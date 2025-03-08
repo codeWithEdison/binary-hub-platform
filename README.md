@@ -1,69 +1,124 @@
-# Welcome to your Lovable project
+# Binary Hub Rwanda Platform
 
-## Project info
+<div align="center">
+  <img src="public/logo.svg" alt="Binary Hub Logo" width="200" />
 
-**URL**: https://lovable.dev/projects/fb7de018-65f7-4a6d-90d5-d1ec5ec5f776
+  <h3>Connecting Innovators, Creating Impact</h3>
 
-## How can I edit this code?
+  <p>
+    <a href="https://binaryhub.codewithedison.com/" target="_blank">View Demo</a> •
+    <a href="#features">Features</a> •
+    <a href="#tech-stack">Tech Stack</a> •
+    <a href="#getting-started">Getting Started</a> •
+    <a href="#contributing">Contributing</a> •
+    <a href="#license">License</a>
+  </p>
 
-There are several ways of editing your application.
+  [![React][React.js]][React-url]
+  [![Vite][Vite.js]][Vite-url]
+  [![Tailwind CSS][Tailwind.css]][Tailwind-url]
+  [![TypeScript][TypeScript]][TypeScript-url]
+  [![Shadcn/UI][Shadcn]][Shadcn-url]
+</div>
 
-**Use Lovable**
+## 💡 About The Project
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/fb7de018-65f7-4a6d-90d5-d1ec5ec5f776) and start prompting.
+Binary Hub Rwanda is an innovation space within the University of Rwanda that fosters creativity, entrepreneurship, and technological advancement. This platform serves as the digital face of Binary Hub, showcasing innovators, projects, and services while providing a connection point for students, mentors, and partners.
 
-Changes made via Lovable will be committed automatically to this repo.
+<img src="public/screenshot.png" alt="Binary Hub Screenshot" width="100%" />
 
-**Use your preferred IDE**
+### ✨ Key Features
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- **Innovation Showcase**: Highlighting cutting-edge projects developed by our community
+- **Innovator Directory**: Featuring talented individuals driving technological change
+- **Service Catalog**: Detailed information about our incubation programs and resources
+- **Event Calendar**: Upcoming workshops, hackathons, and networking opportunities
+- **Partner Network**: Our collaboration ecosystem with industry, academia, and government
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+## 🛠️ Tech Stack
 
-Follow these steps:
+This project leverages modern web technologies:
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+- **Frontend Framework**: [React](https://reactjs.org/) with [TypeScript](https://www.typescriptlang.org/)
+- **Build Tool**: [Vite](https://vitejs.dev/) for lightning-fast development
+- **Styling**: [Tailwind CSS](https://tailwindcss.com/) for utility-first styling
+- **UI Components**: [shadcn/ui](https://ui.shadcn.com/) for beautiful, accessible components
+- **Animations**: [Framer Motion](https://www.framer.com/motion/) for smooth transitions
+- **Routing**: [React Router](https://reactrouter.com/) for client-side navigation
+- **State Management**: [React Query](https://tanstack.com/query/latest) for server state
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+## 🚀 Getting Started
 
-# Step 3: Install the necessary dependencies.
-npm i
+Follow these simple steps to set up the project locally:
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+```bash
+# Clone the repository
+git clone https://github.com/codeWithEdison/binary-hub-platform.git
+
+# Navigate to the project directory
+cd binary-hub-platform
+
+# Install dependencies
+npm install
+
+# Start the development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+Open [http://localhost:5173](http://localhost:5173) to view the application in your browser.
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 📂 Project Structure
 
-**Use GitHub Codespaces**
+```
+binary-hub-platform/
+├── public/             # Static assets
+├── src/                # Source files
+│   ├── components/     # Reusable UI components
+│   ├── lib/            # Utility functions and data
+│   ├── pages/          # Page components for routes
+│   └── styles/         # Global styles and Tailwind configuration
+├── .env                # Environment variables
+└── ...                 # Configuration files
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## 🤝 Contributing
 
-## What technologies are used for this project?
+Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
 
-This project is built with .
+1. Fork the Project
+2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the Branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 📄 License
 
-## How can I deploy this project?
+Distributed under the MIT License. See `LICENSE` for more information.
 
-Simply open [Lovable](https://lovable.dev/projects/fb7de018-65f7-4a6d-90d5-d1ec5ec5f776) and click on Share -> Publish.
+## 📬 Contact
 
-## I want to use a custom domain - is that possible?
+Edison Uwihanganye - [@codeWithEdison](https://twitter.com/codeWithEdison) - edison@binaryhub.rw
 
-We don't support custom domains (yet). If you want to deploy your project under your own domain then we recommend using Netlify. Visit our docs for more details: [Custom domains](https://docs.lovable.dev/tips-tricks/custom-domain/)
+Project Link: [https://github.com/codeWithEdison/binary-hub-platform](https://github.com/codeWithEdison/binary-hub-platform)
+
+## 🙏 Acknowledgments
+
+* [University of Rwanda](https://www.ur.ac.rw/)
+* [Rwanda ICT Chamber](https://www.ict.rw/)
+* [All the innovative students and mentors at Binary Hub](https://binaryhub.codewithedison.com/innovators)
+
+---
+
+<p align="center">Made with ❤️ in Kigali, Rwanda</p>
+
+<!-- MARKDOWN LINKS & IMAGES -->
+[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
+[React-url]: https://reactjs.org/
+[Vite.js]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white
+[Vite-url]: https://vitejs.dev/
+[Tailwind.css]: https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white
+[Tailwind-url]: https://tailwindcss.com/
+[TypeScript]: https://img.shields.io/badge/TypeScript-3178C6?style=for-the-badge&logo=typescript&logoColor=white
+[TypeScript-url]: https://www.typescriptlang.org/
+[Shadcn]: https://img.shields.io/badge/shadcn/ui-000000?style=for-the-badge&logo=shadcnui&logoColor=white
+[Shadcn-url]: https://ui.shadcn.com/
