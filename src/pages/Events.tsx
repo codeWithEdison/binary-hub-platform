@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Calendar, Clock, MapPin, Users, ArrowRight, Filter } from "lucide-react";
+import { Calendar, Clock, MapPin, Users, ArrowRight, Filter, Search } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 
