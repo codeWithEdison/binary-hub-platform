@@ -1,4 +1,3 @@
-
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -7,15 +6,16 @@ import { Link } from "react-router-dom";
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center py-20 px-6 md:px-12 overflow-hidden">
-      {/* Background elements */}
+      {/* Background elements - improved positioning */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/4 right-1/3 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl"></div>
-        <div className="absolute bottom-1/3 left-1/4 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl"></div>
+        <div className="absolute top-1/4 right-1/3 w-72 h-72 bg-primary/10 rounded-full filter blur-3xl"></div>
+        <div className="absolute bottom-1/3 left-1/4 w-72 h-72 bg-accent/10 rounded-full filter blur-3xl"></div>
+        <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-secondary/10 rounded-full filter blur-3xl"></div>
       </div>
       
       <div className="max-w-7xl mx-auto w-full z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Text Content */}
+          {/* Text Content - fixed naming inconsistency */}
           <motion.div
             className="order-2 lg:order-1"
             initial={{ opacity: 0, y: 20 }}
@@ -56,7 +56,7 @@ const Hero = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.5 }}
             >
-              Binary Hub Rwanda empowers students and faculty to transform ideas into impactful innovations that address local challenges.
+              University of Rwanda Innovation Hub empowers students and faculty to transform ideas into impactful innovations that address local challenges.
             </motion.p>
             
             <motion.div 
@@ -75,7 +75,7 @@ const Hero = () => {
             </motion.div>
           </motion.div>
           
-          {/* Image Section */}
+          {/* Image Section - with placeholder image */}
           <motion.div 
             className="order-1 lg:order-2 relative"
             initial={{ opacity: 0, scale: 0.95 }}
@@ -84,15 +84,15 @@ const Hero = () => {
           >
             <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl shadow-primary/10">
               <img 
-                src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3" 
-                alt="Students collaborating at Binary Hub" 
+                src="/img/presentation-img/guest-pic.jpg" 
+                alt="Students collaborating at Innovation Hub" 
                 className="w-full h-auto object-cover"
               />
             </div>
             
-            {/* Floating stats card */}
+            {/* Floating stats card - repositioned to avoid being under image */}
             <motion.div 
-              className="absolute -bottom-5 -left-5 md:bottom-10 md:-left-10 glass p-5 rounded-xl max-w-[250px] shadow-xl"
+              className="absolute left-0 bottom-0 md:-left-16 md:bottom-16 bg-background/80 backdrop-blur-lg p-5 rounded-xl max-w-[250px] shadow-xl border border-border/50 z-20"
               initial={{ opacity: 0, y: 20, x: 20 }}
               animate={{ opacity: 1, y: 0, x: 0 }}
               transition={{ delay: 1.1, duration: 0.6 }}
@@ -109,9 +109,9 @@ const Hero = () => {
               </div>
             </motion.div>
             
-            {/* Floating badge card */}
+            {/* Floating badge card - improved positioning */}
             <motion.div 
-              className="absolute -top-5 -right-5 md:top-10 md:-right-10 glass p-5 rounded-xl shadow-xl"
+              className="absolute -top-5 -right-5 md:top-10 md:-right-10 bg-background/80 backdrop-blur-lg p-5 rounded-xl shadow-xl border border-border/50 z-20 "
               initial={{ opacity: 0, y: -20, x: -20 }}
               animate={{ opacity: 1, y: 0, x: 0 }}
               transition={{ delay: 1.3, duration: 0.6 }}

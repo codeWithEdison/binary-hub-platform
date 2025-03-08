@@ -1,4 +1,3 @@
-
 import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
@@ -115,6 +114,105 @@ const Index = () => {
                 <ArrowRight size={18} className="text-primary transition-transform duration-300 group-hover:translate-x-1" />
               </Link>
             </motion.div>
+          </div>
+        </div>
+      </section>
+      
+      {/* NEW: Innovation Projects Section */}
+      <section className="py-20 px-6 md:px-12 bg-gradient-to-b from-secondary/20 to-transparent">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+            <div>
+              <motion.span 
+                className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                Our Innovations
+              </motion.span>
+              
+              <motion.h2 
+                className="text-3xl md:text-4xl font-display font-bold mb-4"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.5 }}
+              >
+                Featured Projects
+              </motion.h2>
+              
+              <motion.p 
+                className="text-muted-foreground max-w-2xl"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.5 }}
+              >
+                Explore innovative solutions developed by our community to address real-world challenges in Rwanda and beyond.
+              </motion.p>
+            </div>
+            
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+            >
+              <Link 
+                to="/innovations" 
+                className="inline-flex items-center justify-center px-6 py-3 border border-border bg-background/50 hover:bg-background text-foreground rounded-full font-medium transition-all group"
+              >
+                <span>View All Projects</span>
+                <ArrowRight size={18} className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
+              </Link>
+            </motion.div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {projects.slice(0, 3).map((project, index) => (
+              <motion.div
+                key={project.id}
+                className="glass overflow-hidden rounded-xl h-full flex flex-col"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              >
+                <div className="relative h-48 overflow-hidden">
+                  <img 
+                    src={project.image} 
+                    alt={project.title} 
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                  />
+                  <div className="absolute bottom-0 right-0 px-3 py-1 bg-black/70 text-white text-xs font-medium rounded-tl-lg">
+                    {project.stage.charAt(0).toUpperCase() + project.stage.slice(1)}
+                  </div>
+                </div>
+                
+                <div className="p-6 flex-grow flex flex-col">
+                  <div className="mb-4">
+                    <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary mb-3">
+                      {project.category}
+                    </span>
+                    <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
+                    <p className="text-muted-foreground text-sm">{project.description}</p>
+                  </div>
+                  
+                  <div className="mt-auto pt-4 flex justify-between items-center border-t border-border/50">
+                    <span className="text-xs text-muted-foreground">
+                      Innovator{project.innovators.length > 1 ? 's' : ''}: {project.innovators.length}
+                    </span>
+                    <Link to={`/projects/${project.id}`} className="inline-flex items-center justify-center group">
+                      <span className="text-sm text-foreground mr-1 group-hover:text-primary transition-colors">View Project</span>
+                      <ArrowRight size={14} className="text-primary transition-transform duration-300 group-hover:translate-x-1" />
+                    </Link>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -266,7 +364,7 @@ const Index = () => {
                 transition={{ delay: 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
                 <img 
-                  src="https://images.unsplash.com/photo-1624518134862-0fb05682ef0a?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3" 
+                  src="/api/placeholder/800/600" 
                   alt="Join Binary Hub" 
                   className="w-full h-auto rounded-xl shadow-lg"
                 />

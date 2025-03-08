@@ -31,12 +31,12 @@ export type Service = {
 export const innovators: Innovator[] = [
   {
     id: "1",
-    name: "Jean-Claude Ndayisenga",
+    name: "UWIHANGANYE Edison",
     role: "Software Developer",
     status: "student",
     department: "Computer Science",
-    skills: ["React", "Node.js", "AI", "Machine Learning"],
-    image: "https://images.unsplash.com/photo-1531384441138-2736e62e0919?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    skills: ["React", "Node.js", "AI", "Machine Learning", 'block chain'],
+    image: "https://media.licdn.com/dms/image/v2/D4D03AQH_4THyS9-igg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1715287233733?e=1746662400&v=beta&t=utWb8N1bWMnRRO4uT6Qxu-wVa1D-sCtQGHlb_g17818", 
     projects: ["Smart Agriculture IoT Platform", "Student Collaboration App"],
     bio: "Final year computer science student focusing on AI applications for agriculture in Rwanda."
   },

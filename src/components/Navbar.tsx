@@ -14,6 +14,7 @@ const Navbar = () => {
     { name: "Home", path: "/" },
     { name: "About", path: "/about" },
     { name: "Innovators", path: "/innovators" },
+    { name: "Innovations", path: "/innovations" },
   ];
 
   useEffect(() => {
