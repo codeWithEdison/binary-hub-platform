@@ -19,6 +19,25 @@ export type Project = {
   stage: "concept" | "prototype" | "development" | "launched";
   category: string;
   image: string;
+  // New properties
+  date: string;
+  status: string;
+  team: Array<{ name: string; role: string; image?: string }>;
+  categories: string[];
+  links?: {
+    demo?: string;
+    github?: string;
+    website?: string;
+  };
+  fullDescription?: string;
+  problemStatement?: string;
+  solution?: string;
+  technologies?: string[];
+  results?: string;
+  impact?: string;
+  futurePlans?: string;
+  gallery?: string[];
+  updates?: Array<{ date: string; title: string; content: string }>;
 };
 
 export type Service = {
@@ -28,6 +47,7 @@ export type Service = {
   icon: string;
 };
 
+// Update projects to include new fields
 export const innovators: Innovator[] = [
   {
     id: "1",
@@ -105,7 +125,18 @@ export const projects: Project[] = [
     innovators: ["1"],
     stage: "prototype",
     category: "Agriculture",
-    image: "https://images.unsplash.com/photo-1628352081506-83c93d9a2b67?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3"
+    categories: ["Agriculture", "IoT", "Technology"],
+    image: "https://images.unsplash.com/photo-1628352081506-83c93d9a2b67?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3",
+    date: "2023-09-15",
+    status: "In Progress",
+    team: [
+      { name: "UWIHANGANYE Edison", role: "Lead Developer", image: "https://media.licdn.com/dms/image/v2/D4D03AQH_4THyS9-igg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1715287233733?e=1746662400&v=beta&t=utWb8N1bWMnRRO4uT6Qxu-wVa1D-sCtQGHlb_g17818" },
+      { name: "Marie Uwase", role: "IoT Specialist", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
+    ],
+    links: {
+      demo: "https://demo.example.com",
+      github: "https://github.com/example/project"
+    }
   },
   {
     id: "2",
@@ -114,7 +145,19 @@ export const projects: Project[] = [
     innovators: ["2"],
     stage: "launched",
     category: "Healthcare",
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
+    categories: ["Healthcare", "Mobile", "Social Impact"],
+    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    date: "2023-06-22",
+    status: "Completed",
+    team: [
+      { name: "Marie-Claire Uwamahoro", role: "UX Designer", image: "https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
+      { name: "Jean Mutabazi", role: "Mobile Developer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
+      { name: "Alice Kayitesi", role: "Healthcare Consultant", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
+    ],
+    links: {
+      demo: "https://healthcare-app.example.com",
+      website: "https://healthcare-project.example.com"
+    }
   },
   {
     id: "3",
@@ -123,7 +166,14 @@ export const projects: Project[] = [
     innovators: ["3"],
     stage: "development",
     category: "Energy",
-    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3"
+    categories: ["Energy", "Sustainability", "Community"],
+    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3",
+    date: "2023-11-08",
+    status: "In Progress",
+    team: [
+      { name: "Eric Mugisha", role: "Renewable Energy Engineer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
+      { name: "Patricia Umutoni", role: "Community Liaison", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
+    ]
   },
   {
     id: "4",
@@ -132,7 +182,31 @@ export const projects: Project[] = [
     innovators: ["4"],
     stage: "prototype",
     category: "Water",
-    image: "https://images.unsplash.com/photo-1581092921461-39b9d009a73c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
+    categories: ["Water", "Health", "Technology"],
+    image: "https://images.unsplash.com/photo-1581092921461-39b9d009a73c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    date: "2023-08-14",
+    status: "In Progress",
+    team: [
+      { name: "Diane Umutoni", role: "Biotech Researcher", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
+      { name: "Patrick Niyonzima", role: "Water Engineer", image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
+    ],
+    gallery: [
+      "https://images.unsplash.com/photo-1581092921461-39b9d009a73c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+      "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?q=80&w=1973&auto=format&fit=crop&ixlib=rb-4.0.3",
+      "https://images.unsplash.com/photo-1562016600-ece13e8ba570?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3"
+    ],
+    updates: [
+      {
+        date: "2023-08-14",
+        title: "Project Launch",
+        content: "We're excited to start the development of our water purification solution."
+      },
+      {
+        date: "2023-10-22",
+        title: "First Prototype",
+        content: "Successfully tested our first prototype with promising results in lab conditions."
+      }
+    ]
   },
   {
     id: "5",
@@ -141,7 +215,19 @@ export const projects: Project[] = [
     innovators: ["5"],
     stage: "launched",
     category: "Finance",
-    image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
+    categories: ["Finance", "Mobile", "Financial Inclusion"],
+    image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    date: "2023-03-05",
+    status: "Completed",
+    team: [
+      { name: "Kevin Hakizimana", role: "Fintech Entrepreneur", image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
+      { name: "Grace Mukeshimana", role: "Mobile Developer", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
+      { name: "James Ngabo", role: "Financial Advisor", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
+    ],
+    links: {
+      website: "https://savings-platform.example.com"
+    },
+    technologies: ["React Native", "Node.js", "MongoDB", "AWS"]
   },
   {
     id: "6",
@@ -150,7 +236,20 @@ export const projects: Project[] = [
     innovators: ["6"],
     stage: "development",
     category: "Education",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.0.3"
+    categories: ["Education", "Technology", "Rural Development"],
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.0.3",
+    date: "2023-12-01",
+    status: "In Progress",
+    team: [
+      { name: "Claudine Nyiraneza", role: "Education Technologist", image: "https://images.unsplash.com/photo-1581992652564-44c42f5ad3ad?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
+      { name: "Emmanuel Ndayisaba", role: "Educational Content Creator", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
+    ],
+    technologies: ["Android", "Educational Apps", "Solar Charging"],
+    gallery: [
+      "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.0.3",
+      "https://images.unsplash.com/photo-1610484826967-09c5720778c7?q=80&w=1972&auto=format&fit=crop&ixlib=rb-4.0.3",
+      "https://images.unsplash.com/photo-1610484827141-843f6b092676?q=80&w=1972&auto=format&fit=crop&ixlib=rb-4.0.3"
+    ]
   }
 ];
 

@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Filter, Users, Graduation, Building, ChevronDown, ArrowUpDown } from "lucide-react";
+import { Search, Filter, Users, GraduationCap, Building, ChevronDown, ArrowUpDown } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
@@ -95,7 +95,7 @@ const InnovatorsDirectory = () => {
                 {/* Status Filter */}
                 <div>
                   <div className="flex items-center">
-                    <Graduation size={16} className="mr-2 text-muted-foreground" />
+                    <GraduationCap size={16} className="mr-2 text-muted-foreground" />
                     <span className="text-sm font-medium mr-2">Status:</span>
                     <select
                       className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
@@ -154,13 +154,13 @@ const InnovatorsDirectory = () => {
           {/* Innovators Grid */}
           {sortedInnovators.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
-              {sortedInnovators.map((innovator) => (
+              {sortedInnovators.map((innovator, index) => (
                 <Link 
                   key={innovator.id}
                   to={`/innovators/${innovator.id}`}
                   className="block transition-transform duration-300 hover:-translate-y-2"
                 >
-                  <InnovatorCard innovator={innovator} />
+                  <InnovatorCard innovator={innovator} index={index} />
                 </Link>
               ))}
             </div>

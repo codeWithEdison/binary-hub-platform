@@ -1,12 +1,15 @@
-
 import React from "react";
+import { motion } from "framer-motion";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
-  Users, FileText, Calendar, Award, TrendingUp, 
-  ArrowUpRight, ArrowDownRight, Activity
+  Users, ArrowUp, ArrowDown, BarChart3, Lightbulb, Calendar, 
+  ChevronRight, AreaChart, Clock, Settings
 } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
+
 import {
   BarChart,
   Bar,
@@ -21,7 +24,6 @@ import {
   Area
 } from "recharts";
 
-// Sample data for charts
 const monthlyVisitors = [
   { month: "Jan", visitors: 1200 },
   { month: "Feb", visitors: 1900 },
