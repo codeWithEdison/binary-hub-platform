@@ -10,12 +10,14 @@ import About from "./pages/About";
 import InnovatorsDirectory from "./pages/InnovatorsDirectory";
 import InnovationShowcase from "./pages/InnovationShowcase";
 import Events from "./pages/Events";
+import EventDetail from "./pages/EventDetail";
 import Partners from "./pages/Partners";
 import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import ProjectDetail from "./pages/ProjectDetail";
 import InnovatorDetail from "./pages/InnovatorDetail";
 import AnnouncementsPage from "./pages/AnnouncementsPage";
+import AnnouncementDetail from "./pages/AnnouncementDetail";
 import Login from "./pages/Login";
 
 // Admin Routes
@@ -50,7 +52,9 @@ const App = () => (
           <Route path="/innovations" element={<><Navbar /><InnovationShowcase /></>} />
           <Route path="/projects/:projectId" element={<><Navbar /><ProjectDetail /></>} />
           <Route path="/events" element={<><Navbar /><Events /></>} />
+          <Route path="/events/:eventId" element={<><Navbar /><EventDetail /></>} />
           <Route path="/announcements" element={<><Navbar /><AnnouncementsPage /></>} />
+          <Route path="/announcements/:announcementId" element={<><Navbar /><AnnouncementDetail /></>} />
           <Route path="/partners" element={<><Navbar /><Partners /></>} />
           <Route path="/contact" element={<><Navbar /><Contact /></>} />
           
