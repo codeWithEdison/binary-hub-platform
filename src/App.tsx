@@ -15,12 +15,15 @@ import Contact from "./pages/Contact";
 import NotFound from "./pages/NotFound";
 import ProjectDetail from "./pages/ProjectDetail";
 import InnovatorDetail from "./pages/InnovatorDetail";
-import ContactPage from "./pages/Contact";
+import AnnouncementsPage from "./pages/AnnouncementsPage";
 
 // Admin Routes
 import AdminDashboard from "./pages/admin/Dashboard";
 import Overview from "./pages/admin/Overview";
 import InnovatorManagement from "./pages/admin/InnovatorManagement";
+import ProjectManagement from "./pages/admin/ProjectManagement";
+import EventManagement from "./pages/admin/EventManagement";
+import AnnouncementManagement from "./pages/admin/AnnouncementManagement";
 
 const queryClient = new QueryClient();
 
@@ -40,14 +43,18 @@ const App = () => (
           <Route path="/innovations" element={<InnovationShowcase />} />
           <Route path="/projects/:projectId" element={<ProjectDetail />} />
           <Route path="/events" element={<Events />} />
+          <Route path="/announcements" element={<AnnouncementsPage />} />
           <Route path="/partners" element={<Partners />} />
-          <Route path="/contact" element={<ContactPage />} />
+          <Route path="/contact" element={<Contact />} />
           
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminDashboard />}>
             <Route index element={<Overview />} />
             <Route path="innovators" element={<InnovatorManagement />} />
-            {/* Add other admin routes as needed */}
+            <Route path="projects" element={<ProjectManagement />} />
+            <Route path="events" element={<EventManagement />} />
+            <Route path="announcements" element={<AnnouncementManagement />} />
+            {/* More admin routes can be added here */}
           </Route>
           
           {/* Catch-all route for 404 */}

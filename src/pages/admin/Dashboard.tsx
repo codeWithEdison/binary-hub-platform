@@ -1,9 +1,9 @@
 
 import React, { useState } from "react";
-import { useNavigate, Outlet } from "react-router-dom";
+import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import { 
   ChevronLeft, ChevronRight, LayoutDashboard, Users, Calendar, FileText,
-  Settings, LogOut, Menu, X
+  Settings, LogOut, Menu, X, Bell
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
 
   // Navigation links
   const navItems = [
@@ -35,6 +36,11 @@ const AdminDashboard = () => {
       name: "Events", 
       path: "/admin/events", 
       icon: Calendar 
+    },
+    { 
+      name: "Announcements", 
+      path: "/admin/announcements", 
+      icon: Bell 
     },
     { 
       name: "Settings", 
@@ -77,16 +83,14 @@ const AdminDashboard = () => {
                   key={item.name}
                   to={item.path}
                   onClick={() => setMobileMenuOpen(false)}
-                  className={({ isActive }) =>
-                    cn(
-                      "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg",
-                      {
-                        "bg-primary/10 text-primary": location.pathname === item.path,
-                        "text-muted-foreground hover:text-foreground hover:bg-accent/50":
-                          location.pathname !== item.path
-                      }
-                    )
-                  }
+                  className={cn(
+                    "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg",
+                    {
+                      "bg-primary/10 text-primary": location.pathname === item.path,
+                      "text-muted-foreground hover:text-foreground hover:bg-accent/50":
+                        location.pathname !== item.path
+                    }
+                  )}
                 >
                   <item.icon size={18} />
                   {item.name}

@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Bell, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
@@ -15,6 +15,9 @@ const Navbar = () => {
     { name: "About", path: "/about" },
     { name: "Innovators", path: "/innovators" },
     { name: "Innovations", path: "/innovations" },
+    { name: "Events", path: "/events" },
+    { name: "Announcements", path: "/announcements" },
+    { name: "Contact", path: "/contact" },
   ];
 
   useEffect(() => {
@@ -97,7 +100,7 @@ const Navbar = () => {
         </Link>
 
         {/* Desktop Navigation */}
-        <nav className="hidden md:flex space-x-8 items-center">
+        <nav className="hidden md:flex space-x-6 items-center">
           {links.map((link, i) => (
             <motion.div
               key={link.name}
@@ -119,6 +122,21 @@ const Navbar = () => {
               </Link>
             </motion.div>
           ))}
+
+          {/* Admin link */}
+          <motion.div
+            custom={links.length}
+            initial="hidden"
+            animate="visible"
+            variants={linkVariants}
+          >
+            <Link
+              to="/admin"
+              className="ml-2 p-2 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+            >
+              <User size={18} />
+            </Link>
+          </motion.div>
         </nav>
 
         {/* Mobile Menu Toggle */}
@@ -164,6 +182,23 @@ const Navbar = () => {
                     </Link>
                   </motion.div>
                 ))}
+                {/* Admin link for mobile */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ 
+                    opacity: 1, 
+                    y: 0, 
+                    transition: { delay: 0.1 + links.length * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] } 
+                  }}
+                >
+                  <Link
+                    to="/admin"
+                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary/10 text-primary"
+                  >
+                    <User size={18} />
+                    <span>Admin Dashboard</span>
+                  </Link>
+                </motion.div>
               </nav>
             </motion.div>
           )}
