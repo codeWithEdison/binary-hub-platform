@@ -1,273 +1,257 @@
+
 import React from "react";
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
-import { MapPin, Mail, Phone, Clock, ArrowRight, Send } from "lucide-react";
-import Footer from "@/components/Footer";
-import { Button } from "@/components/ui/button";
+import { Mail, Phone, MapPin, Clock, Send, Linkedin, Twitter, Github, Instagram } from "lucide-react";
+import { Link } from "react-router-dom"; 
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import Footer from "@/components/Footer";
 
-const Contact = () => {
-  // Animation variants for the entire component
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        delayChildren: 0.3,
-        staggerChildren: 0.2,
-      },
-    },
-  };
-
-  // Animation variants for individual items
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        stiffness: 80,
-        damping: 20,
-      },
-    },
-  };
-
+const ContactPage = () => {
   return (
-    <motion.div
-      className="min-h-screen bg-background"
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
-      {/* Hero Section */}
-      <section className="relative py-24 bg-secondary/50 dark:bg-secondary/20 overflow-hidden">
-        <div className="container mx-auto px-6 md:px-12">
-          <div className="relative z-10 flex flex-col lg:flex-row items-center">
-            {/* Left Column - Contact Information */}
-            <motion.div
-              className="lg:w-1/2 mb-12 lg:mb-0"
-              variants={itemVariants}
+    <div className="min-h-screen">
+      {/* Header */}
+      <section className="pt-20 pb-12 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
+        <div className="max-w-7xl mx-auto">
+          <motion.div
+            className="text-center max-w-3xl mx-auto"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <motion.span 
+              className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
             >
-              <h1 className="text-3xl md:text-4xl font-bold mb-6 font-display">
-                Get in Touch
-              </h1>
-              <p className="text-muted-foreground text-lg mb-8">
-                We're here to help! Reach out to us with any questions, feedback,
-                or inquiries. Our team is ready to assist you.
-              </p>
+              Get in Touch
+            </motion.span>
+            
+            <h1 className="text-3xl md:text-5xl font-display font-bold mb-6">
+              Contact Us
+            </h1>
+            
+            <p className="text-muted-foreground md:text-lg">
+              Have questions or want to collaborate? Reach out to Binary Hub Rwanda through any of our channels.
+            </p>
+          </motion.div>
+        </div>
+      </section>
 
-              {/* Contact Details */}
-              <div className="space-y-6">
-                <div className="flex items-start space-x-3">
-                  <MapPin className="text-primary h-5 w-5" />
-                  <div className="space-y-1">
-                    <h4 className="font-semibold">Address</h4>
-                    <address className="text-muted-foreground not-italic">
-                      University of Rwanda, Kigali, Rwanda
-                    </address>
-                  </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <Mail className="text-primary h-5 w-5" />
-                  <div className="space-y-1">
-                    <h4 className="font-semibold">Email</h4>
-                    <p className="text-muted-foreground">
-                      <a
-                        href="mailto:info@binaryhub.rw"
-                        className="hover:text-primary transition-colors"
-                      >
-                        info@binaryhub.rw
+      {/* Contact Form & Info */}
+      <section className="py-16 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+            {/* Contact Info */}
+            <div className="lg:col-span-2">
+              <div className="glass rounded-2xl p-8">
+                <h2 className="text-2xl font-semibold mb-6">Contact Information</h2>
+                
+                <div className="space-y-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
+                      <Mail className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-medium mb-1">Email</h3>
+                      <p className="text-muted-foreground mb-1">For general inquiries:</p>
+                      <a href="mailto:contact@binaryhub.rw" className="text-primary hover:underline">
+                        contact@binaryhub.rw
                       </a>
-                    </p>
+                    </div>
                   </div>
-                </div>
-                <div className="flex items-start space-x-3">
-                  <Phone className="text-primary h-5 w-5" />
-                  <div className="space-y-1">
-                    <h4 className="font-semibold">Phone</h4>
-                    <p className="text-muted-foreground">
-                      <a
-                        href="tel:+250780123456"
-                        className="hover:text-primary transition-colors"
-                      >
+                  
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
+                      <Phone className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-medium mb-1">Phone</h3>
+                      <p className="text-muted-foreground mb-1">Mon-Fri from 9am to 5pm:</p>
+                      <a href="tel:+250780123456" className="text-primary hover:underline">
                         +250 780 123 456
                       </a>
-                    </p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
+                      <MapPin className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-medium mb-1">Location</h3>
+                      <p className="text-muted-foreground mb-1">Visit our innovation space:</p>
+                      <p>University of Rwanda - College of Science and Technology, Kigali, Rwanda</p>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-start gap-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0 mt-1">
+                      <Clock className="h-5 w-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="text-base font-medium mb-1">Working Hours</h3>
+                      <p className="text-muted-foreground mb-1">We are open:</p>
+                      <p>Monday - Friday: 9:00 AM - 5:00 PM</p>
+                      <p>Saturday: 10:00 AM - 2:00 PM (By appointment)</p>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-start space-x-3">
-                  <Clock className="text-primary h-5 w-5" />
-                  <div className="space-y-1">
-                    <h4 className="font-semibold">Business Hours</h4>
-                    <p className="text-muted-foreground">
-                      Mon - Fri: 9:00 AM - 5:00 PM
-                    </p>
+                
+                {/* Social Media */}
+                <div className="mt-10">
+                  <h3 className="text-base font-medium mb-4">Connect with us</h3>
+                  <div className="flex gap-3">
+                    <Link to="#" className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors">
+                      <Linkedin className="h-5 w-5 text-primary" />
+                    </Link>
+                    <Link to="#" className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors">
+                      <Twitter className="h-5 w-5 text-primary" />
+                    </Link>
+                    <Link to="#" className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors">
+                      <Github className="h-5 w-5 text-primary" />
+                    </Link>
+                    <Link to="#" className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center hover:bg-primary/20 transition-colors">
+                      <Instagram className="h-5 w-5 text-primary" />
+                    </Link>
                   </div>
                 </div>
               </div>
-
-              {/* Social Media Links */}
-              <div className="mt-8">
-                <h4 className="font-semibold mb-3">Follow Us</h4>
-                <div className="flex space-x-4">
-                  <a
-                    href="#"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    Facebook
-                  </a>
-                  <a
-                    href="#"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    Twitter
-                  </a>
-                  <a
-                    href="#"
-                    className="text-muted-foreground hover:text-primary transition-colors"
-                  >
-                    LinkedIn
-                  </a>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* Right Column - Contact Form */}
-            <motion.div
-              className="lg:w-1/2"
-              variants={itemVariants}
-            >
-              <div className="glass p-8 rounded-2xl">
-                <h3 className="text-2xl font-semibold mb-5">Send us a message</h3>
-                <form className="space-y-4">
-                  <div>
-                    <Input type="text" placeholder="Your Name" />
+            </div>
+            
+            {/* Contact Form */}
+            <div className="lg:col-span-3">
+              <div className="glass rounded-2xl p-8">
+                <h2 className="text-2xl font-semibold mb-6">Send us a Message</h2>
+                
+                <form className="space-y-6">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                    <div>
+                      <label htmlFor="name" className="block text-sm font-medium mb-2">
+                        Your Name
+                      </label>
+                      <Input
+                        id="name"
+                        placeholder="John Doe"
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium mb-2">
+                        Email Address
+                      </label>
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="john@example.com"
+                        required
+                      />
+                    </div>
                   </div>
+                  
                   <div>
-                    <Input type="email" placeholder="Your Email" />
+                    <label htmlFor="subject" className="block text-sm font-medium mb-2">
+                      Subject
+                    </label>
+                    <Input
+                      id="subject"
+                      placeholder="How can we help you?"
+                      required
+                    />
                   </div>
+                  
                   <div>
-                    <Input type="text" placeholder="Subject" />
+                    <label htmlFor="message" className="block text-sm font-medium mb-2">
+                      Your Message
+                    </label>
+                    <Textarea
+                      id="message"
+                      placeholder="Write your message here..."
+                      rows={6}
+                      required
+                    />
                   </div>
+                  
                   <div>
-                    <Textarea placeholder="Your Message" className="min-h-[100px]" />
+                    <Button type="submit" className="w-full sm:w-auto">
+                      <Send className="mr-2 h-4 w-4" /> Send Message
+                    </Button>
                   </div>
-                  <Button className="w-full">
-                    Send Message <Send className="ml-2 h-4 w-4" />
-                  </Button>
                 </form>
               </div>
-            </motion.div>
+            </div>
           </div>
         </div>
       </section>
-
-      {/* Call to Action Section */}
-      <section className="py-16 bg-primary/10">
-        <div className="container mx-auto px-6 md:px-12 text-center">
-          <motion.div
-            className="max-w-3xl mx-auto"
-            variants={itemVariants}
-          >
-            <h2 className="text-3xl font-bold mb-6 font-display">
-              Visit Our Innovation Hub
-            </h2>
-            <p className="text-muted-foreground text-lg mb-8">
-              Discover the center of innovation and collaboration. Join us at
-              Binary Hub Rwanda to explore our facilities, meet our community,
-              and learn about our programs.
-            </p>
-            <div className="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-              <Link
-                to="/visit"
-                className="inline-flex items-center justify-center px-8 py-3 bg-primary text-primary-foreground rounded-full font-medium hover:bg-primary/90 transition-colors"
-              >
-                Plan Your Visit <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-              <Link
-                to="/events"
-                className="inline-flex items-center justify-center px-8 py-3 border border-primary text-foreground rounded-full font-medium hover:bg-primary/10 transition-colors"
-              >
-                View Upcoming Events
-              </Link>
-            </div>
-          </motion.div>
+      
+      {/* Map Section */}
+      <section className="px-6 md:px-12 pb-16">
+        <div className="max-w-7xl mx-auto glass rounded-2xl overflow-hidden">
+          <div className="aspect-video w-full">
+            <iframe
+              title="Binary Hub Rwanda Location"
+              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.473685555132!2d30.058633999999995!3d-1.9705192999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca69aa817a72d%3A0xaee170c9b7255f0e!2sUniversity%20of%20Rwanda%20-%20College%20of%20Science%20and%20Technology!5e0!3m2!1sen!2sus!4v1654567890123!5m2!1sen!2sus"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            ></iframe>
+          </div>
         </div>
       </section>
-
-      {/* FAQs Section */}
-      <section className="py-16">
-        <div className="container mx-auto px-6 md:px-12">
-          <motion.div
-            className="max-w-4xl mx-auto"
-            variants={itemVariants}
-          >
-            <h2 className="text-3xl font-bold mb-8 text-center font-display">
+      
+      {/* FAQ Section */}
+      <section className="px-6 md:px-12 pb-16">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-display font-semibold mb-4">
               Frequently Asked Questions
             </h2>
-            <div className="space-y-6">
-              <div className="glass p-6 rounded-lg">
-                <h4 className="text-lg font-semibold mb-2">
-                  What is Binary Hub Rwanda?
-                </h4>
-                <p className="text-muted-foreground">
-                  Binary Hub Rwanda is an innovation hub dedicated to fostering
-                  technology and entrepreneurship in Rwanda. We provide
-                  resources, mentorship, and community for innovators and
-                  startups.
-                </p>
-              </div>
-              <div className="glass p-6 rounded-lg">
-                <h4 className="text-lg font-semibold mb-2">
-                  How can I get involved?
-                </h4>
-                <p className="text-muted-foreground">
-                  There are many ways to get involved, including attending our
-                  events, joining our mentorship program, or becoming a member
-                  of our community. Visit our{" "}
-                  <Link to="/get-involved" className="text-primary hover:underline">
-                    Get Involved
-                  </Link>{" "}
-                  page for more details.
-                </p>
-              </div>
-              <div className="glass p-6 rounded-lg">
-                <h4 className="text-lg font-semibold mb-2">
-                  Do you offer funding for startups?
-                </h4>
-                <p className="text-muted-foreground">
-                  While we don't directly provide funding, we offer guidance and
-                  resources to help startups find funding opportunities. Check
-                  out our{" "}
-                  <Link to="/funding" className="text-primary hover:underline">
-                    Funding Resources
-                  </Link>{" "}
-                  page for more information.
-                </p>
-              </div>
-              <div className="glass p-6 rounded-lg">
-                <h4 className="text-lg font-semibold mb-2">
-                  Where are you located?
-                </h4>
-                <p className="text-muted-foreground">
-                  We are located at the University of Rwanda, Kigali, Rwanda. See
-                  our{" "}
-                  <Link to="/location" className="text-primary hover:underline">
-                    Location
-                  </Link>{" "}
-                  page for a map and directions.
-                </p>
-              </div>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Can't find the answer you're looking for? Contact our team for more information.
+            </p>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="glass rounded-xl p-6">
+              <h3 className="text-lg font-medium mb-2">How can I join Binary Hub Rwanda?</h3>
+              <p className="text-muted-foreground">
+                Binary Hub Rwanda is open to all University of Rwanda students and faculty interested in innovation. Visit our space during working hours or contact us to learn about the application process.
+              </p>
             </div>
-          </motion.div>
+            
+            <div className="glass rounded-xl p-6">
+              <h3 className="text-lg font-medium mb-2">Do you offer incubation for external startups?</h3>
+              <p className="text-muted-foreground">
+                While our focus is on university-based innovation, we do collaborate with external startups for specific programs. Contact us to discuss potential partnerships.
+              </p>
+            </div>
+            
+            <div className="glass rounded-xl p-6">
+              <h3 className="text-lg font-medium mb-2">How can organizations partner with Binary Hub?</h3>
+              <p className="text-muted-foreground">
+                We welcome partnerships with companies, NGOs, and government entities. Please contact us to discuss mentorship, sponsorship, or collaboration opportunities.
+              </p>
+            </div>
+            
+            <div className="glass rounded-xl p-6">
+              <h3 className="text-lg font-medium mb-2">Are your events open to the public?</h3>
+              <p className="text-muted-foreground">
+                Most of our events are open to the public, but some workshops may have limited capacity or be restricted to members. Check each event page for specific details.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
-
+      
       <Footer />
-    </motion.div>
+    </div>
   );
 };
 
-export default Contact;
+export default ContactPage;
