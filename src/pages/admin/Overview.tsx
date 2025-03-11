@@ -2,8 +2,18 @@ import React from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { 
-  Users, ArrowUp, ArrowDown, BarChart3, Lightbulb, Calendar, 
-  ChevronRight, AreaChart, Clock, Settings
+  Users, 
+  ArrowUpRight,
+  ArrowDownRight,
+  FileText,
+  Award,
+  Calendar,
+  ChevronRight,
+  BarChart3,
+  Lightbulb,
+  Clock,
+  Settings,
+  Activity
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,7 +21,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link } from "react-router-dom";
 
 import {
-  BarChart,
+  BarChart as RechartsBarChart,
   Bar,
   XAxis,
   YAxis,
@@ -20,7 +30,7 @@ import {
   ResponsiveContainer,
   Line,
   LineChart,
-  AreaChart,
+  AreaChart as RechartsAreaChart,
   Area
 } from "recharts";
 
@@ -76,7 +86,6 @@ const Overview = () => {
           </div>
         </div>
 
-        {/* Stats Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           <Card>
             <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -139,9 +148,7 @@ const Overview = () => {
           </Card>
         </div>
 
-        {/* Charts */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
-          {/* Website Visitors Chart */}
           <Card className="col-span-1">
             <CardHeader>
               <CardTitle>Website Visitors</CardTitle>
@@ -149,7 +156,7 @@ const Overview = () => {
             <CardContent>
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <AreaChart
+                  <RechartsAreaChart
                     data={monthlyVisitors}
                     margin={{
                       top: 5,
@@ -168,13 +175,12 @@ const Overview = () => {
                       stroke="#8b5cf6" 
                       fill="#8b5cf680" 
                     />
-                  </AreaChart>
+                  </RechartsAreaChart>
                 </ResponsiveContainer>
               </div>
             </CardContent>
           </Card>
 
-          {/* Projects by Category Chart */}
           <Card className="col-span-1">
             <CardHeader>
               <CardTitle>Projects by Category</CardTitle>
@@ -182,7 +188,7 @@ const Overview = () => {
             <CardContent>
               <div className="h-[300px]">
                 <ResponsiveContainer width="100%" height="100%">
-                  <BarChart
+                  <RechartsBarChart
                     data={projectsByCategory}
                     margin={{
                       top: 5,
@@ -196,13 +202,12 @@ const Overview = () => {
                     <YAxis />
                     <Tooltip />
                     <Bar dataKey="count" fill="#4f46e5" radius={[4, 4, 0, 0]} />
-                  </BarChart>
+                  </RechartsBarChart>
                 </ResponsiveContainer>
               </div>
             </CardContent>
           </Card>
 
-          {/* Innovators Growth Chart */}
           <Card className="col-span-1 lg:col-span-2">
             <CardHeader>
               <CardTitle>Innovators Growth</CardTitle>
@@ -249,7 +254,6 @@ const Overview = () => {
           </Card>
         </div>
 
-        {/* Quick Actions */}
         <Card>
           <CardHeader>
             <CardTitle>Quick Actions</CardTitle>
