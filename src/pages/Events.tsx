@@ -15,7 +15,7 @@ const events = [
     description: "A 48-hour hackathon focusing on solutions for sustainable agriculture and food security in Rwanda.",
     date: "2023-11-15",
     time: "09:00 AM - 06:00 PM",
-    location: "tekinova Hub, University of Rwanda - Kigali Campus",
+    location: "Binary Hub, University of Rwanda - Kigali Campus",
     category: "Hackathon",
     capacity: 100,
     image: "https://images.unsplash.com/photo-1540317580384-e5d43867caa6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
@@ -59,7 +59,7 @@ const events = [
     description: "Exploring how blockchain technology can address social challenges in Africa.",
     date: "2023-12-18",
     time: "01:00 PM - 04:00 PM",
-    location: "tekinova Hub, University of Rwanda - Kigali Campus",
+    location: "Binary Hub, University of Rwanda - Kigali Campus",
     category: "Workshop",
     capacity: 40,
     image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2032&auto=format&fit=crop&ixlib=rb-4.0.3"
@@ -67,7 +67,7 @@ const events = [
   {
     id: "6",
     title: "End of Year Innovation Showcase",
-    description: "Celebrating the achievements of tekinova Hub innovators in 2023.",
+    description: "Celebrating the achievements of Binary Hub innovators in 2023.",
     date: "2023-12-22",
     time: "03:00 PM - 08:00 PM",
     location: "Kigali Convention Center",
@@ -84,13 +84,13 @@ const Events = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [currentMonth, setCurrentMonth] = useState(new Date().getMonth());
-
+  
   // Filter events based on search and category
   const filteredEvents = events.filter(event => {
     const titleMatch = event.title.toLowerCase().includes(searchQuery.toLowerCase());
     const descriptionMatch = event.description.toLowerCase().includes(searchQuery.toLowerCase());
     const categoryMatch = selectedCategory === "All" || event.category === selectedCategory;
-
+    
     return (titleMatch || descriptionMatch) && categoryMatch;
   });
 
@@ -99,14 +99,14 @@ const Events = () => {
     const date = new Date(event.date);
     const month = date.getMonth();
     const monthName = date.toLocaleString('default', { month: 'long' });
-
+    
     if (!groups[month]) {
       groups[month] = {
         name: monthName,
         events: []
       };
     }
-
+    
     groups[month].events.push(event);
     return groups;
   }, {});
@@ -122,7 +122,7 @@ const Events = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <motion.span
+            <motion.span 
               className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -130,11 +130,11 @@ const Events = () => {
             >
               Connect & Learn
             </motion.span>
-
+            
             <h1 className="text-3xl md:text-5xl font-display font-bold mb-6">
               Events & Workshops
             </h1>
-
+            
             <p className="text-muted-foreground md:text-lg">
               Join our community at upcoming events, workshops, and learning opportunities to enhance your skills and expand your network.
             </p>
@@ -160,7 +160,7 @@ const Events = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-
+              
               {/* Category Filter */}
               <div className="md:col-span-6">
                 <div className="flex items-center">
@@ -179,12 +179,12 @@ const Events = () => {
               </div>
             </div>
           </div>
-
+          
           {/* Events Calendar View */}
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-display font-semibold">Upcoming Events</h2>
-
+              
               <div className="flex items-center gap-2">
                 <Button variant="outline" size="sm" className="text-xs">
                   <CalendarIcon size={14} className="mr-1" />
@@ -192,14 +192,14 @@ const Events = () => {
                 </Button>
               </div>
             </div>
-
+            
             {Object.keys(groupedEvents).length > 0 ? (
               Object.values(groupedEvents).map((group: any, index) => (
                 <div key={index} className="mb-12">
                   <h3 className="text-xl font-semibold mb-6 border-b border-border pb-2">
                     {group.name}
                   </h3>
-
+                  
                   <div className="space-y-6">
                     {group.events.map((event: any) => (
                       <motion.div
@@ -213,13 +213,13 @@ const Events = () => {
                       >
                         <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
                           <div className="md:col-span-4 h-48 md:h-full">
-                            <img
-                              src={event.image}
+                            <img 
+                              src={event.image} 
                               alt={event.title}
                               className="w-full h-full object-cover"
                             />
                           </div>
-
+                          
                           <div className="md:col-span-8 p-6">
                             <div className="flex flex-wrap items-center gap-2 mb-3">
                               <span className="px-3 py-1 bg-primary/10 text-primary text-xs rounded-full">
@@ -229,10 +229,10 @@ const Events = () => {
                                 {new Date(event.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                               </span>
                             </div>
-
+                            
                             <h3 className="text-xl font-semibold mb-2">{event.title}</h3>
                             <p className="text-muted-foreground text-sm mb-4">{event.description}</p>
-
+                            
                             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
                               <div className="flex items-center gap-2">
                                 <Calendar size={16} className="text-muted-foreground" />
@@ -240,24 +240,24 @@ const Events = () => {
                                   {new Date(event.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
                                 </span>
                               </div>
-
+                              
                               <div className="flex items-center gap-2">
                                 <Clock size={16} className="text-muted-foreground" />
                                 <span className="text-xs">{event.time}</span>
                               </div>
-
+                              
                               <div className="flex items-center gap-2">
                                 <MapPin size={16} className="text-muted-foreground" />
                                 <span className="text-xs truncate" title={event.location}>{event.location}</span>
                               </div>
                             </div>
-
+                            
                             <div className="flex items-center justify-between">
                               <div className="flex items-center gap-2">
                                 <Users size={16} className="text-muted-foreground" />
                                 <span className="text-xs">{event.capacity} attendees max</span>
                               </div>
-
+                              
                               <Link to={`/events/${event.id}`} className="inline-flex items-center justify-center group">
                                 <span className="text-sm text-foreground mr-1 group-hover:text-primary transition-colors">Details</span>
                                 <ArrowRight size={14} className="text-primary transition-transform duration-300 group-hover:translate-x-1" />
@@ -273,8 +273,8 @@ const Events = () => {
             ) : (
               <div className="text-center py-20">
                 <p className="text-lg text-muted-foreground">No events match your search criteria.</p>
-                <Button
-                  variant="outline"
+                <Button 
+                  variant="outline" 
                   className="mt-4"
                   onClick={() => {
                     setSearchQuery("");
@@ -286,7 +286,7 @@ const Events = () => {
               </div>
             )}
           </div>
-
+          
           {/* Submit Event CTA */}
           <div className="glass rounded-xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2">
@@ -302,8 +302,8 @@ const Events = () => {
                 </div>
               </div>
               <div className="hidden md:block relative h-auto">
-                <img
-                  src="https://images.unsplash.com/photo-1540317580384-e5d43867caa6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
+                <img 
+                  src="https://images.unsplash.com/photo-1540317580384-e5d43867caa6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3" 
                   alt="Event submission"
                   className="absolute inset-0 w-full h-full object-cover"
                 />
@@ -312,7 +312,7 @@ const Events = () => {
           </div>
         </div>
       </section>
-
+      
       <Footer />
     </div>
   );

@@ -1,4 +1,4 @@
-# tekinova Hub Rwanda Platform
+# tekinova Hub  Platform
 
 <div align="center">
   <img src="public/logo.svg" alt="tekinova Hub Logo" width="200" />
