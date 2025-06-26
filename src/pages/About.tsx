@@ -17,10 +17,10 @@ const About = () => {
           <div className="absolute top-1/4 right-1/3 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl"></div>
           <div className="absolute bottom-1/3 left-1/4 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl"></div>
         </div>
-        
+
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="text-center max-w-3xl mx-auto">
-            <motion.span 
+            <motion.span
               className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -28,8 +28,8 @@ const About = () => {
             >
               About Us
             </motion.span>
-            
-            <motion.h1 
+
+            <motion.h1
               className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -37,19 +37,19 @@ const About = () => {
             >
               Our Story & Mission
             </motion.h1>
-            
-            <motion.p 
+
+            <motion.p
               className="text-lg text-muted-foreground"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              Learn about Binary Hub Rwanda's journey, vision, and commitment to fostering innovation within the University of Rwanda community.
+              Learn about tekinova Hub Rwanda's journey, vision, and commitment to fostering innovation within the University of Rwanda community.
             </motion.p>
           </div>
         </div>
       </section>
-      
+
       {/* Our Story Section */}
       <section className="py-20 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
@@ -60,7 +60,7 @@ const About = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-              <motion.span 
+              <motion.span
                 className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -69,24 +69,24 @@ const About = () => {
               >
                 Our Story
               </motion.span>
-              
+
               <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
                 Building an Innovation Ecosystem
               </h2>
-              
+
               <p className="text-muted-foreground mb-6">
-                Binary Hub Rwanda was established in 2018 with a clear mission: to create an ecosystem where innovative ideas flourish and transform into impactful solutions for Rwanda and beyond.
+                tekinova Hub Rwanda was established in 2018 with a clear mission: to create an ecosystem where innovative ideas flourish and transform into impactful solutions for Rwanda and beyond.
               </p>
-              
+
               <p className="text-muted-foreground mb-6">
                 What began as a small initiative within the University of Rwanda has grown into a vibrant community of students, faculty, alumni, and industry partners collaborating to address local challenges through innovation and entrepreneurship.
               </p>
-              
+
               <p className="text-muted-foreground">
-                Today, Binary Hub serves as a catalyst for technological advancement and economic growth, empowering Rwanda's brightest minds to create a better future through innovation.
+                Today, tekinova Hub serves as a catalyst for technological advancement and economic growth, empowering Rwanda's brightest minds to create a better future through innovation.
               </p>
             </motion.div>
-            
+
             <motion.div
               className="relative"
               initial={{ opacity: 0, scale: 0.95 }}
@@ -94,14 +94,14 @@ const About = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-              <img 
-                src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3" 
-                alt="Binary Hub team collaboration" 
+              <img
+                src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3"
+                alt="tekinova Hub team collaboration"
                 className="w-full h-auto rounded-2xl shadow-2xl shadow-primary/10"
               />
-              
+
               {/* Floating timeline card */}
-              <motion.div 
+              <motion.div
                 className="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 glass p-5 rounded-xl shadow-xl max-w-[200px]"
                 initial={{ opacity: 0, y: 20, x: -20 }}
                 whileInView={{ opacity: 1, y: 0, x: 0 }}
@@ -123,12 +123,12 @@ const About = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Mission & Vision Section */}
       <section className="py-20 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <motion.span 
+            <motion.span
               className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -137,8 +137,8 @@ const About = () => {
             >
               Our Purpose
             </motion.span>
-            
-            <motion.h2 
+
+            <motion.h2
               className="text-3xl md:text-4xl font-display font-bold mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -147,8 +147,8 @@ const About = () => {
             >
               Mission & Vision
             </motion.h2>
-            
-            <motion.p 
+
+            <motion.p
               className="text-muted-foreground"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -158,9 +158,9 @@ const About = () => {
               Guiding principles that drive our innovation ecosystem and community impact.
             </motion.p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div 
+            <motion.div
               className="glass p-8 rounded-2xl h-full"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -172,19 +172,19 @@ const About = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
                 </svg>
               </div>
-              
+
               <h3 className="text-2xl font-semibold mb-4">Our Mission</h3>
-              
+
               <p className="text-muted-foreground mb-4">
                 To foster a culture of innovation within the University of Rwanda by providing resources, mentorship, and networks that empower students, faculty, and alumni to develop solutions for local and global challenges.
               </p>
-              
+
               <p className="text-muted-foreground">
                 We aim to bridge the gap between academic knowledge and practical application, creating pathways for ideas to become impactful innovations.
               </p>
             </motion.div>
-            
-            <motion.div 
+
+            <motion.div
               className="glass p-8 rounded-2xl h-full"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -197,13 +197,13 @@ const About = () => {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
               </div>
-              
+
               <h3 className="text-2xl font-semibold mb-4">Our Vision</h3>
-              
+
               <p className="text-muted-foreground mb-4">
                 To be a leading innovation hub in East Africa, recognized for nurturing talent and generating impactful solutions that contribute to Rwanda's development and inspire the continent.
               </p>
-              
+
               <p className="text-muted-foreground">
                 We envision a future where every student with an innovative idea has the opportunity to develop it, and where our alumni are known for their entrepreneurial spirit and problem-solving abilities.
               </p>
@@ -211,7 +211,7 @@ const About = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Values Section */}
       <section className="py-20 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
@@ -223,13 +223,13 @@ const About = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-              <img 
-                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3" 
-                alt="Binary Hub values" 
+              <img
+                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3"
+                alt="tekinova Hub values"
                 className="w-full h-auto rounded-2xl shadow-2xl shadow-primary/10"
               />
             </motion.div>
-            
+
             <motion.div
               className="order-1 lg:order-2"
               initial={{ opacity: 0, y: 20 }}
@@ -237,7 +237,7 @@ const About = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-              <motion.span 
+              <motion.span
                 className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
@@ -246,11 +246,11 @@ const About = () => {
               >
                 Our Values
               </motion.span>
-              
+
               <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
                 Core Principles
               </h2>
-              
+
               <div className="space-y-6">
                 <div className="flex gap-4">
                   <div className="w-12 h-12 shrink-0 bg-primary/10 text-primary rounded-full flex items-center justify-center">
@@ -265,7 +265,7 @@ const About = () => {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-4">
                   <div className="w-12 h-12 shrink-0 bg-primary/10 text-primary rounded-full flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -279,7 +279,7 @@ const About = () => {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-4">
                   <div className="w-12 h-12 shrink-0 bg-primary/10 text-primary rounded-full flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -293,7 +293,7 @@ const About = () => {
                     </p>
                   </div>
                 </div>
-                
+
                 <div className="flex gap-4">
                   <div className="w-12 h-12 shrink-0 bg-primary/10 text-primary rounded-full flex items-center justify-center">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -312,7 +312,7 @@ const About = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Stats Section */}
       <section className="py-16 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
         <div className="max-w-7xl mx-auto">
@@ -324,7 +324,7 @@ const About = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ 
+                transition={{
                   delay: index * 0.1,
                   duration: 0.5,
                   ease: [0.22, 1, 0.36, 1]
@@ -341,7 +341,7 @@ const About = () => {
           </div>
         </div>
       </section>
-      
+
       {/* CTA Section */}
       <section className="py-20 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
@@ -351,9 +351,9 @@ const About = () => {
               <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl"></div>
             </div>
-            
+
             <div className="relative z-10 text-center max-w-3xl mx-auto">
-              <motion.h2 
+              <motion.h2
                 className="text-3xl md:text-4xl font-display font-bold mb-6"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -362,18 +362,18 @@ const About = () => {
               >
                 Join Our Innovation Community
               </motion.h2>
-              
-              <motion.p 
+
+              <motion.p
                 className="text-muted-foreground mb-8"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, duration: 0.5 }}
               >
-                Be part of Rwanda's growing innovation ecosystem. Whether you're a student, faculty member, or industry partner, there's a place for you at Binary Hub.
+                Be part of Rwanda's growing innovation ecosystem. Whether you're a student, faculty member, or industry partner, there's a place for you at tekinova Hub.
               </motion.p>
-              
-              <motion.div 
+
+              <motion.div
                 className="flex flex-wrap justify-center gap-4"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -392,7 +392,7 @@ const About = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Footer */}
       <Footer />
     </div>

@@ -14,7 +14,7 @@ const Index = () => {
     <div className="min-h-screen">
       {/* Hero Section */}
       <Hero />
-      
+
       {/* Stats Section */}
       <section className="py-16 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
         <div className="max-w-7xl mx-auto">
@@ -26,7 +26,7 @@ const Index = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ 
+                transition={{
                   delay: index * 0.1,
                   duration: 0.5,
                   ease: [0.22, 1, 0.36, 1]
@@ -43,7 +43,7 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
+
       {/* About Section */}
       <section className="py-20 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
@@ -55,14 +55,14 @@ const Index = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-              <img 
-                src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3" 
-                alt="Collaboration at Binary Hub" 
+              <img
+                src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
+                alt="Collaboration at tekinova Hub"
                 className="w-full h-auto rounded-2xl shadow-2xl shadow-primary/10"
               />
-              
+
               {/* Floating card */}
-              <motion.div 
+              <motion.div
                 className="absolute -bottom-6 -right-6 md:-bottom-10 md:-right-10 glass p-5 rounded-xl shadow-xl max-w-[200px]"
                 initial={{ opacity: 0, y: 20, x: 20 }}
                 whileInView={{ opacity: 1, y: 0, x: 0 }}
@@ -80,35 +80,35 @@ const Index = () => {
                 </div>
               </motion.div>
             </motion.div>
-            
+
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             >
-              <motion.span 
+              <motion.span
                 className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                About Binary Hub
+                About tekinova Hub
               </motion.span>
-              
+
               <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
                 Building Rwanda's Innovation Ecosystem
               </h2>
-              
+
               <p className="text-muted-foreground mb-6">
-                Binary Hub Rwanda is an innovation space within the University of Rwanda that fosters creativity, entrepreneurship, and technological advancement. We provide resources, mentorship, and networks to help students, faculty, and alumni turn ideas into impactful solutions.
+                tekinova Hub Rwanda is an innovation space within the University of Rwanda that fosters creativity, entrepreneurship, and technological advancement. We provide resources, mentorship, and networks to help students, faculty, and alumni turn ideas into impactful solutions.
               </p>
-              
+
               <p className="text-muted-foreground mb-8">
                 Our mission is to create a sustainable innovation ecosystem that addresses local challenges while preparing Rwanda's next generation of innovators and entrepreneurs.
               </p>
-              
+
               <Link to="/about" className="inline-flex items-center justify-center group">
                 <span className="text-foreground font-medium mr-2 group-hover:text-primary transition-colors">Learn more about our mission</span>
                 <ArrowRight size={18} className="text-primary transition-transform duration-300 group-hover:translate-x-1" />
@@ -117,13 +117,13 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
+
       {/* NEW: Innovation Projects Section */}
       <section className="py-20 px-6 md:px-12 bg-gradient-to-b from-secondary/20 to-transparent">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
-              <motion.span 
+              <motion.span
                 className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -132,8 +132,8 @@ const Index = () => {
               >
                 Our Innovations
               </motion.span>
-              
-              <motion.h2 
+
+              <motion.h2
                 className="text-3xl md:text-4xl font-display font-bold mb-4"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -142,8 +142,8 @@ const Index = () => {
               >
                 Featured Projects
               </motion.h2>
-              
-              <motion.p 
+
+              <motion.p
                 className="text-muted-foreground max-w-2xl"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -153,15 +153,15 @@ const Index = () => {
                 Explore innovative solutions developed by our community to address real-world challenges in Rwanda and beyond.
               </motion.p>
             </div>
-            
+
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.5 }}
             >
-              <Link 
-                to="/innovations" 
+              <Link
+                to="/innovations"
                 className="inline-flex items-center justify-center px-6 py-3 border border-border bg-background/50 hover:bg-background text-foreground rounded-full font-medium transition-all group"
               >
                 <span>View All Projects</span>
@@ -169,7 +169,7 @@ const Index = () => {
               </Link>
             </motion.div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {projects.slice(0, 3).map((project, index) => (
               <motion.div
@@ -182,16 +182,16 @@ const Index = () => {
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
                 <div className="relative h-48 overflow-hidden">
-                  <img 
-                    src={project.image} 
-                    alt={project.title} 
+                  <img
+                    src={project.image}
+                    alt={project.title}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                   />
                   <div className="absolute bottom-0 right-0 px-3 py-1 bg-black/70 text-white text-xs font-medium rounded-tl-lg">
                     {project.stage.charAt(0).toUpperCase() + project.stage.slice(1)}
                   </div>
                 </div>
-                
+
                 <div className="p-6 flex-grow flex flex-col">
                   <div className="mb-4">
                     <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary mb-3">
@@ -200,7 +200,7 @@ const Index = () => {
                     <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
                     <p className="text-muted-foreground text-sm">{project.description}</p>
                   </div>
-                  
+
                   <div className="mt-auto pt-4 flex justify-between items-center border-t border-border/50">
                     <span className="text-xs text-muted-foreground">
                       Innovator{project.innovators.length > 1 ? 's' : ''}: {project.innovators.length}
@@ -216,12 +216,12 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Services Section */}
       <section className="py-20 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16">
-            <motion.span 
+            <motion.span
               className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -230,8 +230,8 @@ const Index = () => {
             >
               What We Offer
             </motion.span>
-            
-            <motion.h2 
+
+            <motion.h2
               className="text-3xl md:text-4xl font-display font-bold mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -240,8 +240,8 @@ const Index = () => {
             >
               Our Services
             </motion.h2>
-            
-            <motion.p 
+
+            <motion.p
               className="text-muted-foreground"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -251,7 +251,7 @@ const Index = () => {
               We provide a comprehensive suite of services designed to support innovators at every stage of their journey.
             </motion.p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {services.map((service, index) => (
               <ServiceCard key={service.id} service={service} index={index} />
@@ -259,13 +259,13 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Featured Innovators Section */}
       <section className="py-20 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
-              <motion.span 
+              <motion.span
                 className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -274,8 +274,8 @@ const Index = () => {
               >
                 Meet Our Talent
               </motion.span>
-              
-              <motion.h2 
+
+              <motion.h2
                 className="text-3xl md:text-4xl font-display font-bold mb-4"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -284,26 +284,26 @@ const Index = () => {
               >
                 Featured Innovators
               </motion.h2>
-              
-              <motion.p 
+
+              <motion.p
                 className="text-muted-foreground max-w-2xl"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                Discover the talented individuals who are driving innovation and creating impact through Binary Hub Rwanda.
+                Discover the talented individuals who are driving innovation and creating impact through tekinova Hub Rwanda.
               </motion.p>
             </div>
-            
+
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.5 }}
             >
-              <Link 
-                to="/innovators" 
+              <Link
+                to="/innovators"
                 className="inline-flex items-center justify-center px-6 py-3 border border-border bg-background/50 hover:bg-background text-foreground rounded-full font-medium transition-all group"
               >
                 <span>View All Innovators</span>
@@ -311,7 +311,7 @@ const Index = () => {
               </Link>
             </motion.div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {innovators.slice(0, 3).map((innovator, index) => (
               <InnovatorCard key={innovator.id} innovator={innovator} index={index} />
@@ -319,7 +319,7 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
+
       {/* CTA Section */}
       <section className="py-20 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
         <div className="max-w-7xl mx-auto">
@@ -329,7 +329,7 @@ const Index = () => {
               <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl"></div>
             </div>
-            
+
             <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -340,11 +340,11 @@ const Index = () => {
                 <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
                   Ready to Join the Innovation Hub?
                 </h2>
-                
+
                 <p className="text-muted-foreground mb-8">
-                  Whether you're a student with a new idea, a faculty member interested in innovation, or an industry partner looking to collaborate, we welcome you to be part of Binary Hub Rwanda.
+                  Whether you're a student with a new idea, a faculty member interested in innovation, or an industry partner looking to collaborate, we welcome you to be part of tekinova Hub Rwanda.
                 </p>
-                
+
                 <div className="flex flex-wrap gap-4">
                   <Link to="/about" className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium transition-all hover:shadow-lg hover:shadow-primary/25">
                     Get Started
@@ -355,7 +355,7 @@ const Index = () => {
                   </Link>
                 </div>
               </motion.div>
-              
+
               <motion.div
                 className="relative"
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -363,9 +363,9 @@ const Index = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
-                <img 
-                  src="/api/placeholder/800/600" 
-                  alt="Join Binary Hub" 
+                <img
+                  src="/api/placeholder/800/600"
+                  alt="Join tekinova Hub"
                   className="w-full h-auto rounded-xl shadow-lg"
                 />
               </motion.div>
@@ -373,7 +373,7 @@ const Index = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Footer */}
       <Footer />
     </div>

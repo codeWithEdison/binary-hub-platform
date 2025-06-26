@@ -1,11 +1,11 @@
 
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { 
-  Bell, 
-  Tag, 
-  Calendar, 
-  User, 
+import {
+  Bell,
+  Tag,
+  Calendar,
+  User,
   Save,
   ArrowLeft,
   AlertCircle
@@ -27,11 +27,11 @@ import { Link } from "react-router-dom";
 
 // Sample data
 const announcementCategories = [
-  "Membership", 
-  "Partnership", 
-  "Donation", 
-  "Operations", 
-  "Event", 
+  "Membership",
+  "Partnership",
+  "Donation",
+  "Operations",
+  "Event",
   "Resources"
 ];
 
@@ -63,7 +63,7 @@ const AnnouncementForm = () => {
       // For now, just use mock data
       const mockData = {
         title: "Applications Open for Innovation Hub Membership",
-        content: "We are excited to announce that applications for the Binary Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
+        content: "We are excited to announce that applications for the tekinova Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
         date: "2023-11-10",
         category: "Membership",
         importance: "high",
@@ -97,12 +97,12 @@ const AnnouncementForm = () => {
     e.preventDefault();
     // In a real app, save to API
     console.log("Form submitted:", formData);
-    
+
     toast({
       title: isEditMode ? "Announcement Updated" : "Announcement Created",
       description: `Successfully ${isEditMode ? "updated" : "created"} ${formData.title}`,
     });
-    
+
     navigate("/admin/announcements");
   };
 
@@ -115,8 +115,8 @@ const AnnouncementForm = () => {
               {isEditMode ? "Edit Announcement" : "Create New Announcement"}
             </h1>
             <p className="text-muted-foreground">
-              {isEditMode 
-                ? "Update the details of this announcement" 
+              {isEditMode
+                ? "Update the details of this announcement"
                 : "Fill in the details to create a new announcement"}
             </p>
           </div>
@@ -139,7 +139,7 @@ const AnnouncementForm = () => {
                   <Bell className="h-4 w-4" />
                   Announcement Title
                 </Label>
-                <Input 
+                <Input
                   id="title"
                   name="title"
                   placeholder="Enter announcement title"
@@ -151,7 +151,7 @@ const AnnouncementForm = () => {
 
               <div className="space-y-2">
                 <Label htmlFor="content">Content</Label>
-                <Textarea 
+                <Textarea
                   id="content"
                   name="content"
                   placeholder="Write the full content of the announcement"
@@ -168,7 +168,7 @@ const AnnouncementForm = () => {
                     <Calendar className="h-4 w-4" />
                     Date
                   </Label>
-                  <Input 
+                  <Input
                     id="date"
                     name="date"
                     type="date"
@@ -183,8 +183,8 @@ const AnnouncementForm = () => {
                     <Tag className="h-4 w-4" />
                     Category
                   </Label>
-                  <Select 
-                    value={formData.category} 
+                  <Select
+                    value={formData.category}
                     onValueChange={(value) => handleSelectChange("category", value)}
                   >
                     <SelectTrigger>
@@ -205,8 +205,8 @@ const AnnouncementForm = () => {
                     <AlertCircle className="h-4 w-4" />
                     Importance
                   </Label>
-                  <Select 
-                    value={formData.importance} 
+                  <Select
+                    value={formData.importance}
                     onValueChange={(value) => handleSelectChange("importance", value)}
                   >
                     <SelectTrigger>
@@ -230,8 +230,8 @@ const AnnouncementForm = () => {
                 </Label>
                 <div className="flex items-center gap-3 p-3 bg-muted rounded-lg">
                   <div className="w-10 h-10 rounded-full overflow-hidden">
-                    <img 
-                      src={formData.author.image} 
+                    <img
+                      src={formData.author.image}
                       alt={formData.author.name}
                       className="w-full h-full object-cover"
                     />
@@ -249,9 +249,9 @@ const AnnouncementForm = () => {
           </Card>
 
           <div className="flex justify-end gap-3">
-            <Button 
-              type="button" 
-              variant="outline" 
+            <Button
+              type="button"
+              variant="outline"
               onClick={() => navigate("/admin/announcements")}
             >
               Cancel

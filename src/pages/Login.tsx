@@ -28,7 +28,7 @@ const Login = () => {
       if (email === "admin@example.com" && password === "password") {
         toast({
           title: "Login successful",
-          description: "Welcome to Binary Hub admin dashboard",
+          description: "Welcome to tekinova Hub admin dashboard",
         });
         navigate("/admin");
       } else {
@@ -54,9 +54,9 @@ const Login = () => {
     <div className="flex items-center justify-center min-h-screen bg-gray-50 p-4">
       <div className="w-full max-w-md">
         <div className="flex justify-center mb-6">
-          <img 
-            src="/img/binary_hub.png" 
-            alt="Binary Hub Logo" 
+          <img
+            src="/img/tekinova_hub.png"
+            alt="tekinova Hub Logo"
             className="h-16"
           />
         </div>

@@ -1,12 +1,12 @@
 
 import React, { useState } from "react";
-import { 
-  Plus, Search, Filter, Edit, Trash2, MoreHorizontal, Eye, Download, 
+import {
+  Plus, Search, Filter, Edit, Trash2, MoreHorizontal, Eye, Download,
   CalendarPlus, ArrowUpDown, ChevronDown, Calendar, MapPin, Clock, Users
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -32,7 +32,7 @@ const events = [
     description: "A 48-hour hackathon focusing on solutions for sustainable agriculture and food security in Rwanda.",
     date: "2023-11-15",
     time: "09:00 AM - 06:00 PM",
-    location: "Binary Hub, University of Rwanda - Kigali Campus",
+    location: "tekinova Hub, University of Rwanda - Kigali Campus",
     category: "Hackathon",
     capacity: 100,
     image: "https://images.unsplash.com/photo-1540317580384-e5d43867caa6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
@@ -76,7 +76,7 @@ const events = [
     description: "Exploring how blockchain technology can address social challenges in Africa.",
     date: "2023-12-18",
     time: "01:00 PM - 04:00 PM",
-    location: "Binary Hub, University of Rwanda - Kigali Campus",
+    location: "tekinova Hub, University of Rwanda - Kigali Campus",
     category: "Workshop",
     capacity: 40,
     image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2032&auto=format&fit=crop&ixlib=rb-4.0.3"
@@ -84,7 +84,7 @@ const events = [
   {
     id: "6",
     title: "End of Year Innovation Showcase",
-    description: "Celebrating the achievements of Binary Hub innovators in 2023.",
+    description: "Celebrating the achievements of tekinova Hub innovators in 2023.",
     date: "2023-12-22",
     time: "03:00 PM - 08:00 PM",
     location: "Kigali Convention Center",
@@ -100,16 +100,16 @@ const categories = ["All", "Hackathon", "Workshop", "Masterclass", "Networking",
 const EventManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
-  
+
   // Filter events based on search query and category
   const filteredEvents = events.filter(event => {
-    const matchesSearch = 
-      event.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    const matchesSearch =
+      event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.location.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesCategory = categoryFilter === "All" || event.category === categoryFilter;
-    
+
     return matchesSearch && matchesCategory;
   });
 
@@ -136,19 +136,19 @@ const EventManagement = () => {
             </Button>
           </div>
         </div>
-        
+
         {/* Filters */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search events..." 
+            <Input
+              placeholder="Search events..."
               className="pl-9"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="flex items-center gap-2">
@@ -166,7 +166,7 @@ const EventManagement = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        
+
         {/* Events Table */}
         <div className="border rounded-lg overflow-hidden">
           <Table>
@@ -186,8 +186,8 @@ const EventManagement = () => {
                 <TableRow key={event.id}>
                   <TableCell>
                     <div className="w-10 h-10 rounded-lg overflow-hidden">
-                      <img 
-                        src={event.image} 
+                      <img
+                        src={event.image}
                         alt={event.title}
                         className="w-full h-full object-cover"
                       />
@@ -202,11 +202,11 @@ const EventManagement = () => {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Badge 
+                    <Badge
                       variant={
-                        event.category === "Hackathon" ? "destructive" : 
-                        event.category === "Workshop" ? "secondary" : 
-                        "default"
+                        event.category === "Hackathon" ? "destructive" :
+                          event.category === "Workshop" ? "secondary" :
+                            "default"
                       }
                     >
                       {event.category}
@@ -217,7 +217,7 @@ const EventManagement = () => {
                       <div className="flex items-center">
                         <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
                         <span className="text-sm">
-                          {new Date(event.date).toLocaleDateString('en-US', { 
+                          {new Date(event.date).toLocaleDateString('en-US', {
                             year: 'numeric',
                             month: 'short',
                             day: 'numeric'

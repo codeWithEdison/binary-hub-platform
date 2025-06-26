@@ -1,12 +1,12 @@
 
 import React, { useState } from "react";
-import { 
-  Plus, Search, Filter, Edit, Trash2, MoreHorizontal, Eye, Download, 
+import {
+  Plus, Search, Filter, Edit, Trash2, MoreHorizontal, Eye, Download,
   Bell, ArrowUpDown, ChevronDown, Calendar, User
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { 
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
@@ -29,7 +29,7 @@ const announcements = [
   {
     id: "1",
     title: "Applications Open for Innovation Hub Membership",
-    content: "We are excited to announce that applications for the Binary Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
+    content: "We are excited to announce that applications for the tekinova Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
     date: "2023-11-10",
     category: "Membership",
     importance: "high",
@@ -42,7 +42,7 @@ const announcements = [
   {
     id: "2",
     title: "New Partnership with Rwanda Information Society Authority",
-    content: "Binary Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
+    content: "tekinova Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
     date: "2023-11-05",
     category: "Partnership",
     importance: "high",
@@ -68,7 +68,7 @@ const announcements = [
   {
     id: "4",
     title: "Changes to Hub Operating Hours",
-    content: "Starting December 1st, Binary Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
+    content: "Starting December 1st, tekinova Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
     date: "2023-10-20",
     category: "Operations",
     importance: "medium",
@@ -112,15 +112,15 @@ const categories = ["All", "Membership", "Partnership", "Donation", "Operations"
 const AnnouncementManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
-  
+
   // Filter announcements based on search query and category
   const filteredAnnouncements = announcements.filter(announcement => {
-    const matchesSearch = 
-      announcement.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    const matchesSearch =
+      announcement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       announcement.content.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     const matchesCategory = categoryFilter === "All" || announcement.category === categoryFilter;
-    
+
     return matchesSearch && matchesCategory;
   });
 
@@ -147,19 +147,19 @@ const AnnouncementManagement = () => {
             </Button>
           </div>
         </div>
-        
+
         {/* Filters */}
         <div className="flex flex-col md:flex-row gap-4 mb-6">
           <div className="relative flex-1">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input 
-              placeholder="Search announcements..." 
+            <Input
+              placeholder="Search announcements..."
               className="pl-9"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
-          
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="flex items-center gap-2">
@@ -177,7 +177,7 @@ const AnnouncementManagement = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        
+
         {/* Announcements Table */}
         <div className="border rounded-lg overflow-hidden">
           <Table>
@@ -206,11 +206,11 @@ const AnnouncementManagement = () => {
                     <Badge variant="outline">{announcement.category}</Badge>
                   </TableCell>
                   <TableCell>
-                    <Badge 
+                    <Badge
                       variant={
-                        announcement.importance === "high" ? "destructive" : 
-                        announcement.importance === "medium" ? "secondary" : 
-                        "outline"
+                        announcement.importance === "high" ? "destructive" :
+                          announcement.importance === "medium" ? "secondary" :
+                            "outline"
                       }
                     >
                       {announcement.importance}
@@ -220,7 +220,7 @@ const AnnouncementManagement = () => {
                     <div className="flex items-center">
                       <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
                       <span className="text-sm">
-                        {new Date(announcement.date).toLocaleDateString('en-US', { 
+                        {new Date(announcement.date).toLocaleDateString('en-US', {
                           year: 'numeric',
                           month: 'short',
                           day: 'numeric'
@@ -231,8 +231,8 @@ const AnnouncementManagement = () => {
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <div className="w-8 h-8 rounded-full overflow-hidden">
-                        <img 
-                          src={announcement.author.image} 
+                        <img
+                          src={announcement.author.image}
                           alt={announcement.author.name}
                           className="w-full h-full object-cover"
                         />

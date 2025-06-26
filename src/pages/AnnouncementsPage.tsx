@@ -14,7 +14,7 @@ const announcements = [
   {
     id: "1",
     title: "Applications Open for Innovation Hub Membership",
-    content: "We are excited to announce that applications for the Binary Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
+    content: "We are excited to announce that applications for the tekinova Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
     date: "2023-11-10",
     category: "Membership",
     importance: "high",
@@ -27,7 +27,7 @@ const announcements = [
   {
     id: "2",
     title: "New Partnership with Rwanda Information Society Authority",
-    content: "Binary Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
+    content: "tekinova Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
     date: "2023-11-05",
     category: "Partnership",
     importance: "high",
@@ -53,7 +53,7 @@ const announcements = [
   {
     id: "4",
     title: "Changes to Hub Operating Hours",
-    content: "Starting December 1st, Binary Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
+    content: "Starting December 1st, tekinova Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
     date: "2023-10-20",
     category: "Operations",
     importance: "medium",
@@ -97,13 +97,13 @@ const categories = ["All", "Membership", "Partnership", "Donation", "Operations"
 const AnnouncementsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
-  
+
   // Filter announcements based on search and category
   const filteredAnnouncements = announcements.filter(announcement => {
     const titleMatch = announcement.title.toLowerCase().includes(searchQuery.toLowerCase());
     const contentMatch = announcement.content.toLowerCase().includes(searchQuery.toLowerCase());
     const categoryMatch = selectedCategory === "All" || announcement.category === selectedCategory;
-    
+
     return (titleMatch || contentMatch) && categoryMatch;
   });
 
@@ -118,7 +118,7 @@ const AnnouncementsPage = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <motion.span 
+            <motion.span
               className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -126,13 +126,13 @@ const AnnouncementsPage = () => {
             >
               Stay Informed
             </motion.span>
-            
+
             <h1 className="text-3xl md:text-5xl font-display font-bold mb-6">
               Announcements
             </h1>
-            
+
             <p className="text-muted-foreground md:text-lg">
-              Stay up-to-date with the latest news, updates, and announcements from Binary Hub Rwanda.
+              Stay up-to-date with the latest news, updates, and announcements from tekinova Hub Rwanda.
             </p>
           </motion.div>
         </div>
@@ -156,7 +156,7 @@ const AnnouncementsPage = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              
+
               {/* Category Filter */}
               <div className="md:col-span-6">
                 <div className="flex items-center">
@@ -175,13 +175,13 @@ const AnnouncementsPage = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Announcements */}
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-2xl font-display font-semibold">Latest Announcements</h2>
             </div>
-            
+
             {filteredAnnouncements.length > 0 ? (
               <div className="space-y-6">
                 {filteredAnnouncements.map((announcement) => (
@@ -196,7 +196,7 @@ const AnnouncementsPage = () => {
                     <Card className="border-0 bg-transparent">
                       <CardHeader className="pb-2">
                         <div className="flex flex-wrap items-center gap-2 mb-2">
-                          <Badge 
+                          <Badge
                             variant={announcement.importance === "high" ? "destructive" : "default"}
                             className={announcement.importance === "medium" ? "bg-yellow-500" : ""}
                           >
@@ -218,8 +218,8 @@ const AnnouncementsPage = () => {
                       <CardFooter className="flex justify-between items-center border-t border-border pt-4">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-full overflow-hidden">
-                            <img 
-                              src={announcement.author.image} 
+                            <img
+                              src={announcement.author.image}
                               alt={announcement.author.name}
                               className="w-full h-full object-cover"
                             />
@@ -229,7 +229,7 @@ const AnnouncementsPage = () => {
                             <p className="text-xs text-muted-foreground">{announcement.author.role}</p>
                           </div>
                         </div>
-                        
+
                         {/* If we had individual announcement pages, we would link to them here */}
                         <Button variant="ghost" size="sm" className="flex items-center gap-1">
                           <span>Read More</span>
@@ -244,8 +244,8 @@ const AnnouncementsPage = () => {
               <div className="text-center py-20">
                 <Bell size={48} className="mx-auto text-muted-foreground mb-4" />
                 <p className="text-lg text-muted-foreground">No announcements match your search criteria.</p>
-                <Button 
-                  variant="outline" 
+                <Button
+                  variant="outline"
                   className="mt-4"
                   onClick={() => {
                     setSearchQuery("");
@@ -257,14 +257,14 @@ const AnnouncementsPage = () => {
               </div>
             )}
           </div>
-          
+
           {/* Subscribe CTA */}
           <div className="glass rounded-xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2">
               <div className="p-8 md:p-12 flex flex-col justify-center">
                 <h3 className="text-2xl font-display font-semibold mb-4">Stay Updated</h3>
                 <p className="text-muted-foreground mb-6">
-                  Subscribe to our newsletter to receive announcements directly in your inbox. Never miss important updates from Binary Hub Rwanda.
+                  Subscribe to our newsletter to receive announcements directly in your inbox. Never miss important updates from tekinova Hub Rwanda.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Input placeholder="Your email address" />
@@ -272,7 +272,7 @@ const AnnouncementsPage = () => {
                 </div>
               </div>
               <div className="hidden md:block relative h-auto">
-                <img 
+                <img
                   src="https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d"
                   alt="Subscribe to updates"
                   className="absolute inset-0 w-full h-full object-cover"
@@ -282,7 +282,7 @@ const AnnouncementsPage = () => {
           </div>
         </div>
       </section>
-      
+
       <Footer />
     </div>
   );

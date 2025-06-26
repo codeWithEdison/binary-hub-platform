@@ -12,7 +12,7 @@ const announcements = [
   {
     id: "1",
     title: "Applications Open for Innovation Hub Membership",
-    content: "We are excited to announce that applications for the Binary Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
+    content: "We are excited to announce that applications for the tekinova Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
     date: "2023-11-10",
     category: "Membership",
     importance: "high",
@@ -22,11 +22,11 @@ const announcements = [
       image: "/img/cordinator.jpg"
     },
     fullContent: `
-      <h2>Binary Hub Rwanda Opens Applications for New Members</h2>
+      <h2>tekinova Hub Rwanda Opens Applications for New Members</h2>
       
-      <p>We are excited to announce that applications for the Binary Hub membership are now open. As Rwanda's premier innovation hub at the University of Rwanda, we are looking for passionate innovators, entrepreneurs, and problem-solvers to join our community.</p>
+      <p>We are excited to announce that applications for the tekinova Hub membership are now open. As Rwanda's premier innovation hub at the University of Rwanda, we are looking for passionate innovators, entrepreneurs, and problem-solvers to join our community.</p>
       
-      <p>Binary Hub membership provides access to our state-of-the-art facilities, including:</p>
+      <p>tekinova Hub membership provides access to our state-of-the-art facilities, including:</p>
       <ul>
         <li>Coworking spaces</li>
         <li>Prototyping lab</li>
@@ -61,7 +61,7 @@ const announcements = [
       Final Selection: January 20, 2024<br>
       Onboarding: February 1, 2024</p>
       
-      <p>For any questions regarding the application process, please contact us at <a href="mailto:membership@binaryhub.rw">membership@binaryhub.rw</a>.</p>
+      <p>For any questions regarding the application process, please contact us at <a href="mailto:membership@tekinovahub.rw">membership@tekinovahub.rw</a>.</p>
     `,
     attachments: [
       { name: "Membership Guidelines.pdf", size: "1.2 MB", type: "pdf" },
@@ -75,7 +75,7 @@ const announcements = [
   {
     id: "2",
     title: "New Partnership with Rwanda Information Society Authority",
-    content: "Binary Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
+    content: "tekinova Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
     date: "2023-11-05",
     category: "Partnership",
     importance: "high",
@@ -87,23 +87,23 @@ const announcements = [
     fullContent: `
       <h2>Strategic Partnership with Rwanda Information Society Authority</h2>
       
-      <p>Binary Hub is proud to announce a new strategic partnership with the Rwanda Information Society Authority (RISA) to promote digital innovation across Rwanda.</p>
+      <p>tekinova Hub is proud to announce a new strategic partnership with the Rwanda Information Society Authority (RISA) to promote digital innovation across Rwanda.</p>
       
-      <p>This collaboration aims to accelerate digital transformation in key sectors of Rwanda's economy by leveraging the innovative capacity of Binary Hub members and the strategic direction provided by RISA.</p>
+      <p>This collaboration aims to accelerate digital transformation in key sectors of Rwanda's economy by leveraging the innovative capacity of tekinova Hub members and the strategic direction provided by RISA.</p>
       
       <h3>Key Aspects of the Partnership</h3>
       
       <p>The partnership will focus on several key areas:</p>
       
       <ol>
-        <li><strong>Innovation Challenges:</strong> RISA will present real-world challenges faced by government agencies that Binary Hub innovators can work to solve.</li>
+        <li><strong>Innovation Challenges:</strong> RISA will present real-world challenges faced by government agencies that tekinova Hub innovators can work to solve.</li>
         <li><strong>Capacity Building:</strong> Joint training programs to enhance digital skills among students and young professionals.</li>
         <li><strong>Research Collaboration:</strong> Collaborative research projects addressing national priorities in digital transformation.</li>
-        <li><strong>Innovation Funding:</strong> Access to funding opportunities for promising digital solutions developed by Binary Hub members.</li>
+        <li><strong>Innovation Funding:</strong> Access to funding opportunities for promising digital solutions developed by tekinova Hub members.</li>
         <li><strong>Policy Input:</strong> Creating channels for innovators to provide input on digital policies and strategies.</li>
       </ol>
       
-      <p>Through this partnership, Binary Hub members will gain unparalleled access to government innovation needs, creating pathways for their solutions to achieve national scale and impact.</p>
+      <p>Through this partnership, tekinova Hub members will gain unparalleled access to government innovation needs, creating pathways for their solutions to achieve national scale and impact.</p>
       
       <h3>Upcoming Opportunities</h3>
       
@@ -111,13 +111,13 @@ const announcements = [
       
       <ul>
         <li>A Digital Innovation Challenge to be launched in January 2024</li>
-        <li>Five internship positions for Binary Hub members at RISA</li>
-        <li>Technical workshops led by RISA experts at Binary Hub</li>
+        <li>Five internship positions for tekinova Hub members at RISA</li>
+        <li>Technical workshops led by RISA experts at tekinova Hub</li>
       </ul>
       
       <p>We believe this partnership represents a significant step forward in creating a robust innovation ecosystem in Rwanda, connecting government needs with innovative solutions developed by Rwanda's brightest minds.</p>
       
-      <p>For more information on how to engage with opportunities arising from this partnership, please contact our partnerships team at <a href="mailto:partnerships@binaryhub.rw">partnerships@binaryhub.rw</a>.</p>
+      <p>For more information on how to engage with opportunities arising from this partnership, please contact our partnerships team at <a href="mailto:partnerships@tekinovahub.rw">partnerships@tekinovahub.rw</a>.</p>
     `,
     attachments: [
       { name: "RISA Partnership Press Release.pdf", size: "2.4 MB", type: "pdf" },
@@ -144,7 +144,7 @@ const announcements = [
   {
     id: "4",
     title: "Changes to Hub Operating Hours",
-    content: "Starting December 1st, Binary Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
+    content: "Starting December 1st, tekinova Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
     date: "2023-10-20",
     category: "Operations",
     importance: "medium",
@@ -169,7 +169,7 @@ const announcements = [
     fullContent: `
       <h2>Call for Projects: End of Year Innovation Showcase</h2>
       
-      <p>Binary Hub Rwanda is pleased to announce the opening of submissions for our prestigious End of Year Innovation Showcase. This annual event celebrates the achievements of our innovative community and provides a platform for talented innovators to present their work to a wide audience of industry leaders, potential investors, and the wider innovation ecosystem.</p>
+      <p>tekinova Hub Rwanda is pleased to announce the opening of submissions for our prestigious End of Year Innovation Showcase. This annual event celebrates the achievements of our innovative community and provides a platform for talented innovators to present their work to a wide audience of industry leaders, potential investors, and the wider innovation ecosystem.</p>
       
       <h3>About the Showcase</h3>
       
@@ -188,9 +188,9 @@ const announcements = [
       <p>The showcase is open to:</p>
       
       <ul>
-        <li>Current Binary Hub members</li>
+        <li>Current tekinova Hub members</li>
         <li>University of Rwanda students and faculty</li>
-        <li>Alumni of Binary Hub programs</li>
+        <li>Alumni of tekinova Hub programs</li>
         <li>Rwandan startups less than two years old (by special application)</li>
       </ul>
       
@@ -225,7 +225,7 @@ const announcements = [
       Exhibitor Briefing: December 10, 2023<br>
       Showcase Event: December 22, 2023</p>
       
-      <p>For questions and further information, please contact our events team at <a href="mailto:events@binaryhub.rw">events@binaryhub.rw</a>.</p>
+      <p>For questions and further information, please contact our events team at <a href="mailto:events@tekinovahub.rw">events@tekinovahub.rw</a>.</p>
       
       <p>We look forward to seeing the innovative solutions you've been working on!</p>
     `,
@@ -254,7 +254,7 @@ const announcements = [
 ];
 
 const AnnouncementDetail = () => {
-  const { announcementId } = useParams<{ announcementId: string }>();
+  const { announcementId } = useParams<{ announcementId: string; }>();
   const announcement = announcements.find(a => a.id === announcementId);
 
   if (!announcement) {
@@ -285,31 +285,31 @@ const AnnouncementDetail = () => {
               <ArrowLeft size={16} />
               <span>Back to Announcements</span>
             </Link>
-            
+
             <div className="flex flex-wrap items-center gap-2 mb-4">
-              <Badge 
+              <Badge
                 variant={announcement.importance === "high" ? "destructive" : "default"}
                 className={announcement.importance === "medium" ? "bg-yellow-500" : ""}
               >
                 {announcement.category}
               </Badge>
               <span className="text-sm text-muted-foreground">
-                {new Date(announcement.date).toLocaleDateString('en-US', { 
+                {new Date(announcement.date).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
                   day: 'numeric'
                 })}
               </span>
             </div>
-            
+
             <h1 className="text-3xl md:text-5xl font-bold mb-6">
               {announcement.title}
             </h1>
-            
+
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-full overflow-hidden">
-                <img 
-                  src={announcement.author.image} 
+                <img
+                  src={announcement.author.image}
                   alt={announcement.author.name}
                   className="w-full h-full object-cover"
                 />
@@ -343,20 +343,20 @@ const AnnouncementDetail = () => {
                   <h2 className="text-xl font-semibold mb-4">Attachments</h2>
                   <div className="space-y-3">
                     {announcement.attachments.map((attachment, i) => (
-                      <div 
+                      <div
                         key={i}
                         className="flex items-center justify-between p-4 border border-border rounded-lg hover:bg-secondary/10 transition-colors"
                       >
                         <div className="flex items-center gap-3">
                           <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
-                            {attachment.type === 'pdf' && 
-                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file-text"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><line x1="16" x2="8" y1="13" y2="13"/><line x1="16" x2="8" y1="17" y2="17"/><line x1="10" x2="8" y1="9" y2="9"/></svg>
+                            {attachment.type === 'pdf' &&
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file-text"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /><line x1="16" x2="8" y1="13" y2="13" /><line x1="16" x2="8" y1="17" y2="17" /><line x1="10" x2="8" y1="9" y2="9" /></svg>
                             }
-                            {attachment.type === 'docx' && 
-                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            {attachment.type === 'docx' &&
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /></svg>
                             }
-                            {attachment.type === 'pptx' && 
-                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file-presentation"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M12 12v6"/><path d="M9.5 15.5L12 12l2.5 3.5"/></svg>
+                            {attachment.type === 'pptx' &&
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="lucide lucide-file-presentation"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z" /><polyline points="14 2 14 8 20 8" /><path d="M12 12v6" /><path d="M9.5 15.5L12 12l2.5 3.5" /></svg>
                             }
                           </div>
                           <div>
@@ -378,7 +378,7 @@ const AnnouncementDetail = () => {
                   <div className="space-y-3">
                     {announcement.relatedLinks.map((link, i) => (
                       <div key={i} className="flex">
-                        <Link 
+                        <Link
                           to={link.url}
                           className="inline-flex items-center gap-2 hover:text-primary transition-colors"
                         >
@@ -403,7 +403,7 @@ const AnnouncementDetail = () => {
                       <div>
                         <p className="font-medium">Published</p>
                         <p className="text-muted-foreground">
-                          {new Date(announcement.date).toLocaleDateString('en-US', { 
+                          {new Date(announcement.date).toLocaleDateString('en-US', {
                             weekday: 'long',
                             year: 'numeric',
                             month: 'long',
@@ -412,7 +412,7 @@ const AnnouncementDetail = () => {
                         </p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-start gap-3">
                       <Tag className="h-5 w-5 text-primary mt-0.5" />
                       <div>
@@ -420,7 +420,7 @@ const AnnouncementDetail = () => {
                         <p className="text-muted-foreground">{announcement.category}</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-start gap-3">
                       <Bell className="h-5 w-5 text-primary mt-0.5" />
                       <div>
@@ -428,7 +428,7 @@ const AnnouncementDetail = () => {
                         <p className="text-muted-foreground capitalize">{announcement.importance}</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-start gap-3">
                       <User className="h-5 w-5 text-primary mt-0.5" />
                       <div>
@@ -439,7 +439,7 @@ const AnnouncementDetail = () => {
                     </div>
                   </div>
                 </div>
-                
+
                 <Button variant="outline" size="lg" className="w-full flex items-center justify-center gap-2">
                   <Share className="h-4 w-4" />
                   Share Announcement

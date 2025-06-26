@@ -91,7 +91,7 @@ const Partners = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <motion.span 
+            <motion.span
               className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -99,11 +99,11 @@ const Partners = () => {
             >
               Our Network
             </motion.span>
-            
+
             <h1 className="text-3xl md:text-5xl font-display font-bold mb-6">
               Partners & Collaborators
             </h1>
-            
+
             <p className="text-muted-foreground md:text-lg">
               Building Rwanda's innovation ecosystem through strategic partnerships with academic institutions, industry leaders, government agencies, and funding organizations.
             </p>
@@ -119,12 +119,12 @@ const Partners = () => {
               <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl"></div>
             </div>
-            
+
             <div className="relative z-10">
               <h2 className="text-2xl md:text-3xl font-display font-bold mb-6 text-center">
                 Our Ecosystem
               </h2>
-              
+
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
                 <motion.div
                   className="flex flex-col items-center"
@@ -138,7 +138,7 @@ const Partners = () => {
                   <h3 className="font-medium mb-1">Industry</h3>
                   <p className="text-sm text-muted-foreground">Connecting with leading companies</p>
                 </motion.div>
-                
+
                 <motion.div
                   className="flex flex-col items-center"
                   initial={{ opacity: 0, y: 20 }}
@@ -151,7 +151,7 @@ const Partners = () => {
                   <h3 className="font-medium mb-1">Academia</h3>
                   <p className="text-sm text-muted-foreground">Leveraging educational expertise</p>
                 </motion.div>
-                
+
                 <motion.div
                   className="flex flex-col items-center"
                   initial={{ opacity: 0, y: 20 }}
@@ -164,7 +164,7 @@ const Partners = () => {
                   <h3 className="font-medium mb-1">Community</h3>
                   <p className="text-sm text-muted-foreground">Building collaborative networks</p>
                 </motion.div>
-                
+
                 <motion.div
                   className="flex flex-col items-center"
                   initial={{ opacity: 0, y: 20 }}
@@ -178,13 +178,13 @@ const Partners = () => {
                   <p className="text-sm text-muted-foreground">International collaboration</p>
                 </motion.div>
               </div>
-              
+
               <div className="mt-12 text-center">
                 <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                  Binary Hub Rwanda thrives through a network of strategic partnerships, enabling our innovators to access resources, expertise, and opportunities.
+                  tekinova Hub Rwanda thrives through a network of strategic partnerships, enabling our innovators to access resources, expertise, and opportunities.
                 </p>
-                <Link 
-                  to="/partner-with-us" 
+                <Link
+                  to="/partner-with-us"
                   className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium transition-colors hover:bg-primary/90"
                 >
                   Become a Partner
@@ -194,7 +194,7 @@ const Partners = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Partners Grid */}
       <section className="py-16 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
         <div className="max-w-7xl mx-auto">
@@ -203,10 +203,10 @@ const Partners = () => {
               Our Partners
             </h2>
             <p className="text-muted-foreground">
-              Meet the organizations that collaborate with Binary Hub Rwanda to foster innovation and entrepreneurship.
+              Meet the organizations that collaborate with tekinova Hub Rwanda to foster innovation and entrepreneurship.
             </p>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {partners.map((partner, index) => (
               <motion.div
@@ -218,13 +218,13 @@ const Partners = () => {
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
                 <div className="h-40 mb-4 overflow-hidden rounded-lg">
-                  <img 
-                    src={partner.logo} 
-                    alt={partner.name} 
+                  <img
+                    src={partner.logo}
+                    alt={partner.name}
                     className="w-full h-full object-cover"
                   />
                 </div>
-                
+
                 <div className="flex-grow">
                   <div className="mb-2">
                     <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary mb-2">
@@ -234,11 +234,11 @@ const Partners = () => {
                   </div>
                   <p className="text-muted-foreground text-sm mb-4">{partner.description}</p>
                 </div>
-                
-                <a 
-                  href={partner.website} 
-                  target="_blank" 
-                  rel="noopener noreferrer" 
+
+                <a
+                  href={partner.website}
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center text-primary hover:text-primary/80 transition-colors mt-2"
                 >
                   Visit Website <ExternalLink size={14} className="ml-1" />
@@ -248,13 +248,13 @@ const Partners = () => {
           </div>
         </div>
       </section>
-      
+
       {/* Success Stories */}
       <section className="py-16 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
             <div>
-              <motion.span 
+              <motion.span
                 className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -262,8 +262,8 @@ const Partners = () => {
               >
                 Partnership Impact
               </motion.span>
-              
-              <motion.h2 
+
+              <motion.h2
                 className="text-3xl md:text-4xl font-display font-bold mb-4"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -271,8 +271,8 @@ const Partners = () => {
               >
                 Success Stories
               </motion.h2>
-              
-              <motion.p 
+
+              <motion.p
                 className="text-muted-foreground max-w-2xl"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -281,14 +281,14 @@ const Partners = () => {
                 Discover how our partnerships have created meaningful impact and innovative solutions for Rwanda.
               </motion.p>
             </div>
-            
+
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 0.4, duration: 0.5 }}
             >
-              <Link 
-                to="/success-stories" 
+              <Link
+                to="/success-stories"
                 className="inline-flex items-center justify-center px-6 py-3 border border-border bg-background/50 hover:bg-background text-foreground rounded-full font-medium transition-all group"
               >
                 <span>View All Success Stories</span>
@@ -296,7 +296,7 @@ const Partners = () => {
               </Link>
             </motion.div>
           </div>
-          
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {successStories.map((story, index) => (
               <motion.div
@@ -308,20 +308,20 @@ const Partners = () => {
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
                 <div className="h-48 overflow-hidden">
-                  <img 
-                    src={story.image} 
-                    alt={story.title} 
+                  <img
+                    src={story.image}
+                    alt={story.title}
                     className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                   />
                 </div>
                 <div className="p-6 flex-grow flex flex-col">
                   <h3 className="text-xl font-semibold mb-3">{story.title}</h3>
                   <p className="text-muted-foreground text-sm mb-4">{story.description}</p>
-                  <Link 
-                    to={`/success-stories/${story.id}`} 
+                  <Link
+                    to={`/success-stories/${story.id}`}
                     className="mt-auto inline-flex items-center text-primary group"
                   >
-                    Read Full Story 
+                    Read Full Story
                     <ArrowRight size={16} className="ml-1 transition-transform duration-300 group-hover:translate-x-1" />
                   </Link>
                 </div>
@@ -330,7 +330,7 @@ const Partners = () => {
           </div>
         </div>
       </section>
-      
+
       {/* CTA Section */}
       <section className="py-16 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
         <div className="max-w-7xl mx-auto">
@@ -339,7 +339,7 @@ const Partners = () => {
               <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl"></div>
             </div>
-            
+
             <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -347,13 +347,13 @@ const Partners = () => {
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
                 <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
-                  Partner with Binary Hub Rwanda
+                  Partner with tekinova Hub Rwanda
                 </h2>
-                
+
                 <p className="text-muted-foreground mb-8">
-                  Interested in collaborating with Binary Hub Rwanda? We're always looking for new partners who share our vision of fostering innovation and entrepreneurship in Rwanda.
+                  Interested in collaborating with tekinova Hub Rwanda? We're always looking for new partners who share our vision of fostering innovation and entrepreneurship in Rwanda.
                 </p>
-                
+
                 <div className="flex flex-wrap gap-4">
                   <Link to="/partner-with-us" className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium transition-all hover:shadow-lg hover:shadow-primary/25">
                     Become a Partner
@@ -364,16 +364,16 @@ const Partners = () => {
                   </Link>
                 </div>
               </motion.div>
-              
+
               <motion.div
                 className="relative"
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
-                <img 
-                  src="https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3" 
-                  alt="Partner with Binary Hub" 
+                <img
+                  src="https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3"
+                  alt="Partner with tekinova Hub"
                   className="w-full h-auto rounded-xl shadow-lg"
                 />
               </motion.div>
@@ -381,7 +381,7 @@ const Partners = () => {
           </div>
         </div>
       </section>
-      
+
       <Footer />
     </div>
   );

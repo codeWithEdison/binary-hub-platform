@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
-import { 
+import {
   ChevronLeft, ChevronRight, LayoutDashboard, Users, Calendar, FileText,
   Settings, LogOut, Menu, X, Bell
 } from "lucide-react";
@@ -17,35 +17,35 @@ const AdminDashboard = () => {
 
   // Navigation links
   const navItems = [
-    { 
-      name: "Dashboard", 
-      path: "/admin", 
-      icon: LayoutDashboard 
+    {
+      name: "Dashboard",
+      path: "/admin",
+      icon: LayoutDashboard
     },
-    { 
-      name: "Innovators", 
-      path: "/admin/innovators", 
-      icon: Users 
+    {
+      name: "Innovators",
+      path: "/admin/innovators",
+      icon: Users
     },
-    { 
-      name: "Projects", 
-      path: "/admin/projects", 
-      icon: FileText 
+    {
+      name: "Projects",
+      path: "/admin/projects",
+      icon: FileText
     },
-    { 
-      name: "Events", 
-      path: "/admin/events", 
-      icon: Calendar 
+    {
+      name: "Events",
+      path: "/admin/events",
+      icon: Calendar
     },
-    { 
-      name: "Announcements", 
-      path: "/admin/announcements", 
-      icon: Bell 
+    {
+      name: "Announcements",
+      path: "/admin/announcements",
+      icon: Bell
     },
-    { 
-      name: "Settings", 
-      path: "/admin/settings", 
-      icon: Settings 
+    {
+      name: "Settings",
+      path: "/admin/settings",
+      icon: Settings
     }
   ];
 
@@ -67,7 +67,7 @@ const AdminDashboard = () => {
         <div className="lg:hidden fixed inset-0 z-50 bg-background/80 backdrop-blur-sm">
           <div className="fixed inset-y-0 left-0 w-full max-w-xs bg-background p-6 shadow-lg">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-xl font-semibold">Binary Hub Admin</h2>
+              <h2 className="text-xl font-semibold">tekinova Hub Admin</h2>
               <Button
                 variant="ghost"
                 size="icon"
@@ -131,7 +131,7 @@ const AdminDashboard = () => {
             }
           )}>
             {sidebarOpen ? (
-              <h2 className="text-xl font-semibold">Binary Hub Admin</h2>
+              <h2 className="text-xl font-semibold">tekinova Hub Admin</h2>
             ) : (
               <span className="text-xl font-semibold">BH</span>
             )}
@@ -188,7 +188,7 @@ const AdminDashboard = () => {
       </aside>
 
       {/* Main content */}
-      <main 
+      <main
         className={cn(
           "transition-all duration-300 pt-16 lg:pt-0",
           {

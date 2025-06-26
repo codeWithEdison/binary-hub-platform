@@ -1,12 +1,12 @@
-# Binary Hub Rwanda Platform
+# tekinova Hub Rwanda Platform
 
 <div align="center">
-  <img src="public/logo.svg" alt="Binary Hub Logo" width="200" />
+  <img src="public/logo.svg" alt="tekinova Hub Logo" width="200" />
 
   <h3>Connecting Innovators, Creating Impact</h3>
 
   <p>
-    <a href="https://binaryhub.codewithedison.com/" target="_blank">View Demo</a> •
+    <a href="https://tekinovahub.codewithedison.com/" target="_blank">View Demo</a> •
     <a href="#features">Features</a> •
     <a href="#tech-stack">Tech Stack</a> •
     <a href="#getting-started">Getting Started</a> •
@@ -14,18 +14,19 @@
     <a href="#license">License</a>
   </p>
 
-  [![React][React.js]][React-url]
-  [![Vite][Vite.js]][Vite-url]
-  [![Tailwind CSS][Tailwind.css]][Tailwind-url]
-  [![TypeScript][TypeScript]][TypeScript-url]
-  [![Shadcn/UI][Shadcn]][Shadcn-url]
+[![React][React.js]][React-url]
+[![Vite][Vite.js]][Vite-url]
+[![Tailwind CSS][Tailwind.css]][Tailwind-url]
+[![TypeScript][TypeScript]][TypeScript-url]
+[![Shadcn/UI][Shadcn]][Shadcn-url]
+
 </div>
 
 ## 💡 About The Project
 
-Binary Hub Rwanda is an innovation space within the University of Rwanda that fosters creativity, entrepreneurship, and technological advancement. This platform serves as the digital face of Binary Hub, showcasing innovators, projects, and services while providing a connection point for students, mentors, and partners.
+tekinova Hub Rwanda is an innovation space within the University of Rwanda that fosters creativity, entrepreneurship, and technological advancement. This platform serves as the digital face of tekinova Hub, showcasing innovators, projects, and services while providing a connection point for students, mentors, and partners.
 
-<img src="public/screenshot.png" alt="Binary Hub Screenshot" width="100%" />
+<img src="public/screenshot.png" alt="tekinova Hub Screenshot" width="100%" />
 
 ### ✨ Key Features
 
@@ -53,10 +54,10 @@ Follow these simple steps to set up the project locally:
 
 ```bash
 # Clone the repository
-git clone https://github.com/codeWithEdison/binary-hub-platform.git
+git clone https://github.com/codeWithEdison/tekinova-hub-platform.git
 
 # Navigate to the project directory
-cd binary-hub-platform
+cd tekinova-hub-platform
 
 # Install dependencies
 npm install
@@ -70,7 +71,7 @@ Open [http://localhost:5173](http://localhost:5173) to view the application in y
 ## 📂 Project Structure
 
 ```
-binary-hub-platform/
+tekinova-hub-platform/
 ├── public/             # Static assets
 ├── src/                # Source files
 │   ├── components/     # Reusable UI components
@@ -97,21 +98,22 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📬 Contact
 
-Edison Uwihanganye - [@codeWithEdison](https://twitter.com/codeWithEdison) - edison@binaryhub.rw
+Edison Uwihanganye - [@codeWithEdison](https://twitter.com/codeWithEdison) - edison@tekinovahub.rw
 
-Project Link: [https://github.com/codeWithEdison/binary-hub-platform](https://github.com/codeWithEdison/binary-hub-platform)
+Project Link: [https://github.com/codeWithEdison/tekinova-hub-platform](https://github.com/codeWithEdison/tekinova-hub-platform)
 
 ## 🙏 Acknowledgments
 
-* [University of Rwanda](https://www.ur.ac.rw/)
-* [Rwanda ICT Chamber](https://www.ict.rw/)
-* [All the innovative students and mentors at Binary Hub](https://binaryhub.codewithedison.com/innovators)
+- [University of Rwanda](https://www.ur.ac.rw/)
+- [Rwanda ICT Chamber](https://www.ict.rw/)
+- [All the innovative students and mentors at tekinova Hub](https://tekinovahub.codewithedison.com/innovators)
 
 ---
 
 <p align="center">Made with ❤️ in Kigali, Rwanda</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
+
 [React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
 [React-url]: https://reactjs.org/
 [Vite.js]: https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white

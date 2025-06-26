@@ -37,10 +37,10 @@ const Navbar = () => {
 
   const navVariants = {
     hidden: { opacity: 0, y: -20 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         duration: 0.5,
         ease: [0.22, 1, 0.36, 1]
       }
@@ -49,10 +49,10 @@ const Navbar = () => {
 
   const linkVariants = {
     hidden: { opacity: 0, y: -10 },
-    visible: (i: number) => ({ 
-      opacity: 1, 
+    visible: (i: number) => ({
+      opacity: 1,
       y: 0,
-      transition: { 
+      transition: {
         delay: i * 0.1,
         duration: 0.5,
         ease: [0.22, 1, 0.36, 1]
@@ -61,7 +61,7 @@ const Navbar = () => {
   };
 
   const mobileMenuVariants = {
-    closed: { 
+    closed: {
       opacity: 0,
       x: "100%",
       transition: {
@@ -69,7 +69,7 @@ const Navbar = () => {
         ease: [0.22, 1, 0.36, 1]
       }
     },
-    open: { 
+    open: {
       opacity: 1,
       x: 0,
       transition: {
@@ -95,7 +95,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="relative z-50">
           <h1 className="text-xl font-display font-semibold">
-            <span className="text-gradient">Binary Hub</span>
+            <span className="text-gradient">tekinova Hub</span>
           </h1>
         </Link>
 
@@ -163,10 +163,10 @@ const Navbar = () => {
                   <motion.div
                     key={link.name}
                     initial={{ opacity: 0, y: 20 }}
-                    animate={{ 
-                      opacity: 1, 
-                      y: 0, 
-                      transition: { delay: 0.1 + i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] } 
+                    animate={{
+                      opacity: 1,
+                      y: 0,
+                      transition: { delay: 0.1 + i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }
                     }}
                   >
                     <Link
@@ -185,10 +185,10 @@ const Navbar = () => {
                 {/* Admin link for mobile */}
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
-                  animate={{ 
-                    opacity: 1, 
-                    y: 0, 
-                    transition: { delay: 0.1 + links.length * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] } 
+                  animate={{
+                    opacity: 1,
+                    y: 0,
+                    transition: { delay: 0.1 + links.length * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }
                   }}
                 >
                   <Link

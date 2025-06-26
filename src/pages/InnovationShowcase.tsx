@@ -19,15 +19,15 @@ const InnovationShowcase = () => {
   const filteredProjects = projects.filter(project => {
     // Filter by category
     const categoryMatch = selectedCategory === "All" || project.category === selectedCategory;
-    
+
     // Filter by stage
     const stageMatch = selectedStage === "All" || project.stage === selectedStage;
-    
+
     // Filter by search query
-    const searchMatch = 
-      project.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+    const searchMatch =
+      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       project.description.toLowerCase().includes(searchQuery.toLowerCase());
-    
+
     return categoryMatch && stageMatch && searchMatch;
   });
 
@@ -42,7 +42,7 @@ const InnovationShowcase = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <motion.span 
+            <motion.span
               className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -50,13 +50,13 @@ const InnovationShowcase = () => {
             >
               Discover Innovation
             </motion.span>
-            
+
             <h1 className="text-3xl md:text-5xl font-display font-bold mb-6">
               Innovation Showcase
             </h1>
-            
+
             <p className="text-muted-foreground md:text-lg">
-              Explore the groundbreaking projects developed by Binary Hub Rwanda's innovators, addressing local challenges with global potential.
+              Explore the groundbreaking projects developed by tekinova Hub Rwanda's innovators, addressing local challenges with global potential.
             </p>
           </motion.div>
         </div>
@@ -80,7 +80,7 @@ const InnovationShowcase = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              
+
               {/* Category Filter */}
               <div className="md:col-span-4">
                 <div className="flex items-center">
@@ -97,7 +97,7 @@ const InnovationShowcase = () => {
                   </select>
                 </div>
               </div>
-              
+
               {/* Stage Filter */}
               <div className="md:col-span-4">
                 <div className="flex items-center">
@@ -118,7 +118,7 @@ const InnovationShowcase = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Projects Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {filteredProjects.length > 0 ? (
@@ -132,16 +132,16 @@ const InnovationShowcase = () => {
                   whileHover={{ y: -5, transition: { duration: 0.2 } }}
                 >
                   <div className="relative h-48 overflow-hidden">
-                    <img 
-                      src={project.image} 
-                      alt={project.title} 
+                    <img
+                      src={project.image}
+                      alt={project.title}
                       className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
                     />
                     <div className="absolute bottom-0 right-0 px-3 py-1 bg-black/70 text-white text-xs font-medium rounded-tl-lg">
                       {project.stage.charAt(0).toUpperCase() + project.stage.slice(1)}
                     </div>
                   </div>
-                  
+
                   <div className="p-6 flex-grow flex flex-col">
                     <div className="mb-4">
                       <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary mb-3">
@@ -150,7 +150,7 @@ const InnovationShowcase = () => {
                       <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
                       <p className="text-muted-foreground text-sm">{project.description}</p>
                     </div>
-                    
+
                     <div className="mt-auto pt-4 flex justify-between items-center border-t border-border/50">
                       <span className="text-xs text-muted-foreground">
                         Innovator{project.innovators.length > 1 ? 's' : ''}: {project.innovators.length}
@@ -171,7 +171,7 @@ const InnovationShowcase = () => {
           </div>
         </div>
       </section>
-      
+
       <Footer />
     </div>
   );

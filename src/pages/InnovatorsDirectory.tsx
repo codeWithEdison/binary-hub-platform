@@ -14,20 +14,20 @@ const InnovatorsDirectory = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [departmentFilter, setDepartmentFilter] = useState("all");
   const [sortBy, setSortBy] = useState("name");
-  
+
   // Filter innovators based on search, status, and department
   const filteredInnovators = innovators.filter(innovator => {
     const nameMatch = innovator.name.toLowerCase().includes(searchQuery.toLowerCase());
     const roleMatch = innovator.role.toLowerCase().includes(searchQuery.toLowerCase());
     const statusMatch = statusFilter === "all" || innovator.status === statusFilter;
     const departmentMatch = departmentFilter === "all" || innovator.department === departmentFilter;
-    
+
     return (nameMatch || roleMatch) && statusMatch && departmentMatch;
   });
-  
+
   // Get unique departments for filter
   const departments = [...new Set(innovators.map(innovator => innovator.department))];
-  
+
   // Sort innovators
   const sortedInnovators = [...filteredInnovators].sort((a, b) => {
     if (sortBy === "name") {
@@ -51,7 +51,7 @@ const InnovatorsDirectory = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5 }}
           >
-            <motion.span 
+            <motion.span
               className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -59,13 +59,13 @@ const InnovatorsDirectory = () => {
             >
               Meet Our Community
             </motion.span>
-            
+
             <h1 className="text-3xl md:text-5xl font-display font-bold mb-6">
               Innovators Directory
             </h1>
-            
+
             <p className="text-muted-foreground md:text-lg">
-              Discover the talented individuals behind Binary Hub Rwanda's innovative projects and initiatives.
+              Discover the talented individuals behind tekinova Hub Rwanda's innovative projects and initiatives.
             </p>
           </motion.div>
         </div>
@@ -90,7 +90,7 @@ const InnovatorsDirectory = () => {
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
               </div>
-              
+
               <div className="md:col-span-6 grid grid-cols-2 gap-4">
                 {/* Status Filter */}
                 <div>
@@ -109,7 +109,7 @@ const InnovatorsDirectory = () => {
                     </select>
                   </div>
                 </div>
-                
+
                 {/* Department Filter */}
                 <div>
                   <div className="flex items-center">
@@ -130,13 +130,13 @@ const InnovatorsDirectory = () => {
               </div>
             </div>
           </div>
-          
+
           {/* Results Count and Sort */}
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8">
             <p className="text-muted-foreground mb-4 sm:mb-0">
               Showing <span className="font-medium text-foreground">{sortedInnovators.length}</span> innovators
             </p>
-            
+
             <div className="flex items-center">
               <span className="text-sm font-medium mr-2">Sort by:</span>
               <select
@@ -150,12 +150,12 @@ const InnovatorsDirectory = () => {
               </select>
             </div>
           </div>
-          
+
           {/* Innovators Grid */}
           {sortedInnovators.length > 0 ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
               {sortedInnovators.map((innovator, index) => (
-                <Link 
+                <Link
                   key={innovator.id}
                   to={`/innovators/${innovator.id}`}
                   className="block transition-transform duration-300 hover:-translate-y-2"
@@ -168,8 +168,8 @@ const InnovatorsDirectory = () => {
             <div className="text-center py-20">
               <Users size={48} className="mx-auto text-muted-foreground mb-4" />
               <p className="text-lg text-muted-foreground">No innovators match your search criteria.</p>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 className="mt-4"
                 onClick={() => {
                   setSearchQuery("");
@@ -181,14 +181,14 @@ const InnovatorsDirectory = () => {
               </Button>
             </div>
           )}
-          
+
           {/* Join CTA */}
           <div className="glass rounded-xl overflow-hidden">
             <div className="grid grid-cols-1 md:grid-cols-2">
               <div className="p-8 md:p-12 flex flex-col justify-center">
                 <h3 className="text-2xl font-display font-semibold mb-4">Join Our Community</h3>
                 <p className="text-muted-foreground mb-6">
-                  Are you a student, faculty member, or researcher interested in innovation? Join Binary Hub Rwanda and become part of our growing community of innovators.
+                  Are you a student, faculty member, or researcher interested in innovation? Join tekinova Hub Rwanda and become part of our growing community of innovators.
                 </p>
                 <div>
                   <Button asChild>
@@ -197,7 +197,7 @@ const InnovatorsDirectory = () => {
                 </div>
               </div>
               <div className="hidden md:block relative h-auto">
-                <img 
+                <img
                   src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
                   alt="Join our community"
                   className="absolute inset-0 w-full h-full object-cover"
@@ -207,7 +207,7 @@ const InnovatorsDirectory = () => {
           </div>
         </div>
       </section>
-      
+
       <Footer />
     </div>
   );

@@ -22,7 +22,7 @@ export type Project = {
   // New properties
   date: string;
   status: string;
-  team: Array<{ name: string; role: string; image?: string }>;
+  team: Array<{ name: string; role: string; image?: string; }>;
   categories: string[];
   links?: {
     demo?: string;
@@ -37,7 +37,7 @@ export type Project = {
   impact?: string;
   futurePlans?: string;
   gallery?: string[];
-  updates?: Array<{ date: string; title: string; content: string }>;
+  updates?: Array<{ date: string; title: string; content: string; }>;
 };
 
 export type Service = {
@@ -56,7 +56,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "Computer Science",
     skills: ["React", "Node.js", "AI", "Machine Learning", 'block chain'],
-    image: "https://media.licdn.com/dms/image/v2/D4D03AQH_4THyS9-igg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1715287233733?e=1746662400&v=beta&t=utWb8N1bWMnRRO4uT6Qxu-wVa1D-sCtQGHlb_g17818", 
+    image: "https://media.licdn.com/dms/image/v2/D4D03AQH_4THyS9-igg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1715287233733?e=1746662400&v=beta&t=utWb8N1bWMnRRO4uT6Qxu-wVa1D-sCtQGHlb_g17818",
     projects: ["Smart Agriculture IoT Platform", "Student Collaboration App"],
     bio: "Final year computer science student focusing on AI applications for agriculture in Rwanda."
   },
@@ -102,7 +102,7 @@ export const innovators: Innovator[] = [
     skills: ["Finance", "Entrepreneurship", "Product Strategy", "Mobile Payments"],
     image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
     projects: ["Mobile Savings Platform", "Farmer Payment System"],
-    bio: "Binary Hub alumni who launched a successful fintech startup serving over 50,000 Rwandans."
+    bio: "tekinova Hub alumni who launched a successful fintech startup serving over 50,000 Rwandans."
   },
   {
     id: "6",
