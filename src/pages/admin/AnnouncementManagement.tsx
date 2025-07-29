@@ -29,7 +29,7 @@ const announcements = [
   {
     id: "1",
     title: "Applications Open for Innovation Hub Membership",
-    content: "We are excited to announce that applications for the tekinova Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
+    content: "We are excited to announce that applications for the Binary Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
     date: "2023-11-10",
     category: "Membership",
     importance: "high",
@@ -42,7 +42,7 @@ const announcements = [
   {
     id: "2",
     title: "New Partnership with Rwanda Information Society Authority",
-    content: "tekinova Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
+    content: "Binary Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
     date: "2023-11-05",
     category: "Partnership",
     importance: "high",
@@ -68,7 +68,7 @@ const announcements = [
   {
     id: "4",
     title: "Changes to Hub Operating Hours",
-    content: "Starting December 1st, tekinova Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
+    content: "Starting December 1st, Binary Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
     date: "2023-10-20",
     category: "Operations",
     importance: "medium",

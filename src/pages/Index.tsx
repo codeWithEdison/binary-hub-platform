@@ -57,7 +57,7 @@ const Index = () => {
             >
               <img
                 src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
-                alt="Collaboration at tekinova Hub"
+                alt="Collaboration at Binary Hub"
                 className="w-full h-auto rounded-2xl shadow-2xl shadow-primary/10"
               />
 
@@ -94,7 +94,7 @@ const Index = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                About tekinova Hub
+                About Binary Hub
               </motion.span>
 
               <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
@@ -102,7 +102,7 @@ const Index = () => {
               </h2>
 
               <p className="text-muted-foreground mb-6">
-                tekinova Hub Rwanda is an innovation space within the University of Rwanda that fosters creativity, entrepreneurship, and technological advancement. We provide resources, mentorship, and networks to help students, faculty, and alumni turn ideas into impactful solutions.
+                Binary Hub Rwanda is an innovation space within the University of Rwanda that fosters creativity, entrepreneurship, and technological advancement. We provide resources, mentorship, and networks to help students, faculty, and alumni turn ideas into impactful solutions.
               </p>
 
               <p className="text-muted-foreground mb-8">
@@ -292,7 +292,7 @@ const Index = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                Discover the talented individuals who are driving innovation and creating impact through tekinova Hub Rwanda.
+                Discover the talented individuals who are driving innovation and creating impact through Binary Hub Rwanda.
               </motion.p>
             </div>
 
@@ -342,7 +342,7 @@ const Index = () => {
                 </h2>
 
                 <p className="text-muted-foreground mb-8">
-                  Whether you're a student with a new idea, a faculty member interested in innovation, or an industry partner looking to collaborate, we welcome you to be part of tekinova Hub Rwanda.
+                  Whether you're a student with a new idea, a faculty member interested in innovation, or an industry partner looking to collaborate, we welcome you to be part of Binary Hub Rwanda.
                 </p>
 
                 <div className="flex flex-wrap gap-4">
@@ -365,7 +365,7 @@ const Index = () => {
               >
                 <img
                   src="/api/placeholder/800/600"
-                  alt="Join tekinova Hub"
+                  alt="Join Binary Hub"
                   className="w-full h-auto rounded-xl shadow-lg"
                 />
               </motion.div>

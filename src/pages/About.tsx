@@ -44,7 +44,7 @@ const About = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              Learn about tekinova Hub Rwanda's journey, vision, and commitment to fostering innovation within the University of Rwanda community.
+              Learn about Binary Hub Rwanda's journey, vision, and commitment to fostering innovation within the University of Rwanda community.
             </motion.p>
           </div>
         </div>
@@ -75,7 +75,7 @@ const About = () => {
               </h2>
 
               <p className="text-muted-foreground mb-6">
-                tekinova Hub Rwanda was established in 2018 with a clear mission: to create an ecosystem where innovative ideas flourish and transform into impactful solutions for Rwanda and beyond.
+                Binary Hub Rwanda was established in 2018 with a clear mission: to create an ecosystem where innovative ideas flourish and transform into impactful solutions for Rwanda and beyond.
               </p>
 
               <p className="text-muted-foreground mb-6">
@@ -83,7 +83,7 @@ const About = () => {
               </p>
 
               <p className="text-muted-foreground">
-                Today, tekinova Hub serves as a catalyst for technological advancement and economic growth, empowering Rwanda's brightest minds to create a better future through innovation.
+                Today, Binary Hub serves as a catalyst for technological advancement and economic growth, empowering Rwanda's brightest minds to create a better future through innovation.
               </p>
             </motion.div>
 
@@ -96,7 +96,7 @@ const About = () => {
             >
               <img
                 src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3"
-                alt="tekinova Hub team collaboration"
+                alt="Binary Hub team collaboration"
                 className="w-full h-auto rounded-2xl shadow-2xl shadow-primary/10"
               />
 
@@ -225,7 +225,7 @@ const About = () => {
             >
               <img
                 src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3"
-                alt="tekinova Hub values"
+                alt="Binary Hub values"
                 className="w-full h-auto rounded-2xl shadow-2xl shadow-primary/10"
               />
             </motion.div>
@@ -370,7 +370,7 @@ const About = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, duration: 0.5 }}
               >
-                Be part of Rwanda's growing innovation ecosystem. Whether you're a student, faculty member, or industry partner, there's a place for you at tekinova Hub.
+                Be part of Rwanda's growing innovation ecosystem. Whether you're a student, faculty member, or industry partner, there's a place for you at Binary Hub.
               </motion.p>
 
               <motion.div

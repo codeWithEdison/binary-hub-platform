@@ -95,7 +95,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="relative z-50">
           <h1 className="text-xl font-display font-semibold">
-            <span className="text-gradient">tekinova Hub</span>
+            <span className="text-gradient">Binary Hub</span>
           </h1>
         </Link>
 

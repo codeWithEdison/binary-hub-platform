@@ -32,7 +32,7 @@ const events = [
     description: "A 48-hour hackathon focusing on solutions for sustainable agriculture and food security in Rwanda.",
     date: "2023-11-15",
     time: "09:00 AM - 06:00 PM",
-    location: "tekinova Hub, University of Rwanda - Kigali Campus",
+    location: "Binary Hub, University of Rwanda - Kigali Campus",
     category: "Hackathon",
     capacity: 100,
     image: "https://images.unsplash.com/photo-1540317580384-e5d43867caa6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
@@ -76,7 +76,7 @@ const events = [
     description: "Exploring how blockchain technology can address social challenges in Africa.",
     date: "2023-12-18",
     time: "01:00 PM - 04:00 PM",
-    location: "tekinova Hub, University of Rwanda - Kigali Campus",
+    location: "Binary Hub, University of Rwanda - Kigali Campus",
     category: "Workshop",
     capacity: 40,
     image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2032&auto=format&fit=crop&ixlib=rb-4.0.3"
@@ -84,7 +84,7 @@ const events = [
   {
     id: "6",
     title: "End of Year Innovation Showcase",
-    description: "Celebrating the achievements of tekinova Hub innovators in 2023.",
+    description: "Celebrating the achievements of Binary Hub innovators in 2023.",
     date: "2023-12-22",
     time: "03:00 PM - 08:00 PM",
     location: "Kigali Convention Center",

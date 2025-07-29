@@ -102,7 +102,7 @@ export const innovators: Innovator[] = [
     skills: ["Finance", "Entrepreneurship", "Product Strategy", "Mobile Payments"],
     image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
     projects: ["Mobile Savings Platform", "Farmer Payment System"],
-    bio: "tekinova Hub alumni who launched a successful fintech startup serving over 50,000 Rwandans."
+    bio: "Binary Hub alumni who launched a successful fintech startup serving over 50,000 Rwandans."
   },
   {
     id: "6",

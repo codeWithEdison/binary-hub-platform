@@ -12,7 +12,7 @@ const announcements = [
   {
     id: "1",
     title: "Applications Open for Innovation Hub Membership",
-    content: "We are excited to announce that applications for the tekinova Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
+    content: "We are excited to announce that applications for the Binary Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
     date: "2023-11-10",
     category: "Membership",
     importance: "high",
@@ -22,11 +22,11 @@ const announcements = [
       image: "/img/cordinator.jpg"
     },
     fullContent: `
-      <h2>tekinova Hub Rwanda Opens Applications for New Members</h2>
+      <h2>Binary Hub Rwanda Opens Applications for New Members</h2>
       
-      <p>We are excited to announce that applications for the tekinova Hub membership are now open. As Rwanda's premier innovation hub at the University of Rwanda, we are looking for passionate innovators, entrepreneurs, and problem-solvers to join our community.</p>
+      <p>We are excited to announce that applications for the Binary Hub membership are now open. As Rwanda's premier innovation hub at the University of Rwanda, we are looking for passionate innovators, entrepreneurs, and problem-solvers to join our community.</p>
       
-      <p>tekinova Hub membership provides access to our state-of-the-art facilities, including:</p>
+      <p>Binary Hub membership provides access to our state-of-the-art facilities, including:</p>
       <ul>
         <li>Coworking spaces</li>
         <li>Prototyping lab</li>
@@ -61,7 +61,7 @@ const announcements = [
       Final Selection: January 20, 2024<br>
       Onboarding: February 1, 2024</p>
       
-      <p>For any questions regarding the application process, please contact us at <a href="mailto:membership@tekinovahub.rw">membership@tekinovahub.rw</a>.</p>
+      <p>For any questions regarding the application process, please contact us at <a href="mailto:membership@Binary Hubhub.rw">membership@Binary Hubhub.rw</a>.</p>
     `,
     attachments: [
       { name: "Membership Guidelines.pdf", size: "1.2 MB", type: "pdf" },
@@ -75,7 +75,7 @@ const announcements = [
   {
     id: "2",
     title: "New Partnership with Rwanda Information Society Authority",
-    content: "tekinova Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
+    content: "Binary Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
     date: "2023-11-05",
     category: "Partnership",
     importance: "high",
@@ -87,23 +87,23 @@ const announcements = [
     fullContent: `
       <h2>Strategic Partnership with Rwanda Information Society Authority</h2>
       
-      <p>tekinova Hub is proud to announce a new strategic partnership with the Rwanda Information Society Authority (RISA) to promote digital innovation across Rwanda.</p>
+      <p>Binary Hub is proud to announce a new strategic partnership with the Rwanda Information Society Authority (RISA) to promote digital innovation across Rwanda.</p>
       
-      <p>This collaboration aims to accelerate digital transformation in key sectors of Rwanda's economy by leveraging the innovative capacity of tekinova Hub members and the strategic direction provided by RISA.</p>
+      <p>This collaboration aims to accelerate digital transformation in key sectors of Rwanda's economy by leveraging the innovative capacity of Binary Hub members and the strategic direction provided by RISA.</p>
       
       <h3>Key Aspects of the Partnership</h3>
       
       <p>The partnership will focus on several key areas:</p>
       
       <ol>
-        <li><strong>Innovation Challenges:</strong> RISA will present real-world challenges faced by government agencies that tekinova Hub innovators can work to solve.</li>
+        <li><strong>Innovation Challenges:</strong> RISA will present real-world challenges faced by government agencies that Binary Hub innovators can work to solve.</li>
         <li><strong>Capacity Building:</strong> Joint training programs to enhance digital skills among students and young professionals.</li>
         <li><strong>Research Collaboration:</strong> Collaborative research projects addressing national priorities in digital transformation.</li>
-        <li><strong>Innovation Funding:</strong> Access to funding opportunities for promising digital solutions developed by tekinova Hub members.</li>
+        <li><strong>Innovation Funding:</strong> Access to funding opportunities for promising digital solutions developed by Binary Hub members.</li>
         <li><strong>Policy Input:</strong> Creating channels for innovators to provide input on digital policies and strategies.</li>
       </ol>
       
-      <p>Through this partnership, tekinova Hub members will gain unparalleled access to government innovation needs, creating pathways for their solutions to achieve national scale and impact.</p>
+      <p>Through this partnership, Binary Hub members will gain unparalleled access to government innovation needs, creating pathways for their solutions to achieve national scale and impact.</p>
       
       <h3>Upcoming Opportunities</h3>
       
@@ -111,13 +111,13 @@ const announcements = [
       
       <ul>
         <li>A Digital Innovation Challenge to be launched in January 2024</li>
-        <li>Five internship positions for tekinova Hub members at RISA</li>
-        <li>Technical workshops led by RISA experts at tekinova Hub</li>
+        <li>Five internship positions for Binary Hub members at RISA</li>
+        <li>Technical workshops led by RISA experts at Binary Hub</li>
       </ul>
       
       <p>We believe this partnership represents a significant step forward in creating a robust innovation ecosystem in Rwanda, connecting government needs with innovative solutions developed by Rwanda's brightest minds.</p>
       
-      <p>For more information on how to engage with opportunities arising from this partnership, please contact our partnerships team at <a href="mailto:partnerships@tekinovahub.rw">partnerships@tekinovahub.rw</a>.</p>
+      <p>For more information on how to engage with opportunities arising from this partnership, please contact our partnerships team at <a href="mailto:partnerships@Binary Hubhub.rw">partnerships@Binary Hubhub.rw</a>.</p>
     `,
     attachments: [
       { name: "RISA Partnership Press Release.pdf", size: "2.4 MB", type: "pdf" },
@@ -144,7 +144,7 @@ const announcements = [
   {
     id: "4",
     title: "Changes to Hub Operating Hours",
-    content: "Starting December 1st, tekinova Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
+    content: "Starting December 1st, Binary Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
     date: "2023-10-20",
     category: "Operations",
     importance: "medium",
@@ -169,7 +169,7 @@ const announcements = [
     fullContent: `
       <h2>Call for Projects: End of Year Innovation Showcase</h2>
       
-      <p>tekinova Hub Rwanda is pleased to announce the opening of submissions for our prestigious End of Year Innovation Showcase. This annual event celebrates the achievements of our innovative community and provides a platform for talented innovators to present their work to a wide audience of industry leaders, potential investors, and the wider innovation ecosystem.</p>
+      <p>Binary Hub Rwanda is pleased to announce the opening of submissions for our prestigious End of Year Innovation Showcase. This annual event celebrates the achievements of our innovative community and provides a platform for talented innovators to present their work to a wide audience of industry leaders, potential investors, and the wider innovation ecosystem.</p>
       
       <h3>About the Showcase</h3>
       
@@ -188,9 +188,9 @@ const announcements = [
       <p>The showcase is open to:</p>
       
       <ul>
-        <li>Current tekinova Hub members</li>
+        <li>Current Binary Hub members</li>
         <li>University of Rwanda students and faculty</li>
-        <li>Alumni of tekinova Hub programs</li>
+        <li>Alumni of Binary Hub programs</li>
         <li>Rwandan startups less than two years old (by special application)</li>
       </ul>
       
@@ -225,7 +225,7 @@ const announcements = [
       Exhibitor Briefing: December 10, 2023<br>
       Showcase Event: December 22, 2023</p>
       
-      <p>For questions and further information, please contact our events team at <a href="mailto:events@tekinovahub.rw">events@tekinovahub.rw</a>.</p>
+      <p>For questions and further information, please contact our events team at <a href="mailto:events@Binary Hubhub.rw">events@Binary Hubhub.rw</a>.</p>
       
       <p>We look forward to seeing the innovative solutions you've been working on!</p>
     `,

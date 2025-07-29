@@ -181,7 +181,7 @@ const Partners = () => {
 
               <div className="mt-12 text-center">
                 <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                  tekinova Hub Rwanda thrives through a network of strategic partnerships, enabling our innovators to access resources, expertise, and opportunities.
+                  Binary Hub Rwanda thrives through a network of strategic partnerships, enabling our innovators to access resources, expertise, and opportunities.
                 </p>
                 <Link
                   to="/partner-with-us"
@@ -203,7 +203,7 @@ const Partners = () => {
               Our Partners
             </h2>
             <p className="text-muted-foreground">
-              Meet the organizations that collaborate with tekinova Hub Rwanda to foster innovation and entrepreneurship.
+              Meet the organizations that collaborate with Binary Hub Rwanda to foster innovation and entrepreneurship.
             </p>
           </div>
 
@@ -347,11 +347,11 @@ const Partners = () => {
                 transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               >
                 <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
-                  Partner with tekinova Hub Rwanda
+                  Partner with Binary Hub Rwanda
                 </h2>
 
                 <p className="text-muted-foreground mb-8">
-                  Interested in collaborating with tekinova Hub Rwanda? We're always looking for new partners who share our vision of fostering innovation and entrepreneurship in Rwanda.
+                  Interested in collaborating with Binary Hub Rwanda? We're always looking for new partners who share our vision of fostering innovation and entrepreneurship in Rwanda.
                 </p>
 
                 <div className="flex flex-wrap gap-4">
@@ -373,7 +373,7 @@ const Partners = () => {
               >
                 <img
                   src="https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3"
-                  alt="Partner with tekinova Hub"
+                  alt="Partner with Binary Hub"
                   className="w-full h-auto rounded-xl shadow-lg"
                 />
               </motion.div>

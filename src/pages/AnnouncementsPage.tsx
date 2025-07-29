@@ -14,7 +14,7 @@ const announcements = [
   {
     id: "1",
     title: "Applications Open for Innovation Hub Membership",
-    content: "We are excited to announce that applications for the tekinova Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
+    content: "We are excited to announce that applications for the Binary Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
     date: "2023-11-10",
     category: "Membership",
     importance: "high",
@@ -27,7 +27,7 @@ const announcements = [
   {
     id: "2",
     title: "New Partnership with Rwanda Information Society Authority",
-    content: "tekinova Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
+    content: "Binary Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
     date: "2023-11-05",
     category: "Partnership",
     importance: "high",
@@ -53,7 +53,7 @@ const announcements = [
   {
     id: "4",
     title: "Changes to Hub Operating Hours",
-    content: "Starting December 1st, tekinova Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
+    content: "Starting December 1st, Binary Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
     date: "2023-10-20",
     category: "Operations",
     importance: "medium",
@@ -132,7 +132,7 @@ const AnnouncementsPage = () => {
             </h1>
 
             <p className="text-muted-foreground md:text-lg">
-              Stay up-to-date with the latest news, updates, and announcements from tekinova Hub Rwanda.
+              Stay up-to-date with the latest news, updates, and announcements from Binary Hub Rwanda.
             </p>
           </motion.div>
         </div>
@@ -264,7 +264,7 @@ const AnnouncementsPage = () => {
               <div className="p-8 md:p-12 flex flex-col justify-center">
                 <h3 className="text-2xl font-display font-semibold mb-4">Stay Updated</h3>
                 <p className="text-muted-foreground mb-6">
-                  Subscribe to our newsletter to receive announcements directly in your inbox. Never miss important updates from tekinova Hub Rwanda.
+                  Subscribe to our newsletter to receive announcements directly in your inbox. Never miss important updates from Binary Hub Rwanda.
                 </p>
                 <div className="flex flex-col sm:flex-row gap-3">
                   <Input placeholder="Your email address" />

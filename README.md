@@ -1,12 +1,12 @@
-# tekinova Hub  Platform
+# Binary hub   
 
 <div align="center">
-  <img src="public/logo.svg" alt="tekinova Hub Logo" width="200" />
+  <img src="public/logo.svg" alt="Binary Hub Logo" width="200" />
 
   <h3>Connecting Innovators, Creating Impact</h3>
 
   <p>
-    <a href="https://tekinovahub.codewithedison.com/" target="_blank">View Demo</a> •
+    <a href="https://Binary Hubhub.codewithedison.com/" target="_blank">View Demo</a> •
     <a href="#features">Features</a> •
     <a href="#tech-stack">Tech Stack</a> •
     <a href="#getting-started">Getting Started</a> •
@@ -24,9 +24,9 @@
 
 ## 💡 About The Project
 
-tekinova Hub Rwanda is an innovation space within the University of Rwanda that fosters creativity, entrepreneurship, and technological advancement. This platform serves as the digital face of tekinova Hub, showcasing innovators, projects, and services while providing a connection point for students, mentors, and partners.
+Binary Hub Rwanda is an innovation space within the University of Rwanda that fosters creativity, entrepreneurship, and technological advancement. This platform serves as the digital face of Binary Hub, showcasing innovators, projects, and services while providing a connection point for students, mentors, and partners.
 
-<img src="public/screenshot.png" alt="tekinova Hub Screenshot" width="100%" />
+<img src="public/screenshot.png" alt="Binary Hub Screenshot" width="100%" />
 
 ### ✨ Key Features
 
@@ -54,10 +54,10 @@ Follow these simple steps to set up the project locally:
 
 ```bash
 # Clone the repository
-git clone https://github.com/codeWithEdison/tekinova-hub-platform.git
+git clone https://github.com/codeWithEdison/Binary Hub-hub-platform.git
 
 # Navigate to the project directory
-cd tekinova-hub-platform
+cd Binary Hub-hub-platform
 
 # Install dependencies
 npm install
@@ -71,7 +71,7 @@ Open [http://localhost:5173](http://localhost:5173) to view the application in y
 ## 📂 Project Structure
 
 ```
-tekinova-hub-platform/
+Binary Hub-hub-platform/
 ├── public/             # Static assets
 ├── src/                # Source files
 │   ├── components/     # Reusable UI components
@@ -98,15 +98,15 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 ## 📬 Contact
 
-Edison Uwihanganye - [@codeWithEdison](https://twitter.com/codeWithEdison) - edison@tekinovahub.rw
+Edison Uwihanganye - [@codeWithEdison](https://twitter.com/codeWithEdison) - edison@Binary Hubhub.rw
 
-Project Link: [https://github.com/codeWithEdison/tekinova-hub-platform](https://github.com/codeWithEdison/tekinova-hub-platform)
+Project Link: [https://github.com/codeWithEdison/Binary Hub-hub-platform](https://github.com/codeWithEdison/Binary Hub-hub-platform)
 
 ## 🙏 Acknowledgments
 
 - [University of Rwanda](https://www.ur.ac.rw/)
 - [Rwanda ICT Chamber](https://www.ict.rw/)
-- [All the innovative students and mentors at tekinova Hub](https://tekinovahub.codewithedison.com/innovators)
+- [All the innovative students and mentors at Binary Hub](https://Binary Hubhub.codewithedison.com/innovators)
 
 ---
 

@@ -67,7 +67,7 @@ const AdminDashboard = () => {
         <div className="lg:hidden fixed inset-0 z-50 bg-background/80 backdrop-blur-sm">
           <div className="fixed inset-y-0 left-0 w-full max-w-xs bg-background p-6 shadow-lg">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-xl font-semibold">tekinova Hub Admin</h2>
+              <h2 className="text-xl font-semibold">Binary Hub Admin</h2>
               <Button
                 variant="ghost"
                 size="icon"
@@ -131,7 +131,7 @@ const AdminDashboard = () => {
             }
           )}>
             {sidebarOpen ? (
-              <h2 className="text-xl font-semibold">tekinova Hub Admin</h2>
+              <h2 className="text-xl font-semibold">Binary Hub Admin</h2>
             ) : (
               <span className="text-xl font-semibold">BH</span>
             )}

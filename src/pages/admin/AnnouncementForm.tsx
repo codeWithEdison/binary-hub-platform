@@ -63,7 +63,7 @@ const AnnouncementForm = () => {
       // For now, just use mock data
       const mockData = {
         title: "Applications Open for Innovation Hub Membership",
-        content: "We are excited to announce that applications for the tekinova Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
+        content: "We are excited to announce that applications for the Binary Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
         date: "2023-11-10",
         category: "Membership",
         importance: "high",

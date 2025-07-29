@@ -38,7 +38,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* About Section */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-xl font-semibold mb-4">tekinova Hub Rwanda</h3>
+            <h3 className="text-xl font-semibold mb-4">Binary Hub Rwanda</h3>
             <p className="text-muted-foreground mb-6 max-w-md">
               Empowering Rwanda's next generation of innovators and entrepreneurs through mentorship, resources, and community.
             </p>
@@ -117,8 +117,8 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <Mail size={18} className="text-primary" />
-                <a href="mailto:info@tekinovahub.rw" className="text-muted-foreground hover:text-primary transition-colors">
-                  info@tekinovahub.rw
+                <a href="mailto:info@Binary Hubhub.rw" className="text-muted-foreground hover:text-primary transition-colors">
+                  info@Binary Hubhub.rw
                 </a>
               </li>
               <li className="flex items-center gap-3">
@@ -135,7 +135,7 @@ const Footer = () => {
           className="border-t border-border mt-12 pt-8 text-center text-sm text-muted-foreground"
           variants={itemVariants}
         >
-          <p>© {new Date().getFullYear()} tekinova Hub Rwanda. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Binary Hub Rwanda. All rights reserved.</p>
         </motion.div>
       </div>
     </motion.footer>

@@ -65,7 +65,7 @@ const InnovatorsDirectory = () => {
             </h1>
 
             <p className="text-muted-foreground md:text-lg">
-              Discover the talented individuals behind tekinova Hub Rwanda's innovative projects and initiatives.
+              Discover the talented individuals behind Binary Hub Rwanda's innovative projects and initiatives.
             </p>
           </motion.div>
         </div>
@@ -188,7 +188,7 @@ const InnovatorsDirectory = () => {
               <div className="p-8 md:p-12 flex flex-col justify-center">
                 <h3 className="text-2xl font-display font-semibold mb-4">Join Our Community</h3>
                 <p className="text-muted-foreground mb-6">
-                  Are you a student, faculty member, or researcher interested in innovation? Join tekinova Hub Rwanda and become part of our growing community of innovators.
+                  Are you a student, faculty member, or researcher interested in innovation? Join Binary Hub Rwanda and become part of our growing community of innovators.
                 </p>
                 <div>
                   <Button asChild>

@@ -34,7 +34,7 @@ const ContactPage = () => {
             </h1>
 
             <p className="text-muted-foreground md:text-lg">
-              Have questions or want to collaborate? Reach out to tekinova Hub Rwanda through any of our channels.
+              Have questions or want to collaborate? Reach out to Binary Hub Rwanda through any of our channels.
             </p>
           </motion.div>
         </div>
@@ -57,8 +57,8 @@ const ContactPage = () => {
                     <div>
                       <h3 className="text-base font-medium mb-1">Email</h3>
                       <p className="text-muted-foreground mb-1">For general inquiries:</p>
-                      <a href="mailto:contact@tekinovahub.rw" className="text-primary hover:underline">
-                        contact@tekinovahub.rw
+                      <a href="mailto:contact@Binary Hubhub.rw" className="text-primary hover:underline">
+                        contact@Binary Hubhub.rw
                       </a>
                     </div>
                   </div>
@@ -192,7 +192,7 @@ const ContactPage = () => {
         <div className="max-w-7xl mx-auto glass rounded-2xl overflow-hidden">
           <div className="aspect-video w-full">
             <iframe
-              title="tekinova Hub Rwanda Location"
+              title="Binary Hub Rwanda Location"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3987.473685555132!2d30.058633999999995!3d-1.9705192999999998!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x19dca69aa817a72d%3A0xaee170c9b7255f0e!2sUniversity%20of%20Rwanda%20-%20College%20of%20Science%20and%20Technology!5e0!3m2!1sen!2sus!4v1654567890123!5m2!1sen!2sus"
               width="100%"
               height="100%"
@@ -219,9 +219,9 @@ const ContactPage = () => {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="glass rounded-xl p-6">
-              <h3 className="text-lg font-medium mb-2">How can I join tekinova Hub Rwanda?</h3>
+              <h3 className="text-lg font-medium mb-2">How can I join Binary Hub Rwanda?</h3>
               <p className="text-muted-foreground">
-                tekinova Hub Rwanda is open to all University of Rwanda students and faculty interested in innovation. Visit our space during working hours or contact us to learn about the application process.
+                Binary Hub Rwanda is open to all University of Rwanda students and faculty interested in innovation. Visit our space during working hours or contact us to learn about the application process.
               </p>
             </div>
 
@@ -233,7 +233,7 @@ const ContactPage = () => {
             </div>
 
             <div className="glass rounded-xl p-6">
-              <h3 className="text-lg font-medium mb-2">How can organizations partner with tekinova Hub?</h3>
+              <h3 className="text-lg font-medium mb-2">How can organizations partner with Binary Hub?</h3>
               <p className="text-muted-foreground">
                 We welcome partnerships with companies, NGOs, and government entities. Please contact us to discuss mentorship, sponsorship, or collaboration opportunities.
               </p>

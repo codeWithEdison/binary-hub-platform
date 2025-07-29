@@ -56,7 +56,7 @@ const InnovationShowcase = () => {
             </h1>
 
             <p className="text-muted-foreground md:text-lg">
-              Explore the groundbreaking projects developed by tekinova Hub Rwanda's innovators, addressing local challenges with global potential.
+              Explore the groundbreaking projects developed by Binary Hub Rwanda's innovators, addressing local challenges with global potential.
             </p>
           </motion.div>
         </div>

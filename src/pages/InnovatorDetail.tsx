@@ -114,7 +114,7 @@ const InnovatorDetail = () => {
                   {innovator.bio}
                 </p>
                 <p className="text-muted-foreground mb-6">
-                  As a {innovator.status} in the {innovator.department} department, {innovator.name.split(' ')[0]} has been focusing on developing innovative solutions that address local challenges in Rwanda. With expertise in {innovator.skills.slice(0, 3).join(', ')}, and other areas, {innovator.name.split(' ')[0]} brings a unique perspective to the tekinova Hub community.
+                  As a {innovator.status} in the {innovator.department} department, {innovator.name.split(' ')[0]} has been focusing on developing innovative solutions that address local challenges in Rwanda. With expertise in {innovator.skills.slice(0, 3).join(', ')}, and other areas, {innovator.name.split(' ')[0]} brings a unique perspective to the Binary Hub community.
                 </p>
                 <p className="text-muted-foreground">
                   {innovator.name.split(' ')[0]} is passionate about using technology to create positive social impact and is always open to collaboration opportunities with like-minded innovators.
@@ -214,7 +214,7 @@ const InnovatorDetail = () => {
 
                 <Button asChild className="w-full">
                   <Link to="/contact" className="flex items-center justify-center gap-2">
-                    Contact tekinova Hub
+                    Contact Binary Hub
                   </Link>
                 </Button>
               </div>

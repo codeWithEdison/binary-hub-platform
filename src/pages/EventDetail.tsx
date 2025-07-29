@@ -16,11 +16,11 @@ const events = [
     description: "A 48-hour hackathon focusing on solutions for sustainable agriculture and food security in Rwanda.",
     date: "2023-11-15",
     time: "09:00 AM - 06:00 PM",
-    location: "tekinova Hub, University of Rwanda - Kigali Campus",
+    location: "Binary Hub, University of Rwanda - Kigali Campus",
     category: "Hackathon",
     capacity: 100,
     image: "https://images.unsplash.com/photo-1540317580384-e5d43867caa6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
-    organizer: "tekinova Hub Rwanda",
+    organizer: "Binary Hub Rwanda",
     fullDescription: "Join us for our Annual Innovation Hackathon, a 48-hour event where teams of innovators work together to develop solutions for sustainable agriculture and food security challenges in Rwanda. Participants will have access to mentors, resources, and a collaborative workspace to bring their ideas to life. This event is open to students, professionals, and anyone interested in using technology to address agricultural challenges. Cash prizes and incubation opportunities will be awarded to the top three teams.",
     agenda: [
       {
@@ -46,15 +46,15 @@ const events = [
     speakers: [
       {
         name: "Dr. Marie Umubyeyi",
-        role: "Director, tekinova Hub",
+        role: "Director, Binary Hub",
         image: "/img/deanict.jpg",
-        bio: "Dr. Marie is the founding director of tekinova Hub Rwanda and has over 15 years of experience in technology innovation."
+        bio: "Dr. Marie is the founding director of Binary Hub Rwanda and has over 15 years of experience in technology innovation."
       },
       {
         name: "Jean Paul Habineza",
         role: "Program Coordinator",
         image: "/img/cordinator.jpg",
-        bio: "Jean Paul manages innovation programs and mentorship initiatives at tekinova Hub."
+        bio: "Jean Paul manages innovation programs and mentorship initiatives at Binary Hub."
       }
     ],
     sponsors: [
@@ -78,7 +78,7 @@ const events = [
     category: "Workshop",
     capacity: 50,
     image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
-    organizer: "tekinova Hub Rwanda in partnership with Ministry of Health",
+    organizer: "Binary Hub Rwanda in partnership with Ministry of Health",
     fullDescription: "This workshop explores the current and future applications of artificial intelligence in healthcare delivery across Africa. With a focus on Rwanda's healthcare system, experts will discuss how AI technologies can address challenges in diagnosis, treatment, and healthcare access in resource-constrained settings. The session will include presentations, case studies, and a Q&A session with industry leaders and healthcare professionals.",
     agenda: [
       {
@@ -144,7 +144,7 @@ const events = [
     description: "Exploring how blockchain technology can address social challenges in Africa.",
     date: "2023-12-18",
     time: "01:00 PM - 04:00 PM",
-    location: "tekinova Hub, University of Rwanda - Kigali Campus",
+    location: "Binary Hub, University of Rwanda - Kigali Campus",
     category: "Workshop",
     capacity: 40,
     image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2032&auto=format&fit=crop&ixlib=rb-4.0.3"
@@ -152,15 +152,15 @@ const events = [
   {
     id: "6",
     title: "End of Year Innovation Showcase",
-    description: "Celebrating the achievements of tekinova Hub innovators in 2023.",
+    description: "Celebrating the achievements of Binary Hub innovators in 2023.",
     date: "2023-12-22",
     time: "03:00 PM - 08:00 PM",
     location: "Kigali Convention Center",
     category: "Showcase",
     capacity: 200,
     image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
-    organizer: "tekinova Hub Rwanda",
-    fullDescription: "Join us for our End of Year Innovation Showcase, where tekinova Hub innovators will present their groundbreaking projects developed throughout 2023. This event celebrates the creativity, persistence, and technical excellence of our community members who have worked tirelessly to create solutions addressing local and regional challenges. The showcase will feature live demonstrations, interactive exhibits, and networking opportunities with innovators, industry leaders, and potential investors.",
+    organizer: "Binary Hub Rwanda",
+    fullDescription: "Join us for our End of Year Innovation Showcase, where Binary Hub innovators will present their groundbreaking projects developed throughout 2023. This event celebrates the creativity, persistence, and technical excellence of our community members who have worked tirelessly to create solutions addressing local and regional challenges. The showcase will feature live demonstrations, interactive exhibits, and networking opportunities with innovators, industry leaders, and potential investors.",
     agenda: [
       {
         day: "Event Schedule",
@@ -178,7 +178,7 @@ const events = [
         name: "Prof. Emmanuel Masabo",
         role: "Director of Research, University of Rwanda",
         image: "/img/emmanuel.jpg",
-        bio: "Prof. Emmanuel leads research initiatives at the University of Rwanda and has been instrumental in establishing the tekinova Hub."
+        bio: "Prof. Emmanuel leads research initiatives at the University of Rwanda and has been instrumental in establishing the Binary Hub."
       }
     ],
     sponsors: [
