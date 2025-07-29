@@ -51,205 +51,280 @@ export type Service = {
 export const innovators: Innovator[] = [
   {
     id: "1",
-    name: "UWIHANGANYE Edison",
-    role: "Software Developer",
-    status: "student",
-    department: "Computer Science",
-    skills: ["React", "Node.js", "AI", "Machine Learning", 'block chain'],
-    image: "https://media.licdn.com/dms/image/v2/D4D03AQH_4THyS9-igg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1715287233733?e=1746662400&v=beta&t=utWb8N1bWMnRRO4uT6Qxu-wVa1D-sCtQGHlb_g17818",
-    projects: ["Smart Agriculture IoT Platform", "Student Collaboration App"],
-    bio: "Final year computer science student focusing on AI applications for agriculture in Rwanda."
+    name: "MBONABUCYA Celestin",
+    role: "Founder, Initiator, and Hub Coordinator",
+    status: "faculty",
+    department: "School of ICT",
+    skills: ["Strategic Leadership", "Innovation Management", "Project Coordination", "Mentorship"],
+    image: "/img/coordinatoro.jpg",
+    projects: ["UMUTUNGO Box", "IMOTRAK", "INUMA App"],
+    bio: "Founder and strategic coordinator of UR Binary Hub, overseeing partnerships and innovation direction."
   },
   {
     id: "2",
-    name: "Marie-Claire Uwamahoro",
-    role: "UX Designer",
-    status: "alumni",
-    department: "Design",
-    skills: ["UI/UX", "User Research", "Prototyping", "Design Systems"],
-    image: "https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
-    projects: ["Rural Healthcare App", "Financial Inclusion Platform"],
-    bio: "Design alumna with 3 years experience creating accessible digital products for underserved communities."
+    name: "NDAYISHIMIYE Habibu",
+    role: "Assistant Coordinator",
+    status: "student",
+    department: "School of ICT",
+    skills: ["Project Management", "Team Coordination", "Reporting", "Operations"],
+    image: "/img/Habibu.png",
+    projects: ["Hub Operations", "Team Management"],
+    bio: "Assistant coordinator managing day-to-day operations and team coordination at UR Binary Hub."
   },
   {
     id: "3",
-    name: "Eric Mugisha",
-    role: "Renewable Energy Engineer",
-    status: "faculty",
-    department: "Engineering",
-    skills: ["Solar Energy", "Sustainable Design", "Project Management"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
-    projects: ["Community Solar Initiative", "Energy Education Program"],
-    bio: "Faculty member leading research on affordable renewable energy solutions for rural Rwanda."
+    name: "ISHIMWE KARLISE Lucie",
+    role: "Assistant Administrator",
+    status: "student",
+    department: "School of ICT",
+    skills: ["Documentation", "Administration", "Event Coordination", "Communication"],
+    image: "/img/lucie.jpg",
+    projects: ["Documentation Management", "Event Organization"],
+    bio: "Assistant administrator managing hub documentation, logistics, and internal communication."
   },
   {
     id: "4",
-    name: "Diane Umutoni",
-    role: "Biotech Researcher",
-    status: "student",
-    department: "Biotechnology",
-    skills: ["Microbiology", "Lab Research", "Data Analysis"],
-    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
-    projects: ["Water Purification Solution", "Local Medicine Research"],
-    bio: "PhD student researching affordable water purification using locally sourced materials."
+    name: "NIYONGABO Emmanuel",
+    role: "Frontend Developer",
+    status: "alumni",
+    department: "External Expert",
+    skills: ["React", "JavaScript", "HTML", "CSS", "UI Development"],
+    image: "/img/emmanuel.png",
+    projects: ["UMUTUNGO Box", "Academic Records System"],
+    bio: "External expert mentoring frontend development and creating reusable UI components."
   },
   {
     id: "5",
-    name: "Kevin Hakizimana",
-    role: "Fintech Entrepreneur",
+    name: "SHYIRAMBERE Joseph",
+    role: "Backend & Database Developer",
     status: "alumni",
-    department: "Business",
-    skills: ["Finance", "Entrepreneurship", "Product Strategy", "Mobile Payments"],
-    image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
-    projects: ["Mobile Savings Platform", "Farmer Payment System"],
-    bio: "Binary Hub alumni who launched a successful fintech startup serving over 50,000 Rwandans."
+    department: "External Expert",
+    skills: ["Node.js", "PostgreSQL", "MongoDB", "REST APIs", "Database Design"],
+    image: "/img/joseph.jpg",
+    projects: ["IMOTRAK", "Customer Support System"],
+    bio: "External expert leading backend architecture and database optimization for hub projects."
   },
   {
     id: "6",
-    name: "Claudine Nyiraneza",
-    role: "Education Technologist",
-    status: "faculty",
-    department: "Education",
-    skills: ["EdTech", "Curriculum Design", "Digital Literacy"],
-    image: "https://images.unsplash.com/photo-1581992652564-44c42f5ad3ad?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
-    projects: ["Rural School Tablet Program", "Teacher Training Platform"],
-    bio: "Education faculty member pioneering digital literacy programs for rural schools."
+    name: "David TUYISHIME",
+    role: "Backend Developer Team Leader",
+    status: "student",
+    department: "School of ICT",
+    skills: ["Backend Development", "Team Leadership", "Code Review", "Git"],
+    image: "/img/David.png",
+    projects: ["INUMA App", "Academic Records System"],
+    bio: "Student team leader coordinating backend development activities and mentoring junior developers."
+  },
+  {
+    id: "7",
+    name: "UWIHANGANYE Edison",
+    role: "UI/UX & Frontend Team Leader",
+    status: "student",
+    department: "Computer Science",
+    skills: ["React", "UI/UX Design", "Team Leadership", "Frontend Architecture"],
+    image: "/img/presentation-img/edison.jpg",
+    projects: ["Smart Agriculture IoT Platform", "Customer Support System"],
+    bio: "Student team leader coordinating frontend development and UI/UX design activities."
+  },
+  {
+    id: "8",
+    name: "Eric TUYISHIMIRE",
+    role: "UI/UX Designer",
+    status: "alumni",
+    department: "External Expert",
+    skills: ["Figma", "Design Systems", "User Research", "Prototyping"],
+    image: "/img/eds.jpg",
+    projects: ["Design System", "User Experience Research"],
+    bio: "External expert leading design thinking sessions and establishing UI/UX standards."
+  },
+  {
+    id: "9",
+    name: "Derrick IRADUKUNDA",
+    role: "Systems Administrator",
+    status: "student",
+    department: "School of ICT",
+    skills: ["System Administration", "Server Management", "Deployment", "Security"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Infrastructure Management", "Deployment Systems"],
+    bio: "Student managing internal infrastructure and deployment environments for hub projects."
+  },
+  {
+    id: "10",
+    name: "Igor IHIMBAZWE",
+    role: "DevOps Tools Advisor",
+    status: "student",
+    department: "School of ICT",
+    skills: ["DevOps", "CI/CD", "Docker", "Cloud Deployment"],
+    image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["DevOps Pipeline", "Cloud Infrastructure"],
+    bio: "Student advisor setting up DevOps pipelines and cloud deployment strategies."
+  },
+  {
+    id: "11",
+    name: "Danny HATEGEKIMANA",
+    role: "Promotional Materials Designer",
+    status: "student",
+    department: "School of ICT",
+    skills: ["Graphic Design", "Branding", "Social Media", "Marketing Materials"],
+    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Brand Identity", "Marketing Materials"],
+    bio: "Student designer creating promotional materials and maintaining Binary Hub branding."
+  },
+  {
+    id: "12",
+    name: "Marie Claire UWIRINYIYIMANA",
+    role: "Health & Sports Activities Coordinator",
+    status: "student",
+    department: "School of ICT",
+    skills: ["Event Coordination", "Team Building", "Wellness Programs"],
+    image: "https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Wellness Programs", "Team Building Activities"],
+    bio: "Student coordinator organizing wellness activities and team-building events for the hub."
   }
 ];
 
 export const projects: Project[] = [
   {
     id: "1",
-    title: "Smart Agriculture IoT Platform",
-    description: "IoT system helping small-scale farmers monitor soil conditions and optimize irrigation.",
-    innovators: ["1"],
-    stage: "prototype",
-    category: "Agriculture",
-    categories: ["Agriculture", "IoT", "Technology"],
-    image: "https://images.unsplash.com/photo-1628352081506-83c93d9a2b67?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3",
-    date: "2023-09-15",
-    status: "In Progress",
+    title: "UMUTUNGO Box",
+    description: "Asset Management System for public institutions to track assets, value, and depreciation.",
+    innovators: ["1", "4"],
+    stage: "launched",
+    category: "Asset Management",
+    categories: ["Government", "Asset Management", "Public Service"],
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    date: "2023-03-15",
+    status: "Completed",
     team: [
-      { name: "UWIHANGANYE Edison", role: "Lead Developer", image: "https://media.licdn.com/dms/image/v2/D4D03AQH_4THyS9-igg/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1715287233733?e=1746662400&v=beta&t=utWb8N1bWMnRRO4uT6Qxu-wVa1D-sCtQGHlb_g17818" },
-      { name: "Marie Uwase", role: "IoT Specialist", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
+      { name: "MBONABUCYA Celestin", role: "Project Lead", image: "/img/coordinatoro.jpg" },
+      { name: "NIYONGABO Emmanuel", role: "Frontend Developer", image: "/img/emmanuel.png" }
     ],
     links: {
-      demo: "https://demo.example.com",
-      github: "https://github.com/example/project"
-    }
+      demo: "https://umutungo.example.com"
+    },
+    fullDescription: "Comprehensive asset management solution for public institutions.",
+    problemStatement: "Public institutions lacked proper asset tracking and management systems.",
+    solution: "Developed a comprehensive web-based system for asset registration, tracking, and depreciation calculation.",
+    technologies: ["React", "Node.js", "PostgreSQL", "Bootstrap"]
   },
   {
     id: "2",
-    title: "Rural Healthcare App",
-    description: "Mobile application connecting remote communities with healthcare providers and resources.",
-    innovators: ["2"],
+    title: "IMOTRAK",
+    description: "Fleet Management System for monitoring usage, maintenance, and cost of institutional vehicles.",
+    innovators: ["5", "6"],
     stage: "launched",
-    category: "Healthcare",
-    categories: ["Healthcare", "Mobile", "Social Impact"],
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
-    date: "2023-06-22",
+    category: "Fleet Management",
+    categories: ["Transportation", "Fleet Management", "Government"],
+    image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3",
+    date: "2023-06-20",
     status: "Completed",
     team: [
-      { name: "Marie-Claire Uwamahoro", role: "UX Designer", image: "https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
-      { name: "Jean Mutabazi", role: "Mobile Developer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
-      { name: "Alice Kayitesi", role: "Healthcare Consultant", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
+      { name: "SHYIRAMBERE Joseph", role: "Backend Developer", image: "/img/joseph.jpg" },
+      { name: "David TUYISHIME", role: "Team Leader", image: "/img/David.png" }
     ],
     links: {
-      demo: "https://healthcare-app.example.com",
-      website: "https://healthcare-project.example.com"
-    }
+      demo: "https://imotrak.example.com"
+    },
+    fullDescription: "Complete fleet management solution for institutional vehicle monitoring.",
+    problemStatement: "Institutions had no systematic way to track vehicle usage, maintenance, and costs.",
+    solution: "Built a comprehensive system for vehicle registration, usage tracking, maintenance scheduling, and cost analysis.",
+    technologies: ["Vue.js", "Express.js", "MongoDB", "Chart.js"]
   },
   {
     id: "3",
-    title: "Community Solar Initiative",
-    description: "Affordable solar energy solutions designed specifically for rural Rwandan communities.",
-    innovators: ["3"],
+    title: "INUMA App",
+    description: "Request flow management system for submitting and following up on staff inquiries in institutions.",
+    innovators: ["6", "7"],
     stage: "development",
-    category: "Energy",
-    categories: ["Energy", "Sustainability", "Community"],
-    image: "https://images.unsplash.com/photo-1509391366360-2e959784a276?q=80&w=2072&auto=format&fit=crop&ixlib=rb-4.0.3",
-    date: "2023-11-08",
+    category: "Request Management",
+    categories: ["Workflow", "Government", "Administration"],
+    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    date: "2023-09-10",
     status: "In Progress",
     team: [
-      { name: "Eric Mugisha", role: "Renewable Energy Engineer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
-      { name: "Patricia Umutoni", role: "Community Liaison", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
-    ]
+      { name: "David TUYISHIME", role: "Backend Lead", image: "/img/David.png" },
+      { name: "UWIHANGANYE Edison", role: "Frontend Lead", image: "/img/presentation-img/edison.jpg" }
+    ],
+    fullDescription: "Streamlined request management system for institutional staff inquiries.",
+    problemStatement: "Staff requests and inquiries were handled manually without proper tracking.",
+    solution: "Developed a digital workflow system for request submission, tracking, and resolution.",
+    technologies: ["React", "Node.js", "MySQL", "Material-UI"]
   },
   {
     id: "4",
-    title: "Water Purification Solution",
-    description: "Low-cost water purification system using locally available materials and simple technology.",
-    innovators: ["4"],
-    stage: "prototype",
-    category: "Water",
-    categories: ["Water", "Health", "Technology"],
-    image: "https://images.unsplash.com/photo-1581092921461-39b9d009a73c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
-    date: "2023-08-14",
+    title: "Customer Support System – Rwanda FDA",
+    description: "Helps citizens submit and track requests to Rwanda FDA; integrated with email and SMS.",
+    innovators: ["4", "7"],
+    stage: "launched",
+    category: "Customer Support",
+    categories: ["Government", "Healthcare", "Public Service"],
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    date: "2023-11-15",
+    status: "Completed",
+    team: [
+      { name: "NIYONGABO Emmanuel", role: "Frontend Developer", image: "/img/emmanuel.png" },
+      { name: "UWIHANGANYE Edison", role: "UI/UX Lead", image: "/img/presentation-img/edison.jpg" }
+    ],
+    links: {
+      website: "https://fda-support.example.com"
+    },
+    fullDescription: "Comprehensive customer support platform for Rwanda FDA citizen services.",
+    problemStatement: "Citizens had difficulty submitting and tracking requests to Rwanda FDA.",
+    solution: "Built an integrated platform with email and SMS notifications for request management.",
+    technologies: ["Angular", "Spring Boot", "PostgreSQL", "Twilio API"]
+  },
+  {
+    id: "5",
+    title: "Academic Records System",
+    description: "Tool for managing student marks, transcripts, and academic validation processes at CST. (Under Development)",
+    innovators: ["4", "6"],
+    stage: "development",
+    category: "Education",
+    categories: ["Education", "Academic Management", "University"],
+    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.0.3",
+    date: "2024-01-10",
     status: "In Progress",
     team: [
-      { name: "Diane Umutoni", role: "Biotech Researcher", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
-      { name: "Patrick Niyonzima", role: "Water Engineer", image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
+      { name: "NIYONGABO Emmanuel", role: "Frontend Developer", image: "/img/emmanuel.png" },
+      { name: "David TUYISHIME", role: "Backend Developer", image: "/img/David.png" }
     ],
-    gallery: [
-      "https://images.unsplash.com/photo-1581092921461-39b9d009a73c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
-      "https://images.unsplash.com/photo-1560520653-9e0e4c89eb11?q=80&w=1973&auto=format&fit=crop&ixlib=rb-4.0.3",
-      "https://images.unsplash.com/photo-1562016600-ece13e8ba570?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3"
-    ],
+    fullDescription: "Comprehensive academic records management system for CST.",
+    problemStatement: "Manual academic record keeping was inefficient and error-prone.",
+    solution: "Developing a digital system for marks entry, transcript generation, and academic validation.",
+    technologies: ["React", "Django", "PostgreSQL", "PDF Generation"],
     updates: [
       {
-        date: "2023-08-14",
-        title: "Project Launch",
-        content: "We're excited to start the development of our water purification solution."
+        date: "2024-01-10",
+        title: "Project Initiated",
+        content: "Started development of the academic records management system for CST."
       },
       {
-        date: "2023-10-22",
-        title: "First Prototype",
-        content: "Successfully tested our first prototype with promising results in lab conditions."
+        date: "2024-02-15",
+        title: "Database Design Complete",
+        content: "Completed the database schema design for student records and transcript management."
       }
     ]
   },
   {
-    id: "5",
-    title: "Mobile Savings Platform",
-    description: "Fintech solution helping unbanked Rwandans save money and build financial resilience.",
-    innovators: ["5"],
-    stage: "launched",
-    category: "Finance",
-    categories: ["Finance", "Mobile", "Financial Inclusion"],
-    image: "https://images.unsplash.com/photo-1526304640581-d334cdbbf45e?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
-    date: "2023-03-05",
-    status: "Completed",
-    team: [
-      { name: "Kevin Hakizimana", role: "Fintech Entrepreneur", image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
-      { name: "Grace Mukeshimana", role: "Mobile Developer", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
-      { name: "James Ngabo", role: "Financial Advisor", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
-    ],
-    links: {
-      website: "https://savings-platform.example.com"
-    },
-    technologies: ["React Native", "Node.js", "MongoDB", "AWS"]
-  },
-  {
     id: "6",
-    title: "Rural School Tablet Program",
-    description: "Educational initiative providing tablets and digital curricula to rural schools.",
-    innovators: ["6"],
+    title: "UR Binary Hub Platform",
+    description: "Official website and management platform for UR Binary Hub showcasing innovations and team members.",
+    innovators: ["7", "8", "11"],
     stage: "development",
-    category: "Education",
-    categories: ["Education", "Technology", "Rural Development"],
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.0.3",
-    date: "2023-12-01",
+    category: "Web Platform",
+    categories: ["Web Development", "Innovation Hub", "University"],
+    image: "/img/presentation-img/team.jpg",
+    date: "2024-01-20",
     status: "In Progress",
     team: [
-      { name: "Claudine Nyiraneza", role: "Education Technologist", image: "https://images.unsplash.com/photo-1581992652564-44c42f5ad3ad?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
-      { name: "Emmanuel Ndayisaba", role: "Educational Content Creator", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
+      { name: "UWIHANGANYE Edison", role: "Frontend Lead", image: "/img/presentation-img/edison.jpg" },
+      { name: "Eric TUYISHIMIRE", role: "UI/UX Designer", image: "/img/eds.jpg" },
+      { name: "Danny HATEGEKIMANA", role: "Brand Designer", image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
     ],
-    technologies: ["Android", "Educational Apps", "Solar Charging"],
-    gallery: [
-      "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.0.3",
-      "https://images.unsplash.com/photo-1610484826967-09c5720778c7?q=80&w=1972&auto=format&fit=crop&ixlib=rb-4.0.3",
-      "https://images.unsplash.com/photo-1610484827141-843f6b092676?q=80&w=1972&auto=format&fit=crop&ixlib=rb-4.0.3"
-    ]
+    fullDescription: "Modern platform showcasing UR Binary Hub's innovations, team, and achievements.",
+    problemStatement: "UR Binary Hub needed a professional platform to showcase its work and attract collaborators.",
+    solution: "Building a comprehensive web platform with project showcases, team directory, and innovation management.",
+    technologies: ["React", "TypeScript", "Tailwind CSS", "Framer Motion"]
   }
 ];
 
