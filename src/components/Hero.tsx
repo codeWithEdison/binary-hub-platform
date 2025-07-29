@@ -1,136 +1,166 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Sparkles, Play, ChevronDown } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center py-20 px-6 md:px-12 overflow-hidden">
-      {/* Background elements - improved positioning */}
+    <section className="relative min-h-screen flex items-center overflow-hidden">
+      {/* Background Image with Dark Overlay */}
       <div className="absolute inset-0 z-0">
-        <div className="absolute top-1/4 right-1/3 w-72 h-72 bg-primary/10 rounded-full filter blur-3xl"></div>
-        <div className="absolute bottom-1/3 left-1/4 w-72 h-72 bg-accent/10 rounded-full filter blur-3xl"></div>
-        <div className="absolute top-2/3 right-1/4 w-64 h-64 bg-secondary/10 rounded-full filter blur-3xl"></div>
+        <img 
+          src="/img/presentation-img/team.jpg" 
+          alt="UR Binary Hub Innovators" 
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
       </div>
       
-      <div className="max-w-7xl mx-auto w-full z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-          {/* Text Content - fixed naming inconsistency */}
+      <div className="max-w-7xl mx-auto w-full z-10 px-6 md:px-12">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen py-20">
+          {/* Text Content - Left Side */}
           <motion.div
             className="order-2 lg:order-1"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
+            initial={{ opacity: 0, x: -50 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <motion.span 
-              className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
+            <motion.div
+              className="inline-flex items-center px-4 py-2 bg-[#00628b]/20 text-white rounded-full text-sm font-semibold mb-6"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
+              <Sparkles className="w-4 h-4 mr-2" />
               UR Binary Hub
-            </motion.span>
+            </motion.div>
             
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight mb-6">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-white">
               <motion.span 
                 className="block"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
               >
-                Nurturing Innovation,
+                Unlock Innovation
               </motion.span>
               <motion.span 
-                className="block text-gradient"
+                className="block text-[#00628b]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
               >
-                Building Solutions
+                Build Solutions
               </motion.span>
             </h1>
             
             <motion.p 
-              className="text-lg md:text-xl text-muted-foreground mb-8 max-w-xl"
+              className="text-xl md:text-2xl text-gray-200 mb-8 max-w-xl leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
-              transition={{ delay: 0.8, duration: 0.5 }}
+              transition={{ delay: 1, duration: 0.5 }}
             >
-              UR Binary Hub is the innovation and incubation hub of the University of Rwanda, nurturing student, staff, and alumni-led innovations focused on developing homegrown digital solutions.
+              Student-led innovation for Rwanda's digital transformation.
             </motion.p>
             
             <motion.div 
               className="flex flex-wrap gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 0.5 }}
+              transition={{ delay: 1.2, duration: 0.5 }}
             >
-              <Link to="/about" className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium transition-all hover:shadow-lg hover:shadow-primary/25">
-                Learn More
+              <Link 
+                to="/about" 
+                className="inline-flex items-center px-8 py-4 bg-[#00628b] text-white rounded-full font-semibold hover:bg-blue-600 hover:shadow-lg hover:shadow-[#00628b]/25 transition-all duration-300 group"
+              >
+                <span>GET STARTED</span>
+                <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <Link to="/innovators" className="inline-flex items-center justify-center px-6 py-3 border border-border bg-background/50 hover:bg-background text-foreground rounded-full font-medium transition-all group">
-                <span>View Innovators</span>
-                <ArrowRight size={18} className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
+              <a 
+                href="https://www.youtube.com/watch?v=your-video-id" 
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center px-8 py-4 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#00628b] transition-all duration-300 group"
+              >
+                <Play className="w-5 h-5 mr-2" />
+                <span>Watch Video</span>
+              </a>
             </motion.div>
           </motion.div>
           
-          {/* Image Section - with placeholder image */}
+          {/* Video/Image Section - Right Side */}
           <motion.div 
             className="order-1 lg:order-2 relative"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, x: 50 }}
+            animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
-            <div className="relative z-10 rounded-2xl overflow-hidden shadow-2xl shadow-primary/10">
-              <img 
-                src="/img/presentation-img/guest-pic.jpg" 
-                alt="Students collaborating at Innovation Hub" 
-                className="w-full h-auto object-cover"
-              />
+            <div className="relative">
+              {/* Main Video/Image Container */}
+              <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl">
+                <img 
+                  src="/img/presentation-img/presentation.jpg" 
+                  alt="UR Binary Hub Innovation Event" 
+                  className="w-full h-auto object-cover"
+                />
+                <div className="absolute inset-0 bg-black/30"></div>
+                
+                {/* Play Button Overlay */}
+                <motion.div
+                  className="absolute inset-0 flex items-center justify-center"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  <a 
+                    href="https://www.youtube.com/watch?v=your-video-id" 
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="w-20 h-20 bg-[#00628b] rounded-full flex items-center justify-center shadow-lg cursor-pointer group hover:bg-blue-600 transition-colors"
+                  >
+                    <Play className="w-8 h-8 text-white ml-1" />
+                  </a>
+                </motion.div>
+              </div>
+              
+              {/* Floating Elements */}
+              <motion.div 
+                className="absolute -top-6 -right-6 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-white/20"
+                animate={{ y: [-10, 10, -10] }}
+                transition={{ duration: 3, repeat: Infinity }}
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-sm font-semibold text-gray-700">Live Innovation</span>
+                </div>
+              </motion.div>
+
+              <motion.div 
+                className="absolute -bottom-6 -left-6 bg-[#00628b] text-white rounded-2xl p-4 shadow-xl"
+                animate={{ y: [10, -10, 10] }}
+                transition={{ duration: 4, repeat: Infinity }}
+              >
+                <div className="text-center">
+                  <p className="text-2xl font-bold">5+</p>
+                  <p className="text-xs opacity-90">Flagship Projects</p>
+                </div>
+              </motion.div>
             </div>
-            
-            {/* Floating stats card - repositioned to avoid being under image */}
-            <motion.div 
-              className="absolute left-0 bottom-0 md:-left-16 md:bottom-16 bg-background/80 backdrop-blur-lg p-5 rounded-xl max-w-[250px] shadow-xl border border-border/50 z-20"
-              initial={{ opacity: 0, y: 20, x: 20 }}
-              animate={{ opacity: 1, y: 0, x: 0 }}
-              transition={{ delay: 1.1, duration: 0.6 }}
-            >
-              <p className="text-sm text-muted-foreground mb-2">Students Supported</p>
-              <p className="text-3xl font-display font-bold text-gradient">200+</p>
-              <div className="mt-2 w-full bg-border/50 h-1 rounded-full overflow-hidden">
-                <motion.div 
-                  className="h-full bg-primary"
-                  initial={{ width: "0%" }}
-                  animate={{ width: "75%" }}
-                  transition={{ delay: 1.5, duration: 1 }}
-                ></motion.div>
-              </div>
-            </motion.div>
-            
-            {/* Floating badge card - improved positioning */}
-            <motion.div 
-              className="absolute -top-5 -right-5 md:top-10 md:-right-10 bg-background/80 backdrop-blur-lg p-5 rounded-xl shadow-xl border border-border/50 z-20 "
-              initial={{ opacity: 0, y: -20, x: -20 }}
-              animate={{ opacity: 1, y: 0, x: 0 }}
-              transition={{ delay: 1.3, duration: 0.6 }}
-            >
-              <div className="flex items-center">
-                <div className="w-10 h-10 bg-primary/20 text-primary rounded-full flex items-center justify-center mr-3">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                  </svg>
-                </div>
-                <div>
-                  <p className="font-medium">Innovation Hub</p>
-                  <p className="text-sm text-muted-foreground">Est. 2018</p>
-                </div>
-              </div>
-            </motion.div>
           </motion.div>
         </div>
       </div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-20"
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 2, repeat: Infinity }}
+      >
+        <div className="flex flex-col items-center text-white">
+          <span className="text-sm font-medium mb-2">Scroll to explore</span>
+          <ChevronDown className="w-6 h-6" />
+        </div>
+      </motion.div>
     </section>
   );
 };

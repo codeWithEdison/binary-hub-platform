@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { projects } from "@/lib/data";
 
-// Define filter categories
-const categories = ["All", "Agriculture", "Healthcare", "Energy", "Water", "Finance", "Education"];
+// Updated categories based on binaryhub.md flagship projects
+const categories = ["All", "Asset Management", "Fleet Management", "Request Management", "Customer Support", "Education"];
 const stages = ["All", "concept", "prototype", "development", "launched"];
 
 const InnovationShowcase = () => {
@@ -56,7 +56,7 @@ const InnovationShowcase = () => {
             </h1>
 
             <p className="text-muted-foreground md:text-lg">
-              Explore the groundbreaking projects developed by Binary Hub Rwanda's innovators, addressing local challenges with global potential.
+              Explore the flagship projects developed by UR Binary Hub innovators, addressing national and institutional challenges with homegrown digital solutions.
             </p>
           </motion.div>
         </div>

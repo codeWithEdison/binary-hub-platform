@@ -34,7 +34,7 @@ const ContactPage = () => {
             </h1>
 
             <p className="text-muted-foreground md:text-lg">
-              Have questions or want to collaborate? Reach out to Binary Hub Rwanda through any of our channels.
+              Have questions or want to collaborate? Reach out to UR Binary Hub through any of our channels.
             </p>
           </motion.div>
         </div>
@@ -57,8 +57,8 @@ const ContactPage = () => {
                     <div>
                       <h3 className="text-base font-medium mb-1">Email</h3>
                       <p className="text-muted-foreground mb-1">For general inquiries:</p>
-                      <a href="mailto:contact@Binary Hubhub.rw" className="text-primary hover:underline">
-                        contact@Binary Hubhub.rw
+                      <a href="mailto:contact@binaryhub.ur.ac.rw" className="text-primary hover:underline">
+                        contact@binaryhub.ur.ac.rw
                       </a>
                     </div>
                   </div>
@@ -83,7 +83,7 @@ const ContactPage = () => {
                     <div>
                       <h3 className="text-base font-medium mb-1">Location</h3>
                       <p className="text-muted-foreground mb-1">Visit our innovation space:</p>
-                      <p>University of Rwanda - College of Science and Technology, Kigali, Rwanda</p>
+                      <p>UR Binary Hub, School of ICT, College of Science and Technology (CST), University of Rwanda, Kigali, Rwanda</p>
                     </div>
                   </div>
 

@@ -15,9 +15,9 @@ const Navbar = () => {
     { name: "About", path: "/about" },
     { name: "Innovators", path: "/innovators" },
     { name: "Innovations", path: "/innovations" },
-    { name: "Events", path: "/events" },
-    { name: "Announcements", path: "/announcements" },
-    { name: "Contact", path: "/contact" },
+    // { name: "Events", path: "/events" },
+    // { name: "Announcements", path: "/announcements" },
+    // { name: "Contact", path: "/contact" },
   ];
 
   useEffect(() => {
@@ -69,7 +69,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="relative z-50">
           <h1 className="text-xl font-display font-semibold">
-            <span className="text-gradient">UR Binary Hub</span>
+            <span className="text-[#00628b]">UR Binary Hub</span>
           </h1>
         </Link>
 
@@ -86,7 +86,7 @@ const Navbar = () => {
               <Link
                 to={link.path}
                 className={cn(
-                  "text-foreground/80 hover:text-foreground transition-colors py-2 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-primary after:origin-left after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300",
+                  "text-foreground/80 hover:text-foreground transition-colors py-2 relative after:absolute after:bottom-0 after:left-0 after:right-0 after:h-0.5 after:bg-[#00628b] after:origin-left after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300",
                   {
                     "text-foreground font-medium after:scale-x-100": location.pathname === link.path
                   }
@@ -98,7 +98,7 @@ const Navbar = () => {
           ))}
 
           {/* Admin link */}
-          <motion.div
+          {/* <motion.div
             custom={links.length}
             initial="hidden"
             animate="visible"
@@ -106,11 +106,11 @@ const Navbar = () => {
           >
             <Link
               to="/admin"
-              className="ml-2 p-2 rounded-full bg-primary/10 text-primary hover:bg-primary/20 transition-colors"
+              className="ml-2 p-2 rounded-full bg-[#00628b]/10 text-[#00628b] hover:bg-[#00628b]/20 transition-colors"
             >
               <User size={18} />
             </Link>
-          </motion.div>
+          </motion.div> */}
         </nav>
 
         {/* Mobile Menu Toggle */}
@@ -148,7 +148,7 @@ const Navbar = () => {
                       className={cn(
                         "text-2xl font-medium py-2",
                         {
-                          "text-primary": location.pathname === link.path
+                          "text-[#00628b]": location.pathname === link.path
                         }
                       )}
                     >
@@ -167,7 +167,7 @@ const Navbar = () => {
                 >
                   <Link
                     to="/admin"
-                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-primary/10 text-primary"
+                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-lg bg-[#00628b]/10 text-[#00628b]"
                   >
                     <User size={18} />
                     <span>Admin Dashboard</span>

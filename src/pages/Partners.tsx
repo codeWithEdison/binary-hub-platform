@@ -5,77 +5,77 @@ import { Link } from "react-router-dom";
 import { Building, Users, GraduationCap, Globe, ArrowRight, ExternalLink } from "lucide-react";
 import Footer from "@/components/Footer";
 
-// Mock partners data
+// Updated partners data based on binaryhub.md key stakeholders
 const partners = [
   {
     id: "1",
     name: "University of Rwanda",
     logo: "https://images.unsplash.com/photo-1594322436404-5a0526db4d13?q=80&w=2029&auto=format&fit=crop&ixlib=rb-4.0.3",
     category: "academic",
-    description: "Our primary academic partner providing institutional support, facilities, and faculty expertise.",
+    description: "Policy oversight and coordination for UR Binary Hub operations.",
     website: "https://www.ur.ac.rw"
   },
   {
     id: "2",
-    name: "Rwanda ICT Chamber",
+    name: "UR Data Center",
     logo: "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3",
-    category: "industry",
-    description: "Supporting our innovators with industry connections, mentorship, and business development opportunities.",
-    website: "https://www.ict.rw"
+    category: "infrastructure",
+    description: "Providing hosting and testing infrastructure for our projects.",
+    website: "#"
   },
   {
     id: "3",
-    name: "Rwanda Development Board",
+    name: "Ministry of ICT / RISA",
     logo: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
     category: "government",
-    description: "Providing strategic guidance and support for scaling innovations into businesses.",
-    website: "https://rdb.rw"
+    description: "Prioritization aligned with national strategy and digital transformation goals.",
+    website: "https://www.minict.gov.rw"
   },
   {
     id: "4",
-    name: "African Development Bank",
+    name: "Mastercard Foundation",
     logo: "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.0.3",
     category: "funding",
-    description: "Supporting our programs through grants and innovation funding opportunities.",
-    website: "https://www.afdb.org"
+    description: "Supporting activities and innovation programs through grants and funding opportunities.",
+    website: "https://mastercardfdn.org"
   },
   {
     id: "5",
-    name: "Digital Opportunity Trust Rwanda",
+    name: "GIZ Rwanda",
     logo: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
-    category: "ngo",
-    description: "Collaborating on digital skills development and youth empowerment initiatives.",
-    website: "https://www.dotrust.org"
+    category: "funding",
+    description: "Supporting innovation programs and capacity building initiatives.",
+    website: "https://www.giz.de/en/worldwide/rwanda.html"
   },
   {
     id: "6",
-    name: "Norrsken East Africa",
+    name: "ENABEL",
     logo: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2032&auto=format&fit=crop&ixlib=rb-4.0.3",
-    category: "industry",
-    description: "Providing scale-up support and connections to the broader East African startup ecosystem.",
-    website: "https://www.norrsken.org"
+    category: "funding",
+    description: "Supporting innovation and development programs in Rwanda.",
+    website: "https://www.enabel.be"
   }
 ];
 
-// Success stories data
+// Updated success stories based on binaryhub.md flagship projects
 const successStories = [
   {
     id: "1",
-    title: "AgriSense & Ministry of Agriculture",
-    description: "A collaboration that led to the implementation of IoT soil monitoring systems across 12 agricultural cooperatives in Rwanda.",
-    image: "https://images.unsplash.com/photo-1628352081506-83c93d9a2b67?q=80&w=2080&auto=format&fit=crop&ixlib=rb-4.0.3"
+    title: "UMUTUNGO Box & Public Institutions",
+    description: "Asset Management System successfully implemented for public institutions to track assets, value, and depreciation.",
+    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
   },
   {
     id: "2",
-    title: "MediConnect & Rwanda Biomedical Center",
-    description: "Partnership that developed a telemedicine platform now serving over 20,000 patients in rural Rwanda.",
-    image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
+    title: "IMOTRAK & Institutional Fleet Management",
+    description: "Fleet Management System deployed for monitoring usage, maintenance, and cost of institutional vehicles.",
+    image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3"
   },
   {
     id: "3",
-    title: "EduTech Rwanda & UNICEF",
-    description: "Collaboration that brought digital learning tools to 45 rural schools, impacting over 15,000 students.",
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.0.3"
+    title: "Customer Support System & Rwanda FDA",
+    description: "Integrated platform helping citizens submit and track requests to Rwanda FDA with email and SMS notifications.",
+    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1f?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
   }
 ];
 
