@@ -1,32 +1,103 @@
-
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Target, Eye, Users, Lightbulb, Award, Building2 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { stats, services } from "@/lib/data";
 import ServiceCard from "@/components/ServiceCard";
 
 const About = () => {
+  const objectives = [
+    {
+      icon: Users,
+      title: "Foster Interdisciplinary Collaboration",
+      description: "Bring together students, staff, alumni, and industry experts for innovation."
+    },
+    {
+      icon: Building2,
+      title: "Focus on Edu-tech & Priority Areas",
+      description: "Aligned with national and UR strategies for maximum impact."
+    },
+    {
+      icon: Award,
+      title: "Provide Mentorship & Career Development",
+      description: "Real-world project experience and career pathway guidance."
+    },
+    {
+      icon: Target,
+      title: "Strengthen UR's Digital Position",
+      description: "Position UR as a leading digital solutions provider."
+    }
+  ];
+
+  const features = [
+    {
+      feature: "Incubation Support",
+      description: "Offers mentorship, training, and working space for tech innovators."
+    },
+    {
+      feature: "University-Backed",
+      description: "Operates under the University of Rwanda; aligned with national development goals."
+    },
+    {
+      feature: "Multidisciplinary Teams",
+      description: "Engages students, academic staff, alumni, and external experts."
+    },
+    {
+      feature: "Focus Area",
+      description: "Primarily software development for public institutions and national systems."
+    },
+    {
+      feature: "Co-Ownership Model",
+      description: "Solutions are co-owned by the University and the developers."
+    },
+    {
+      feature: "Real-World Impact",
+      description: "Works on projects addressing public service delivery, governance, and education."
+    }
+  ];
+
+  const flagshipProjects = [
+    {
+      name: "UMUTUNGO Box",
+      description: "Asset Management System for public institutions to track assets, value, and depreciation."
+    },
+    {
+      name: "IMOTRAK",
+      description: "Fleet Management System for monitoring usage, maintenance, and cost of institutional vehicles."
+    },
+    {
+      name: "INUMA App",
+      description: "Request flow management system for submitting and following up on staff inquiries in institutions."
+    },
+    {
+      name: "Customer Support System – Rwanda FDA",
+      description: "Helps citizens submit and track requests to Rwanda FDA; integrated with email and SMS."
+    },
+    {
+      name: "Academic Records System",
+      description: "Tool for managing student marks, transcripts, and academic validation processes at CST. (Under Development)"
+    }
+  ];
+
   return (
     <div className="min-h-screen pt-20">
       {/* Hero Section */}
       <section className="relative py-24 px-6 md:px-12 overflow-hidden">
-        {/* Background elements */}
         <div className="absolute inset-0 z-0">
           <div className="absolute top-1/4 right-1/3 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl"></div>
           <div className="absolute bottom-1/3 left-1/4 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl"></div>
         </div>
 
         <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center max-w-3xl mx-auto">
+          <div className="text-center max-w-4xl mx-auto">
             <motion.span
               className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.5 }}
             >
-              About Us
+              About UR Binary Hub
             </motion.span>
 
             <motion.h1
@@ -35,55 +106,40 @@ const About = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              Our Story & Mission
+              What is UR Binary Hub?
             </motion.h1>
 
             <motion.p
-              className="text-lg text-muted-foreground"
+              className="text-lg text-muted-foreground max-w-3xl mx-auto"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              Learn about Binary Hub Rwanda's journey, vision, and commitment to fostering innovation within the University of Rwanda community.
+              UR Binary Hub is the innovation and incubation hub of the University of Rwanda, currently hosted within the School of ICT at the College of Science and Technology (CST). It is a conducive environment for nurturing student, staff, experts and alumni-led innovations focused on developing homegrown digital solutions that address national and institutional challenges.
             </motion.p>
           </div>
         </div>
       </section>
 
-      {/* Our Story Section */}
-      <section className="py-20 px-6 md:px-12">
+      {/* Vision Section */}
+      <section className="py-20 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
             <motion.div
+              className="glass p-8 rounded-2xl h-full"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.5 }}
             >
-              <motion.span
-                className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-              >
-                Our Story
-              </motion.span>
+              <div className="w-12 h-12 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-6">
+                <Eye size={24} />
+              </div>
 
-              <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
-                Building an Innovation Ecosystem
-              </h2>
-
-              <p className="text-muted-foreground mb-6">
-                Binary Hub Rwanda was established in 2018 with a clear mission: to create an ecosystem where innovative ideas flourish and transform into impactful solutions for Rwanda and beyond.
-              </p>
-
-              <p className="text-muted-foreground mb-6">
-                What began as a small initiative within the University of Rwanda has grown into a vibrant community of students, faculty, alumni, and industry partners collaborating to address local challenges through innovation and entrepreneurship.
-              </p>
+              <h3 className="text-2xl font-semibold mb-4">Our Vision</h3>
 
               <p className="text-muted-foreground">
-                Today, Binary Hub serves as a catalyst for technological advancement and economic growth, empowering Rwanda's brightest minds to create a better future through innovation.
+                To establish a sustainable and institutionally recognized software development center that nurtures student and staff innovations, builds practical skills, and contributes to national and institutional digital transformation.
               </p>
             </motion.div>
 
@@ -92,40 +148,20 @@ const About = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.8 }}
             >
               <img
-                src="https://images.unsplash.com/photo-1531545514256-b1400bc00f31?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3"
-                alt="Binary Hub team collaboration"
+                src="/img/presentation-img/team.jpg"
+                alt="UR Binary Hub Vision"
                 className="w-full h-auto rounded-2xl shadow-2xl shadow-primary/10"
               />
-
-              {/* Floating timeline card */}
-              <motion.div
-                className="absolute -bottom-6 -left-6 md:-bottom-10 md:-left-10 glass p-5 rounded-xl shadow-xl max-w-[200px]"
-                initial={{ opacity: 0, y: 20, x: -20 }}
-                whileInView={{ opacity: 1, y: 0, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5, duration: 0.6 }}
-              >
-                <div className="flex flex-col">
-                  <div className="w-10 h-10 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-3">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                  </div>
-                  <p className="font-medium text-sm">Established</p>
-                  <p className="text-2xl font-bold text-gradient">2018</p>
-                  <p className="text-xs text-muted-foreground mt-1">University of Rwanda</p>
-                </div>
-              </motion.div>
             </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Mission & Vision Section */}
-      <section className="py-20 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
+      {/* Objectives Section */}
+      <section className="py-20 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="text-center max-w-3xl mx-auto mb-16">
             <motion.span
@@ -135,7 +171,7 @@ const About = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.5 }}
             >
-              Our Purpose
+              Our Goals
             </motion.span>
 
             <motion.h2
@@ -145,176 +181,158 @@ const About = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.2, duration: 0.5 }}
             >
-              Mission & Vision
+              Specific Objectives
             </motion.h2>
-
-            <motion.p
-              className="text-muted-foreground"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3, duration: 0.5 }}
-            >
-              Guiding principles that drive our innovation ecosystem and community impact.
-            </motion.p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <motion.div
-              className="glass p-8 rounded-2xl h-full"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-              <div className="w-12 h-12 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
-                </svg>
-              </div>
-
-              <h3 className="text-2xl font-semibold mb-4">Our Mission</h3>
-
-              <p className="text-muted-foreground mb-4">
-                To foster a culture of innovation within the University of Rwanda by providing resources, mentorship, and networks that empower students, faculty, and alumni to develop solutions for local and global challenges.
-              </p>
-
-              <p className="text-muted-foreground">
-                We aim to bridge the gap between academic knowledge and practical application, creating pathways for ideas to become impactful innovations.
-              </p>
-            </motion.div>
-
-            <motion.div
-              className="glass p-8 rounded-2xl h-full"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.5, duration: 0.5 }}
-            >
-              <div className="w-12 h-12 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-6">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
-                </svg>
-              </div>
-
-              <h3 className="text-2xl font-semibold mb-4">Our Vision</h3>
-
-              <p className="text-muted-foreground mb-4">
-                To be a leading innovation hub in East Africa, recognized for nurturing talent and generating impactful solutions that contribute to Rwanda's development and inspire the continent.
-              </p>
-
-              <p className="text-muted-foreground">
-                We envision a future where every student with an innovative idea has the opportunity to develop it, and where our alumni are known for their entrepreneurial spirit and problem-solving abilities.
-              </p>
-            </motion.div>
+            {objectives.map((objective, index) => (
+              <motion.div
+                key={objective.title}
+                className="glass p-6 rounded-xl h-full"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+              >
+                <div className="w-12 h-12 bg-primary/20 text-primary rounded-full flex items-center justify-center mb-4">
+                  <objective.icon size={20} />
+                </div>
+                <h3 className="text-xl font-semibold mb-3">{objective.title}</h3>
+                <p className="text-muted-foreground">{objective.description}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* Values Section */}
-      <section className="py-20 px-6 md:px-12">
+      {/* Key Features Section */}
+      <section className="py-20 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
         <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
-            <motion.div
-              className="order-2 lg:order-1 relative"
-              initial={{ opacity: 0, scale: 0.95 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            >
-              <img
-                src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3"
-                alt="Binary Hub values"
-                className="w-full h-auto rounded-2xl shadow-2xl shadow-primary/10"
-              />
-            </motion.div>
-
-            <motion.div
-              className="order-1 lg:order-2"
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <motion.h2
+              className="text-3xl md:text-4xl font-display font-bold mb-6"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.5 }}
             >
-              <motion.span
-                className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
+              Key Features of UR Binary Hub
+            </motion.h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.feature}
+                className="glass p-6 rounded-xl"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
+              >
+                <h3 className="text-lg font-semibold mb-3 text-primary">{feature.feature}</h3>
+                <p className="text-muted-foreground text-sm">{feature.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Flagship Projects Section */}
+      <section className="py-20 px-6 md:px-12">
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center max-w-3xl mx-auto mb-16">
+            <motion.h2
+              className="text-3xl md:text-4xl font-display font-bold mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5 }}
+            >
+              Flagship Projects Developed at Binary Hub
+            </motion.h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {flagshipProjects.map((project, index) => (
+              <motion.div
+                key={project.name}
+                className="glass p-6 rounded-xl border-l-4 border-primary"
                 initial={{ opacity: 0, x: -20 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.3, duration: 0.5 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
               >
-                Our Values
-              </motion.span>
+                <h3 className="text-xl font-semibold mb-3 text-primary">{project.name}</h3>
+                <p className="text-muted-foreground">{project.description}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
 
+      {/* Current Structure Section */}
+      <section className="py-20 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
               <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
-                Core Principles
+                Current Structure & Operations
               </h2>
 
-              <div className="space-y-6">
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 shrink-0 bg-primary/10 text-primary rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-1">Innovation</h3>
-                    <p className="text-muted-foreground">
-                      We encourage creative thinking and novel approaches to problem-solving.
-                    </p>
-                  </div>
+              <div className="space-y-4">
+                <div className="flex gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 shrink-0"></div>
+                  <p className="text-muted-foreground">
+                    Coordinated by a team of volunteers from the School of ICT
+                  </p>
                 </div>
-
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 shrink-0 bg-primary/10 text-primary rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-1">Collaboration</h3>
-                    <p className="text-muted-foreground">
-                      We believe in the power of diverse perspectives and interdisciplinary teamwork.
-                    </p>
-                  </div>
+                <div className="flex gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 shrink-0"></div>
+                  <p className="text-muted-foreground">
+                    Operates with project managers, front-end and back-end developers, testers, and documentation specialists
+                  </p>
                 </div>
-
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 shrink-0 bg-primary/10 text-primary rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 11.5V14m0-2.5v-6a1.5 1.5 0 113 0m-3 6a1.5 1.5 0 00-3 0v2a7.5 7.5 0 0015 0v-5a1.5 1.5 0 00-3 0m-6-3V11m0-5.5v-1a1.5 1.5 0 013 0v1m0 0V11m0-5.5a1.5 1.5 0 013 0v3m0 0V11" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-1">Impact-Focused</h3>
-                    <p className="text-muted-foreground">
-                      We prioritize solutions that create meaningful change for Rwanda and its communities.
-                    </p>
-                  </div>
+                <div className="flex gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 shrink-0"></div>
+                  <p className="text-muted-foreground">
+                    Offers an environment where students work on live projects, contributing voluntarily
+                  </p>
                 </div>
-
-                <div className="flex gap-4">
-                  <div className="w-12 h-12 shrink-0 bg-primary/10 text-primary rounded-full flex items-center justify-center">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 className="text-xl font-semibold mb-1">Learning Culture</h3>
-                    <p className="text-muted-foreground">
-                      We embrace continuous learning, experimentation, and growth from both successes and failures.
-                    </p>
-                  </div>
+                <div className="flex gap-3">
+                  <div className="w-2 h-2 bg-primary rounded-full mt-2 shrink-0"></div>
+                  <p className="text-muted-foreground">
+                    Solutions are first used within the University of Rwanda and made available to other government institutions
+                  </p>
                 </div>
               </div>
+            </motion.div>
+
+            <motion.div
+              className="relative"
+              initial={{ opacity: 0, scale: 0.95 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.8 }}
+            >
+              <img
+                src="/img/presentation-img/presentation.jpg"
+                alt="Binary Hub Structure"
+                className="w-full h-auto rounded-2xl shadow-2xl shadow-primary/10"
+              />
             </motion.div>
           </div>
         </div>
       </section>
 
       {/* Stats Section */}
-      <section className="py-16 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
+      <section className="py-16 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-10">
             {stats.map((stat, index) => (
@@ -324,11 +342,7 @@ const About = () => {
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{
-                  delay: index * 0.1,
-                  duration: 0.5,
-                  ease: [0.22, 1, 0.36, 1]
-                }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
               >
                 <p className="text-3xl md:text-4xl font-display font-bold text-gradient mb-2">
                   {stat.value}
@@ -343,10 +357,9 @@ const About = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-20 px-6 md:px-12">
+      <section className="py-20 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
         <div className="max-w-7xl mx-auto">
           <div className="glass p-8 md:p-12 rounded-2xl overflow-hidden relative">
-            {/* Background gradient */}
             <div className="absolute inset-0 z-0">
               <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl"></div>
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl"></div>
@@ -360,7 +373,7 @@ const About = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5 }}
               >
-                Join Our Innovation Community
+                Ready to Join UR Binary Hub?
               </motion.h2>
 
               <motion.p
@@ -370,21 +383,21 @@ const About = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.2, duration: 0.5 }}
               >
-                Be part of Rwanda's growing innovation ecosystem. Whether you're a student, faculty member, or industry partner, there's a place for you at Binary Hub.
+                Whether you're a student with an innovative idea, a faculty member interested in research collaboration, or an industry partner looking to work with us, we welcome you to be part of our growing innovation community.
               </motion.p>
 
               <motion.div
-                className="flex flex-wrap justify-center gap-4"
+                className="flex flex-wrap gap-4 justify-center"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.3, duration: 0.5 }}
+                transition={{ delay: 0.4, duration: 0.5 }}
               >
-                <Link to="/innovators" className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium transition-all hover:shadow-lg hover:shadow-primary/25">
-                  Meet Our Innovators
+                <Link to="/contact" className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium transition-all hover:shadow-lg hover:shadow-primary/25">
+                  Get Started
                 </Link>
-                <Link to="/" className="inline-flex items-center justify-center px-6 py-3 border border-border bg-background/50 hover:bg-background text-foreground rounded-full font-medium transition-all group">
-                  <span>Contact Us</span>
+                <Link to="/innovators" className="inline-flex items-center justify-center px-6 py-3 border border-border bg-background/50 hover:bg-background text-foreground rounded-full font-medium transition-all group">
+                  <span>Meet Our Team</span>
                   <ArrowRight size={18} className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
               </motion.div>
@@ -393,7 +406,6 @@ const About = () => {
         </div>
       </section>
 
-      {/* Footer */}
       <Footer />
     </div>
   );

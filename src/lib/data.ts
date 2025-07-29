@@ -256,33 +256,45 @@ export const projects: Project[] = [
 export const services: Service[] = [
   {
     id: "1",
-    title: "Incubation Program",
-    description: "12-week intensive program helping innovators develop ideas into viable prototypes and businesses.",
-    icon: "rocket"
-  },
-  {
-    id: "2",
-    title: "Mentorship Network",
-    description: "Connect with industry experts and successful entrepreneurs for guidance and advice.",
+    title: "Access to Skilled Talent",
+    description: "Get access to experienced developers, designers, testers, and mentors with innovative thinking.",
     icon: "users"
   },
   {
-    id: "3",
-    title: "Funding Access",
-    description: "Support in accessing grants, investments, and other funding opportunities for your innovation.",
+    id: "2",
+    title: "Cost Efficiency",
+    description: "Development costs significantly reduced with shared infrastructure and tools.",
     icon: "banknote"
   },
   {
+    id: "3",
+    title: "Mentorship & Technical Guidance",
+    description: "Get mentorship from industry experts, professors, and senior developers.",
+    icon: "rocket"
+  },
+  {
     id: "4",
-    title: "Workspace & Resources",
-    description: "Access to state-of-the-art facilities, equipment, and workspace for development and testing.",
+    title: "Infrastructure & Workspace",
+    description: "Free access to office space, internet, devices, testing tools, and meeting rooms.",
     icon: "laptop"
+  },
+  {
+    id: "5",
+    title: "Funding Opportunities",
+    description: "Early-stage grants, stipends, and connections to investors and innovation funds.",
+    icon: "award"
+  },
+  {
+    id: "6",
+    title: "Networking & Exposure",
+    description: "Access to hackathons, demos, exhibitions, seminars, meetings, and conferences.",
+    icon: "network"
   }
 ];
 
 export const stats = [
   { value: "200+", label: "Innovators Supported" },
-  { value: "45+", label: "Successful Startups" },
-  { value: "$2.5M", label: "Investment Secured" },
-  { value: "12", label: "Industry Partners" }
+  { value: "5+", label: "Flagship Projects" },
+  { value: "50+", label: "Active Students" },
+  { value: "10+", label: "Industry Partners" }
 ];

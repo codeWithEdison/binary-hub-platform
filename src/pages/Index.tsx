@@ -98,15 +98,15 @@ const Index = () => {
               </motion.span>
 
               <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
-                Building Rwanda's Innovation Ecosystem
+                What is UR Binary Hub?
               </h2>
 
               <p className="text-muted-foreground mb-6">
-                Binary Hub Rwanda is an innovation space within the University of Rwanda that fosters creativity, entrepreneurship, and technological advancement. We provide resources, mentorship, and networks to help students, faculty, and alumni turn ideas into impactful solutions.
+                UR Binary Hub is the innovation and incubation hub of the University of Rwanda, currently hosted within the School of ICT at the College of Science and Technology (CST). It is a conducive environment for nurturing student, staff, expert and alumni-led innovations focused on developing homegrown digital solutions that address national and institutional challenges.
               </p>
 
               <p className="text-muted-foreground mb-8">
-                Our mission is to create a sustainable innovation ecosystem that addresses local challenges while preparing Rwanda's next generation of innovators and entrepreneurs.
+                Our vision is to establish a sustainable and institutionally recognized software development center that nurtures student and staff innovations, builds practical skills, and contributes to national and institutional digital transformation.
               </p>
 
               <Link to="/about" className="inline-flex items-center justify-center group">
@@ -292,7 +292,7 @@ const Index = () => {
                 viewport={{ once: true }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                Discover the talented individuals who are driving innovation and creating impact through Binary Hub Rwanda.
+                Discover the talented individuals who are driving innovation and creating impact through UR Binary Hub.
               </motion.p>
             </div>
 
@@ -342,7 +342,7 @@ const Index = () => {
                 </h2>
 
                 <p className="text-muted-foreground mb-8">
-                  Whether you're a student with a new idea, a faculty member interested in innovation, or an industry partner looking to collaborate, we welcome you to be part of Binary Hub Rwanda.
+                  Whether you're a student with a new idea, a faculty member interested in innovation, or an industry partner looking to collaborate, we welcome you to be part of UR Binary Hub.
                 </p>
 
                 <div className="flex flex-wrap gap-4">

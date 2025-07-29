@@ -18,6 +18,7 @@
 
     --primary: 221 83% 53%;
     --primary-foreground: 210 40% 98%;
+    --primary-variant: 221 83% 63%;
 
     --secondary: 210 40% 96%;
     --secondary-foreground: 222 47% 11%;
@@ -25,8 +26,14 @@
     --muted: 210 40% 96%;
     --muted-foreground: 215 16% 47%;
 
-    --accent: 221 83% 53%;
+    --accent: 45 93% 58%;
     --accent-foreground: 210 40% 98%;
+    
+    /* UR Brand Colors */
+    --ur-blue: 221 83% 53%;
+    --ur-gold: 45 93% 58%;
+    --ur-green: 142 71% 45%;
+    --ur-red: 0 84% 60%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 210 40% 98%;
@@ -59,6 +66,7 @@
 
     --primary: 217 91% 60%;
     --primary-foreground: 222 47% 11%;
+    --primary-variant: 217 91% 70%;
 
     --secondary: 217 33% 17%;
     --secondary-foreground: 210 40% 98%;
@@ -66,8 +74,14 @@
     --muted: 217 33% 17%;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 217 91% 60%;
+    --accent: 45 93% 58%;
     --accent-foreground: 210 40% 98%;
+    
+    /* UR Brand Colors - Dark Mode */
+    --ur-blue: 217 91% 60%;
+    --ur-gold: 45 93% 58%;
+    --ur-green: 142 71% 55%;
+    --ur-red: 0 84% 70%;
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;

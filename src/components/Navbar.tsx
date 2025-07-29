@@ -37,46 +37,20 @@ const Navbar = () => {
 
   const navVariants = {
     hidden: { opacity: 0, y: -20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
+    visible: { opacity: 1, y: 0 }
   };
 
   const linkVariants = {
     hidden: { opacity: 0, y: -10 },
     visible: (i: number) => ({
       opacity: 1,
-      y: 0,
-      transition: {
-        delay: i * 0.1,
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1]
-      }
+      y: 0
     })
   };
 
   const mobileMenuVariants = {
-    closed: {
-      opacity: 0,
-      x: "100%",
-      transition: {
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    },
-    open: {
-      opacity: 1,
-      x: 0,
-      transition: {
-        duration: 0.5,
-        ease: [0.22, 1, 0.36, 1]
-      }
-    }
+    closed: { opacity: 0, x: "100%" },
+    open: { opacity: 1, x: 0 }
   };
 
   return (
@@ -95,7 +69,7 @@ const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="relative z-50">
           <h1 className="text-xl font-display font-semibold">
-            <span className="text-gradient">Binary Hub</span>
+            <span className="text-gradient">UR Binary Hub</span>
           </h1>
         </Link>
 
@@ -166,7 +140,7 @@ const Navbar = () => {
                     animate={{
                       opacity: 1,
                       y: 0,
-                      transition: { delay: 0.1 + i * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+                      transition: { delay: 0.1 + i * 0.1, duration: 0.5 }
                     }}
                   >
                     <Link
@@ -188,7 +162,7 @@ const Navbar = () => {
                   animate={{
                     opacity: 1,
                     y: 0,
-                    transition: { delay: 0.1 + links.length * 0.1, duration: 0.5, ease: [0.22, 1, 0.36, 1] }
+                    transition: { delay: 0.1 + links.length * 0.1, duration: 0.5 }
                   }}
                 >
                   <Link

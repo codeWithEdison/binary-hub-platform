@@ -19,11 +19,7 @@ const Footer = () => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: [0.22, 1, 0.36, 1] }
-    }
+    visible: { opacity: 1, y: 0 }
   };
 
   return (
@@ -38,9 +34,9 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* About Section */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-xl font-semibold mb-4">Binary Hub Rwanda</h3>
+            <h3 className="text-xl font-semibold mb-4">UR Binary Hub</h3>
             <p className="text-muted-foreground mb-6 max-w-md">
-              Empowering Rwanda's next generation of innovators and entrepreneurs through mentorship, resources, and community.
+              The innovation and incubation hub of the University of Rwanda, nurturing student and staff innovations focused on developing homegrown digital solutions.
             </p>
             <div className="flex space-x-4">
               <a
@@ -135,7 +131,7 @@ const Footer = () => {
           className="border-t border-border mt-12 pt-8 text-center text-sm text-muted-foreground"
           variants={itemVariants}
         >
-          <p>© {new Date().getFullYear()} Binary Hub Rwanda. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} UR Binary Hub. All rights reserved.</p>
         </motion.div>
       </div>
     </motion.footer>

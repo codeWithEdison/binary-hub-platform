@@ -28,7 +28,7 @@ const Hero = () => {
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              University of Rwanda Innovation Hub
+              UR Binary Hub
             </motion.span>
             
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold leading-tight mb-6">
@@ -38,7 +38,7 @@ const Hero = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
               >
-                Connecting Innovators,
+                Nurturing Innovation,
               </motion.span>
               <motion.span 
                 className="block text-gradient"
@@ -46,7 +46,7 @@ const Hero = () => {
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
               >
-                Creating Impact
+                Building Solutions
               </motion.span>
             </h1>
             
@@ -56,7 +56,7 @@ const Hero = () => {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.8, duration: 0.5 }}
             >
-              University of Rwanda Innovation Hub empowers students and faculty to transform ideas into impactful innovations that address local challenges.
+              UR Binary Hub is the innovation and incubation hub of the University of Rwanda, nurturing student, staff, and alumni-led innovations focused on developing homegrown digital solutions.
             </motion.p>
             
             <motion.div 
