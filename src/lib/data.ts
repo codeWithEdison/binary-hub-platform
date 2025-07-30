@@ -56,7 +56,7 @@ export const innovators: Innovator[] = [
     status: "faculty",
     department: "School of ICT",
     skills: ["Strategic Leadership", "Innovation Management", "Project Coordination", "Mentorship"],
-    image: "/img/cordinator.jpg",
+    image: "/img/Team/cordinator.jpg",
     projects: ["UMUTUNGO Box", "IMOTRAK", "INUMA App"],
     bio: "Hub Coordinator overseeing strategic coordination and partnerships at UR Binary Hub."
   },
@@ -67,7 +67,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["Project Management", "Team Coordination", "Reporting", "Operations"],
-    image: "/img/Habibu.png",
+    image: "/img/Team/habibu.jpg",
     projects: ["Hub Operations", "Team Management"],
     bio: "Assistant Coordinator managing day-to-day operations and team coordination at UR Binary Hub."
   },
@@ -78,7 +78,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["Documentation", "Administration", "Event Coordination", "Communication"],
-    image: "/img/lucie.jpg",
+    image: "/img/Team/karlise.jpg",
     projects: ["Documentation Management", "Event Organization"],
     bio: "Assistant Administrator managing hub documentation, logistics, and internal communication."
   },
@@ -89,7 +89,7 @@ export const innovators: Innovator[] = [
     status: "alumni",
     department: "External Expert",
     skills: ["React", "JavaScript", "HTML", "CSS", "UI Development"],
-    image: "/img/emmanuel.png",
+    image: "/img/Team/emmanuel.png",
     projects: ["UMUTUNGO Box", "Academic Records System"],
     bio: "Frontend Mentor providing technical guidance and mentorship for frontend development."
   },
@@ -100,7 +100,7 @@ export const innovators: Innovator[] = [
     status: "alumni",
     department: "External Expert",
     skills: ["Node.js", "PostgreSQL", "MongoDB", "REST APIs", "Database Design"],
-    image: "/img/joseph.jpg",
+    image: "/img/Team/joseph.jpg",
     projects: ["IMOTRAK", "Customer Support System"],
     bio: "Backend & Database Mentor leading backend architecture and database optimization."
   },
@@ -111,7 +111,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["Backend Development", "Team Leadership", "Code Review", "Git"],
-    image: "/img/David.png",
+    image: "/img/Team/david.jpg",
     projects: ["INUMA App", "Academic Records System"],
     bio: "Backend Team Leader coordinating backend development activities and mentoring junior developers."
   },
@@ -122,7 +122,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "Computer Science",
     skills: ["React", "UI/UX Design", "Team Leadership", "Frontend Architecture"],
-    image: "/img/presentation-img/edison.jpg",
+    image: "/img/Team/edison.jpg",
     projects: ["Customer Support System", "UR Binary Hub Platform"],
     bio: "UI/UX & Frontend Team Leader coordinating frontend development and design activities."
   },
@@ -133,7 +133,7 @@ export const innovators: Innovator[] = [
     status: "alumni",
     department: "External Expert",
     skills: ["Figma", "Design Systems", "User Research", "Prototyping"],
-    image: "/img/eds.jpg",
+    image: "/img/Team/eric.jpg",
     projects: ["Design System", "User Experience Research"],
     bio: "UI/UX Designer leading design thinking sessions and establishing UI/UX standards."
   },
@@ -144,7 +144,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["System Administration", "Server Management", "Deployment", "Security"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/derick.jpg",
     projects: ["Infrastructure Management", "Deployment Systems"],
     bio: "Systems Administrator managing internal infrastructure and deployment environments."
   },
@@ -155,7 +155,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["DevOps", "CI/CD", "Docker", "Cloud Deployment"],
-    image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/igor.jpg",
     projects: ["DevOps Pipeline", "Cloud Infrastructure"],
     bio: "DevOps Advisor setting up DevOps pipelines and cloud deployment strategies."
   },
@@ -166,7 +166,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["Graphic Design", "Branding", "Social Media", "Marketing Materials"],
-    image: "https://images.unsplash.com/photo-1573497019940-1c00da094a0b?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/dany.jpg",
     projects: ["Brand Identity", "Marketing Materials"],
     bio: "Designer creating promotional materials and maintaining Binary Hub branding."
   },
@@ -177,7 +177,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["Event Coordination", "Team Building", "Wellness Programs"],
-    image: "https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/claire.jpg",
     projects: ["Wellness Programs", "Team Building Activities"],
     bio: "Health & Sports Coordinator organizing wellness activities and team-building events."
   },
@@ -189,7 +189,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["JavaScript", "React", "Web Development"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/denis.jpg",
     projects: ["Learning Projects", "Code Reviews"],
     bio: "Junior Developer learning and contributing to Binary Hub projects."
   },
@@ -200,7 +200,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["Python", "Django", "Backend Development"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/jado.png",
     projects: ["Learning Projects", "Code Reviews"],
     bio: "Junior Developer learning and contributing to Binary Hub projects."
   },
@@ -211,7 +211,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["JavaScript", "Node.js", "Full Stack Development"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/olvier.jpg",
     projects: ["Learning Projects", "Code Reviews"],
     bio: "Junior Developer learning and contributing to Binary Hub projects."
   },
@@ -222,7 +222,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["React", "TypeScript", "Frontend Development"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/poli.jpg",
     projects: ["Learning Projects", "Code Reviews"],
     bio: "Junior Developer learning and contributing to Binary Hub projects."
   },
@@ -233,7 +233,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["Java", "Spring Boot", "Backend Development"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/michel.png",
     projects: ["Learning Projects", "Code Reviews"],
     bio: "Junior Developer learning and contributing to Binary Hub projects."
   },
@@ -244,7 +244,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["JavaScript", "Vue.js", "Frontend Development"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/clement.jpg",
     projects: ["Learning Projects", "Code Reviews"],
     bio: "Junior Developer learning and contributing to Binary Hub projects."
   },
@@ -255,7 +255,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["Python", "Flask", "Backend Development"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/obed.jpg",
     projects: ["Learning Projects", "Code Reviews"],
     bio: "Junior Developer learning and contributing to Binary Hub projects."
   },
@@ -266,7 +266,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["React", "Node.js", "Full Stack Development"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/hertillan.jpg",
     projects: ["Learning Projects", "Code Reviews"],
     bio: "Junior Developer learning and contributing to Binary Hub projects."
   },
@@ -277,7 +277,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["JavaScript", "Express.js", "Backend Development"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/ericc.jpg",
     projects: ["Learning Projects", "Code Reviews"],
     bio: "Junior Developer learning and contributing to Binary Hub projects."
   },
@@ -288,7 +288,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["React", "CSS", "Frontend Development"],
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Team/merci.jpg",
     projects: ["Learning Projects", "Code Reviews"],
     bio: "Junior Developer learning and contributing to Binary Hub projects."
   }
@@ -310,13 +310,13 @@ export const projects: Project[] = [
     date: "2023-03-15",
     status: "Completed",
     team: [
-      { name: "MBONABUCYA Celestin", role: "Project Lead", image: "/img/cordinator.jpg" },
-      { name: "NDAYISHIMIYE Habibu", role: "Assistant Coordinator", image: "/img/Habibu.png" },
-      { name: "ISHIMWE KARLISE Lucie", role: "Assistant Administrator", image: "/img/lucie.jpg" },
-      { name: "NIYONGABO Emmanuel", role: "Frontend Developer", image: "/img/emmanuel.png" },
-      { name: "SHYIRAMBERE Joseph", role: "Backend Developer", image: "/img/joseph.jpg" },
-      { name: "David TUYISHIME", role: "Backend Team Leader", image: "/img/David.png" },
-      { name: "UWIHANGANYE Edison", role: "UI/UX Designer", image: "/img/presentation-img/edison.jpg" }
+      { name: "MBONABUCYA Celestin", role: "Project Lead", image: "/img/Team/cordinator.jpg" },
+      { name: "NDAYISHIMIYE Habibu", role: "Assistant Coordinator", image: "/img/Team/habibu.jpg" },
+      { name: "ISHIMWE KARLISE Lucie", role: "Assistant Administrator", image: "/img/Team/karlise.jpg" },
+      { name: "NIYONGABO Emmanuel", role: "Frontend Developer", image: "/img/Team/emmanuel.png" },
+      { name: "SHYIRAMBERE Joseph", role: "Backend Developer", image: "/img/Team/joseph.jpg" },
+      { name: "David TUYISHIME", role: "Backend Team Leader", image: "/img/Team/david.jpg" },
+      { name: "UWIHANGANYE Edison", role: "UI/UX Designer", image: "/img/Team/edison.jpg" }
     ],
     links: {
       demo: "https://demo.umutungo.codewithedison.com/"
@@ -338,11 +338,11 @@ export const projects: Project[] = [
     date: "2023-06-20",
     status: "development",
     team: [
-      { name: "Marie Claire UWIRINYIYIMANA", role: "Health & Sports Coordinator", image: "https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
-      { name: "Poli NDIRAMIYE", role: "Junior Developer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
-      { name: "Michael MUNEZERO NTAGANIRA", role: "Junior Developer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
-      { name: "Clement NSENGIYUMVA", role: "Junior Developer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
-      { name: "Obed UWIHANGANYE", role: "Junior Developer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
+      { name: "Marie Claire UWIRINYIYIMANA", role: "Health & Sports Coordinator", image: "/img/Team/claire.jpg" },
+      { name: "Poli NDIRAMIYE", role: "Junior Developer", image: "/img/Team/jonathan.jpg" },
+      { name: "Michael MUNEZERO NTAGANIRA", role: "Junior Developer", image: "/img/Team/michel.png" },
+      { name: "Clement NSENGIYUMVA", role: "Junior Developer", image: "/img/Team/fabrice.jpg" },
+      { name: "Obed UWIHANGANYE", role: "Junior Developer", image: "/img/Team/cryille.jpg" }
     ],
     links: {
       demo: "https://www.figma.com/proto/86AnJDFU35wGufAEm3Eud6/IMOTRAK?node-id=124-3&t=bDVR2Vj1FvlYdiDv-1&starting-point-node-id=124%3A3"
@@ -364,9 +364,9 @@ export const projects: Project[] = [
     date: "2023-09-10",
     status: "In Progress",
     team: [
-      { name: "UWIHANGANYE Edison", role: "UI/UX & Frontend Team Leader", image: "/img/presentation-img/edison.jpg" },
-      { name: "Olivier BYIRINGORO", role: "Frontend Developer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
-      { name: "Igor IHIMBAZWE", role: "Backend Developer", image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
+      { name: "UWIHANGANYE Edison", role: "UI/UX & Frontend Team Leader", image: "/img/Team/edison.jpg" },
+      { name: "Olivier BYIRINGORO", role: "Frontend Developer", image: "/img/Team/edison.jpg" },
+      { name: "Igor IHIMBAZWE", role: "Backend Developer", image: "/img/Team/igor.jpg" }
     ],
     links: {
       demo: "https://staff-request.codewithedison.com/",
@@ -388,8 +388,8 @@ export const projects: Project[] = [
     date: "2023-11-15",
     status: "Completed",
     team: [
-      { name: "NIYONGABO Emmanuel", role: "Frontend Developer", image: "/img/emmanuel.png" },
-      { name: "SHYIRAMBERE Joseph", role: "Backend Developer", image: "/img/joseph.jpg" }
+      { name: "NIYONGABO Emmanuel", role: "Frontend Developer", image: "/img/Team/emmanuel.png" },
+      { name: "SHYIRAMBERE Joseph", role: "Backend Developer", image: "/img/Team/joseph.jpg" }
     ],
     links: {
       website: "https://fda-support.example.com"
@@ -402,31 +402,22 @@ export const projects: Project[] = [
   {
     id: "5",
     title: "Academic Records System",
-    description: "Tool for managing student marks, transcripts, and academic validation processes at CST. (Under Development)",
-    innovators: [],
+    description: "Digital system for managing student academic records and transcripts.",
+    innovators: ["6"],
     stage: "concept",
     category: "Education",
-    categories: ["Education", "Academic Management", "University"],
-    image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.0.3",
-    date: "2024-01-10",
-    status: "Planning Phase",
-    team: [],
-    fullDescription: "Comprehensive academic records management system for CST.",
-    problemStatement: "Manual academic record keeping was inefficient and error-prone.",
-    solution: "Developing a digital system for marks entry, transcript generation, and academic validation.",
-    technologies: ["React", "Django", "PostgreSQL", "PDF Generation"],
-    updates: [
-      {
-        date: "2024-01-10",
-        title: "Project Initiated",
-        content: "Started development of the academic records management system for CST."
-      },
-      {
-        date: "2024-02-15",
-        title: "Database Design Complete",
-        content: "Completed the database schema design for student records and transcript management."
-      }
-    ]
+    categories: ["Education", "Student Management", "Administration"],
+    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3",
+    date: "2024-01-15",
+    status: "Planning",
+    team: [
+      { name: "David TUYISHIME", role: "Backend Team Leader", image: "/img/Team/david.jpg" }
+    ],
+    links: {},
+    fullDescription: "Digital academic records management system for educational institutions.",
+    problemStatement: "Academic records were managed manually, leading to inefficiencies and errors.",
+    solution: "Develop a digital system for secure academic record management and transcript generation.",
+    technologies: ["React", "Node.js", "PostgreSQL", "Digital Signatures"]
   }
 ];
 

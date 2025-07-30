@@ -43,7 +43,7 @@ const App = () => (
         <Routes>
           {/* Auth Routes */}
           <Route path="/login" element={<Login />} />
-          
+
           {/* Public Routes with Navbar */}
           <Route path="/" element={<><Navbar /><Index /></>} />
           <Route path="/about" element={<><Navbar /><About /></>} />
@@ -57,7 +57,7 @@ const App = () => (
           <Route path="/announcements/:announcementId" element={<><Navbar /><AnnouncementDetail /></>} />
           <Route path="/partners" element={<><Navbar /><Partners /></>} />
           <Route path="/contact" element={<><Navbar /><Contact /></>} />
-          
+
           {/* Admin Routes */}
           <Route path="/admin" element={<AdminDashboard />}>
             <Route index element={<Overview />} />
@@ -74,7 +74,7 @@ const App = () => (
             <Route path="announcements/new" element={<AnnouncementForm />} />
             <Route path="announcements/edit/:id" element={<AnnouncementForm />} />
           </Route>
-          
+
           {/* Catch-all route for 404 */}
           <Route path="*" element={<NotFound />} />
         </Routes>
