@@ -113,7 +113,7 @@ const Hero = () => {
                   whileTap={{ scale: 0.95 }}
                 >
                   <a
-                    href="https://www.youtube.com/watch?v=your-video-id"
+                    href="https://youtube.com/@urtekinova_hub?si=PYU7RoxBYqKkQiJF"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-20 h-20 bg-[#00628b] rounded-full flex items-center justify-center shadow-lg cursor-pointer group hover:bg-blue-600 transition-colors"
