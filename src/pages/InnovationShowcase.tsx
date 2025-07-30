@@ -1,10 +1,11 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Filter, ArrowRight } from "lucide-react";
+import { Search, Filter, ArrowRight, Sparkles, Code, Rocket } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { projects } from "@/lib/data";
+import { Button } from "@/components/ui/button";
 
 // Updated categories based on binaryhub.md flagship projects
 const categories = ["All", "Asset Management", "Fleet Management", "Request Management", "Customer Support", "Education"];
@@ -32,50 +33,76 @@ const InnovationShowcase = () => {
   });
 
   return (
-    <div className="min-h-screen">
-      {/* Header */}
-      <section className="pt-20 pb-12 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
-        <div className="max-w-7xl mx-auto">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+      {/* Header Section - Enhanced */}
+      <section className="pt-24 pb-16 px-6 md:px-12 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 via-blue-50/30 to-transparent"></div>
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-r from-blue-400/10 to-[#00628b]/10 rounded-full blur-3xl"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
-            className="text-center max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
+            className="text-center max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.8 }}
           >
-            <motion.span
-              className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-full border border-[#00628b]/20 mb-6"
             >
-              Discover Innovation
-            </motion.span>
+              <Code className="w-5 h-5 mr-2 text-[#00628b]" />
+              <span className="text-sm font-semibold text-[#00628b]">Discover Innovation</span>
+            </motion.div>
 
-            <h1 className="text-3xl md:text-5xl font-display font-bold mb-6">
-              Innovation Showcase
-            </h1>
+            <motion.h1
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+            >
+              Innovation{" "}
+              <span className="text-[#00628b] bg-gradient-to-r from-[#00628b] to-blue-600 bg-clip-text text-transparent">
+                Showcase
+              </span>
+            </motion.h1>
 
-            <p className="text-muted-foreground md:text-lg">
-              Explore the flagship projects developed by UR Binary Hub innovators, addressing national and institutional challenges with homegrown digital solutions.
-            </p>
+            <motion.p
+              className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
+              Explore the flagship projects developed by UR Binary Hub innovators, addressing national and institutional challenges with homegrown digital solutions that drive real impact.
+            </motion.p>
           </motion.div>
         </div>
       </section>
 
-      {/* Filters and Search Section */}
-      <section className="py-10 px-6 md:px-12">
+      {/* Filters and Search Section - Enhanced */}
+      <section className="flex-1 py-16 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
-          <div className="glass p-6 rounded-xl mb-10">
+          {/* Enhanced Filters */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/30 mb-12"
+          >
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
               {/* Search Input */}
               <div className="md:col-span-4 relative">
-                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Search size={16} className="text-muted-foreground" />
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                  <Search size={18} className="text-[#00628b]" />
                 </div>
                 <input
                   type="text"
                   placeholder="Search projects..."
-                  className="pl-10 w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+                  className="pl-12 h-12 w-full rounded-xl border border-[#00628b]/20 bg-white/80 backdrop-blur-sm px-4 text-sm focus:border-[#00628b] focus:ring-[#00628b]/20 transition-all duration-300"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -83,92 +110,263 @@ const InnovationShowcase = () => {
 
               {/* Category Filter */}
               <div className="md:col-span-4">
-                <div className="flex items-center">
-                  <Filter size={16} className="mr-2 text-muted-foreground" />
-                  <span className="text-sm font-medium mr-2">Category:</span>
-                  <select
-                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    value={selectedCategory}
-                    onChange={(e) => setSelectedCategory(e.target.value)}
-                  >
-                    {categories.map(category => (
-                      <option key={category} value={category}>{category}</option>
-                    ))}
-                  </select>
+                <div className="flex items-center mb-2">
+                  <Filter size={16} className="mr-2 text-[#00628b]" />
+                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Category</span>
                 </div>
+                <select
+                  className="w-full h-12 rounded-xl border border-[#00628b]/20 bg-white/80 backdrop-blur-sm px-4 text-sm focus:border-[#00628b] focus:ring-[#00628b]/20 transition-all duration-300"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                  {categories.map(category => (
+                    <option key={category} value={category}>{category}</option>
+                  ))}
+                </select>
               </div>
 
               {/* Stage Filter */}
               <div className="md:col-span-4">
-                <div className="flex items-center">
-                  <Filter size={16} className="mr-2 text-muted-foreground" />
-                  <span className="text-sm font-medium mr-2">Stage:</span>
-                  <select
-                    className="w-full rounded-lg border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
-                    value={selectedStage}
-                    onChange={(e) => setSelectedStage(e.target.value)}
-                  >
-                    {stages.map(stage => (
-                      <option key={stage} value={stage}>
-                        {stage === "All" ? "All" : stage.charAt(0).toUpperCase() + stage.slice(1)}
-                      </option>
-                    ))}
-                  </select>
+                <div className="flex items-center mb-2">
+                  <Rocket size={16} className="mr-2 text-[#00628b]" />
+                  <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Stage</span>
                 </div>
+                <select
+                  className="w-full h-12 rounded-xl border border-[#00628b]/20 bg-white/80 backdrop-blur-sm px-4 text-sm focus:border-[#00628b] focus:ring-[#00628b]/20 transition-all duration-300"
+                  value={selectedStage}
+                  onChange={(e) => setSelectedStage(e.target.value)}
+                >
+                  {stages.map(stage => (
+                    <option key={stage} value={stage}>
+                      {stage === "All" ? "All Stages" : stage.charAt(0).toUpperCase() + stage.slice(1)}
+                    </option>
+                  ))}
+                </select>
               </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Projects Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {filteredProjects.length > 0 ? (
-              filteredProjects.map((project, index) => (
+          {/* Results Count */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.2, duration: 0.6 }}
+            className="flex items-center mb-8"
+          >
+            <div className="w-8 h-8 bg-[#00628b]/10 rounded-lg flex items-center justify-center mr-3">
+              <Code size={16} className="text-[#00628b]" />
+            </div>
+            <p className="text-gray-600 dark:text-gray-300">
+              Showing <span className="font-semibold text-[#00628b]">{filteredProjects.length}</span> project{filteredProjects.length !== 1 ? 's' : ''}
+            </p>
+          </motion.div>
+
+          {/* Projects Grid - Enhanced */}
+          {filteredProjects.length > 0 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
+            >
+              {filteredProjects.map((project, index) => (
                 <motion.div
                   key={project.id}
-                  className="glass overflow-hidden rounded-xl h-full flex flex-col"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
+                  whileHover={{ y: -8, scale: 1.02 }}
                 >
-                  <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-                    />
-                    <div className="absolute bottom-0 right-0 px-3 py-1 bg-black/70 text-white text-xs font-medium rounded-tl-lg">
-                      {project.stage.charAt(0).toUpperCase() + project.stage.slice(1)}
-                    </div>
-                  </div>
+                  <Link to={`/projects/${project.id}`} className="block">
+                    <div className="bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-[#00628b]/10 transition-all duration-500 group">
+                      {/* Enhanced Image Container */}
+                      <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600">
+                        <img
+                          src={project.image}
+                          alt={project.title}
+                          className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.style.display = 'none';
+                            const fallback = target.nextElementSibling as HTMLElement;
+                            if (fallback) {
+                              fallback.classList.remove('hidden');
+                            }
+                          }}
+                        />
+                        
+                        {/* Fallback for failed images */}
+                        <div className="hidden absolute inset-0 flex items-center justify-center">
+                          <div className="w-20 h-20 bg-gradient-to-br from-[#00628b] to-blue-600 rounded-full flex items-center justify-center shadow-lg">
+                            <Code size={32} className="text-white" />
+                          </div>
+                        </div>
 
-                  <div className="p-6 flex-grow flex flex-col">
-                    <div className="mb-4">
-                      <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary mb-3">
-                        {project.category}
-                      </span>
-                      <h3 className="text-xl font-semibold mb-2">{project.title}</h3>
-                      <p className="text-muted-foreground text-sm">{project.description}</p>
-                    </div>
+                        {/* Gradient Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                        
+                        {/* Stage Badge */}
+                        <div className="absolute top-4 left-4">
+                          <span className={`px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm shadow-lg ${
+                            project.stage === 'concept' ? 'bg-yellow-500/90 text-white' :
+                            project.stage === 'prototype' ? 'bg-orange-500/90 text-white' :
+                            project.stage === 'development' ? 'bg-blue-500/90 text-white' :
+                            'bg-green-500/90 text-white'
+                          }`}>
+                            {project.stage.charAt(0).toUpperCase() + project.stage.slice(1)}
+                          </span>
+                        </div>
 
-                    <div className="mt-auto pt-4 flex justify-between items-center border-t border-border/50">
-                      <span className="text-xs text-muted-foreground">
-                        Innovator{project.innovators.length > 1 ? 's' : ''}: {project.innovators.length}
-                      </span>
-                      <Link to={`/projects/${project.id}`} className="inline-flex items-center justify-center group">
-                        <span className="text-sm text-foreground mr-1 group-hover:text-primary transition-colors">View Project</span>
-                        <ArrowRight size={14} className="text-primary transition-transform duration-300 group-hover:translate-x-1" />
-                      </Link>
+                        {/* Category Badge */}
+                        <div className="absolute top-4 right-4">
+                          <span className="px-3 py-1 bg-white/95 backdrop-blur-sm text-[#00628b] text-xs rounded-full font-semibold shadow-lg border border-white/50">
+                            {project.category}
+                          </span>
+                        </div>
+
+                        {/* Hover Overlay */}
+                        <div className="absolute inset-0 bg-[#00628b]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                          <div className="bg-white/90 backdrop-blur-sm rounded-full p-3 shadow-lg transform scale-0 group-hover:scale-100 transition-transform duration-300">
+                            <ArrowRight size={20} className="text-[#00628b]" />
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Enhanced Content Section */}
+                      <div className="p-6">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-[#00628b] transition-colors line-clamp-1">
+                          {project.title}
+                        </h3>
+                        <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 line-clamp-2">
+                          {project.description}
+                        </p>
+
+                        {/* Project Stats */}
+                        <div className="flex items-center justify-between mb-4">
+                          <div className="flex items-center">
+                            <div className="w-2 h-2 bg-[#00628b] rounded-full mr-2"></div>
+                            <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                              {project.innovators.length} innovator{project.innovators.length !== 1 ? 's' : ''}
+                            </span>
+                          </div>
+                          <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                            {project.status}
+                          </span>
+                        </div>
+
+                        {/* Footer with CTA */}
+                        <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
+                          <div className="flex items-center text-[#00628b] group-hover:text-blue-600 transition-colors">
+                            <span className="text-sm font-semibold mr-1">View Project</span>
+                            <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                          </div>
+                          {project.links?.demo && (
+                            <a
+                              href={project.links.demo}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-xs text-gray-500 hover:text-[#00628b] transition-colors"
+                              onClick={(e) => e.stopPropagation()}
+                            >
+                              Live Demo
+                            </a>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
+                  </Link>
                 </motion.div>
-              ))
-            ) : (
-              <div className="col-span-full text-center py-20">
-                <p className="text-lg text-muted-foreground">No projects match your filters. Try adjusting your search criteria.</p>
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="text-center py-20"
+            >
+              <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-12 shadow-xl border border-white/30 max-w-md mx-auto">
+                <div className="w-20 h-20 bg-[#00628b]/10 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Code size={40} className="text-[#00628b]" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">No projects found</h3>
+                <p className="text-gray-600 dark:text-gray-300 mb-6">
+                  No projects match your search criteria. Try adjusting your filters.
+                </p>
+                <button
+                  onClick={() => {
+                    setSearchQuery("");
+                    setSelectedCategory("All");
+                    setSelectedStage("All");
+                  }}
+                  className="bg-[#00628b] hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
+                >
+                  Clear Filters
+                </button>
               </div>
-            )}
-          </div>
+            </motion.div>
+          )}
+
+          {/* CTA Section - Enhanced */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6, duration: 0.8 }}
+            className="bg-gradient-to-r from-[#00628b] to-blue-600 rounded-3xl overflow-hidden shadow-2xl relative"
+          >
+            <div className="absolute inset-0 bg-[url('/img/presentation-img/team.jpg')] bg-cover bg-center opacity-10"></div>
+            <div className="relative z-10 p-8 md:p-12 text-center">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="inline-flex items-center px-4 py-2 bg-white/20 backdrop-blur-sm rounded-full text-white text-sm font-semibold mb-4"
+              >
+                <Sparkles className="w-4 h-4 mr-2" />
+                Ready to Collaborate?
+              </motion.div>
+              
+              <motion.h3
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="text-3xl md:text-4xl font-bold text-white mb-4"
+              >
+                Have a Project Idea?
+              </motion.h3>
+              
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                className="text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed"
+              >
+                Join our community of innovators and bring your ideas to life. We provide the resources, mentorship, and support you need to develop impactful digital solutions.
+              </motion.p>
+              
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5, duration: 0.6 }}
+              >
+                <Button asChild className="bg-white text-[#00628b] hover:bg-gray-100 px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 group">
+                  <Link to="/contact">
+                    <span>Start Your Project</span>
+                    <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </Button>
+              </motion.div>
+            </div>
+          </motion.div>
         </div>
       </section>
 

@@ -70,7 +70,7 @@ const About = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+    <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Hero Section - Enhanced */}
       <section className="relative py-24 px-6 md:px-12 overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-r from-[#00628b]/5 via-blue-50/30 to-transparent"></div>
@@ -114,7 +114,7 @@ const About = () => {
       </section>
 
       {/* Vision Section - Enhanced */}
-      <section className="py-24 px-6 md:px-12 relative overflow-hidden">
+      <section className="flex-1 py-24 px-6 md:px-12 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 to-blue-50/30"></div>
         <div className="max-w-7xl mx-auto relative z-10">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
