@@ -83,6 +83,17 @@ export const innovators: Innovator[] = [
     bio: "Assistant Administrator managing hub documentation, logistics, and internal communication."
   },
   {
+    id: "7",
+    name: "UWIHANGANYE Edison",
+    role: "UI/UX & Frontend Team Leader",
+    status: "student",
+    department: "Computer Science",
+    skills: ["React", "UI/UX Design", "Team Leadership", "Frontend Architecture"],
+    image: "/img/Team/edison.jpg",
+    projects: ["Customer Support System", "UR Binary Hub Platform"],
+    bio: "UI/UX & Frontend Team Leader coordinating frontend development and design activities."
+  },
+  {
     id: "4",
     name: "NIYONGABO Emmanuel",
     role: "Frontend Mentor",
@@ -115,17 +126,7 @@ export const innovators: Innovator[] = [
     projects: ["INUMA App", "Academic Records System"],
     bio: "Backend Team Leader coordinating backend development activities and mentoring junior developers."
   },
-  {
-    id: "7",
-    name: "UWIHANGANYE Edison",
-    role: "UI/UX & Frontend Team Leader",
-    status: "student",
-    department: "Computer Science",
-    skills: ["React", "UI/UX Design", "Team Leadership", "Frontend Architecture"],
-    image: "/img/Team/edison.jpg",
-    projects: ["Customer Support System", "UR Binary Hub Platform"],
-    bio: "UI/UX & Frontend Team Leader coordinating frontend development and design activities."
-  },
+ 
   {
     id: "8",
     name: "Eric TUYISHIMIRE",
