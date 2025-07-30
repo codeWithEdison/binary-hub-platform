@@ -1,0 +1,21 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: http://urbinaryhub.rw/sitemap.xml
+
+# Disallow admin areas
+Disallow: /admin/
+Disallow: /login
+
+# Allow all other content
+Allow: /about
+Allow: /innovators
+Allow: /innovations
+Allow: /contact
+Allow: /events
+Allow: /announcements
+Allow: /partners
+
+# Crawl delay (optional)
+Crawl-delay: 1 

@@ -164,7 +164,7 @@ const Navbar = () => {
                   </motion.div>
                 ))}
                 {/* Admin link for mobile */}
-                <motion.div
+                {/* <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   animate={{
                     opacity: 1,
@@ -179,7 +179,7 @@ const Navbar = () => {
                     <User size={18} />
                     <span>Admin Dashboard</span>
                   </Link>
-                </motion.div>
+                </motion.div> */}
               </nav>
             </motion.div>
           )}
