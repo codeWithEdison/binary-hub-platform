@@ -157,8 +157,8 @@ const ContactPage = () => {
                     <div>
                       <h3 className="text-base font-semibold mb-1 text-gray-900 dark:text-white">Working Hours</h3>
                       <p className="text-gray-600 dark:text-gray-300 mb-1">We are open:</p>
-                      <p className="text-gray-600 dark:text-gray-300">Monday - Friday: 9:00 AM - 5:00 PM</p>
-                      <p className="text-gray-600 dark:text-gray-300">Saturday: 10:00 AM - 2:00 PM (By appointment)</p>
+                      <p className="text-gray-600 dark:text-gray-300 font-semibold text-[#00628b]">24/7 - Always Available</p>
+                      <p className="text-gray-600 dark:text-gray-300 text-sm">Our innovation space is accessible around the clock for our community members.</p>
                     </div>
                   </div>
                 </div>
