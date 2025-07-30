@@ -30,7 +30,7 @@ const Index = () => {
   // Auto-slide for stakeholders
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % 10);
+      setCurrentSlide((prev) => (prev + 1) % 11);
     }, 3000);
     return () => clearInterval(interval);
   }, []);
@@ -61,13 +61,13 @@ const Index = () => {
       <StatsSection />
 
       {/* About Section - Using Reusable Component */}
-      <AboutSection 
+      <AboutSection
         className="bg-gradient-to-br from-[#00628b]/5 to-blue-50 dark:from-slate-800 dark:to-slate-900"
         variant="index"
       />
 
       {/* Projects Showcase - Using Reusable Component */}
-      <ProjectsSection 
+      <ProjectsSection
         className="bg-gradient-to-br from-[#00628b]/5 to-blue-50 dark:from-slate-800 dark:to-slate-900"
         maxProjects={3}
         showViewAllButton={true}
@@ -100,9 +100,9 @@ const Index = () => {
             </motion.div>
 
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Our{" "} 
+              Our{" "}
               <span className="text-[#00628b] bg-gradient-to-r from-[#00628b] to-blue-600 bg-clip-text text-transparent">
-                Key Stakeholders 
+                Key Stakeholders
               </span>
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
@@ -114,21 +114,21 @@ const Index = () => {
           <div className="relative">
             {/* Navigation Arrows */}
             <button
-              onClick={() => setCurrentSlide(currentSlide > 0 ? currentSlide - 1 : 9)}
+              onClick={() => setCurrentSlide(currentSlide > 0 ? currentSlide - 1 : 10)}
               className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-white/30 hover:bg-white hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
             >
               <ChevronLeft className="w-6 h-6 text-[#00628b] group-hover:scale-110 transition-transform" />
             </button>
 
             <button
-              onClick={() => setCurrentSlide(currentSlide < 9 ? currentSlide + 1 : 0)}
+              onClick={() => setCurrentSlide(currentSlide < 10 ? currentSlide + 1 : 0)}
               className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-white/30 hover:bg-white hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
             >
               <ChevronRight className="w-6 h-6 text-[#00628b] group-hover:scale-110 transition-transform" />
             </button>
 
             {/* Mobile Grid Layout */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 lg:hidden"> 
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 lg:hidden">
               {[
                 { name: "University of Rwanda", logo: "/img/stakeholder/UR.png", category: "Academic", contribution: "Policy oversight and coordination" },
                 { name: "UR Data Center", logo: "/img/stakeholder/datacenter.png", category: "Infrastructure", contribution: "Hosting and testing infrastructure" },
@@ -139,7 +139,8 @@ const Index = () => {
                 { name: "ENABEL", logo: "/img/stakeholder/enabel.png", category: "International", contribution: "Development cooperation and support" },
                 { name: "AI & IoT Hub", logo: "/img/stakeholder/ICT CHAMBER.png", category: "Innovation", contribution: "Mentorship, resource sharing, project protection" },
                 { name: "Directorate of Research", logo: "/img/stakeholder/NCST.png", category: "Research", contribution: "Research fund access" },
-                { name: "Private Sector", logo: "/img/stakeholder/RDB_logo.png", category: "Industry", contribution: "Mentorship, co-development, sponsorship" }
+                { name: "Private Sector", logo: "/img/stakeholder/RDB_logo.png", category: "Industry", contribution: "Mentorship, co-development, sponsorship" },
+                { name: "Africa Centre of Excellence in IoT", logo: "/img/stakeholder/ACOEIOT.png", category: "Research", contribution: "IoT research and innovation in Africa" }
               ].map((stakeholder, index) => (
                 <motion.div
                   key={stakeholder.name}
@@ -155,8 +156,8 @@ const Index = () => {
                     <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                     {/* Category badge */}
-                    <div className="absolute top-2 right-2">
-                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#00628b]/10 text-[#00628b] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <div className="absolute top-2 right-2 z-30">
+                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#00628b]/10 text-[#00628b] border border-[#00628b]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
                         {stakeholder.category}
                       </span>
                     </div>
@@ -220,7 +221,8 @@ const Index = () => {
                   { name: "ENABEL", logo: "/img/stakeholder/enabel.png", category: "International", contribution: "Development cooperation and support" },
                   { name: "AI & IoT Hub", logo: "/img/stakeholder/ICT CHAMBER.png", category: "Innovation", contribution: "Mentorship, resource sharing, project protection" },
                   { name: "Directorate of Research", logo: "/img/stakeholder/NCST.png", category: "Research", contribution: "Research fund access" },
-                  { name: "Private Sector", logo: "/img/stakeholder/RDB_logo.png", category: "Industry", contribution: "Mentorship, co-development, sponsorship" }
+                  { name: "Private Sector", logo: "/img/stakeholder/RDB_logo.png", category: "Industry", contribution: "Mentorship, co-development, sponsorship" },
+                  { name: "Africa Centre of Excellence in IoT", logo: "/img/stakeholder/ACOEIOT.png", category: "Research", contribution: "IoT research and innovation in Africa" }
                 ].map((stakeholder, index) => (
                   <div key={stakeholder.name} className="w-1/5 flex-shrink-0">
                     <motion.div
@@ -236,8 +238,8 @@ const Index = () => {
                         <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                         {/* Category badge */}
-                        <div className="absolute top-3 right-3">
-                          <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#00628b]/10 text-[#00628b] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <div className="absolute top-3 right-3 z-30">
+                          <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#00628b]/10 text-[#00628b] border border-[#00628b]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
                             {stakeholder.category}
                           </span>
                         </div>
@@ -288,7 +290,7 @@ const Index = () => {
 
             {/* Slide Indicators - Desktop Only */}
             <div className="hidden lg:flex justify-center mt-8 space-x-2">
-              {Array.from({ length: 10 }, (_, i) => (
+              {Array.from({ length: 11 }, (_, i) => (
                 <button
                   key={i}
                   onClick={() => setCurrentSlide(i)}

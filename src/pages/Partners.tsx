@@ -10,7 +10,7 @@ const partners = [
   {
     id: "1",
     name: "University of Rwanda",
-    logo: "https://images.unsplash.com/photo-1594322436404-5a0526db4d13?q=80&w=2029&auto=format&fit=crop&ixlib=rb-4.0.3",
+    logo: "/img/stakeholder/UR.png",
     category: "academic",
     description: "Policy oversight and coordination for UR Binary Hub operations.",
     website: "https://www.ur.ac.rw"
@@ -18,7 +18,7 @@ const partners = [
   {
     id: "2",
     name: "UR Data Center",
-    logo: "https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3",
+    logo: "/img/stakeholder/datacenter.png",
     category: "infrastructure",
     description: "Providing hosting and testing infrastructure for our projects.",
     website: "#"
@@ -26,7 +26,7 @@ const partners = [
   {
     id: "3",
     name: "Ministry of ICT / RISA",
-    logo: "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    logo: "/img/stakeholder/minict.png",
     category: "government",
     description: "Prioritization aligned with national strategy and digital transformation goals.",
     website: "https://www.minict.gov.rw"
@@ -34,7 +34,7 @@ const partners = [
   {
     id: "4",
     name: "Mastercard Foundation",
-    logo: "https://images.unsplash.com/photo-1444653614773-995cb1ef9efa?q=80&w=2076&auto=format&fit=crop&ixlib=rb-4.0.3",
+    logo: "/img/stakeholder/mastercard foundation.png",
     category: "funding",
     description: "Supporting activities and innovation programs through grants and funding opportunities.",
     website: "https://mastercardfdn.org"
@@ -42,7 +42,7 @@ const partners = [
   {
     id: "5",
     name: "GIZ Rwanda",
-    logo: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    logo: "/img/stakeholder/giz.png",
     category: "funding",
     description: "Supporting innovation programs and capacity building initiatives.",
     website: "https://www.giz.de/en/worldwide/rwanda.html"
@@ -50,10 +50,18 @@ const partners = [
   {
     id: "6",
     name: "ENABEL",
-    logo: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=2032&auto=format&fit=crop&ixlib=rb-4.0.3",
+    logo: "/img/stakeholder/enabel.png",
     category: "funding",
     description: "Supporting innovation and development programs in Rwanda.",
     website: "https://www.enabel.be"
+  },
+  {
+    id: "7",
+    name: "Africa Centre of Excellence in IoT",
+    logo: "/img/stakeholder/ACOEIOT.png",
+    category: "research",
+    description: "Advancing IoT research and innovation in Africa through collaborative projects and capacity building.",
+    website: "#"
   }
 ];
 
@@ -81,32 +89,51 @@ const successStories = [
 
 const Partners = () => {
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Header */}
-      <section className="pt-20 pb-12 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
-        <div className="max-w-7xl mx-auto">
+      <section className="pt-24 pb-16 px-6 md:px-12 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 via-blue-50/30 to-transparent"></div>
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-r from-blue-400/10 to-[#00628b]/10 rounded-full blur-3xl"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
-            className="text-center max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
+            className="text-center max-w-4xl mx-auto"
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.8 }}
           >
-            <motion.span
-              className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.2 }}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-full border border-[#00628b]/20 mb-6"
             >
-              Our Network
-            </motion.span>
+              <Globe className="w-5 h-5 mr-2 text-[#00628b]" />
+              <span className="text-sm font-semibold text-[#00628b]">Strategic Partnerships</span>
+            </motion.div>
 
-            <h1 className="text-3xl md:text-5xl font-display font-bold mb-6">
-              Partners & Collaborators
-            </h1>
+            <motion.h1
+              className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3, duration: 0.8 }}
+            >
+              Partners &{" "}
+              <span className="text-[#00628b] bg-gradient-to-r from-[#00628b] to-blue-600 bg-clip-text text-transparent">
+                Collaborators
+              </span>
+            </motion.h1>
 
-            <p className="text-muted-foreground md:text-lg">
+            <motion.p
+              className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+            >
               Building Rwanda's innovation ecosystem through strategic partnerships with academic institutions, industry leaders, government agencies, and funding organizations.
-            </p>
+            </motion.p>
           </motion.div>
         </div>
       </section>
@@ -114,134 +141,148 @@ const Partners = () => {
       {/* Network Visualization */}
       <section className="py-16 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
-          <div className="glass p-8 md:p-12 rounded-2xl mb-16 relative overflow-hidden">
-            <div className="absolute inset-0 z-0 opacity-20">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl"></div>
-            </div>
-
-            <div className="relative z-10">
-              <h2 className="text-2xl md:text-3xl font-display font-bold mb-6 text-center">
-                Our Ecosystem
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 md:p-12 shadow-xl border border-white/30"
+          >
+            <div className="text-center mb-12">
+              <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">
+                Our Partnership Network
               </h2>
-
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-                <motion.div
-                  className="flex flex-col items-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.1 }}
-                >
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                    <Building className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="font-medium mb-1">Industry</h3>
-                  <p className="text-sm text-muted-foreground">Connecting with leading companies</p>
-                </motion.div>
-
-                <motion.div
-                  className="flex flex-col items-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.2 }}
-                >
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                    <GraduationCap className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="font-medium mb-1">Academia</h3>
-                  <p className="text-sm text-muted-foreground">Leveraging educational expertise</p>
-                </motion.div>
-
-                <motion.div
-                  className="flex flex-col items-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.3 }}
-                >
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                    <Users className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="font-medium mb-1">Community</h3>
-                  <p className="text-sm text-muted-foreground">Building collaborative networks</p>
-                </motion.div>
-
-                <motion.div
-                  className="flex flex-col items-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.5, delay: 0.4 }}
-                >
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
-                    <Globe className="w-8 h-8 text-primary" />
-                  </div>
-                  <h3 className="font-medium mb-1">Global</h3>
-                  <p className="text-sm text-muted-foreground">International collaboration</p>
-                </motion.div>
-              </div>
-
-              <div className="mt-12 text-center">
-                <p className="text-muted-foreground mb-6 max-w-2xl mx-auto">
-                  Binary Hub Rwanda thrives through a network of strategic partnerships, enabling our innovators to access resources, expertise, and opportunities.
-                </p>
-                <Link
-                  to="/partner-with-us"
-                  className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium transition-colors hover:bg-primary/90"
-                >
-                  Become a Partner
-                </Link>
-              </div>
+              <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+                Binary Hub Rwanda thrives through a network of strategic partnerships, enabling our innovators to access resources, expertise, and opportunities.
+              </p>
             </div>
-          </div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+              <motion.div
+                className="flex flex-col items-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1 }}
+              >
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00628b]/20 to-blue-400/20 flex items-center justify-center mb-4">
+                  <Building className="w-8 h-8 text-[#00628b]" />
+                </div>
+                <h3 className="font-semibold mb-2 text-gray-900 dark:text-white">Government</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300 text-center">Policy alignment & support</p>
+              </motion.div>
+
+              <motion.div
+                className="flex flex-col items-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.2 }}
+              >
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00628b]/20 to-blue-400/20 flex items-center justify-center mb-4">
+                  <GraduationCap className="w-8 h-8 text-[#00628b]" />
+                </div>
+                <h3 className="font-semibold mb-2 text-gray-900 dark:text-white">Academia</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300 text-center">Research & expertise</p>
+              </motion.div>
+
+              <motion.div
+                className="flex flex-col items-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.3 }}
+              >
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00628b]/20 to-blue-400/20 flex items-center justify-center mb-4">
+                  <Users className="w-8 h-8 text-[#00628b]" />
+                </div>
+                <h3 className="font-semibold mb-2 text-gray-900 dark:text-white">Funding</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300 text-center">Financial support & grants</p>
+              </motion.div>
+
+              <motion.div
+                className="flex flex-col items-center"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.4 }}
+              >
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#00628b]/20 to-blue-400/20 flex items-center justify-center mb-4">
+                  <Globe className="w-8 h-8 text-[#00628b]" />
+                </div>
+                <h3 className="font-semibold mb-2 text-gray-900 dark:text-white">Research</h3>
+                <p className="text-sm text-gray-600 dark:text-gray-300 text-center">Innovation & development</p>
+              </motion.div>
+            </div>
+
+            <div className="mt-12 text-center">
+              <Link
+                to="/contact"
+                className="inline-flex items-center justify-center px-8 py-4 bg-[#00628b] text-white rounded-xl font-semibold transition-all duration-300 hover:bg-blue-600 hover:shadow-lg hover:shadow-[#00628b]/25 group"
+              >
+                <span>Become a Partner</span>
+                <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Partners Grid */}
-      <section className="py-16 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
+      <section className="py-16 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <h2 className="text-2xl md:text-3xl font-display font-bold mb-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold mb-6 text-gray-900 dark:text-white">
               Our Partners
             </h2>
-            <p className="text-muted-foreground">
+            <p className="text-lg text-gray-600 dark:text-gray-300">
               Meet the organizations that collaborate with Binary Hub Rwanda to foster innovation and entrepreneurship.
             </p>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {partners.map((partner, index) => (
               <motion.div
                 key={partner.id}
-                className="glass rounded-xl p-6 flex flex-col h-full"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.6 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 flex flex-col h-full shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-[#00628b]/10 transition-all duration-500"
               >
-                <div className="h-40 mb-4 overflow-hidden rounded-lg">
+                <div className="h-48 mb-6 overflow-hidden rounded-2xl bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600">
                   <img
                     src={partner.logo}
                     alt={partner.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-contain p-4"
                   />
                 </div>
 
                 <div className="flex-grow">
-                  <div className="mb-2">
-                    <span className="inline-block px-2 py-1 text-xs font-medium rounded-full bg-primary/10 text-primary mb-2">
+                  <div className="mb-4 relative">
+                    <span className="inline-block px-4 py-2 text-sm font-semibold rounded-full bg-[#00628b]/10 text-[#00628b] border border-[#00628b]/20 mb-3 relative z-20">
                       {partner.category.charAt(0).toUpperCase() + partner.category.slice(1)}
                     </span>
-                    <h3 className="text-xl font-semibold">{partner.name}</h3>
+                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{partner.name}</h3>
                   </div>
-                  <p className="text-muted-foreground text-sm mb-4">{partner.description}</p>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-6 leading-relaxed">{partner.description}</p>
                 </div>
 
                 <a
                   href={partner.website}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center text-primary hover:text-primary/80 transition-colors mt-2"
+                  className="inline-flex items-center text-[#00628b] hover:text-blue-600 transition-colors font-semibold group"
                 >
-                  Visit Website <ExternalLink size={14} className="ml-1" />
+                  <span>Visit Website</span>
+                  <ExternalLink size={16} className="ml-2 group-hover:translate-x-1 transition-transform" />
                 </a>
               </motion.div>
             ))}
@@ -252,78 +293,68 @@ const Partners = () => {
       {/* Success Stories */}
       <section className="py-16 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6"
+          >
             <div>
-              <motion.span
-                className="inline-block px-4 py-1.5 mb-6 text-sm font-medium rounded-full bg-primary/10 text-primary"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.5 }}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-full border border-[#00628b]/20 mb-6"
               >
-                Partnership Impact
-              </motion.span>
+                <Globe className="w-4 h-4 mr-2 text-[#00628b]" />
+                <span className="text-sm font-semibold text-[#00628b]">Partnership Impact</span>
+              </motion.div>
 
               <motion.h2
-                className="text-3xl md:text-4xl font-display font-bold mb-4"
+                className="text-3xl md:text-4xl font-bold mb-4 text-gray-900 dark:text-white"
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.5 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.6 }}
               >
                 Success Stories
               </motion.h2>
 
               <motion.p
-                className="text-muted-foreground max-w-2xl"
+                className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl"
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.6 }}
               >
                 Discover how our partnerships have created meaningful impact and innovative solutions for Rwanda.
               </motion.p>
             </div>
-
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 0.4, duration: 0.5 }}
-            >
-              <Link
-                to="/success-stories"
-                className="inline-flex items-center justify-center px-6 py-3 border border-border bg-background/50 hover:bg-background text-foreground rounded-full font-medium transition-all group"
-              >
-                <span>View All Success Stories</span>
-                <ArrowRight size={18} className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
-              </Link>
-            </motion.div>
-          </div>
+          </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             {successStories.map((story, index) => (
               <motion.div
                 key={story.id}
-                className="glass overflow-hidden rounded-xl h-full flex flex-col"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1, duration: 0.6 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-[#00628b]/10 transition-all duration-500"
               >
-                <div className="h-48 overflow-hidden">
+                <div className="aspect-video overflow-hidden">
                   <img
                     src={story.image}
                     alt={story.title}
-                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+                    className="w-full h-full object-cover"
                   />
                 </div>
-                <div className="p-6 flex-grow flex flex-col">
-                  <h3 className="text-xl font-semibold mb-3">{story.title}</h3>
-                  <p className="text-muted-foreground text-sm mb-4">{story.description}</p>
-                  <Link
-                    to={`/success-stories/${story.id}`}
-                    className="mt-auto inline-flex items-center text-primary group"
-                  >
-                    Read Full Story
-                    <ArrowRight size={16} className="ml-1 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Link>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{story.title}</h3>
+                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">{story.description}</p>
                 </div>
               </motion.div>
             ))}
@@ -332,53 +363,61 @@ const Partners = () => {
       </section>
 
       {/* CTA Section */}
-      <section className="py-16 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
+      <section className="py-16 px-6 md:px-12">
         <div className="max-w-7xl mx-auto">
-          <div className="glass p-8 md:p-12 rounded-2xl overflow-hidden relative">
-            <div className="absolute inset-0 z-0">
-              <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full filter blur-3xl"></div>
-              <div className="absolute bottom-0 left-0 w-64 h-64 bg-accent/10 rounded-full filter blur-3xl"></div>
-            </div>
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="bg-gradient-to-r from-[#00628b] to-blue-600 rounded-3xl overflow-hidden shadow-2xl relative"
+          >
+            <div className="absolute inset-0 bg-[url('/img/presentation-img/team.jpg')] bg-cover bg-center opacity-10"></div>
+            <div className="relative z-10 p-8 md:p-12 text-center">
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2, duration: 0.6 }}
+                className="text-3xl md:text-4xl font-bold text-white mb-6"
+              >
+                Partner with Binary Hub Rwanda
+              </motion.h2>
 
-            <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3, duration: 0.6 }}
+                className="text-white/90 mb-8 max-w-2xl mx-auto leading-relaxed"
+              >
+                Interested in collaborating with Binary Hub Rwanda? We're always looking for new partners who share our vision of fostering innovation and entrepreneurship in Rwanda.
+              </motion.p>
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4, duration: 0.6 }}
+                className="flex flex-wrap gap-4 justify-center"
               >
-                <h2 className="text-3xl md:text-4xl font-display font-bold mb-6">
-                  Partner with Binary Hub Rwanda
-                </h2>
-
-                <p className="text-muted-foreground mb-8">
-                  Interested in collaborating with Binary Hub Rwanda? We're always looking for new partners who share our vision of fostering innovation and entrepreneurship in Rwanda.
-                </p>
-
-                <div className="flex flex-wrap gap-4">
-                  <Link to="/partner-with-us" className="inline-flex items-center justify-center px-6 py-3 bg-primary text-primary-foreground rounded-full font-medium transition-all hover:shadow-lg hover:shadow-primary/25">
-                    Become a Partner
-                  </Link>
-                  <Link to="/contact" className="inline-flex items-center justify-center px-6 py-3 border border-border bg-background/50 hover:bg-background text-foreground rounded-full font-medium transition-all group">
-                    <span>Contact Us</span>
-                    <ArrowRight size={18} className="ml-2 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Link>
-                </div>
-              </motion.div>
-
-              <motion.div
-                className="relative"
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <img
-                  src="https://images.unsplash.com/photo-1556761175-b413da4baf72?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3"
-                  alt="Partner with Binary Hub"
-                  className="w-full h-auto rounded-xl shadow-lg"
-                />
+                <Link 
+                  to="/contact" 
+                  className="inline-flex items-center justify-center px-8 py-4 bg-white text-[#00628b] rounded-xl font-semibold transition-all duration-300 hover:bg-gray-100 hover:shadow-lg group"
+                >
+                  <span>Become a Partner</span>
+                  <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <Link 
+                  to="/contact" 
+                  className="inline-flex items-center justify-center px-8 py-4 border-2 border-white text-white rounded-xl font-semibold transition-all duration-300 hover:bg-white hover:text-[#00628b] group"
+                >
+                  <span>Contact Us</span>
+                  <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </motion.div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
