@@ -167,7 +167,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["Graphic Design", "Branding", "Social Media", "Marketing Materials"],
-    image: "/img/Team/dany.jpg",
+    image: "/img/Team/danny.jpg",
     projects: ["Brand Identity", "Marketing Materials"],
     bio: "Designer creating promotional materials and maintaining Binary Hub branding."
   },

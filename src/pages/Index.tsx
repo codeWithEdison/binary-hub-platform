@@ -74,7 +74,7 @@ const Index = () => {
       />
 
       {/* Stakeholders & Contributions Section - Enhanced Design */}
-      <section className="py-24 px-6 md:px-12 relative overflow-hidden" id="stakeholders">
+      <section className="py-24  px-6 md:px-12 relative overflow-hidden" id="stakeholders" >
         {/* Background Elements */}
         <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 via-blue-50/30 to-transparent"></div>
         <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-full blur-3xl"></div>
@@ -100,9 +100,9 @@ const Index = () => {
             </motion.div>
 
             <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
-              Our{" "}
+              Our{" "} 
               <span className="text-[#00628b] bg-gradient-to-r from-[#00628b] to-blue-600 bg-clip-text text-transparent">
-                Key Stakeholders
+                Key Stakeholders 
               </span>
             </h2>
             <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
@@ -128,7 +128,7 @@ const Index = () => {
             </button>
 
             {/* Mobile Grid Layout */}
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 lg:hidden">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 lg:hidden"> 
               {[
                 { name: "University of Rwanda", logo: "/img/stakeholder/UR.png", category: "Academic", contribution: "Policy oversight and coordination" },
                 { name: "UR Data Center", logo: "/img/stakeholder/datacenter.png", category: "Infrastructure", contribution: "Hosting and testing infrastructure" },
@@ -150,7 +150,7 @@ const Index = () => {
                   transition={{ delay: index * 0.1, duration: 0.6 }}
                   whileHover={{ y: -5, scale: 1.02 }}
                 >
-                  <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-lg border border-white/30 hover:shadow-xl group-hover:shadow-[#00628b]/10 transition-all duration-500 relative overflow-hidden">
+                  <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-lg border border-white/30 hover:shadow-xl group-hover:shadow-[#00628b]/10 transition-all duration-500 relative overflow-hidden  ">
                     {/* Background gradient overlay */}
                     <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
@@ -204,7 +204,7 @@ const Index = () => {
             </div>
 
             {/* Desktop Slideshow Layout */}
-            <div className="hidden lg:block overflow-hidden">
+            <div className="hidden lg:block overflow-hidden  p-8 ">
               <motion.div
                 className="flex gap-6 md:gap-8"
                 animate={{ x: `-${currentSlide * 20}%` }}
@@ -231,7 +231,7 @@ const Index = () => {
                       transition={{ delay: index * 0.1, duration: 0.6 }}
                       whileHover={{ y: -8, scale: 1.05 }}
                     >
-                      <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/30 hover:shadow-2xl group-hover:shadow-[#00628b]/10 transition-all duration-500 relative overflow-hidden">
+                      <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/30 hover:shadow-2xl group-hover:shadow-[#00628b]/10 transition-all duration-500 relative overflow-hidden ">
                         {/* Background gradient overlay */}
                         <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
