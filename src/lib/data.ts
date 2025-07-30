@@ -47,7 +47,7 @@ export type Service = {
   icon: string;
 };
 
-// Updated innovators based on binaryhub.md
+// Updated innovators based on binaryhub.md - including junior volunteers
 export const innovators: Innovator[] = [
   {
     id: "1",
@@ -56,7 +56,7 @@ export const innovators: Innovator[] = [
     status: "faculty",
     department: "School of ICT",
     skills: ["Strategic Leadership", "Innovation Management", "Project Coordination", "Mentorship"],
-    image: "/img/coordinatoro.jpg",
+    image: "/img/cordinator.jpg",
     projects: ["UMUTUNGO Box", "IMOTRAK", "INUMA App"],
     bio: "Hub Coordinator overseeing strategic coordination and partnerships at UR Binary Hub."
   },
@@ -166,7 +166,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["Graphic Design", "Branding", "Social Media", "Marketing Materials"],
-    image: "https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "https://images.unsplash.com/photo-1573497019940-1c00da094a0b?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
     projects: ["Brand Identity", "Marketing Materials"],
     bio: "Designer creating promotional materials and maintaining Binary Hub branding."
   },
@@ -180,8 +180,121 @@ export const innovators: Innovator[] = [
     image: "https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
     projects: ["Wellness Programs", "Team Building Activities"],
     bio: "Health & Sports Coordinator organizing wellness activities and team-building events."
+  },
+  // Junior Volunteers added as innovators
+  {
+    id: "13",
+    name: "Denis UWIHIRWE",
+    role: "Junior Developer",
+    status: "student",
+    department: "School of ICT",
+    skills: ["JavaScript", "React", "Web Development"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Learning Projects", "Code Reviews"],
+    bio: "Junior Developer learning and contributing to Binary Hub projects."
+  },
+  {
+    id: "14",
+    name: "Jado Fils SEZIKEYE",
+    role: "Junior Developer",
+    status: "student",
+    department: "School of ICT",
+    skills: ["Python", "Django", "Backend Development"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Learning Projects", "Code Reviews"],
+    bio: "Junior Developer learning and contributing to Binary Hub projects."
+  },
+  {
+    id: "15",
+    name: "Olivier BYIRINGORO",
+    role: "Junior Developer",
+    status: "student",
+    department: "School of ICT",
+    skills: ["JavaScript", "Node.js", "Full Stack Development"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Learning Projects", "Code Reviews"],
+    bio: "Junior Developer learning and contributing to Binary Hub projects."
+  },
+  {
+    id: "16",
+    name: "Poli NDIRAMIYE",
+    role: "Junior Developer",
+    status: "student",
+    department: "School of ICT",
+    skills: ["React", "TypeScript", "Frontend Development"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Learning Projects", "Code Reviews"],
+    bio: "Junior Developer learning and contributing to Binary Hub projects."
+  },
+  {
+    id: "17",
+    name: "Michael MUNEZERO NTAGANIRA",
+    role: "Junior Developer",
+    status: "student",
+    department: "School of ICT",
+    skills: ["Java", "Spring Boot", "Backend Development"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Learning Projects", "Code Reviews"],
+    bio: "Junior Developer learning and contributing to Binary Hub projects."
+  },
+  {
+    id: "18",
+    name: "Clement NSENGIYUMVA",
+    role: "Junior Developer",
+    status: "student",
+    department: "School of ICT",
+    skills: ["JavaScript", "Vue.js", "Frontend Development"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Learning Projects", "Code Reviews"],
+    bio: "Junior Developer learning and contributing to Binary Hub projects."
+  },
+  {
+    id: "19",
+    name: "Obed UWIHANGANYE",
+    role: "Junior Developer",
+    status: "student",
+    department: "School of ICT",
+    skills: ["Python", "Flask", "Backend Development"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Learning Projects", "Code Reviews"],
+    bio: "Junior Developer learning and contributing to Binary Hub projects."
+  },
+  {
+    id: "20",
+    name: "TUYISHIME KAYITSINGA Hertillan",
+    role: "Junior Developer",
+    status: "student",
+    department: "School of ICT",
+    skills: ["React", "Node.js", "Full Stack Development"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Learning Projects", "Code Reviews"],
+    bio: "Junior Developer learning and contributing to Binary Hub projects."
+  },
+  {
+    id: "21",
+    name: "Eric TUYISHIME",
+    role: "Junior Developer",
+    status: "student",
+    department: "School of ICT",
+    skills: ["JavaScript", "Express.js", "Backend Development"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Learning Projects", "Code Reviews"],
+    bio: "Junior Developer learning and contributing to Binary Hub projects."
+  },
+  {
+    id: "22",
+    name: "Merci RUYANGA",
+    role: "Junior Developer",
+    status: "student",
+    department: "School of ICT",
+    skills: ["React", "CSS", "Frontend Development"],
+    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3",
+    projects: ["Learning Projects", "Code Reviews"],
+    bio: "Junior Developer learning and contributing to Binary Hub projects."
   }
 ];
+
+
 
 // Updated projects based on binaryhub.md flagship projects
 export const projects: Project[] = [
@@ -189,19 +302,24 @@ export const projects: Project[] = [
     id: "1",
     title: "UMUTUNGO Box",
     description: "Asset Management System for public institutions to track assets, value, and depreciation.",
-    innovators: ["1", "4"],
-    stage: "launched",
+    innovators: ["1", "2", "3", "4", "5", "6", "7"],
+    stage: "development",
     category: "Asset Management",
-    categories: ["Government", "Asset Management", "Public Service"],
-    image: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    categories: ["Government", "Asset Management", "Public Service", 'Planning', 'Monitoring', 'Evaluation'],
+    image: "/img/Project/umutungo.png",
     date: "2023-03-15",
     status: "Completed",
     team: [
-      { name: "MBONABUCYA Celestin", role: "Project Lead", image: "/img/coordinatoro.jpg" },
-      { name: "NIYONGABO Emmanuel", role: "Frontend Developer", image: "/img/emmanuel.png" }
+      { name: "MBONABUCYA Celestin", role: "Project Lead", image: "/img/cordinator.jpg" },
+      { name: "NDAYISHIMIYE Habibu", role: "Assistant Coordinator", image: "/img/Habibu.png" },
+      { name: "ISHIMWE KARLISE Lucie", role: "Assistant Administrator", image: "/img/lucie.jpg" },
+      { name: "NIYONGABO Emmanuel", role: "Frontend Developer", image: "/img/emmanuel.png" },
+      { name: "SHYIRAMBERE Joseph", role: "Backend Developer", image: "/img/joseph.jpg" },
+      { name: "David TUYISHIME", role: "Backend Team Leader", image: "/img/David.png" },
+      { name: "UWIHANGANYE Edison", role: "UI/UX Designer", image: "/img/presentation-img/edison.jpg" }
     ],
     links: {
-      demo: "https://umutungo.example.com"
+      demo: "https://demo.umutungo.codewithedison.com/"
     },
     fullDescription: "Comprehensive asset management solution for public institutions to track assets, value, and depreciation.",
     problemStatement: "Public institutions lacked proper asset tracking and management systems.",
@@ -212,19 +330,22 @@ export const projects: Project[] = [
     id: "2",
     title: "IMOTRAK",
     description: "Fleet Management System for monitoring usage, maintenance, and cost of institutional vehicles.",
-    innovators: ["5", "6"],
-    stage: "launched",
+    innovators: ["12", "16", "17", "18", "19"],
+    stage: "development",
     category: "Fleet Management",
     categories: ["Transportation", "Fleet Management", "Government"],
-    image: "https://images.unsplash.com/photo-1558618047-3c8c76ca7d13?q=80&w=2069&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Project/imotrack.png",
     date: "2023-06-20",
-    status: "Completed",
+    status: "development",
     team: [
-      { name: "SHYIRAMBERE Joseph", role: "Backend Developer", image: "/img/joseph.jpg" },
-      { name: "David TUYISHIME", role: "Team Leader", image: "/img/David.png" }
+      { name: "Marie Claire UWIRINYIYIMANA", role: "Health & Sports Coordinator", image: "https://images.unsplash.com/photo-1614644147798-f8c0fc9da7f6?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
+      { name: "Poli NDIRAMIYE", role: "Junior Developer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
+      { name: "Michael MUNEZERO NTAGANIRA", role: "Junior Developer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
+      { name: "Clement NSENGIYUMVA", role: "Junior Developer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
+      { name: "Obed UWIHANGANYE", role: "Junior Developer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
     ],
     links: {
-      demo: "https://imotrak.example.com"
+      demo: "https://www.figma.com/proto/86AnJDFU35wGufAEm3Eud6/IMOTRAK?node-id=124-3&t=bDVR2Vj1FvlYdiDv-1&starting-point-node-id=124%3A3"
     },
     fullDescription: "Complete fleet management solution for institutional vehicle monitoring.",
     problemStatement: "Institutions had no systematic way to track vehicle usage, maintenance, and costs.",
@@ -235,17 +356,21 @@ export const projects: Project[] = [
     id: "3",
     title: "INUMA App",
     description: "Request flow management system for submitting and following up on staff inquiries in institutions.",
-    innovators: ["6", "7"],
+    innovators: ["7", "15", "10"],
     stage: "development",
     category: "Request Management",
     categories: ["Workflow", "Government", "Administration"],
-    image: "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "/img/Project/inuma.png",
     date: "2023-09-10",
     status: "In Progress",
     team: [
-      { name: "David TUYISHIME", role: "Backend Lead", image: "/img/David.png" },
-      { name: "UWIHANGANYE Edison", role: "Frontend Lead", image: "/img/presentation-img/edison.jpg" }
+      { name: "UWIHANGANYE Edison", role: "UI/UX & Frontend Team Leader", image: "/img/presentation-img/edison.jpg" },
+      { name: "Olivier BYIRINGORO", role: "Frontend Developer", image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" },
+      { name: "Igor IHIMBAZWE", role: "Backend Developer", image: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?q=80&w=987&auto=format&fit=crop&ixlib=rb-4.0.3" }
     ],
+    links: {
+      demo: "https://staff-request.codewithedison.com/",
+    },
     fullDescription: "Streamlined request management system for institutional staff inquiries.",
     problemStatement: "Staff requests and inquiries were handled manually without proper tracking.",
     solution: "Developed a digital workflow system for request submission, tracking, and resolution.",
@@ -255,7 +380,7 @@ export const projects: Project[] = [
     id: "4",
     title: "Customer Support System – Rwanda FDA",
     description: "Helps citizens submit and track requests to Rwanda FDA; integrated with email and SMS.",
-    innovators: ["4", "7"],
+    innovators: ["4", "5"],
     stage: "launched",
     category: "Customer Support",
     categories: ["Government", "Healthcare", "Public Service"],
@@ -264,7 +389,7 @@ export const projects: Project[] = [
     status: "Completed",
     team: [
       { name: "NIYONGABO Emmanuel", role: "Frontend Developer", image: "/img/emmanuel.png" },
-      { name: "UWIHANGANYE Edison", role: "UI/UX Lead", image: "/img/presentation-img/edison.jpg" }
+      { name: "SHYIRAMBERE Joseph", role: "Backend Developer", image: "/img/joseph.jpg" }
     ],
     links: {
       website: "https://fda-support.example.com"
@@ -278,17 +403,14 @@ export const projects: Project[] = [
     id: "5",
     title: "Academic Records System",
     description: "Tool for managing student marks, transcripts, and academic validation processes at CST. (Under Development)",
-    innovators: ["4", "6"],
-    stage: "development",
+    innovators: [],
+    stage: "concept",
     category: "Education",
     categories: ["Education", "Academic Management", "University"],
     image: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b?q=80&w=2022&auto=format&fit=crop&ixlib=rb-4.0.3",
     date: "2024-01-10",
-    status: "In Progress",
-    team: [
-      { name: "NIYONGABO Emmanuel", role: "Frontend Developer", image: "/img/emmanuel.png" },
-      { name: "David TUYISHIME", role: "Backend Developer", image: "/img/David.png" }
-    ],
+    status: "Planning Phase",
+    team: [],
     fullDescription: "Comprehensive academic records management system for CST.",
     problemStatement: "Manual academic record keeping was inefficient and error-prone.",
     solution: "Developing a digital system for marks entry, transcript generation, and academic validation.",
@@ -380,8 +502,8 @@ export const services: Service[] = [
 
 // Updated stats based on binaryhub.md information
 export const stats = [
-  { value: "5+", label: "Flagship Projects" },
-  { value: "12+", label: "Core Team Members" },
-  { value: "10+", label: "Junior Volunteers" },
-  { value: "15+", label: "Industry Partners" }
+  { value: "5", label: "Flagship Solutions" }, // UMUTUNGO Box, IMOTRAK, INUMA App, Customer Support System, Academic Records System
+  { value: "22", label: "Total Innovators" }, // Core Team (12) + Junior Volunteers (10) = 22 total team members
+  { value: "5", label: "Professionals" }, // Alumni (3) + Faculty (1) + External Experts (1) = 5 professionals
+  { value: "8+", label: "Industry Partners" } // Mastercard Foundation, GIZ, ENABEL, Ministry of ICT/RISA, UR Data Center, Center for Innovation, Directorate of Research, Private Sector
 ];

@@ -8,15 +8,15 @@ const Hero = () => {
     <section className="relative min-h-screen flex items-center overflow-hidden">
       {/* Background Image with Dark Overlay */}
       <div className="absolute inset-0 z-0">
-        <img 
-          src="/img/presentation-img/team.jpg" 
-          alt="UR Binary Hub Innovators" 
+        <img
+          src="/img/presentation-img/team.jpg"
+          alt="UR Binary Hub Innovators"
           className="w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-black/60"></div>
         <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
       </div>
-      
+
       <div className="max-w-7xl mx-auto w-full z-10 px-6 md:px-12">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-20 items-center min-h-screen py-20">
           {/* Text Content - Left Side */}
@@ -35,9 +35,9 @@ const Hero = () => {
               <Sparkles className="w-4 h-4 mr-2" />
               UR Binary Hub
             </motion.div>
-            
+
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-white">
-              <motion.span 
+              <motion.span
                 className="block"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -45,7 +45,7 @@ const Hero = () => {
               >
                 Unlock Innovation
               </motion.span>
-              <motion.span 
+              <motion.span
                 className="block text-[#00628b]"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -54,8 +54,8 @@ const Hero = () => {
                 Build Solutions
               </motion.span>
             </h1>
-            
-            <motion.p 
+
+            <motion.p
               className="text-xl md:text-2xl text-gray-200 mb-8 max-w-xl leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -63,22 +63,22 @@ const Hero = () => {
             >
               Student-led innovation for Rwanda's digital transformation.
             </motion.p>
-            
-            <motion.div 
+
+            <motion.div
               className="flex flex-wrap gap-4"
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2, duration: 0.5 }}
             >
-              <Link 
-                to="/about" 
+              <Link
+                to="/about"
                 className="inline-flex items-center px-8 py-4 bg-[#00628b] text-white rounded-full font-semibold hover:bg-blue-600 hover:shadow-lg hover:shadow-[#00628b]/25 transition-all duration-300 group"
               >
                 <span>GET STARTED</span>
                 <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
-              <a 
-                href="https://www.youtube.com/watch?v=your-video-id" 
+              <a
+                href="https://www.youtube.com/watch?v=your-video-id"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-8 py-4 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#00628b] transition-all duration-300 group"
@@ -88,9 +88,9 @@ const Hero = () => {
               </a>
             </motion.div>
           </motion.div>
-          
+
           {/* Video/Image Section - Right Side */}
-          <motion.div 
+          <motion.div
             className="order-1 lg:order-2 relative"
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
@@ -99,21 +99,21 @@ const Hero = () => {
             <div className="relative">
               {/* Main Video/Image Container */}
               <div className="relative z-10 rounded-3xl overflow-hidden shadow-2xl">
-                <img 
-                  src="/img/presentation-img/presentation.jpg" 
-                  alt="UR Binary Hub Innovation Event" 
+                <img
+                  src="/img/presentation-img/presentation.jpg"
+                  alt="UR Binary Hub Innovation Event"
                   className="w-full h-auto object-cover"
                 />
                 <div className="absolute inset-0 bg-black/30"></div>
-                
+
                 {/* Play Button Overlay */}
                 <motion.div
                   className="absolute inset-0 flex items-center justify-center"
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
                 >
-                  <a 
-                    href="https://www.youtube.com/watch?v=your-video-id" 
+                  <a
+                    href="https://www.youtube.com/watch?v=your-video-id"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="w-20 h-20 bg-[#00628b] rounded-full flex items-center justify-center shadow-lg cursor-pointer group hover:bg-blue-600 transition-colors"
@@ -122,9 +122,9 @@ const Hero = () => {
                   </a>
                 </motion.div>
               </div>
-              
+
               {/* Floating Elements */}
-              <motion.div 
+              {/* <motion.div
                 className="absolute -top-6 -right-6 bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-xl border border-white/20"
                 animate={{ y: [-10, 10, -10] }}
                 transition={{ duration: 3, repeat: Infinity }}
@@ -133,9 +133,9 @@ const Hero = () => {
                   <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
                   <span className="text-sm font-semibold text-gray-700">Live Innovation</span>
                 </div>
-              </motion.div>
+              </motion.div> */}
 
-              <motion.div 
+              {/* <motion.div
                 className="absolute -bottom-6 -left-6 bg-[#00628b] text-white rounded-2xl p-4 shadow-xl"
                 animate={{ y: [10, -10, 10] }}
                 transition={{ duration: 4, repeat: Infinity }}
@@ -144,7 +144,7 @@ const Hero = () => {
                   <p className="text-2xl font-bold">5+</p>
                   <p className="text-xs opacity-90">Flagship Projects</p>
                 </div>
-              </motion.div>
+              </motion.div> */}
             </div>
           </motion.div>
         </div>

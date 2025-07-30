@@ -34,7 +34,14 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
           {/* About Section */}
           <motion.div variants={itemVariants}>
-            <h3 className="text-xl font-semibold mb-4">UR Binary Hub</h3>
+            <div className="flex items-center space-x-2 mb-4">
+              <img
+                src="/img/logo.png"
+                alt="UR Binary Hub Logo"
+                className="h-8 w-auto"
+              />
+              <h3 className="text-xl font-semibold">UR Binary Hub</h3>
+            </div>
             <p className="text-muted-foreground mb-6 max-w-md">
               The innovation and incubation hub of the University of Rwanda, nurturing student and staff innovations focused on developing homegrown digital solutions.
             </p>

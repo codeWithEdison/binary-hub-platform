@@ -68,9 +68,16 @@ const Navbar = () => {
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="relative z-50">
-          <h1 className="text-xl font-display font-semibold">
-            <span className="text-[#00628b]">UR Binary Hub</span>
-          </h1>
+          <div className="flex items-center space-x-2">
+            <img
+              src="/img/logo.png"
+              alt="UR Binary Hub Logo"
+              className="h-10 w-auto"
+            />
+            <h1 className="text-xl font-display font-semibold">
+              <span className="text-[#00628b]">UR Binary Hub</span>
+            </h1>
+          </div>
         </Link>
 
         {/* Desktop Navigation */}

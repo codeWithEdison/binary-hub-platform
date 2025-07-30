@@ -20,8 +20,8 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				sans: ['Inter', 'sans-serif'],
-				display: ['SF Pro Display', 'Inter', 'sans-serif'],
+				'zurich': ['ZurichBT', 'sans-serif'],
+				'display': ['ZurichBT', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import { ArrowRight, Play, ChevronDown, Sparkles, Users, Code, Rocket, Globe } from "lucide-react";
+import { ArrowRight, Play, ChevronDown, Sparkles, Users, Code, Rocket, Globe, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Hero from "@/components/Hero";
 import Footer from "@/components/Footer";
@@ -11,6 +11,7 @@ import { innovators, projects, services, stats } from "@/lib/data";
 
 const Index = () => {
   const [currentProject, setCurrentProject] = useState(0);
+  const [currentSlide, setCurrentSlide] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 1000], [0, -200]);
@@ -20,6 +21,14 @@ const Index = () => {
     const interval = setInterval(() => {
       setCurrentProject((prev) => (prev + 1) % projects.length);
     }, 4000);
+    return () => clearInterval(interval);
+  }, []);
+
+  // Auto-slide for stakeholders
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % 10);
+    }, 3000);
     return () => clearInterval(interval);
   }, []);
 
@@ -34,7 +43,7 @@ const Index = () => {
         style={{ y }}
       >
         <div className="flex flex-col gap-4">
-          {['hero', 'about', 'projects', 'services', 'team', 'cta'].map((section, index) => (
+          {['hero', 'about', 'projects', 'stakeholders', 'services', 'team', 'cta'].map((section, index) => (
             <motion.div
               key={section}
               className="w-3 h-3 rounded-full bg-[#00628b]/30 border-2 border-[#00628b] cursor-pointer hover:bg-[#00628b] transition-all duration-300"
@@ -45,25 +54,53 @@ const Index = () => {
         </div>
       </motion.div>
 
-      {/* Stats Section - Redesigned */}
-      <section className="py-20 px-6 md:px-12 relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#00628b]/5 to-transparent"></div>
+      {/* Stats Section - Enhanced Design */}
+      <section className="py-24 px-6 md:px-12 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-r from-[#00628b]/5 via-blue-50/30 to-transparent"></div>
         <div className="max-w-7xl mx-auto relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-16"
+            className="text-center mb-20"
           >
-            <h2 className="text-4xl md:text-5xl font-bold text-[#00628b] mb-4">
+            <h2 className="text-4xl md:text-5xl font-bold text-[#00628b] mb-6">
               UR Binary Hub in Numbers
             </h2>
-            <div className="w-24 h-1 bg-[#00628b] mx-auto"></div>
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8">
+              Real impact through flagship solutions, dedicated team members, and strategic partnerships
+            </p>
+            <div className="w-24 h-1 bg-gradient-to-r from-[#00628b] to-blue-400 mx-auto rounded-full"></div>
           </motion.div>
 
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-            {stats.map((stat, index) => (
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            {[
+              {
+                icon: Rocket,
+                value: stats[0].value,
+                label: stats[0].label,
+                color: "from-blue-400 to-cyan-500"
+              },
+              {
+                icon: Users,
+                value: stats[1].value,
+                label: stats[1].label,
+                color: "from-green-400 to-emerald-500"
+              },
+              {
+                icon: Sparkles,
+                value: stats[2].value,
+                label: stats[2].label,
+                color: "from-purple-400 to-indigo-500"
+              },
+              {
+                icon: Globe,
+                value: stats[3].value,
+                label: stats[3].label,
+                color: "from-orange-400 to-red-500"
+              }
+            ].map((stat, index) => (
               <motion.div
                 key={stat.label}
                 className="group relative"
@@ -71,25 +108,86 @@ const Index = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1, duration: 0.6 }}
+                whileHover={{ y: -8 }}
               >
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/20 group-hover:shadow-2xl group-hover:scale-105 transition-all duration-500">
-                  <div className="relative">
+                <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/30 group-hover:shadow-2xl group-hover:scale-105 transition-all duration-500 relative overflow-hidden">
+                  {/* Background gradient overlay */}
+                  <div className={`absolute inset-0 bg-gradient-to-br ${stat.color} opacity-5 group-hover:opacity-10 transition-opacity duration-500`}></div>
+
+                  <div className="relative z-10">
+                    {/* Icon with animated background */}
+                    <div className="flex justify-center mb-6">
+                      <motion.div
+                        className={`w-16 h-16 rounded-2xl bg-gradient-to-br ${stat.color} flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-500`}
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        animate={{
+                          boxShadow: [
+                            `0 10px 25px -5px ${stat.color.split(' ')[1].replace('to-', '').replace('-500', '')}40`,
+                            `0 20px 40px -10px ${stat.color.split(' ')[1].replace('to-', '').replace('-500', '')}60`,
+                            `0 10px 25px -5px ${stat.color.split(' ')[1].replace('to-', '').replace('-500', '')}40`
+                          ]
+                        }}
+                        transition={{ duration: 2, repeat: Infinity }}
+                      >
+                        <stat.icon className="w-8 h-8 text-white" />
+                      </motion.div>
+                    </div>
+
+                    {/* Value with enhanced typography */}
+                    <div className="text-center">
+                      <motion.p
+                        className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-3 group-hover:text-[#00628b] transition-colors duration-300"
+                        initial={{ scale: 0.8 }}
+                        whileInView={{ scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.1 + 0.3, duration: 0.5, type: "spring", stiffness: 200 }}
+                      >
+                        {stat.value}
+                      </motion.p>
+                      <p className="text-sm md:text-base text-gray-600 dark:text-gray-400 font-medium leading-relaxed">
+                        {stat.label}
+                      </p>
+                    </div>
+
+                    {/* Decorative elements */}
                     <motion.div
-                      className="absolute -top-2 -right-2 w-6 h-6 bg-gradient-to-r from-[#00628b] to-blue-400 rounded-full opacity-20"
-                      animate={{ scale: [1, 1.2, 1] }}
-                      transition={{ duration: 2, repeat: Infinity }}
+                      className={`absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-br ${stat.color} rounded-full opacity-30`}
+                      animate={{
+                        scale: [1, 1.3, 1],
+                        opacity: [0.3, 0.6, 0.3]
+                      }}
+                      transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
                     />
-                    <p className="text-4xl md:text-5xl font-bold text-[#00628b] mb-2 group-hover:text-blue-600 transition-colors">
-                      {stat.value}
-                    </p>
-                    <p className="text-sm md:text-base text-gray-600 font-medium">
-                      {stat.label}
-                    </p>
+
+                    <motion.div
+                      className={`absolute -bottom-1 -left-1 w-3 h-3 bg-gradient-to-br ${stat.color} rounded-full opacity-20`}
+                      animate={{
+                        scale: [1, 1.5, 1],
+                        opacity: [0.2, 0.4, 0.2]
+                      }}
+                      transition={{ duration: 3, repeat: Infinity, delay: index * 0.3 }}
+                    />
                   </div>
                 </div>
               </motion.div>
             ))}
           </div>
+
+          {/* Additional stats row for mobile */}
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="mt-12 text-center"
+          >
+            <div className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-full border border-[#00628b]/20">
+              <div className="w-2 h-2 bg-[#00628b] rounded-full mr-3 animate-pulse"></div>
+              <span className="text-sm font-medium text-[#00628b]">
+                Growing innovation ecosystem with real-world impact
+              </span>
+            </div>
+          </motion.div>
         </div>
       </section>
 
@@ -182,7 +280,7 @@ const Index = () => {
                 />
 
                 {/* Floating Elements */}
-                <motion.div
+                {/* <motion.div
                   className="absolute -top-6 -right-6 bg-white rounded-2xl p-4 shadow-xl border border-white/20"
                   animate={{ y: [-10, 10, -10] }}
                   transition={{ duration: 3, repeat: Infinity }}
@@ -191,9 +289,9 @@ const Index = () => {
                     <div className="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
                     <span className="text-sm font-semibold text-gray-700">Live Innovation</span>
                   </div>
-                </motion.div>
+                </motion.div> */}
 
-                <motion.div
+                {/* <motion.div
                   className="absolute -bottom-6 -left-6 bg-gradient-to-r from-[#00628b] to-blue-600 text-white rounded-2xl p-4 shadow-xl"
                   animate={{ y: [10, -10, 10] }}
                   transition={{ duration: 4, repeat: Infinity }}
@@ -202,7 +300,7 @@ const Index = () => {
                     <p className="text-2xl font-bold">5+</p>
                     <p className="text-xs opacity-90">Flagship Projects</p>
                   </div>
-                </motion.div>
+                </motion.div> */}
               </div>
             </motion.div>
           </div>
@@ -305,6 +403,174 @@ const Index = () => {
               </Link>
             </motion.div>
           </div>
+        </div>
+      </section>
+
+      {/* Stakeholders & Contributions Section - Enhanced Design */}
+      <section className="py-24 px-6 md:px-12 relative overflow-hidden" id="stakeholders">
+        {/* Background Elements */}
+        <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 via-blue-50/30 to-transparent"></div>
+        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-full blur-3xl"></div>
+        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-r from-blue-400/10 to-[#00628b]/10 rounded-full blur-3xl"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-20"
+          >
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.6 }}
+              className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-full border border-[#00628b]/20 mb-6"
+            >
+              <Globe className="w-5 h-5 mr-2 text-[#00628b]" />
+              <span className="text-sm font-semibold text-[#00628b]">Strategic Partnerships</span>
+            </motion.div>
+
+            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+              Our{" "}
+              <span className="text-[#00628b] bg-gradient-to-r from-[#00628b] to-blue-600 bg-clip-text text-transparent">
+                Key Stakeholders
+              </span>
+            </h2>
+            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              Strategic partnerships and collaborations that drive innovation and support our mission to transform Rwanda through technology.
+            </p>
+          </motion.div>
+
+          {/* Slideshow Container */}
+          <div className="relative">
+            {/* Navigation Arrows */}
+            <button
+              onClick={() => setCurrentSlide(currentSlide > 0 ? currentSlide - 1 : 9)}
+              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-white/30 hover:bg-white hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
+            >
+              <ChevronLeft className="w-6 h-6 text-[#00628b] group-hover:scale-110 transition-transform" />
+            </button>
+
+            <button
+              onClick={() => setCurrentSlide(currentSlide < 9 ? currentSlide + 1 : 0)}
+              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-white/30 hover:bg-white hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
+            >
+              <ChevronRight className="w-6 h-6 text-[#00628b] group-hover:scale-110 transition-transform" />
+            </button>
+
+            <div className="overflow-hidden">
+              <motion.div
+                className="flex gap-6 md:gap-8"
+                animate={{ x: `-${currentSlide * 20}%` }}
+                transition={{ duration: 0.5, ease: "easeInOut" }}
+              >
+                {[
+                  { name: "University of Rwanda", logo: "/img/logorura.png", category: "Academic", contribution: "Policy oversight and coordination" },
+                  { name: "UR Data Center", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/87/University_of_Rwanda_logo.svg/1200px-University_of_Rwanda_logo.svg.png", category: "Infrastructure", contribution: "Hosting and testing infrastructure" },
+                  { name: "Ministry of ICT / RISA", logo: "/img/minict.png", category: "Government", contribution: "Prioritization aligned with national strategy" },
+                  { name: "Center for Innovation", logo: "https://www.rwanda-innovation.org/wp-content/uploads/2021/03/logo.png", category: "Innovation", contribution: "IP support and alignment with national goals" },
+                  { name: "Mastercard Foundation", logo: "https://www.mastercardfdn.org/wp-content/uploads/2020/03/mastercard-foundation-logo.png", category: "Funding", contribution: "Support activities and innovation programs" },
+                  { name: "GIZ", logo: "https://www.giz.de/en/downloads/giz-logo.png", category: "International", contribution: "Technical assistance and capacity building" },
+                  { name: "ENABEL", logo: "https://www.enabel.be/sites/default/files/logo-enabel.png", category: "International", contribution: "Development cooperation and support" },
+                  { name: "AI & IoT Hub", logo: "https://via.placeholder.com/150x80/00628b/ffffff?text=AI+IoT+Hub", category: "Innovation", contribution: "Mentorship, resource sharing, project protection" },
+                  { name: "Directorate of Research", logo: "https://via.placeholder.com/150x80/00628b/ffffff?text=Research", category: "Research", contribution: "Research fund access" },
+                  { name: "Private Sector", logo: "https://via.placeholder.com/150x80/00628b/ffffff?text=Private+Sector", category: "Industry", contribution: "Mentorship, co-development, sponsorship" }
+                ].map((stakeholder, index) => (
+                  <div key={stakeholder.name} className="w-1/5 flex-shrink-0">
+                    <motion.div
+                      className="group relative"
+                      initial={{ opacity: 0, y: 30 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.1, duration: 0.6 }}
+                      whileHover={{ y: -8, scale: 1.05 }}
+                    >
+                      <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/30 hover:shadow-2xl group-hover:shadow-[#00628b]/10 transition-all duration-500 relative overflow-hidden">
+                        {/* Background gradient overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                        {/* Category badge */}
+                        <div className="absolute top-3 right-3">
+                          <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#00628b]/10 text-[#00628b] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            {stakeholder.category}
+                          </span>
+                        </div>
+
+                        <div className="relative z-10 flex flex-col items-center space-y-4">
+                          <div className="w-16 h-16 md:w-20 md:h-20 relative group-hover:scale-110 transition-transform duration-300">
+                            <div className="absolute inset-0 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                            <img
+                              src={stakeholder.logo}
+                              alt={`${stakeholder.name} Logo`}
+                              className="relative w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110"
+                              onError={(e) => {
+                                e.currentTarget.style.display = 'none';
+                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                              }}
+                            />
+                            <div className="hidden w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-2xl flex items-center justify-center">
+                              <span className="text-xs text-gray-500 dark:text-gray-400 text-center font-semibold">
+                                {stakeholder.name}
+                              </span>
+                            </div>
+                          </div>
+                          <div className="text-center space-y-2">
+                            <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold leading-tight group-hover:text-[#00628b] transition-colors duration-300">
+                              {stakeholder.name}
+                            </p>
+                            <p className="text-xs text-gray-500 dark:text-gray-500 leading-tight opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                              {stakeholder.contribution}
+                            </p>
+                          </div>
+                        </div>
+
+                        {/* Decorative elements */}
+                        <motion.div
+                          className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-r from-[#00628b] to-blue-400 rounded-full opacity-0 group-hover:opacity-30"
+                          animate={{
+                            scale: [1, 1.3, 1],
+                            opacity: [0, 0.3, 0]
+                          }}
+                          transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+                        />
+                      </div>
+                    </motion.div>
+                  </div>
+                ))}
+              </motion.div>
+            </div>
+
+            {/* Slide Indicators */}
+            <div className="flex justify-center mt-8 space-x-2">
+              {Array.from({ length: 10 }, (_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentSlide(i)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${currentSlide === i
+                    ? 'bg-[#00628b] w-6'
+                    : 'bg-gray-300 hover:bg-gray-400'
+                    }`}
+                />
+              ))}
+            </div>
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.8, duration: 0.6 }}
+            className="text-center mt-20"
+          >
+            <div className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-full border border-[#00628b]/20 shadow-lg">
+              <div className="w-2 h-2 bg-[#00628b] rounded-full mr-3 animate-pulse"></div>
+              <span className="text-sm font-semibold text-[#00628b]">
+                Building strong partnerships for sustainable innovation
+              </span>
+            </div>
+          </motion.div>
         </div>
       </section>
 
