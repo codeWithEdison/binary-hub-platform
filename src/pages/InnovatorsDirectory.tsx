@@ -13,7 +13,7 @@ const InnovatorsDirectory = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [departmentFilter, setDepartmentFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("name");
+  const [sortBy, setSortBy] = useState("none");
 
   // Filter innovators based on search, status, and department
   const filteredInnovators = innovators.filter(innovator => {
@@ -28,17 +28,19 @@ const InnovatorsDirectory = () => {
   // Get unique departments for filter
   const departments = [...new Set(innovators.map(innovator => innovator.department))];
 
-  // Sort innovators
-  const sortedInnovators = [...filteredInnovators].sort((a, b) => {
-    if (sortBy === "name") {
-      return a.name.localeCompare(b.name);
-    } else if (sortBy === "role") {
-      return a.role.localeCompare(b.role);
-    } else if (sortBy === "projects") {
-      return b.projects.length - a.projects.length;
-    }
-    return 0;
-  });
+  // Sort innovators only if a sort option is selected
+  const sortedInnovators = sortBy === "none"
+    ? filteredInnovators
+    : [...filteredInnovators].sort((a, b) => {
+      if (sortBy === "name") {
+        return a.name.localeCompare(b.name);
+      } else if (sortBy === "role") {
+        return a.role.localeCompare(b.role);
+      } else if (sortBy === "projects") {
+        return b.projects.length - a.projects.length;
+      }
+      return 0;
+    });
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
@@ -180,6 +182,7 @@ const InnovatorsDirectory = () => {
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
               >
+                <option value="none">Default</option>
                 <option value="name">Name</option>
                 <option value="role">Role</option>
                 <option value="projects">Projects Count</option>
@@ -223,7 +226,7 @@ const InnovatorsDirectory = () => {
                             }
                           }}
                         />
-                        
+
                         {/* Fallback Avatar */}
                         <div className="hidden absolute inset-0 flex items-center justify-center">
                           <div className="w-24 h-24 bg-gradient-to-br from-[#00628b] to-blue-600 rounded-full flex items-center justify-center shadow-lg">
@@ -235,14 +238,13 @@ const InnovatorsDirectory = () => {
 
                         {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                        
+
                         {/* Status Badge */}
                         <div className="absolute top-4 left-4">
-                          <span className={`px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm ${
-                            innovator.status === 'student' ? 'bg-blue-500/90 text-white shadow-lg' :
-                            innovator.status === 'faculty' ? 'bg-green-500/90 text-white shadow-lg' :
-                            'bg-purple-500/90 text-white shadow-lg'
-                          }`}>
+                          <span className={`px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm ${innovator.status === 'student' ? 'bg-blue-500/90 text-white shadow-lg' :
+                              innovator.status === 'faculty' ? 'bg-green-500/90 text-white shadow-lg' :
+                                'bg-purple-500/90 text-white shadow-lg'
+                            }`}>
                             {innovator.status.charAt(0).toUpperCase() + innovator.status.slice(1)}
                           </span>
                         </div>
@@ -359,7 +361,7 @@ const InnovatorsDirectory = () => {
                   <Sparkles className="w-4 h-4 mr-2" />
                   Join Our Community
                 </motion.div>
-                
+
                 <motion.h3
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -369,7 +371,7 @@ const InnovatorsDirectory = () => {
                 >
                   Ready to Make an Impact?
                 </motion.h3>
-                
+
                 <motion.p
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -379,7 +381,7 @@ const InnovatorsDirectory = () => {
                 >
                   Are you a student, faculty member, or researcher interested in innovation? Join Binary Hub Rwanda and become part of our growing community of innovators driving digital transformation.
                 </motion.p>
-                
+
                 <motion.div
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}

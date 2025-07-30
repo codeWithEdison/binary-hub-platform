@@ -78,7 +78,7 @@ const Hero = () => {
                 <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
               </Link>
               <a
-                href="https://www.youtube.com/watch?v=your-video-id"
+                href="https://youtube.com/@urtekinova_hub?si=PYU7RoxBYqKkQiJF"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center px-8 py-4 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#00628b] transition-all duration-300 group"
