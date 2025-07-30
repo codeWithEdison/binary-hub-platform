@@ -345,9 +345,7 @@ export const projects: Project[] = [
       { name: "Clement NSENGIYUMVA", role: "Junior Developer", image: "/img/Team/fabrice.jpg" },
       { name: "Obed UWIHANGANYE", role: "Junior Developer", image: "/img/Team/cryille.jpg" }
     ],
-    links: {
-      demo: "https://www.figma.com/proto/86AnJDFU35wGufAEm3Eud6/IMOTRAK?node-id=124-3&t=bDVR2Vj1FvlYdiDv-1&starting-point-node-id=124%3A3"
-    },
+    links: { },
     fullDescription: "Complete fleet management solution for institutional vehicle monitoring.",
     problemStatement: "Institutions had no systematic way to track vehicle usage, maintenance, and costs.",
     solution: "Built a comprehensive system for vehicle registration, usage tracking, maintenance scheduling, and cost analysis.",
