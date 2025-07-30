@@ -408,7 +408,7 @@ export const projects: Project[] = [
     stage: "concept",
     category: "Education",
     categories: ["Education", "Student Management", "Administration"],
-    image: "https://images.unsplash.com/photo-1522202176988-66273c2fd55f?q=80&w=2071&auto=format&fit=crop&ixlib=rb-4.0.3",
+    image: "#",
     date: "2024-01-15",
     status: "Planning",
     team: [

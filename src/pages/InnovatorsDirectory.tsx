@@ -106,13 +106,13 @@ const InnovatorsDirectory = () => {
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
               {/* Search Input */}
               <div className="md:col-span-6 relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                <div className="absolute inset-y-0 left-0 pl-4 flex items-center justify-center pointer-events-none z-10">
                   <Search size={18} className="text-[#00628b]" />
                 </div>
                 <Input
                   type="text"
                   placeholder="Search innovators by name or role..."
-                  className="pl-12 h-12 text-base border-[#00628b]/20 focus:border-[#00628b] focus:ring-[#00628b]/20"
+                  className="pl-12 h-12 text-base border-[#00628b]/20 focus:border-[#00628b] focus:ring-[#00628b]/20 bg-white/80 backdrop-blur-sm"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                 />
@@ -242,8 +242,8 @@ const InnovatorsDirectory = () => {
                         {/* Status Badge */}
                         <div className="absolute top-4 left-4">
                           <span className={`px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm ${innovator.status === 'student' ? 'bg-blue-500/90 text-white shadow-lg' :
-                              innovator.status === 'faculty' ? 'bg-green-500/90 text-white shadow-lg' :
-                                'bg-purple-500/90 text-white shadow-lg'
+                            innovator.status === 'faculty' ? 'bg-green-500/90 text-white shadow-lg' :
+                              'bg-purple-500/90 text-white shadow-lg'
                             }`}>
                             {innovator.status.charAt(0).toUpperCase() + innovator.status.slice(1)}
                           </span>
