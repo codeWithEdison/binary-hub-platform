@@ -107,8 +107,8 @@ const About = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.4, duration: 0.8 }}
             >
-              UR Binary Hub is the innovation and incubation hub of the University of Rwanda, currently hosted within the School of ICT at the College of Science and Technology (CST). It is a conducive environment for nurturing student, staff, experts and alumni-led innovations focused on developing homegrown digital solutions that address national and institutional challenges.
-            </motion.p>
+              UR Binary Hub is the innovation and incubation hub of the University of Rwanda , It is a conducive environment for nurturing student, staff, experts and alumni-led innovations focused on developing homegrown digital solutions that address national and institutional challenges.
+            </motion.p> 
           </div>
         </div>
       </section>
@@ -356,10 +356,9 @@ const About = () => {
 
                 <div className="space-y-4">
                   {[
-                    "Coordinated by volunteers from the School of ICT",
-                    "Project managers, front-end/back-end developers, testers, and documentation specialists",
+                    "The Hub is Coordinated by Project managers, front-end/back-end developers, testers, and documentation specialists Innovators and experts from the School of ICT  ",
                     "Students contribute voluntarily on live projects",
-                    "Solutions used first within UR and available to other institutions"
+                    "Developed Solutions are  used first within UR and available to other institutions"
                   ].map((item, index) => (
                     <motion.div
                       key={index}

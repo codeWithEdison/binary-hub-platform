@@ -120,8 +120,8 @@ const ContactPage = () => {
                     <div>
                       <h3 className="text-base font-semibold mb-1 text-gray-900 dark:text-white">Email</h3>
                       <p className="text-gray-600 dark:text-gray-300 mb-1">For general inquiries:</p>
-                      <a href="mailto:contact@binaryhub.ur.ac.rw" className="text-[#00628b] hover:text-[#00628b]/80 transition-colors font-medium">
-                        contact@binaryhub.ur.ac.rw
+                      <a href="mailto:urbinaryhub@gmail.com" className="text-[#00628b] hover:text-[#00628b]/80 transition-colors font-medium">
+                        urbinaryhub@gmail.com
                       </a>
                     </div>
                   </div>
@@ -134,7 +134,7 @@ const ContactPage = () => {
                       <h3 className="text-base font-semibold mb-1 text-gray-900 dark:text-white">Phone</h3>
                       <p className="text-gray-600 dark:text-gray-300 mb-1">Mon-Fri from 9am to 5pm:</p>
                       <a href="tel:+250780123456" className="text-[#00628b] hover:text-[#00628b]/80 transition-colors font-medium">
-                        +250 780 123 456
+                        +250 790 289 399
                       </a>
                     </div>
                   </div>
@@ -146,7 +146,7 @@ const ContactPage = () => {
                     <div>
                       <h3 className="text-base font-semibold mb-1 text-gray-900 dark:text-white">Location</h3>
                       <p className="text-gray-600 dark:text-gray-300 mb-1">Visit our innovation space:</p>
-                      <p className="text-gray-600 dark:text-gray-300">UR Binary Hub, School of ICT, College of Science and Technology (CST), University of Rwanda, Kigali, Rwanda</p>
+                      <p className="text-gray-600 dark:text-gray-300">Binary Hub , University of Rwanda - Nyarugenge Campus</p>
                     </div>
                   </div>
 
@@ -345,9 +345,8 @@ const ContactPage = () => {
                       {item.question}
                     </h3>
                     <ChevronDown
-                      className={`w-6 h-6 text-[#00628b] transition-transform duration-300 ${
-                        openFAQ === index ? "rotate-180" : ""
-                      }`}
+                      className={`w-6 h-6 text-[#00628b] transition-transform duration-300 ${openFAQ === index ? "rotate-180" : ""
+                        }`}
                     />
                   </button>
                   <AnimatePresence>

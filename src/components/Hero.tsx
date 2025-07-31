@@ -6,15 +6,15 @@ import { Link } from "react-router-dom";
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center overflow-hidden">
-      {/* Background Image with Dark Overlay */}
+      {/* Background Image with Gray Overlay */}
       <div className="absolute inset-0 z-0">
         <img
           src="/img/presentation-img/team.jpg"
           alt="UR Binary Hub Innovators"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-black/60"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-black/80 via-black/40 to-transparent"></div>
+        <div className="absolute inset-0 bg-gray-100/60"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-gray-100/80 via-gray-100/40 to-transparent"></div>
       </div>
 
       <div className="max-w-7xl mx-auto w-full z-10 px-6 md:px-12">
@@ -27,7 +27,7 @@ const Hero = () => {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <motion.div
-              className="inline-flex items-center px-4 py-2 bg-[#00628b]/20 text-white rounded-full text-sm font-semibold mb-6"
+              className="inline-flex items-center px-4 py-2 bg-[#00628b]/20 text-[#00628b] rounded-full text-sm font-semibold mb-6"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}
@@ -36,7 +36,7 @@ const Hero = () => {
               UR Binary Hub
             </motion.div>
 
-            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-white">
+            <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6 text-gray-900">
               <motion.span
                 className="block"
                 initial={{ opacity: 0 }}
@@ -56,7 +56,7 @@ const Hero = () => {
             </h1>
 
             <motion.p
-              className="text-xl md:text-2xl text-gray-200 mb-8 max-w-xl leading-relaxed"
+              className="text-xl md:text-2xl text-gray-700 mb-8 max-w-xl leading-relaxed"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ delay: 1, duration: 0.5 }}
@@ -81,7 +81,7 @@ const Hero = () => {
                 href="https://youtube.com/@urtekinova_hub?si=PYU7RoxBYqKkQiJF"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center px-8 py-4 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#00628b] transition-all duration-300 group"
+                className="inline-flex items-center px-8 py-4 border-2 border-[#00628b] text-[#00628b] rounded-full font-semibold hover:bg-[#00628b] hover:text-white transition-all duration-300 group"
               >
                 <Play className="w-5 h-5 mr-2" />
                 <span>Watch Video</span>
@@ -156,7 +156,7 @@ const Hero = () => {
         animate={{ y: [0, 10, 0] }}
         transition={{ duration: 2, repeat: Infinity }}
       >
-        <div className="flex flex-col items-center text-white">
+        <div className="flex flex-col items-center text-gray-700">
           <span className="text-sm font-medium mb-2">Scroll to explore</span>
           <ChevronDown className="w-6 h-6" />
         </div>
