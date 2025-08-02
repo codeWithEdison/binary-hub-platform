@@ -145,7 +145,7 @@ export const innovators: Innovator[] = [
     status: "student",
     department: "School of ICT",
     skills: ["System Administration", "Server Management", "Deployment", "Security"],
-    image: "/img/Team/derick.jpg",
+    image: "/img/Team/derrick.jpg",
     projects: ["Infrastructure Management", "Deployment Systems"],
     bio: "Systems Administrator managing internal infrastructure and deployment environments."
   },
@@ -288,7 +288,7 @@ export const innovators: Innovator[] = [
     role: "Junior Developer",
     status: "student",
     department: "School of ICT",
-    skills: ["React", "CSS", "Frontend Development"],
+    skills: ["React", "CSS", "fullstack  Development"],
     image: "/img/Team/merci.jpg",
     projects: ["Learning Projects", "Code Reviews"],
     bio: "Junior Developer learning and contributing to Binary Hub projects."
