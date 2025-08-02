@@ -1,26 +1,15 @@
-# Single-stage build - simplest approach
-FROM node:18-alpine
-
-# Set working directory
+# Build stage
+FROM node:20-alpine AS build
 WORKDIR /app
 
-# Copy package files first for better layer caching
 COPY package*.json ./
-
-# Install dependencies
-RUN npm ci --silent
-
-# Install serve globally for production serving
-RUN npm install -g serve
-
-# Copy source code
+RUN npm ci --force
 COPY . .
-
-# Build the application
 RUN npm run build
 
-# Expose port 3000
-EXPOSE 3000
-
-# Start the application
-CMD ["serve", "-s", "build", "-l", "3000"]
+# Production stage (nginx)
+FROM nginx:stable-alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"] 

@@ -8,7 +8,8 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "docker build . -t ghcr.io/programmerdatch/binaryhubweb:latest && docker push ghcr.io/programmerdatch/binaryhubweb:latest"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
