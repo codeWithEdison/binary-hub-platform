@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  binaryhubweb:
+    # build: .
+    image: ghcr.io/programmerdatch/binaryhubweb:latest
+    ports:
+      - "7015:80"
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped 
