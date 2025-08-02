@@ -64,8 +64,8 @@ jobs:
         docker build . --tag ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
         docker push ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
 
-  deploy-to-urhg-server:
-    if: github.ref == 'refs/heads/${{ env.BRANCH_NAME }}' && needs.check-secrets.outputs.secrets_available == 'true'
+  deploy-to-server:
+    if: github.ref == format('refs/heads/{0}', env.BRANCH_NAME) && needs.check-secrets.outputs.secrets_available == 'true'
     needs: [check-secrets, build-image]
     name: Deploy Image to Server
     runs-on: ubuntu-latest
