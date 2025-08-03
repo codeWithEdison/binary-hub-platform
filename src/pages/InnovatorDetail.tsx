@@ -4,14 +4,91 @@ import { useParams, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowLeft, Mail, ExternalLink, Github, Linkedin, Twitter, Users, Code, Building, Sparkles, Instagram } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
 import Footer from "@/components/Footer";
-import { innovators, projects } from "@/lib/data";
+import { useInnovators } from "@/hooks/useInnovators";
+import { useProjects } from "@/hooks/useProjects";
 
 const InnovatorDetail = () => {
   const { innovatorId } = useParams<{ innovatorId: string; }>();
+  const { innovators, loading: innovatorsLoading } = useInnovators();
+  const { projects, loading: projectsLoading } = useProjects();
 
   // Find the innovator by ID
   const innovator = innovators.find(i => i.id === innovatorId);
+
+  // Find the projects this innovator is involved with
+  const innovatorProjects = projects.filter(project => {
+    // Filter projects where the innovator is involved
+    return project.innovators?.some(innovator => innovator.innovator_id === innovatorId);
+  });
+
+  const statusColors = {
+    student: "bg-blue-500/90 text-white",
+    alumni: "bg-purple-500/90 text-white",
+    faculty: "bg-green-500/90 text-white"
+  };
+
+  if (innovatorsLoading) {
+    return (
+      <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
+        <div className="flex-1 px-6 md:px-12 py-28">
+          <div className="max-w-7xl mx-auto">
+            {/* Loading skeleton */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-xl border border-white/30 mb-12">
+              <div className="relative h-48 md:h-56 w-full bg-gradient-to-br from-[#00628b]/10 via-blue-50/30 to-indigo-50/30">
+                <div className="absolute -bottom-20 left-8 md:left-12">
+                  <Skeleton className="w-36 h-36 md:w-40 md:h-40 rounded-full" />
+                </div>
+              </div>
+              <div className="pt-24 pb-8 px-8 md:px-12">
+                <Skeleton className="h-8 w-64 mb-4" />
+                <Skeleton className="h-6 w-48 mb-2" />
+                <Skeleton className="h-4 w-32" />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              <div className="lg:col-span-2 space-y-8">
+                <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/30">
+                  <Skeleton className="h-8 w-32 mb-6" />
+                  <Skeleton className="h-4 w-full mb-2" />
+                  <Skeleton className="h-4 w-3/4 mb-2" />
+                  <Skeleton className="h-4 w-5/6" />
+                </div>
+                <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/30">
+                  <Skeleton className="h-8 w-32 mb-6" />
+                  <div className="space-y-4">
+                    <Skeleton className="h-20 w-full" />
+                    <Skeleton className="h-20 w-full" />
+                  </div>
+                </div>
+              </div>
+              <div className="space-y-8">
+                <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/30">
+                  <Skeleton className="h-6 w-32 mb-4" />
+                  <div className="flex flex-wrap gap-2">
+                    <Skeleton className="h-6 w-16" />
+                    <Skeleton className="h-6 w-20" />
+                    <Skeleton className="h-6 w-14" />
+                  </div>
+                </div>
+                <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/30">
+                  <Skeleton className="h-6 w-24 mb-4" />
+                  <div className="space-y-4">
+                    <Skeleton className="h-4 w-32" />
+                    <Skeleton className="h-4 w-24" />
+                    <Skeleton className="h-4 w-28" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
+  }
 
   if (!innovator) {
     return (
@@ -40,17 +117,6 @@ const InnovatorDetail = () => {
       </div>
     );
   }
-
-  // Find the projects this innovator is involved with
-  const innovatorProjects = projects.filter(project =>
-    project.innovators.includes(innovator.id)
-  );
-
-  const statusColors = {
-    student: "bg-blue-500/90 text-white",
-    alumni: "bg-purple-500/90 text-white",
-    faculty: "bg-green-500/90 text-white"
-  };
 
   return (
     <div className="flex flex-col  bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
@@ -95,21 +161,23 @@ const InnovatorDetail = () => {
                   transition={{ delay: 0.3, duration: 0.6 }}
                   className="w-36 h-36 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-white shadow-xl"
                 >
-                  <img
-                    src={innovator.image}
-                    alt={innovator.name}
-                    className="w-full h-full object-cover object-top"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement;
-                      target.style.display = 'none';
-                      const fallback = target.nextElementSibling as HTMLElement;
-                      if (fallback) {
-                        fallback.classList.remove('hidden');
-                      }
-                    }}
-                  />
+                  {innovator.image ? (
+                    <img
+                      src={innovator.image}
+                      alt={innovator.name}
+                      className="w-full h-full object-cover object-top"
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement;
+                        target.style.display = 'none';
+                        const fallback = target.nextElementSibling as HTMLElement;
+                        if (fallback) {
+                          fallback.classList.remove('hidden');
+                        }
+                      }}
+                    />
+                  ) : null}
                   {/* Fallback Avatar */}
-                  <div className="hidden absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#00628b] to-blue-600">
+                  <div className={`${innovator.image ? 'hidden' : ''} absolute inset-0 flex items-center justify-center bg-gradient-to-br from-[#00628b] to-blue-600`}>
                     <span className="text-3xl font-bold text-white">
                       {innovator.name.split(' ').map(n => n[0]).join('').toUpperCase()}
                     </span>
@@ -126,7 +194,7 @@ const InnovatorDetail = () => {
                   transition={{ delay: 0.4, duration: 0.6 }}
                 >
                   <div className="flex items-center gap-2 mb-2">
-                    <span className={`px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm ${statusColors[innovator.status]}`}>
+                    <span className={`px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm ${statusColors[innovator.status] || statusColors.student}`}>
                       {innovator.status.charAt(0).toUpperCase() + innovator.status.slice(1)}
                     </span>
                   </div>
@@ -136,7 +204,7 @@ const InnovatorDetail = () => {
                   </h1>
 
                   <p className="text-xl text-gray-600 dark:text-gray-300">
-                    {innovator.role}
+                    {innovator.role || "Innovator"}
                   </p>
                 </motion.div>
 
@@ -201,10 +269,10 @@ const InnovatorDetail = () => {
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white">About</h2>
                 </div>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  {innovator.bio}
+                  {innovator.bio || "Passionate innovator contributing to Rwanda's digital transformation."}
                 </p>
                 <p className="text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-                  As a {innovator.status} in the {innovator.department} department, {innovator.name.split(' ')[0]} has been focusing on developing innovative solutions that address local challenges in Rwanda. With expertise in {innovator.skills.slice(0, 3).join(', ')}, and other areas, {innovator.name.split(' ')[0]} brings a unique perspective to the Binary Hub community.
+                  As a {innovator.status} in the {innovator.department} department, {innovator.name.split(' ')[0]} has been focusing on developing innovative solutions that address local challenges in Rwanda. With expertise in {(innovator.skills || []).slice(0, 3).map(s => s.skill).join(', ')}, and other areas, {innovator.name.split(' ')[0]} brings a unique perspective to the Binary Hub community.
                 </p>
                 <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
                   {innovator.name.split(' ')[0]} is passionate about using technology to create positive social impact and is always open to collaboration opportunities with like-minded innovators.
@@ -226,7 +294,21 @@ const InnovatorDetail = () => {
                   <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Projects</h2>
                 </div>
 
-                {innovatorProjects.length > 0 ? (
+                {projectsLoading ? (
+                  <div className="space-y-6">
+                    {Array.from({ length: 2 }).map((_, index) => (
+                      <div key={index} className="flex flex-col md:flex-row gap-4 p-6 rounded-2xl border border-gray-100">
+                        <Skeleton className="w-full md:w-32 h-24 rounded-xl" />
+                        <div className="flex-grow space-y-2">
+                          <Skeleton className="h-4 w-20" />
+                          <Skeleton className="h-6 w-48" />
+                          <Skeleton className="h-4 w-full" />
+                          <Skeleton className="h-4 w-3/4" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : innovatorProjects.length > 0 ? (
                   <div className="space-y-6">
                     {innovatorProjects.map((project, index) => (
                       <motion.div
@@ -238,21 +320,23 @@ const InnovatorDetail = () => {
                         className="flex flex-col md:flex-row gap-4 p-6 rounded-2xl hover:bg-[#00628b]/5 transition-all duration-300 border border-transparent hover:border-[#00628b]/20"
                       >
                         <div className="w-full md:w-32 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-gradient-to-br from-gray-100 to-gray-200">
-                          <img
-                            src={project.image}
-                            alt={project.title}
-                            className="w-full h-full object-cover"
-                            onError={(e) => {
-                              const target = e.target as HTMLImageElement;
-                              target.style.display = 'none';
-                              const fallback = target.nextElementSibling as HTMLElement;
-                              if (fallback) {
-                                fallback.classList.remove('hidden');
-                              }
-                            }}
-                          />
+                          {project.image ? (
+                            <img
+                              src={project.image}
+                              alt={project.title}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                                const fallback = target.nextElementSibling as HTMLElement;
+                                if (fallback) {
+                                  fallback.classList.remove('hidden');
+                                }
+                              }}
+                            />
+                          ) : null}
                           {/* Fallback Icon */}
-                          <div className="hidden absolute inset-0 flex items-center justify-center">
+                          <div className={`${project.image ? 'hidden' : ''} absolute inset-0 flex items-center justify-center`}>
                             <Code className="w-8 h-8 text-[#00628b]" />
                           </div>
                         </div>
@@ -310,12 +394,12 @@ const InnovatorDetail = () => {
                 </div>
 
                 <div className="flex flex-wrap gap-2 mb-6">
-                  {innovator.skills.map(skill => (
+                  {(innovator.skills || []).map((skillObj, index) => (
                     <span
-                      key={skill}
+                      key={`${skillObj.skill}-${index}`}
                       className="px-3 py-1 bg-[#00628b]/10 text-[#00628b] text-sm rounded-full font-semibold"
                     >
-                      {skill}
+                      {skillObj.skill}
                     </span>
                   ))}
                 </div>

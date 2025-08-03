@@ -1,24 +1,35 @@
 
 import React, { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, Filter, Users, GraduationCap, Building, ChevronDown, ArrowUpDown, Sparkles, ArrowRight } from "lucide-react";
+import { Search, Filter, Users, GraduationCap, Building, ChevronDown, ArrowUpDown, Sparkles, ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import InnovatorCard from "@/components/InnovatorCard";
-import { innovators } from "@/lib/data";
+import { Skeleton } from "@/components/ui/skeleton";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useInnovators } from "@/hooks/useInnovators";
 
 const InnovatorsDirectory = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [departmentFilter, setDepartmentFilter] = useState("all");
   const [sortBy, setSortBy] = useState("none");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(9);
+
+  const { innovators, loading } = useInnovators();
 
   // Filter innovators based on search, status, and department
   const filteredInnovators = innovators.filter(innovator => {
     const nameMatch = innovator.name.toLowerCase().includes(searchQuery.toLowerCase());
-    const roleMatch = innovator.role.toLowerCase().includes(searchQuery.toLowerCase());
+    const roleMatch = (innovator.role || "").toLowerCase().includes(searchQuery.toLowerCase());
     const statusMatch = statusFilter === "all" || innovator.status === statusFilter;
     const departmentMatch = departmentFilter === "all" || innovator.department === departmentFilter;
 
@@ -35,12 +46,68 @@ const InnovatorsDirectory = () => {
       if (sortBy === "name") {
         return a.name.localeCompare(b.name);
       } else if (sortBy === "role") {
-        return a.role.localeCompare(b.role);
-      } else if (sortBy === "projects") {
-        return b.projects.length - a.projects.length;
+        return (a.role || "").localeCompare(b.role || "");
+      } else if (sortBy === "department") {
+        return a.department.localeCompare(b.department);
       }
       return 0;
     });
+
+  // Calculate pagination for "See More" functionality
+  const totalItems = sortedInnovators.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const endIndex = currentPage * itemsPerPage;
+  const currentInnovators = sortedInnovators.slice(0, endIndex);
+
+  // Reset to first page when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, statusFilter, departmentFilter, sortBy]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (value: string) => {
+    setItemsPerPage(Number(value));
+    setCurrentPage(1);
+  };
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(totalPages);
+      }
+    }
+
+    return pages;
+  };
 
   return (
     <div className="flex flex-col min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
@@ -171,27 +238,48 @@ const InnovatorsDirectory = () => {
                 <Users size={16} className="text-[#00628b]" />
               </div>
               <p className="text-gray-600 dark:text-gray-300">
-                Showing <span className="font-semibold text-[#00628b]">{sortedInnovators.length}</span> innovators
+                Showing <span className="font-semibold text-[#00628b]">{currentInnovators.length}</span> of <span className="font-semibold text-[#00628b]">{totalItems}</span> innovators
+                {currentInnovators.length < totalItems && (
+                  <span className="text-gray-500"> (showing more on next page)</span>
+                )}
               </p>
             </div>
 
-            <div className="flex items-center">
-              <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 mr-3">Sort by:</span>
-              <select
-                className="rounded-xl border border-[#00628b]/20 bg-white/80 backdrop-blur-sm px-4 py-2 text-sm focus:border-[#00628b] focus:ring-[#00628b]/20 transition-all duration-300"
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-              >
-                <option value="none">Default</option>
-                <option value="name">Name</option>
-                <option value="role">Role</option>
-                <option value="projects">Projects Count</option>
-              </select>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">Items per page:</span>
+                <Select value={itemsPerPage.toString()} onValueChange={handleItemsPerPageChange}>
+                  <SelectTrigger className="w-20">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="6">6</SelectItem>
+                    <SelectItem value="9">9</SelectItem>
+                    <SelectItem value="12">12</SelectItem>
+                    <SelectItem value="18">18</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="flex items-center">
+                <span className="text-sm font-semibold text-gray-700 dark:text-gray-300 mr-3">Sort by:</span>
+                <select
+                  className="rounded-xl border border-[#00628b]/20 bg-white/80 backdrop-blur-sm px-4 py-2 text-sm focus:border-[#00628b] focus:ring-[#00628b]/20 transition-all duration-300"
+                  value={sortBy}
+                  onChange={(e) => setSortBy(e.target.value)}
+                >
+                  <option value="none">Default</option>
+                  <option value="name">Name</option>
+                  <option value="role">Role</option>
+                  <option value="department">Department</option>
+                </select>
+              </div>
             </div>
           </motion.div>
 
           {/* Innovators Grid - Enhanced */}
-          {sortedInnovators.length > 0 ? (
+          {loading ? (
+            // Loading skeleton grid
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -199,7 +287,45 @@ const InnovatorsDirectory = () => {
               transition={{ delay: 0.4, duration: 0.8 }}
               className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
             >
-              {sortedInnovators.map((innovator, index) => (
+              {Array.from({ length: itemsPerPage }).map((_, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
+                >
+                  <div className="bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-xl border border-white/30">
+                    {/* Image skeleton */}
+                    <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                      <Skeleton className="w-full h-full" />
+                    </div>
+
+                    {/* Content skeleton */}
+                    <div className="p-6">
+                      <Skeleton className="h-6 w-3/4 mb-2" />
+                      <Skeleton className="h-4 w-1/2 mb-3" />
+                      <Skeleton className="h-4 w-full mb-2" />
+                      <Skeleton className="h-4 w-2/3 mb-4" />
+                      <Skeleton className="h-6 w-1/3 mb-4" />
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <Skeleton className="h-4 w-20" />
+                        <Skeleton className="h-4 w-24" />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : currentInnovators.length > 0 ? (
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
+            >
+              {currentInnovators.map((innovator, index) => (
                 <motion.div
                   key={innovator.id}
                   initial={{ opacity: 0, y: 30 }}
@@ -213,22 +339,24 @@ const InnovatorsDirectory = () => {
                       {/* Enhanced Image Container */}
                       <div className="relative h-64 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600">
                         {/* Image with better error handling */}
-                        <img
-                          src={innovator.image}
-                          alt={innovator.name}
-                          className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.style.display = 'none';
-                            const fallback = target.nextElementSibling as HTMLElement;
-                            if (fallback) {
-                              fallback.classList.remove('hidden');
-                            }
-                          }}
-                        />
+                        {innovator.image ? (
+                          <img
+                            src={innovator.image}
+                            alt={innovator.name}
+                            className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const fallback = target.nextElementSibling as HTMLElement;
+                              if (fallback) {
+                                fallback.classList.remove('hidden');
+                              }
+                            }}
+                          />
+                        ) : null}
 
                         {/* Fallback Avatar */}
-                        <div className="hidden absolute inset-0 flex items-center justify-center">
+                        <div className={`${innovator.image ? 'hidden' : ''} absolute inset-0 flex items-center justify-center`}>
                           <div className="w-24 h-24 bg-gradient-to-br from-[#00628b] to-blue-600 rounded-full flex items-center justify-center shadow-lg">
                             <span className="text-2xl font-bold text-white">
                               {innovator.name.split(' ').map(n => n[0]).join('').toUpperCase()}
@@ -252,12 +380,12 @@ const InnovatorsDirectory = () => {
                         {/* Skills Preview */}
                         <div className="absolute bottom-4 left-4 right-4">
                           <div className="flex flex-wrap gap-2">
-                            {innovator.skills.slice(0, 3).map((skill, skillIndex) => (
+                            {(innovator.skills || []).slice(0, 3).map((skillObj, skillIndex) => (
                               <span
-                                key={skillIndex}
+                                key={`${skillObj.skill}-${skillIndex}`}
                                 className="px-3 py-1 bg-white/95 backdrop-blur-sm text-[#00628b] text-xs rounded-full font-semibold shadow-lg border border-white/50"
                               >
-                                {skill}
+                                {skillObj.skill}
                               </span>
                             ))}
                           </div>
@@ -277,10 +405,10 @@ const InnovatorsDirectory = () => {
                           {innovator.name}
                         </h3>
                         <p className="text-[#00628b] font-semibold text-sm mb-3 line-clamp-1">
-                          {innovator.role}
+                          {innovator.role || "Innovator"}
                         </p>
                         <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4 line-clamp-2">
-                          {innovator.bio}
+                          {innovator.bio || "Passionate innovator contributing to Rwanda's digital transformation."}
                         </p>
 
                         {/* Department Badge */}
@@ -291,12 +419,12 @@ const InnovatorsDirectory = () => {
                           </span>
                         </div>
 
-                        {/* Footer with Projects Count and CTA */}
+                        {/* Footer with Skills Count and CTA */}
                         <div className="flex items-center justify-between pt-4 border-t border-gray-100 dark:border-gray-700">
                           <div className="flex items-center">
                             <div className="w-2 h-2 bg-[#00628b] rounded-full mr-2"></div>
                             <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                              {innovator.projects.length} project{innovator.projects.length !== 1 ? 's' : ''}
+                              {(innovator.skills || []).length} skill{(innovator.skills || []).length !== 1 ? 's' : ''}
                             </span>
                           </div>
                           <div className="flex items-center text-[#00628b] group-hover:text-blue-600 transition-colors">
@@ -324,19 +452,44 @@ const InnovatorsDirectory = () => {
                 </div>
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">No innovators found</h3>
                 <p className="text-gray-600 dark:text-gray-300 mb-6">
-                  No innovators match your search criteria. Try adjusting your filters.
+                  {searchQuery || statusFilter !== "all" || departmentFilter !== "all"
+                    ? "No innovators match your search criteria. Try adjusting your filters."
+                    : "No innovators available at the moment."
+                  }
                 </p>
-                <Button
-                  onClick={() => {
-                    setSearchQuery("");
-                    setStatusFilter("all");
-                    setDepartmentFilter("all");
-                  }}
-                  className="bg-[#00628b] hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
-                >
-                  Clear Filters
-                </Button>
+                {(searchQuery || statusFilter !== "all" || departmentFilter !== "all") && (
+                  <Button
+                    onClick={() => {
+                      setSearchQuery("");
+                      setStatusFilter("all");
+                      setDepartmentFilter("all");
+                      setSortBy("none");
+                    }}
+                    className="bg-[#00628b] hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300"
+                  >
+                    Clear Filters
+                  </Button>
+                )}
               </div>
+            </motion.div>
+          )}
+
+          {/* See More Button */}
+          {!loading && currentPage < totalPages && (
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.6, duration: 0.8 }}
+              className="flex justify-center mb-16"
+            >
+              <Button
+                onClick={() => handlePageChange(currentPage + 1)}
+                className="bg-[#00628b] hover:bg-blue-600 text-white px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 group shadow-lg hover:shadow-xl"
+              >
+                <span>See More Innovators</span>
+                <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
+              </Button>
             </motion.div>
           )}
 

@@ -4,8 +4,9 @@ import { motion } from "framer-motion";
 import { Search, Filter, ArrowRight, Sparkles, Code, Rocket } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
-import { projects } from "@/lib/data";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useProjects } from "@/hooks/useProjects";
 
 // Updated categories based on binaryhub.md flagship projects
 const categories = ["All", "Asset Management", "Fleet Management", "Request Management", "Customer Support", "Education"];
@@ -15,6 +16,8 @@ const InnovationShowcase = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedStage, setSelectedStage] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const { projects, loading } = useProjects();
 
   // Filter projects based on selected criteria
   const filteredProjects = projects.filter(project => {
@@ -163,7 +166,48 @@ const InnovationShowcase = () => {
           </motion.div>
 
           {/* Projects Grid - Enhanced */}
-          {filteredProjects.length > 0 ? (
+          {loading ? (
+            // Loading skeleton grid
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.8 }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16"
+            >
+              {Array.from({ length: 6 }).map((_, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.1, duration: 0.6 }}
+                >
+                  <div className="bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-xl border border-white/30">
+                    {/* Image skeleton */}
+                    <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
+                      <Skeleton className="w-full h-full" />
+                    </div>
+
+                    {/* Content skeleton */}
+                    <div className="p-6">
+                      <Skeleton className="h-6 w-3/4 mb-3" />
+                      <Skeleton className="h-4 w-full mb-2" />
+                      <Skeleton className="h-4 w-5/6 mb-4" />
+                      <div className="flex items-center justify-between mb-4">
+                        <Skeleton className="h-4 w-20" />
+                        <Skeleton className="h-4 w-16" />
+                      </div>
+                      <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                        <Skeleton className="h-4 w-24" />
+                        <Skeleton className="h-4 w-20" />
+                      </div>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : filteredProjects.length > 0 ? (
             <motion.div
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
@@ -197,7 +241,7 @@ const InnovationShowcase = () => {
                             }
                           }}
                         />
-                        
+
                         {/* Fallback for failed images */}
                         <div className="hidden absolute inset-0 flex items-center justify-center">
                           <div className="w-20 h-20 bg-gradient-to-br from-[#00628b] to-blue-600 rounded-full flex items-center justify-center shadow-lg">
@@ -207,15 +251,14 @@ const InnovationShowcase = () => {
 
                         {/* Gradient Overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
-                        
+
                         {/* Stage Badge */}
                         <div className="absolute top-4 left-4">
-                          <span className={`px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm shadow-lg ${
-                            project.stage === 'concept' ? 'bg-yellow-500/90 text-white' :
+                          <span className={`px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm shadow-lg ${project.stage === 'concept' ? 'bg-yellow-500/90 text-white' :
                             project.stage === 'prototype' ? 'bg-orange-500/90 text-white' :
-                            project.stage === 'development' ? 'bg-blue-500/90 text-white' :
-                            'bg-green-500/90 text-white'
-                          }`}>
+                              project.stage === 'development' ? 'bg-blue-500/90 text-white' :
+                                'bg-green-500/90 text-white'
+                            }`}>
                             {project.stage.charAt(0).toUpperCase() + project.stage.slice(1)}
                           </span>
                         </div>
@@ -249,11 +292,11 @@ const InnovationShowcase = () => {
                           <div className="flex items-center">
                             <div className="w-2 h-2 bg-[#00628b] rounded-full mr-2"></div>
                             <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                              {project.innovators.length} innovator{project.innovators.length !== 1 ? 's' : ''}
+                              {(project.team || []).length} team member{(project.team || []).length !== 1 ? 's' : ''}
                             </span>
                           </div>
                           <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
-                            {project.status}
+                            {project.status || 'Active'}
                           </span>
                         </div>
 
@@ -263,9 +306,9 @@ const InnovationShowcase = () => {
                             <span className="text-sm font-semibold mr-1">View Project</span>
                             <ArrowRight size={14} className="group-hover:translate-x-1 transition-transform" />
                           </div>
-                          {project.links?.demo && (
+                          {(project.links || []).find(link => link.link_type === 'demo') && (
                             <a
-                              href={project.links.demo}
+                              href={(project.links || []).find(link => link.link_type === 'demo')?.url}
                               target="_blank"
                               rel="noopener noreferrer"
                               className="text-xs text-gray-500 hover:text-[#00628b] transition-colors"
@@ -331,7 +374,7 @@ const InnovationShowcase = () => {
                 <Sparkles className="w-4 h-4 mr-2" />
                 Ready to Collaborate?
               </motion.div>
-              
+
               <motion.h3
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -341,7 +384,7 @@ const InnovationShowcase = () => {
               >
                 Have a Project Idea?
               </motion.h3>
-              
+
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -351,7 +394,7 @@ const InnovationShowcase = () => {
               >
                 Join our community of innovators and bring your ideas to life. We provide the resources, mentorship, and support you need to develop impactful digital solutions.
               </motion.p>
-              
+
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}

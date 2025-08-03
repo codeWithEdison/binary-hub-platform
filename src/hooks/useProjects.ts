@@ -37,6 +37,9 @@ export interface Project {
   gallery?: Array<{
     image_url: string;
   }>;
+  innovators?: Array<{
+    innovator_id: string;
+  }>;
 }
 
 export const useProjects = () => {
@@ -58,7 +61,8 @@ export const useProjects = () => {
         team:project_team(name, role, image),
         technologies:project_technologies(technology),
         links:project_links(url, link_type),
-        gallery:project_gallery(image_url)
+        gallery:project_gallery(image_url),
+        innovators:project_innovators(innovator_id)
       `)
       .order("created_at", { ascending: false });
 
