@@ -19,6 +19,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 
 import {
@@ -127,12 +128,76 @@ const Overview = () => {
     return (
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
-          <div className="flex items-center justify-center h-64">
-            <div className="flex items-center gap-2">
-              <Loader2 className="h-6 w-6 animate-spin" />
-              <span>Loading dashboard data...</span>
+          {/* Header Skeleton */}
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+            <div>
+              <Skeleton className="h-8 w-64 mb-2" />
+              <Skeleton className="h-4 w-48" />
+            </div>
+            <div className="mt-4 md:mt-0">
+              <Skeleton className="h-10 w-40" />
             </div>
           </div>
+
+          {/* Stats Cards Skeleton */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {Array.from({ length: 4 }).map((_, i) => (
+              <Card key={i}>
+                <CardHeader className="flex flex-row items-center justify-between pb-2">
+                  <Skeleton className="h-4 w-24" />
+                  <Skeleton className="h-4 w-4" />
+                </CardHeader>
+                <CardContent>
+                  <Skeleton className="h-8 w-16 mb-2" />
+                  <Skeleton className="h-3 w-32" />
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          {/* Charts Skeleton */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+            <Card className="col-span-1">
+              <CardHeader>
+                <Skeleton className="h-6 w-32" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-[300px] w-full" />
+              </CardContent>
+            </Card>
+
+            <Card className="col-span-1">
+              <CardHeader>
+                <Skeleton className="h-6 w-40" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-[300px] w-full" />
+              </CardContent>
+            </Card>
+
+            <Card className="col-span-1 lg:col-span-2">
+              <CardHeader>
+                <Skeleton className="h-6 w-36" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-[300px] w-full" />
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Quick Actions Skeleton */}
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-6 w-28" />
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+                {Array.from({ length: 4 }).map((_, i) => (
+                  <Skeleton key={i} className="h-24 w-full" />
+                ))}
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     );
