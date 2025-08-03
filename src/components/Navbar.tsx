@@ -118,7 +118,7 @@ const Navbar = () => {
           ))}
 
           {/* Admin link */}
-          {/* <motion.div
+          <motion.div
             custom={links.length}
             initial="hidden"
             animate="visible"
@@ -130,7 +130,7 @@ const Navbar = () => {
             >
               <User size={18} />
             </Link>
-          </motion.div> */}
+          </motion.div>
         </nav>
 
         {/* Mobile Menu Toggle */}
