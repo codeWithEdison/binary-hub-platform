@@ -21,24 +21,32 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { innovators } from "@/lib/data";
 import { Link } from "react-router-dom";
+import { useInnovators } from "@/hooks/useInnovators";
+import { Badge } from "@/components/ui/badge";
 
 const InnovatorManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const { innovators, loading, deleteInnovator } = useInnovators();
   
   // Filter innovators based on search query and status
   const filteredInnovators = innovators.filter(innovator => {
     const matchesSearch = 
       innovator.name.toLowerCase().includes(searchQuery.toLowerCase()) || 
       innovator.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      innovator.department.toLowerCase().includes(searchQuery.toLowerCase());
+      (innovator.department || "").toLowerCase().includes(searchQuery.toLowerCase());
     
     const matchesStatus = statusFilter === "all" || innovator.status === statusFilter;
     
     return matchesSearch && matchesStatus;
   });
+
+  const handleDelete = async (id: string) => {
+    if (confirm("Are you sure you want to delete this innovator?")) {
+      await deleteInnovator(id);
+    }
+  };
 
   return (
     <div className="p-6">
@@ -147,25 +155,26 @@ const InnovatorManagement = () => {
                       <span className="capitalize">{innovator.status}</span>
                     </div>
                   </TableCell>
-                  <TableCell>{innovator.department}</TableCell>
+                  <TableCell>{innovator.department || "N/A"}</TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
-                      {innovator.skills.slice(0, 2).map((skill, i) => (
-                        <span 
+                      {(innovator.skills || []).slice(0, 2).map((skillObj, i) => (
+                        <Badge 
                           key={i} 
-                          className="px-2 py-1 bg-primary/10 text-primary text-xs rounded-full"
+                          variant="outline"
+                          className="bg-primary/10 text-primary border-primary/20"
                         >
-                          {skill}
-                        </span>
+                          {skillObj.skill}
+                        </Badge>
                       ))}
-                      {innovator.skills.length > 2 && (
-                        <span className="px-2 py-1 bg-muted text-muted-foreground text-xs rounded-full">
+                      {(innovator.skills || []).length > 2 && (
+                        <Badge variant="outline" className="bg-muted text-muted-foreground">
                           +{innovator.skills.length - 2}
-                        </span>
+                        </Badge>
                       )}
                     </div>
                   </TableCell>
-                  <TableCell>{innovator.projects.length}</TableCell>
+                  <TableCell>{(innovator.projects || []).length}</TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
@@ -187,7 +196,10 @@ const InnovatorManagement = () => {
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">
+                        <DropdownMenuItem 
+                          className="text-destructive"
+                          onClick={() => handleDelete(innovator.id)}
+                        >
                           <Trash2 className="h-4 w-4 mr-2" />
                           Delete
                         </DropdownMenuItem>
@@ -196,7 +208,14 @@ const InnovatorManagement = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              {filteredInnovators.length === 0 && (
+              {loading && (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-8">
+                    <div className="text-muted-foreground">Loading...</div>
+                  </TableCell>
+                </TableRow>
+              )}
+              {!loading && filteredInnovators.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-8">
                     <div className="text-muted-foreground">

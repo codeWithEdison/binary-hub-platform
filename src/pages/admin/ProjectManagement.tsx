@@ -22,15 +22,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Link } from "react-router-dom";
-import { projects } from "@/lib/data";
 import { Badge } from "@/components/ui/badge";
+import { useProjects } from "@/hooks/useProjects";
 
 const ProjectManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("all");
+  const { projects, loading, deleteProject } = useProjects();
   
   // Get unique categories from projects
-  const categories = [...new Set(projects.flatMap(project => project.categories))];
+  const categories = [...new Set(projects.flatMap(project => 
+    (project.categories || []).map(cat => cat.category)
+  ))];
   
   // Filter projects based on search query and category
   const filteredProjects = projects.filter(project => {
@@ -38,10 +41,17 @@ const ProjectManagement = () => {
       project.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
       project.description.toLowerCase().includes(searchQuery.toLowerCase());
     
-    const matchesCategory = categoryFilter === "all" || project.categories.includes(categoryFilter);
+    const projectCategories = (project.categories || []).map(cat => cat.category);
+    const matchesCategory = categoryFilter === "all" || projectCategories.includes(categoryFilter);
     
     return matchesSearch && matchesCategory;
   });
+
+  const handleDelete = async (id: string) => {
+    if (confirm("Are you sure you want to delete this project?")) {
+      await deleteProject(id);
+    }
+  };
 
   return (
     <div className="p-6">
@@ -137,16 +147,16 @@ const ProjectManagement = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-1">
-                      {project.categories.slice(0, 2).map((category, i) => (
+                      {(project.categories || []).slice(0, 2).map((categoryObj, i) => (
                         <Badge 
                           key={i} 
                           variant="outline"
                           className="bg-primary/10 text-primary border-primary/20"
                         >
-                          {category}
+                          {categoryObj.category}
                         </Badge>
                       ))}
-                      {project.categories.length > 2 && (
+                      {(project.categories || []).length > 2 && (
                         <Badge variant="outline" className="bg-muted text-muted-foreground">
                           +{project.categories.length - 2}
                         </Badge>
@@ -166,7 +176,7 @@ const ProjectManagement = () => {
                   </TableCell>
                   <TableCell>
                     <div className="flex -space-x-2">
-                      {project.team.slice(0, 3).map((member, index) => (
+                      {(project.team || []).slice(0, 3).map((member, index) => (
                         <div 
                           key={index}
                           className="w-8 h-8 rounded-full border-2 border-background overflow-hidden"
@@ -178,7 +188,7 @@ const ProjectManagement = () => {
                           />
                         </div>
                       ))}
-                      {project.team.length > 3 && (
+                      {(project.team || []).length > 3 && (
                         <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-xs font-medium border-2 border-background">
                           +{project.team.length - 3}
                         </div>
@@ -218,7 +228,10 @@ const ProjectManagement = () => {
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">
+                        <DropdownMenuItem 
+                          className="text-destructive"
+                          onClick={() => handleDelete(project.id)}
+                        >
                           <Trash2 className="h-4 w-4 mr-2" />
                           Delete
                         </DropdownMenuItem>
@@ -227,7 +240,14 @@ const ProjectManagement = () => {
                   </TableCell>
                 </TableRow>
               ))}
-              {filteredProjects.length === 0 && (
+              {loading && (
+                <TableRow>
+                  <TableCell colSpan={7} className="text-center py-8">
+                    <div className="text-muted-foreground">Loading...</div>
+                  </TableCell>
+                </TableRow>
+              )}
+              {!loading && filteredProjects.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-8">
                     <div className="text-muted-foreground">
