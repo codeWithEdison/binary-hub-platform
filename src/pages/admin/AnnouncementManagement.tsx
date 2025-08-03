@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import {
   Plus, Search, Filter, Edit, Trash2, MoreHorizontal, Eye, Download,
-  Bell, ArrowUpDown, ChevronDown, Calendar, User
+  Bell, ArrowUpDown, ChevronDown, Calendar, User, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,13 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -21,97 +28,21 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-
-// Sample announcements data (from AnnouncementsPage.tsx)
-const announcements = [
-  {
-    id: "1",
-    title: "Applications Open for Innovation Hub Membership",
-    content: "We are excited to announce that applications for the Binary Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
-    date: "2023-11-10",
-    category: "Membership",
-    importance: "high",
-    author: {
-      name: "Jean Paul Habineza",
-      role: "Program Coordinator",
-      image: "/img/cordinator.jpg"
-    }
-  },
-  {
-    id: "2",
-    title: "New Partnership with Rwanda Information Society Authority",
-    content: "Binary Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
-    date: "2023-11-05",
-    category: "Partnership",
-    importance: "high",
-    author: {
-      name: "Dr. Marie Umubyeyi",
-      role: "Director",
-      image: "/img/deanict.jpg"
-    }
-  },
-  {
-    id: "3",
-    title: "Equipment Donation from XYZ Technologies",
-    content: "We've received a generous donation of computer equipment from XYZ Technologies. The equipment includes 20 laptops, 5 3D printers, and various IoT devices that will be available for members to use.",
-    date: "2023-10-28",
-    category: "Donation",
-    importance: "medium",
-    author: {
-      name: "Eric Ndayishimiye",
-      role: "Resource Manager",
-      image: "/img/userr.png"
-    }
-  },
-  {
-    id: "4",
-    title: "Changes to Hub Operating Hours",
-    content: "Starting December 1st, Binary Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
-    date: "2023-10-20",
-    category: "Operations",
-    importance: "medium",
-    author: {
-      name: "Claire Uwase",
-      role: "Administrative Officer",
-      image: "/img/userr.png"
-    }
-  },
-  {
-    id: "5",
-    title: "End of Year Innovation Showcase - Call for Projects",
-    content: "We are now accepting submissions for the End of Year Innovation Showcase. This is your opportunity to present your project to industry leaders, potential investors, and the wider community.",
-    date: "2023-10-15",
-    category: "Event",
-    importance: "high",
-    author: {
-      name: "Jean Paul Habineza",
-      role: "Program Coordinator",
-      image: "/img/cordinator.jpg"
-    }
-  },
-  {
-    id: "6",
-    title: "New Resources Added to Digital Library",
-    content: "We've added over a hundred new e-books, research papers, and tutorials to our digital library, covering topics from machine learning to product design. Access these resources through your member portal.",
-    date: "2023-10-10",
-    category: "Resources",
-    importance: "low",
-    author: {
-      name: "Patrick Mutabazi",
-      role: "Knowledge Manager",
-      image: "/img/userr.png"
-    }
-  }
-];
+import { useAnnouncements } from "@/hooks/useAnnouncements";
 
 // Categories for filtering
-const categories = ["All", "Membership", "Partnership", "Donation", "Operations", "Event", "Resources"];
+const categories = ["All", "Membership", "Partnership", "Donation", "Operations", "Event", "Resources", "General"];
 
 const AnnouncementManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const { announcements, loading, deleteAnnouncement } = useAnnouncements();
 
   // Filter announcements based on search query and category
   const filteredAnnouncements = announcements.filter(announcement => {
@@ -119,10 +50,75 @@ const AnnouncementManagement = () => {
       announcement.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       announcement.content.toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesCategory = categoryFilter === "All" || announcement.category === categoryFilter;
+    // For now, we'll use a simple category mapping since announcements don't have categories yet
+    const announcementCategory = "General"; // Default category
+    const matchesCategory = categoryFilter === "All" || announcementCategory === categoryFilter;
 
     return matchesSearch && matchesCategory;
   });
+
+  // Calculate pagination
+  const totalItems = filteredAnnouncements.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentAnnouncements = filteredAnnouncements.slice(startIndex, endIndex);
+
+  // Reset to first page when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, categoryFilter]);
+
+  const handleDelete = async (id: string) => {
+    if (confirm("Are you sure you want to delete this announcement?")) {
+      await deleteAnnouncement(id);
+    }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (value: string) => {
+    setItemsPerPage(Number(value));
+    setCurrentPage(1);
+  };
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(totalPages);
+      }
+    }
+
+    return pages;
+  };
 
   return (
     <div className="p-6">
@@ -178,6 +174,27 @@ const AnnouncementManagement = () => {
           </DropdownMenu>
         </div>
 
+        {/* Results Summary */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-sm text-muted-foreground">
+            Showing {startIndex + 1} to {Math.min(endIndex, totalItems)} of {totalItems} announcements
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Items per page:</span>
+            <Select value={itemsPerPage.toString()} onValueChange={handleItemsPerPageChange}>
+              <SelectTrigger className="w-20">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="5">5</SelectItem>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
         {/* Announcements Table */}
         <div className="border rounded-lg overflow-hidden">
           <Table>
@@ -192,99 +209,189 @@ const AnnouncementManagement = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredAnnouncements.map((announcement) => (
-                <TableRow key={announcement.id}>
-                  <TableCell>
-                    <div>
-                      <div className="font-medium">{announcement.title}</div>
-                      <div className="text-sm text-muted-foreground line-clamp-1">
-                        {announcement.content}
+              {loading ? (
+                // Loading skeleton rows
+                Array.from({ length: itemsPerPage }).map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell>
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-64" />
+                        <Skeleton className="h-3 w-48" />
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="outline">{announcement.category}</Badge>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        announcement.importance === "high" ? "destructive" :
-                          announcement.importance === "medium" ? "secondary" :
-                            "outline"
-                      }
-                    >
-                      {announcement.importance}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center">
-                      <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                      <span className="text-sm">
-                        {new Date(announcement.date).toLocaleDateString('en-US', {
-                          year: 'numeric',
-                          month: 'short',
-                          day: 'numeric'
-                        })}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full overflow-hidden">
-                        <img
-                          src={announcement.author.image}
-                          alt={announcement.author.name}
-                          className="w-full h-full object-cover"
-                        />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-20" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-16" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-24" />
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Skeleton className="w-8 h-8 rounded-full" />
+                        <div className="space-y-1">
+                          <Skeleton className="h-3 w-20" />
+                          <Skeleton className="h-2 w-16" />
+                        </div>
                       </div>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Skeleton className="h-8 w-8 ml-auto" />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                currentAnnouncements.map((announcement) => (
+                  <TableRow key={announcement.id}>
+                    <TableCell>
                       <div>
-                        <div className="text-sm font-medium">{announcement.author.name}</div>
-                        <div className="text-xs text-muted-foreground">{announcement.author.role}</div>
+                        <div className="font-medium">{announcement.title}</div>
+                        <div className="text-sm text-muted-foreground line-clamp-1">
+                          {announcement.content}
+                        </div>
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild>
-                          <Link to={`/admin/announcements/${announcement.id}`} className="flex items-center">
-                            <Eye className="h-4 w-4 mr-2" />
-                            View
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link to={`/admin/announcements/edit/${announcement.id}`} className="flex items-center">
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {filteredAnnouncements.length === 0 && (
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">General</Badge>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">
+                        Medium
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center">
+                        <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                        <span className="text-sm">
+                          {new Date(announcement.created_at).toLocaleDateString('en-US', {
+                            year: 'numeric',
+                            month: 'short',
+                            day: 'numeric'
+                          })}
+                        </span>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <div className="w-8 h-8 rounded-full overflow-hidden">
+                          <div className="w-full h-full bg-muted flex items-center justify-center">
+                            <User className="h-4 w-4 text-muted-foreground" />
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm font-medium">Admin</div>
+                          <div className="text-xs text-muted-foreground">System</div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem asChild>
+                            <Link to={`/admin/announcements/${announcement.id}`} className="flex items-center">
+                              <Eye className="h-4 w-4 mr-2" />
+                              View
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link to={`/admin/announcements/edit/${announcement.id}`} className="flex items-center">
+                              <Edit className="h-4 w-4 mr-2" />
+                              Edit
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="text-destructive"
+                            onClick={() => handleDelete(announcement.id)}
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+              {!loading && currentAnnouncements.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={6} className="text-center py-8">
                     <div className="text-muted-foreground">
-                      No announcements found matching your criteria
+                      {searchQuery || categoryFilter !== "All"
+                        ? "No announcements found matching your criteria"
+                        : "No announcements found. Add your first announcement!"
+                      }
                     </div>
+                    {!searchQuery && categoryFilter === "All" && (
+                      <Button asChild className="mt-2" size="sm">
+                        <Link to="/admin/announcements/new">
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add First Announcement
+                        </Link>
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
         </div>
+
+        {/* Pagination */}
+        {!loading && totalPages > 1 && (
+          <div className="flex items-center justify-between mt-6">
+            <div className="text-sm text-muted-foreground">
+              Page {currentPage} of {totalPages}
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </Button>
+
+              <div className="flex items-center gap-1">
+                {getPageNumbers().map((page, index) => (
+                  <React.Fragment key={index}>
+                    {page === '...' ? (
+                      <span className="px-2 text-muted-foreground">...</span>
+                    ) : (
+                      <Button
+                        variant={currentPage === page ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handlePageChange(page as number)}
+                        className="w-8 h-8 p-0"
+                      >
+                        {page}
+                      </Button>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

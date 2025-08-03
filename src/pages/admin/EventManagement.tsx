@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import {
   Plus, Search, Filter, Edit, Trash2, MoreHorizontal, Eye, Download,
-  CalendarPlus, ArrowUpDown, ChevronDown, Calendar, MapPin, Clock, Users
+  CalendarPlus, ArrowUpDown, ChevronDown, Calendar, MapPin, Clock, Users, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,6 +14,13 @@ import {
   DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   Table,
   TableBody,
   TableCell,
@@ -21,97 +28,98 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-
-// Sample events data (from Events.tsx)
-const events = [
-  {
-    id: "1",
-    title: "Annual Innovation Hackathon",
-    description: "A 48-hour hackathon focusing on solutions for sustainable agriculture and food security in Rwanda.",
-    date: "2023-11-15",
-    time: "09:00 AM - 06:00 PM",
-    location: "Binary Hub, University of Rwanda - Kigali Campus",
-    category: "Hackathon",
-    capacity: 100,
-    image: "https://images.unsplash.com/photo-1540317580384-e5d43867caa6?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
-  },
-  {
-    id: "2",
-    title: "AI in Healthcare Workshop",
-    description: "Learn how artificial intelligence is transforming healthcare delivery in Africa.",
-    date: "2023-11-22",
-    time: "02:00 PM - 05:00 PM",
-    location: "Virtual Event (Zoom)",
-    category: "Workshop",
-    capacity: 50,
-    image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
-  },
-  {
-    id: "3",
-    title: "Startup Funding Masterclass",
-    description: "Comprehensive guide to securing funding for your tech startup in East Africa.",
-    date: "2023-12-05",
-    time: "10:00 AM - 04:00 PM",
-    location: "Norrsken House Kigali",
-    category: "Masterclass",
-    capacity: 30,
-    image: "https://images.unsplash.com/photo-1556761175-4b46a572b786?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3"
-  },
-  {
-    id: "4",
-    title: "Women in Tech Networking Event",
-    description: "Networking event for women in technology across Rwanda.",
-    date: "2023-12-12",
-    time: "05:30 PM - 08:30 PM",
-    location: "Kigali Innovation City",
-    category: "Networking",
-    capacity: 75,
-    image: "https://images.unsplash.com/photo-1483389127117-b6a2102724ae?q=80&w=2074&auto=format&fit=crop&ixlib=rb-4.0.3"
-  },
-  {
-    id: "5",
-    title: "Blockchain for Social Impact",
-    description: "Exploring how blockchain technology can address social challenges in Africa.",
-    date: "2023-12-18",
-    time: "01:00 PM - 04:00 PM",
-    location: "Binary Hub, University of Rwanda - Kigali Campus",
-    category: "Workshop",
-    capacity: 40,
-    image: "https://images.unsplash.com/photo-1639322537228-f710d846310a?q=80&w=2032&auto=format&fit=crop&ixlib=rb-4.0.3"
-  },
-  {
-    id: "6",
-    title: "End of Year Innovation Showcase",
-    description: "Celebrating the achievements of Binary Hub innovators in 2023.",
-    date: "2023-12-22",
-    time: "03:00 PM - 08:00 PM",
-    location: "Kigali Convention Center",
-    category: "Showcase",
-    capacity: 200,
-    image: "https://images.unsplash.com/photo-1475721027785-f74eccf877e2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
-  }
-];
+import { useEvents } from "@/hooks/useEvents";
 
 // Event categories for filtering
-const categories = ["All", "Hackathon", "Workshop", "Masterclass", "Networking", "Showcase"];
+const categories = ["All", "Hackathon", "Workshop", "Masterclass", "Networking", "Showcase", "Conference", "Seminar"];
 
 const EventManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("All");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(10);
+
+  const { events, loading, deleteEvent } = useEvents();
 
   // Filter events based on search query and category
   const filteredEvents = events.filter(event => {
     const matchesSearch =
       event.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      event.location.toLowerCase().includes(searchQuery.toLowerCase());
+      (event.location || "").toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesCategory = categoryFilter === "All" || event.category === categoryFilter;
+    // For now, we'll use a simple category mapping since events don't have categories yet
+    const eventCategory = "Workshop"; // Default category
+    const matchesCategory = categoryFilter === "All" || eventCategory === categoryFilter;
 
     return matchesSearch && matchesCategory;
   });
+
+  // Calculate pagination
+  const totalItems = filteredEvents.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentEvents = filteredEvents.slice(startIndex, endIndex);
+
+  // Reset to first page when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, categoryFilter]);
+
+  const handleDelete = async (id: string) => {
+    if (confirm("Are you sure you want to delete this event?")) {
+      await deleteEvent(id);
+    }
+  };
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
+  const handleItemsPerPageChange = (value: string) => {
+    setItemsPerPage(Number(value));
+    setCurrentPage(1);
+  };
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxVisiblePages = 5;
+
+    if (totalPages <= maxVisiblePages) {
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      if (currentPage <= 3) {
+        for (let i = 1; i <= 4; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(totalPages);
+      } else if (currentPage >= totalPages - 2) {
+        pages.push(1);
+        pages.push('...');
+        for (let i = totalPages - 3; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        pages.push(1);
+        pages.push('...');
+        for (let i = currentPage - 1; i <= currentPage + 1; i++) {
+          pages.push(i);
+        }
+        pages.push('...');
+        pages.push(totalPages);
+      }
+    }
+
+    return pages;
+  };
 
   return (
     <div className="p-6">
@@ -167,6 +175,27 @@ const EventManagement = () => {
           </DropdownMenu>
         </div>
 
+        {/* Results Summary */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="text-sm text-muted-foreground">
+            Showing {startIndex + 1} to {Math.min(endIndex, totalItems)} of {totalItems} events
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="text-sm text-muted-foreground">Items per page:</span>
+            <Select value={itemsPerPage.toString()} onValueChange={handleItemsPerPageChange}>
+              <SelectTrigger className="w-20">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="5">5</SelectItem>
+                <SelectItem value="10">10</SelectItem>
+                <SelectItem value="20">20</SelectItem>
+                <SelectItem value="50">50</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
         {/* Events Table */}
         <div className="border rounded-lg overflow-hidden">
           <Table>
@@ -182,110 +211,213 @@ const EventManagement = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredEvents.map((event) => (
-                <TableRow key={event.id}>
-                  <TableCell>
-                    <div className="w-10 h-10 rounded-lg overflow-hidden">
-                      <img
-                        src={event.image}
-                        alt={event.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div>
-                      <div className="font-medium">{event.title}</div>
-                      <div className="text-sm text-muted-foreground line-clamp-1">
-                        {event.description}
+              {loading ? (
+                // Loading skeleton rows
+                Array.from({ length: itemsPerPage }).map((_, i) => (
+                  <TableRow key={i}>
+                    <TableCell>
+                      <Skeleton className="w-10 h-10 rounded-lg" />
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-48" />
+                        <Skeleton className="h-3 w-32" />
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <Badge
-                      variant={
-                        event.category === "Hackathon" ? "destructive" :
-                          event.category === "Workshop" ? "secondary" :
-                            "default"
-                      }
-                    >
-                      {event.category}
-                    </Badge>
-                  </TableCell>
-                  <TableCell>
-                    <div className="space-y-1">
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-6 w-20" />
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-2">
+                        <Skeleton className="h-4 w-24" />
+                        <Skeleton className="h-3 w-20" />
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-32" />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton className="h-4 w-12" />
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <Skeleton className="h-8 w-8 ml-auto" />
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                currentEvents.map((event) => (
+                  <TableRow key={event.id}>
+                    <TableCell>
+                      <div className="w-10 h-10 rounded-lg overflow-hidden">
+                        {event.image ? (
+                          <img
+                            src={event.image}
+                            alt={event.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.currentTarget.src = "/img/placeholder.svg";
+                            }}
+                          />
+                        ) : (
+                          <div className="w-full h-full bg-muted flex items-center justify-center">
+                            <Calendar className="h-5 w-5 text-muted-foreground" />
+                          </div>
+                        )}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div>
+                        <div className="font-medium">{event.title}</div>
+                        <div className="text-sm text-muted-foreground line-clamp-1">
+                          {event.description}
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge variant="outline">
+                        Workshop
+                      </Badge>
+                    </TableCell>
+                    <TableCell>
+                      <div className="space-y-1">
+                        <div className="flex items-center">
+                          <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
+                          <span className="text-sm">
+                            {new Date(event.date).toLocaleDateString('en-US', {
+                              year: 'numeric',
+                              month: 'short',
+                              day: 'numeric'
+                            })}
+                          </span>
+                        </div>
+                        <div className="flex items-center">
+                          <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
+                          <span className="text-sm">
+                            {event.date} {/* Using date as time for now */}
+                          </span>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
                       <div className="flex items-center">
-                        <Calendar className="h-4 w-4 mr-2 text-muted-foreground" />
-                        <span className="text-sm">
-                          {new Date(event.date).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
-                          })}
+                        <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
+                        <span className="text-sm truncate max-w-[180px]" title={event.location || "TBD"}>
+                          {event.location || "TBD"}
                         </span>
                       </div>
+                    </TableCell>
+                    <TableCell>
                       <div className="flex items-center">
-                        <Clock className="h-4 w-4 mr-2 text-muted-foreground" />
-                        <span className="text-sm">{event.time}</span>
+                        <Users className="h-4 w-4 mr-2 text-muted-foreground" />
+                        <span className="text-sm">{event.max_attendees || "Unlimited"}</span>
                       </div>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center">
-                      <MapPin className="h-4 w-4 mr-2 text-muted-foreground" />
-                      <span className="text-sm truncate max-w-[180px]" title={event.location}>
-                        {event.location}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center">
-                      <Users className="h-4 w-4 mr-2 text-muted-foreground" />
-                      <span className="text-sm">{event.capacity}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="text-right">
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuItem asChild>
-                          <Link to={`/events/${event.id}`} className="flex items-center">
-                            <Eye className="h-4 w-4 mr-2" />
-                            View
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link to={`/admin/events/edit/${event.id}`} className="flex items-center">
-                            <Edit className="h-4 w-4 mr-2" />
-                            Edit
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-destructive">
-                          <Trash2 className="h-4 w-4 mr-2" />
-                          Delete
-                        </DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
-                  </TableCell>
-                </TableRow>
-              ))}
-              {filteredEvents.length === 0 && (
+                    </TableCell>
+                    <TableCell className="text-right">
+                      <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                          <Button variant="ghost" size="icon">
+                            <MoreHorizontal className="h-4 w-4" />
+                          </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent align="end">
+                          <DropdownMenuItem asChild>
+                            <Link to={`/events/${event.id}`} className="flex items-center">
+                              <Eye className="h-4 w-4 mr-2" />
+                              View
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuItem asChild>
+                            <Link to={`/admin/events/edit/${event.id}`} className="flex items-center">
+                              <Edit className="h-4 w-4 mr-2" />
+                              Edit
+                            </Link>
+                          </DropdownMenuItem>
+                          <DropdownMenuSeparator />
+                          <DropdownMenuItem
+                            className="text-destructive"
+                            onClick={() => handleDelete(event.id)}
+                          >
+                            <Trash2 className="h-4 w-4 mr-2" />
+                            Delete
+                          </DropdownMenuItem>
+                        </DropdownMenuContent>
+                      </DropdownMenu>
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+              {!loading && currentEvents.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={7} className="text-center py-8">
                     <div className="text-muted-foreground">
-                      No events found matching your criteria
+                      {searchQuery || categoryFilter !== "All"
+                        ? "No events found matching your criteria"
+                        : "No events found. Add your first event!"
+                      }
                     </div>
+                    {!searchQuery && categoryFilter === "All" && (
+                      <Button asChild className="mt-2" size="sm">
+                        <Link to="/admin/events/new">
+                          <Plus className="h-4 w-4 mr-2" />
+                          Add First Event
+                        </Link>
+                      </Button>
+                    )}
                   </TableCell>
                 </TableRow>
               )}
             </TableBody>
           </Table>
         </div>
+
+        {/* Pagination */}
+        {!loading && totalPages > 1 && (
+          <div className="flex items-center justify-between mt-6">
+            <div className="text-sm text-muted-foreground">
+              Page {currentPage} of {totalPages}
+            </div>
+            <div className="flex items-center gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage - 1)}
+                disabled={currentPage === 1}
+              >
+                <ChevronLeft className="h-4 w-4" />
+                Previous
+              </Button>
+
+              <div className="flex items-center gap-1">
+                {getPageNumbers().map((page, index) => (
+                  <React.Fragment key={index}>
+                    {page === '...' ? (
+                      <span className="px-2 text-muted-foreground">...</span>
+                    ) : (
+                      <Button
+                        variant={currentPage === page ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => handlePageChange(page as number)}
+                        className="w-8 h-8 p-0"
+                      >
+                        {page}
+                      </Button>
+                    )}
+                  </React.Fragment>
+                ))}
+              </div>
+
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => handlePageChange(currentPage + 1)}
+                disabled={currentPage === totalPages}
+              >
+                Next
+                <ChevronRight className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
