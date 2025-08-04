@@ -100,10 +100,10 @@ const Index = () => {
               className="inline-flex items-center px-6 py-3 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-full border border-[#00628b]/20 mb-6"
             >
               <Globe className="w-5 h-5 mr-2 text-[#00628b]" />
-              <span className="text-sm font-semibold text-[#00628b]">Strategic Partnerships</span>
+              <span className="text-3xl font-semibold text-[#00628b]">Strategic Partnerships</span>
             </motion.div>
 
-            <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+            <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-6">
               Our{" "}
               <span className="text-[#00628b] bg-gradient-to-r from-[#00628b] to-blue-600 bg-clip-text text-transparent">
                 Key Stakeholders
@@ -170,7 +170,7 @@ const Index = () => {
                           <img
                             src={stakeholder.logo || `/img/stakeholder/${stakeholder.name.toLowerCase().replace(/\s+/g, '_')}.png`}
                             alt={`${stakeholder.name} Logo`}
-                            className="relative w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110"
+                            className="relative w-full h-full object-contain transition-all duration-500 group-hover:scale-110"
                             onError={(e) => {
                               e.currentTarget.style.display = 'none';
                               e.currentTarget.nextElementSibling?.classList.remove('hidden');
@@ -255,7 +255,7 @@ const Index = () => {
                               <img
                                 src={stakeholder.logo || `/img/stakeholder/${stakeholder.name.toLowerCase().replace(/\s+/g, '_')}.png`}
                                 alt={`${stakeholder.name} Logo`}
-                                className="relative w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110"
+                                className="relative w-full h-full object-contain transition-all duration-500 group-hover:scale-110"
                                 onError={(e) => {
                                   e.currentTarget.style.display = 'none';
                                   e.currentTarget.nextElementSibling?.classList.remove('hidden');

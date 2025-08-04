@@ -47,7 +47,8 @@ const AboutSection: React.FC<AboutSectionProps> = ({
               </h2>
 
               <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                UR Binary Hub is the innovation and incubation hub of the University of Rwanda, currently hosted within the School of ICT at the College of Science and Technology (CST). It is a conducive environment for nurturing student, staff, experts, and alumni-led innovations focused on developing homegrown digital solutions that address national and institutional challenges.
+                UR Binary Hub is the innovation and incubation hub of the University of Rwanda, 
+                currently hosted within the School of ICT at the College of Science and Technology (CST). It is a conducive environment for nurturing student, staff, experts, and alumni-led innovations focused on developing homegrown digital solutions that address national and institutional challenges.
               </p>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-6">

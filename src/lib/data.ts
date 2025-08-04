@@ -126,7 +126,7 @@ export const innovators: Innovator[] = [
     projects: ["INUMA App", "Academic Records System"],
     bio: "Backend Team Leader coordinating backend development activities and mentoring junior developers."
   },
- 
+
   {
     id: "8",
     name: "Eric TUYISHIMIRE",
@@ -335,7 +335,7 @@ export const projects: Project[] = [
     stage: "development",
     category: "Fleet Management",
     categories: ["Transportation", "Fleet Management", "Government"],
-    image: "/img/Project/imotrack.png",
+    image: "/img/Project/imotrak.png",
     date: "2023-06-20",
     status: "development",
     team: [
@@ -345,7 +345,7 @@ export const projects: Project[] = [
       { name: "Clement NSENGIYUMVA", role: "Junior Developer", image: "/img/Team/fabrice.jpg" },
       { name: "Obed UWIHANGANYE", role: "Junior Developer", image: "/img/Team/cryille.jpg" }
     ],
-    links: { },
+    links: {},
     fullDescription: "Complete fleet management solution for institutional vehicle monitoring.",
     problemStatement: "Institutions had no systematic way to track vehicle usage, maintenance, and costs.",
     solution: "Built a comprehensive system for vehicle registration, usage tracking, maintenance scheduling, and cost analysis.",
@@ -359,7 +359,7 @@ export const projects: Project[] = [
     stage: "development",
     category: "Request Management",
     categories: ["Workflow", "Government", "Administration"],
-    image: "/img/Project/inuma.png",
+    image: "/img/Project/inuma.jpg",
     date: "2023-09-10",
     status: "In Progress",
     team: [
