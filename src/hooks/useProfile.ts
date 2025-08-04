@@ -36,33 +36,38 @@ export const useProfile = () => {
     setLoading(true);
     try {
       // Fetch user roles
-      const { data: userRoles } = await supabase
+      const { data: userRoles, error } = await supabase
         .from("user_roles")
         .select("role")
         .eq("user_id", user.id)
         .single();
 
-      // Create profile with role from database or default to innovator
+      console.log("User roles from database:", userRoles); // Debug log
+
+      // Create profile with role from database, fallback to user metadata, or default to innovator
       const profile: Profile = {
         id: user.id,
         first_name: user.user_metadata?.first_name || null,
         last_name: user.user_metadata?.last_name || null,
         avatar_url: null,
-        role: userRoles?.role || "innovator",
+        role: (userRoles && typeof userRoles === 'object' && 'role' in userRoles) ? userRoles.role : (user.user_metadata?.role || "innovator"),
         department_id: user.user_metadata?.department_id || null,
         bio: user.user_metadata?.bio || null,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
+
+      console.log("Created profile:", profile); // Debug log
       setProfile(profile);
     } catch (error) {
-      // If no role found, default to innovator
+      console.log("Error fetching user roles:", error); // Debug log
+      // If no role found in database, check user metadata, or default to innovator
       const profile: Profile = {
         id: user.id,
         first_name: user.user_metadata?.first_name || null,
         last_name: user.user_metadata?.last_name || null,
         avatar_url: null,
-        role: "innovator",
+        role: user.user_metadata?.role || "innovator",
         department_id: user.user_metadata?.department_id || null,
         bio: user.user_metadata?.bio || null,
         created_at: new Date().toISOString(),
@@ -81,7 +86,7 @@ export const useProfile = () => {
       title: "Info",
       description: "Profile updates not implemented yet"
     });
-    
+
     return { error: new Error("Profiles table not implemented yet") };
   };
 

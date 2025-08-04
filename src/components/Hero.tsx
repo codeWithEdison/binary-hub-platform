@@ -27,7 +27,7 @@ const Hero = () => {
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
           >
             <motion.div
-              className="inline-flex items-center px-4 py-2 bg-[#00628b]/20 text-[#00628b] rounded-full text-sm font-semibold mb-6"
+              className="inline-flex items-center px-4 py-2 mt-8  bg-[#00628b]/20 text-[#00628b] rounded-full text-sm font-semibold mb-6"
               initial={{ opacity: 0, x: -20 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.3, duration: 0.5 }}

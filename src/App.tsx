@@ -20,6 +20,7 @@ import InnovatorDetail from "./pages/InnovatorDetail";
 import AnnouncementsPage from "./pages/AnnouncementsPage";
 import AnnouncementDetail from "./pages/AnnouncementDetail";
 import Auth from "./pages/Auth";
+import Login from "./pages/Login";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 // Admin Routes
@@ -47,6 +48,7 @@ const App = () => (
         <Routes>
           {/* Auth Routes */}
           <Route path="/auth" element={<Auth />} />
+          <Route path="/login" element={<Login />} />
 
           {/* Public Routes with Navbar */}
           <Route path="/" element={<><Navbar /><Index /></>} />

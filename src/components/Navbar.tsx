@@ -1,14 +1,19 @@
 
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, Bell, User } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { useProfile } from "@/hooks/useProfile";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const { profile } = useProfile();
 
   const links = [
     { name: "Home", path: "/" },
@@ -66,6 +71,28 @@ const Navbar = () => {
     open: { opacity: 1, x: 0 }
   };
 
+  const handleAdminClick = () => {
+    console.log("Admin click debug:", {
+      hasUser: !!user,
+      userRole: profile?.role,
+      profile: profile
+    });
+
+    if (!user) {
+      console.log("No user, navigating to /auth");
+      navigate("/auth");
+    } else {
+      // Check if user is admin using profile role (same as ProtectedRoute)
+      if (profile?.role === "admin") {
+        console.log("User is admin, navigating to /admin");
+        navigate("/admin");
+      } else {
+        console.log("User is not admin, navigating to /auth");
+        navigate("/auth");
+      }
+    }
+  };
+
   return (
     <motion.header
       className={cn(
@@ -118,19 +145,19 @@ const Navbar = () => {
           ))}
 
           {/* Admin link */}
-          {/* <motion.div
+          <motion.div
             custom={links.length}
             initial="hidden"
             animate="visible"
             variants={linkVariants}
           >
-            <Link
-              to="/admin"
+            <button
+              onClick={handleAdminClick}
               className="ml-2 p-2 rounded-full bg-[#00628b]/10 text-[#00628b] hover:bg-[#00628b]/20 transition-colors"
             >
               <User size={18} />
-            </Link>
-          </motion.div> */}
+            </button>
+          </motion.div>
         </nav>
 
         {/* Mobile Menu Toggle */}

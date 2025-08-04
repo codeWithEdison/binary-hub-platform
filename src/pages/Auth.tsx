@@ -7,6 +7,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useAuth } from "@/hooks/useAuth";
+import { useProfile } from "@/hooks/useProfile";
 import { useReferenceData } from "@/hooks/useReferenceData";
 import { Textarea } from "@/components/ui/textarea";
 
@@ -19,16 +20,22 @@ const Auth = () => {
   const [departmentId, setDepartmentId] = useState("");
   const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   const { user, signIn, signUp } = useAuth();
+  const { profile } = useProfile();
   const { departments } = useReferenceData();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (user) {
-      navigate("/");
+    if (user && profile) {
+      // Check user role and redirect accordingly (same as ProtectedRoute)
+      if (profile.role === "admin") {
+        navigate("/admin");
+      } else {
+        navigate("/");
+      }
     }
-  }, [user, navigate]);
+  }, [user, profile, navigate]);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,7 +47,7 @@ const Auth = () => {
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
-    
+
     const metadata = {
       first_name: firstName,
       last_name: lastName,
@@ -68,7 +75,7 @@ const Auth = () => {
               <TabsTrigger value="signin">Sign In</TabsTrigger>
               <TabsTrigger value="signup">Sign Up</TabsTrigger>
             </TabsList>
-            
+
             <TabsContent value="signin">
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
@@ -98,7 +105,7 @@ const Auth = () => {
                 </Button>
               </form>
             </TabsContent>
-            
+
             <TabsContent value="signup">
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="grid grid-cols-2 gap-4">
@@ -123,7 +130,7 @@ const Auth = () => {
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -135,7 +142,7 @@ const Auth = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="password">Password</Label>
                   <Input
@@ -147,7 +154,7 @@ const Auth = () => {
                     required
                   />
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="role">Role</Label>
                   <Select value={role} onValueChange={(value: "admin" | "innovator") => setRole(value)}>
@@ -160,7 +167,7 @@ const Auth = () => {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 {role === "innovator" && (
                   <>
                     <div className="space-y-2">
@@ -178,7 +185,7 @@ const Auth = () => {
                         </SelectContent>
                       </Select>
                     </div>
-                    
+
                     <div className="space-y-2">
                       <Label htmlFor="bio">Bio (optional)</Label>
                       <Textarea
@@ -191,7 +198,7 @@ const Auth = () => {
                     </div>
                   </>
                 )}
-                
+
                 <Button type="submit" className="w-full" disabled={loading}>
                   {loading ? "Creating account..." : "Sign Up"}
                 </Button>

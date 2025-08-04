@@ -31,8 +31,8 @@ export const useAuth = () => {
 
   const signUp = async (email: string, password: string, metadata?: any) => {
     const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
+
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -48,6 +48,25 @@ export const useAuth = () => {
         variant: "destructive"
       });
     } else {
+      // If signup successful and we have a user, insert role into user_roles table
+      if (data.user && metadata?.role) {
+        const { error: roleError } = await supabase
+          .from("user_roles")
+          .insert({
+            user_id: data.user.id,
+            role: metadata.role
+          });
+
+        if (roleError) {
+          console.error("Error inserting user role:", roleError);
+          toast({
+            title: "Warning",
+            description: "Account created but role assignment failed. Please contact support.",
+            variant: "destructive"
+          });
+        }
+      }
+
       toast({
         title: "Success",
         description: "Check your email for verification link"
@@ -58,7 +77,7 @@ export const useAuth = () => {
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password
     });
@@ -69,6 +88,30 @@ export const useAuth = () => {
         description: error.message,
         variant: "destructive"
       });
+    } else {
+      // If signin successful and user has role in metadata but not in database, insert it
+      if (data.user && data.user.user_metadata?.role) {
+        // Check if role already exists in database
+        const { data: existingRole } = await supabase
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", data.user.id)
+          .single();
+
+        if (!existingRole) {
+          // Insert role into database
+          const { error: roleError } = await supabase
+            .from("user_roles")
+            .insert({
+              user_id: data.user.id,
+              role: data.user.user_metadata.role
+            });
+
+          if (roleError) {
+            console.error("Error inserting user role:", roleError);
+          }
+        }
+      }
     }
 
     return { error };
@@ -76,7 +119,7 @@ export const useAuth = () => {
 
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
-    
+
     if (error) {
       toast({
         title: "Error",
