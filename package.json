@@ -9,7 +9,7 @@
     "build:dev": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
-    "deploy": "docker build . -t ghcr.io/programmerdatch/binaryhubweb:latest && docker push ghcr.io/programmerdatch/binaryhubweb:latest"
+    "deploy": "docker build . -t ghcr.io/programmerdatch/binaryhubweb:latest && docker push ghcr.io/programmerdatch/binaryhubweb:latest && ssh urhgserver 'cd /root/apps/binaryhub/binaryhub-web && docker compose pull && docker compose up -d --force-recreate'"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.9.0",
