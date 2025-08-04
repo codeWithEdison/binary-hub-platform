@@ -388,6 +388,45 @@ export type Database = {
         }
         Relationships: []
       }
+      stakeholders: {
+        Row: {
+          category: string
+          contact_email: string | null
+          contact_phone: string | null
+          contribution: string | null
+          created_at: string
+          id: string
+          logo: string | null
+          name: string
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          category: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          contribution?: string | null
+          created_at?: string
+          id?: string
+          logo?: string | null
+          name: string
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          category?: string
+          contact_email?: string | null
+          contact_phone?: string | null
+          contribution?: string | null
+          created_at?: string
+          id?: string
+          logo?: string | null
+          name?: string
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
       stats: {
         Row: {
           created_at: string | null
@@ -412,16 +451,44 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["user_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["user_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["user_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _user_id: string
+          _role: Database["public"]["Enums"]["user_role"]
+        }
+        Returns: boolean
+      }
     }
     Enums: {
       innovator_status: "student" | "alumni" | "faculty"
       project_stage: "concept" | "prototype" | "development" | "launched"
+      user_role: "admin" | "innovator"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -551,6 +618,7 @@ export const Constants = {
     Enums: {
       innovator_status: ["student", "alumni", "faculty"],
       project_stage: ["concept", "prototype", "development", "launched"],
+      user_role: ["admin", "innovator"],
     },
   },
 } as const
