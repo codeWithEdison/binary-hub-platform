@@ -92,7 +92,7 @@ const Index = () => {
             transition={{ duration: 0.8 }}
             className="text-center mb-20"
           >
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
@@ -101,9 +101,9 @@ const Index = () => {
             >
               <Globe className="w-5 h-5 mr-2 text-[#00628b]" />
               <span className="text-3xl font-semibold text-[#00628b]">Strategic Partnerships</span>
-            </motion.div>
+            </motion.div> */}
 
-            <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white mb-6">
+            <h2 className="text-3xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
               Our{" "}
               <span className="text-[#00628b] bg-gradient-to-r from-[#00628b] to-blue-600 bg-clip-text text-transparent">
                 Key Stakeholders
@@ -116,20 +116,24 @@ const Index = () => {
 
           {/* Slideshow Container */}
           <div className="relative">
-            {/* Navigation Arrows */}
-            <button
-              onClick={() => setCurrentSlide(currentSlide > 0 ? currentSlide - 1 : stakeholders.length - 1)}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-white/30 hover:bg-white hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
-            >
-              <ChevronLeft className="w-6 h-6 text-[#00628b] group-hover:scale-110 transition-transform" />
-            </button>
+            {/* Navigation Arrows - Only when more than 5 stakeholders */}
+            {stakeholders.length > 5 && (
+              <>
+                <button
+                  onClick={() => setCurrentSlide(currentSlide > 0 ? currentSlide - 1 : stakeholders.length - 1)}
+                  className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-white/30 hover:bg-white hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
+                >
+                  <ChevronLeft className="w-6 h-6 text-[#00628b] group-hover:scale-110 transition-transform" />
+                </button>
 
-            <button
-              onClick={() => setCurrentSlide(currentSlide < stakeholders.length - 1 ? currentSlide + 1 : 0)}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-white/30 hover:bg-white hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
-            >
-              <ChevronRight className="w-6 h-6 text-[#00628b] group-hover:scale-110 transition-transform" />
-            </button>
+                <button
+                  onClick={() => setCurrentSlide(currentSlide < stakeholders.length - 1 ? currentSlide + 1 : 0)}
+                  className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-white/30 hover:bg-white hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
+                >
+                  <ChevronRight className="w-6 h-6 text-[#00628b] group-hover:scale-110 transition-transform" />
+                </button>
+              </>
+            )}
 
             {/* Mobile Grid Layout */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 lg:hidden">
@@ -207,8 +211,8 @@ const Index = () => {
               )}
             </div>
 
-            {/* Desktop Slideshow Layout */}
-            <div className="hidden lg:block overflow-hidden  p-8 ">
+            {/* Desktop Layout - Static Grid for 5 or fewer, Slideshow for more */}
+            <div className="hidden lg:block overflow-hidden p-8">
               {stakeholdersLoading ? (
                 // Loading skeleton for desktop
                 <div className="flex gap-6 md:gap-8">
@@ -222,7 +226,74 @@ const Index = () => {
                     </div>
                   ))}
                 </div>
+              ) : stakeholders.length <= 5 ? (
+                // Static grid for 5 or fewer stakeholders
+                <div className="flex gap-6 md:gap-8 justify-center">
+                  {stakeholders.map((stakeholder, index) => (
+                    <div key={stakeholder.id} className="w-1/5 flex-shrink-0">
+                      <motion.div
+                        className="group relative"
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.1, duration: 0.6 }}
+                        whileHover={{ y: -8, scale: 1.05 }}
+                      >
+                        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/30 hover:shadow-2xl group-hover:shadow-[#00628b]/10 transition-all duration-500 relative overflow-hidden">
+                          {/* Background gradient overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                          {/* Category badge */}
+                          <div className="absolute top-3 right-3 z-30">
+                            <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#00628b]/10 text-[#00628b] border border-[#00628b]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
+                              {stakeholder.category}
+                            </span>
+                          </div>
+
+                          <div className="relative z-10 flex flex-col items-center space-y-4">
+                            <div className="w-16 h-16 md:w-20 md:h-20 relative group-hover:scale-110 transition-transform duration-300">
+                              <div className="absolute inset-0 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                              <img
+                                src={stakeholder.logo || `/img/stakeholder/${stakeholder.name.toLowerCase().replace(/\s+/g, '_')}.png`}
+                                alt={`${stakeholder.name} Logo`}
+                                className="relative w-full h-full object-contain transition-all duration-500 group-hover:scale-110"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                                }}
+                              />
+                              <div className="hidden w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-2xl flex items-center justify-center">
+                                <span className="text-xs text-gray-500 dark:text-gray-400 text-center font-semibold">
+                                  {stakeholder.name}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="text-center space-y-2">
+                              <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold leading-tight group-hover:text-[#00628b] transition-colors duration-300">
+                                {stakeholder.name}
+                              </p>
+                              <p className="text-xs text-gray-500 dark:text-gray-500 leading-tight opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                {stakeholder.contribution}
+                              </p>
+                            </div>
+                          </div>
+
+                          {/* Decorative elements */}
+                          <motion.div
+                            className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-r from-[#00628b] to-blue-400 rounded-full opacity-0 group-hover:opacity-30"
+                            animate={{
+                              scale: [1, 1.3, 1],
+                              opacity: [0, 0.3, 0]
+                            }}
+                            transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+                          />
+                        </div>
+                      </motion.div>
+                    </div>
+                  ))}
+                </div>
               ) : (
+                // Slideshow for more than 5 stakeholders
                 <motion.div
                   className="flex gap-6 md:gap-8"
                   animate={{ x: `-${currentSlide * 20}%` }}
@@ -238,7 +309,7 @@ const Index = () => {
                         transition={{ delay: index * 0.1, duration: 0.6 }}
                         whileHover={{ y: -8, scale: 1.05 }}
                       >
-                        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/30 hover:shadow-2xl group-hover:shadow-[#00628b]/10 transition-all duration-500 relative overflow-hidden ">
+                        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/30 hover:shadow-2xl group-hover:shadow-[#00628b]/10 transition-all duration-500 relative overflow-hidden">
                           {/* Background gradient overlay */}
                           <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
@@ -294,19 +365,21 @@ const Index = () => {
               )}
             </div>
 
-            {/* Slide Indicators - Desktop Only */}
-            <div className="hidden lg:flex justify-center mt-8 space-x-2">
-              {Array.from({ length: stakeholders.length }, (_, i) => (
-                <button
-                  key={i}
-                  onClick={() => setCurrentSlide(i)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${currentSlide === i
-                    ? 'bg-[#00628b] w-6'
-                    : 'bg-gray-300 hover:bg-gray-400'
-                    }`}
-                />
-              ))}
-            </div>
+            {/* Slide Indicators - Desktop Only (when more than 5 stakeholders) */}
+            {stakeholders.length > 5 && (
+              <div className="hidden lg:flex justify-center mt-8 space-x-2">
+                {Array.from({ length: stakeholders.length }, (_, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setCurrentSlide(i)}
+                    className={`w-2 h-2 rounded-full transition-all duration-300 ${currentSlide === i
+                      ? 'bg-[#00628b] w-6'
+                      : 'bg-gray-300 hover:bg-gray-400'
+                      }`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
 
           <motion.div
