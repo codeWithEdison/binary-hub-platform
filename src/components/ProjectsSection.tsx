@@ -1,6 +1,6 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink, Code } from "lucide-react";
 import { Link } from "react-router-dom";
 import { projects } from "@/lib/data";
 
@@ -15,7 +15,7 @@ interface ProjectsSectionProps {
 
 const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   className = "",
-  showAllProjects = true, 
+  showAllProjects = true,
   maxProjects = 6,
   title = "Our Flagship Projects",
   subtitle = "Explore innovative solutions developed by our community to address real-world challenges in Rwanda and beyond.",
@@ -66,19 +66,28 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
                   {/* Header with Logo, Title, and Category */}
                   <div className="p-6">
                     <div className="flex items-center space-x-4 mb-4">
-                      {/* Circular Logo */}
-                      <div className="relative w-16 h-16 rounded-full bg-white dark:bg-gray-800 shadow-md flex items-center justify-center overflow-hidden border-2 border-gray-200 dark:border-gray-600 flex-shrink-0">
+                      {/* Enhanced Circular Logo */}
+                      <div className="relative w-16 h-16 rounded-full bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 shadow-md flex items-center justify-center overflow-hidden border-2 border-gray-200 dark:border-gray-600 flex-shrink-0">
                         <img
-                          src={project.image}
+                          src={project.image || "/img/placeholder.svg"}
                           alt={`${project.title} Logo`}
                           className="w-12 h-12 object-contain group-hover:scale-110 transition-transform duration-500"
                           onError={(e) => {
-                            // Fallback for missing images
+                            // Enhanced fallback for missing logos
                             const target = e.target as HTMLImageElement;
-                            target.src = "/img/placeholder.svg";
-                            target.className = "w-10 h-10 opacity-50";
+                            target.style.display = 'none';
+                            const fallback = target.nextElementSibling as HTMLElement;
+                            if (fallback) {
+                              fallback.classList.remove('hidden');
+                            }
                           }}
                         />
+                        {/* Enhanced Fallback */}
+                        <div className="hidden w-10 h-10 bg-gradient-to-br from-[#00628b] to-blue-600 rounded-full flex items-center justify-center">
+                          <div className="text-center">
+                            <Code size={16} className="text-white" />
+                          </div>
+                        </div>
                       </div>
 
                       {/* Title and Category */}

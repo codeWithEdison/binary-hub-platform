@@ -184,9 +184,11 @@ const InnovationShowcase = () => {
                   transition={{ delay: index * 0.1, duration: 0.6 }}
                 >
                   <div className="bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-xl border border-white/30">
-                    {/* Image skeleton */}
-                    <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200">
-                      <Skeleton className="w-full h-full" />
+                    {/* Logo skeleton */}
+                    <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+                      <div className="w-24 h-24 bg-gradient-to-br from-gray-200 to-gray-300 rounded-2xl flex items-center justify-center">
+                        <Skeleton className="w-16 h-16 rounded-xl" />
+                      </div>
                     </div>
 
                     {/* Content skeleton */}
@@ -226,12 +228,12 @@ const InnovationShowcase = () => {
                 >
                   <Link to={`/projects/${project.id}`} className="block">
                     <div className="bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-[#00628b]/10 transition-all duration-500 group">
-                      {/* Enhanced Image Container */}
-                      <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600">
+                      {/* Enhanced Logo Container */}
+                      <div className="relative h-56 overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700">
                         <img
-                          src={project.image}
-                          alt={project.title}
-                          className="w-full h-full object-cover object-top group-hover:scale-110 transition-transform duration-700"
+                          src={project.image || "/img/placeholder.svg"}
+                          alt={`${project.title} Logo`}
+                          className="w-full h-full object-contain p-6 group-hover:scale-105 transition-transform duration-500"
                           onError={(e) => {
                             const target = e.target as HTMLImageElement;
                             target.style.display = 'none';
@@ -242,15 +244,20 @@ const InnovationShowcase = () => {
                           }}
                         />
 
-                        {/* Fallback for failed images */}
+                        {/* Enhanced Fallback for failed logos */}
                         <div className="hidden absolute inset-0 flex items-center justify-center">
-                          <div className="w-20 h-20 bg-gradient-to-br from-[#00628b] to-blue-600 rounded-full flex items-center justify-center shadow-lg">
-                            <Code size={32} className="text-white" />
+                          <div className="w-24 h-24 bg-gradient-to-br from-[#00628b] to-blue-600 rounded-2xl flex items-center justify-center shadow-lg">
+                            <div className="text-center">
+                              <Code size={28} className="text-white mb-1" />
+                              <div className="text-xs text-white font-semibold mt-1">
+                                {project.title.split(' ').map(word => word[0]).join('').toUpperCase()}
+                              </div>
+                            </div>
                           </div>
                         </div>
 
-                        {/* Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"></div>
+                        {/* Subtle Logo Overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-transparent to-[#00628b]/5"></div>
 
                         {/* Stage Badge */}
                         <div className="absolute top-4 left-4">

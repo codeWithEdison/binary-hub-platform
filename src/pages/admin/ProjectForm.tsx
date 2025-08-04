@@ -36,7 +36,6 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { useProjects } from "@/hooks/useProjects";
 import { useInnovators } from "@/hooks/useInnovators";
-import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Sample categories for selection
@@ -97,7 +96,8 @@ const ProjectForm = () => {
     stage: "concept" as "concept" | "prototype" | "development" | "launched",
     status: "",
     date: "",
-    image: ""
+    image: "",
+    featured: false
   });
 
   const [categories, setCategories] = useState<string[]>([""]);
@@ -130,7 +130,8 @@ const ProjectForm = () => {
           stage: project.stage,
           status: project.status || "",
           date: project.date || "",
-          image: project.image || ""
+          image: project.image || "",
+          featured: project.featured || false
         });
 
         // Set main image preview
@@ -341,91 +342,80 @@ const ProjectForm = () => {
     setTeam(team.filter(member => member.id !== id));
   };
 
-  // Create related records
-  const createRelatedRecords = async (projectId: string) => {
-    // Create categories
-    for (const category of categories.filter(cat => cat.trim())) {
-      await supabase.from("project_categories").insert({
-        project_id: projectId,
-        category: category.trim()
-      });
-    }
-
-    // Create technologies
-    for (const technology of technologies.filter(tech => tech.trim())) {
-      await supabase.from("project_technologies").insert({
-        project_id: projectId,
-        technology: technology.trim()
-      });
-    }
-
-    // Create links
-    for (const link of links.filter(l => l.url.trim() && l.link_type.trim())) {
-      await supabase.from("project_links").insert({
-        project_id: projectId,
-        link_type: link.link_type.trim(),
-        url: link.url.trim()
-      });
-    }
-
-    // Create team members
-    for (const member of team.filter(m => m.name.trim() && m.role.trim())) {
-      await supabase.from("project_team").insert({
-        project_id: projectId,
-        name: member.name.trim(),
-        role: member.role.trim(),
-        image: member.image?.trim() || null
-      });
-    }
-
-    // Create gallery images
-    for (const imageUrl of gallery.filter(url => url.trim())) {
-      await supabase.from("project_gallery").insert({
-        project_id: projectId,
-        image_url: imageUrl.trim()
-      });
-    }
-  };
-
-  // Update related records
-  const updateRelatedRecords = async (projectId: string) => {
-    // Delete existing related records
-    await supabase.from("project_categories").delete().eq("project_id", projectId);
-    await supabase.from("project_technologies").delete().eq("project_id", projectId);
-    await supabase.from("project_links").delete().eq("project_id", projectId);
-    await supabase.from("project_team").delete().eq("project_id", projectId);
-    await supabase.from("project_gallery").delete().eq("project_id", projectId);
-
-    // Create new related records
-    await createRelatedRecords(projectId);
-  };
+  // Note: Related data is now handled automatically by the useProjects hook
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
 
     try {
+      // Prepare project data with related data
       const projectData = {
         ...formData,
         date: formData.date || null,
-        image: uploadedImageUrl || formData.image || null
+        image: uploadedImageUrl || formData.image || null,
+        // Include related data that our hook will handle
+        categories: categories.filter(cat => cat.trim()).map(cat => ({ category: cat.trim() })),
+        technologies: technologies.filter(tech => tech.trim()).map(tech => ({ technology: tech.trim() })),
+        links: links.filter(link => link.url.trim() && link.link_type.trim()).map(link => ({
+          url: link.url.trim(),
+          link_type: link.link_type.trim()
+        })),
+        team: team.filter(member => member.name.trim() && member.role.trim()).map(member => ({
+          name: member.name.trim(),
+          role: member.role.trim(),
+          image: member.image?.trim() || null
+        })),
+        gallery: gallery.filter(url => url.trim()).map(url => ({ image_url: url.trim() })),
+        innovators: team.filter(member => member.id && member.id !== member.name).map(member => ({
+          innovator_id: member.id
+        }))
       };
 
+      console.log("Submitting project data:", projectData);
+
       if (isEditMode && id) {
+        console.log("Updating project with ID:", id);
         const { error } = await updateProject(id, projectData);
+        console.log("Update result:", { error });
         if (!error) {
-          await updateRelatedRecords(id);
+          toast({
+            title: "Success",
+            description: "Project updated successfully"
+          });
+          navigate("/admin/projects");
+        } else {
+          toast({
+            title: "Error",
+            description: `Failed to update project: ${error?.message || 'Unknown error'}`,
+            variant: "destructive"
+          });
         }
       } else {
+        console.log("Creating new project");
         const { data, error } = await createProject(projectData);
+        console.log("Create result:", { data, error });
         if (!error && data) {
-          await createRelatedRecords(data.id);
+          toast({
+            title: "Success",
+            description: "Project created successfully"
+          });
+          navigate("/admin/projects");
+        } else {
+          toast({
+            title: "Error",
+            description: `Failed to create project: ${error?.message || 'Unknown error'}`,
+            variant: "destructive"
+          });
         }
       }
-
-      navigate("/admin/projects");
     } catch (error) {
       console.error("Error saving project:", error);
+      toast({
+        title: "Error",
+        description: "Failed to save project",
+        variant: "destructive"
+      });
     } finally {
       setIsSubmitting(false);
     }
@@ -617,6 +607,24 @@ const ProjectForm = () => {
                       ))}
                     </SelectContent>
                   </Select>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="featured" className="flex items-center gap-2">
+                    <CheckCircle className="h-4 w-4" />
+                    Featured Project
+                  </Label>
+                  <div className="flex items-center space-x-2">
+                    <input
+                      type="checkbox"
+                      id="featured"
+                      checked={formData.featured}
+                      onChange={(e) => setFormData(prev => ({ ...prev, featured: e.target.checked }))}
+                      disabled={isSubmitting}
+                      className="rounded border-gray-300 text-[#00628b] focus:ring-[#00628b]"
+                    />
+                    <span className="text-sm text-gray-600">Mark as featured project</span>
+                  </div>
                 </div>
               </div>
             </CardContent>

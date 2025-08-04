@@ -8,93 +8,14 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
-
-// Sample announcements data
-const announcements = [
-  {
-    id: "1",
-    title: "Applications Open for Innovation Hub Membership",
-    content: "We are excited to announce that applications for the Binary Hub membership are now open. Join our vibrant community of innovators and access resources, mentorship, and networking opportunities.",
-    date: "2023-11-10",
-    category: "Membership",
-    importance: "high",
-    author: {
-      name: "Jean Paul Habineza",
-      role: "Program Coordinator",
-      image: "/img/cordinator.jpg"
-    }
-  },
-  {
-    id: "2",
-    title: "New Partnership with Rwanda Information Society Authority",
-    content: "Binary Hub is proud to announce a new strategic partnership with RISA to promote digital innovation across Rwanda. This partnership will create new opportunities for our members.",
-    date: "2023-11-05",
-    category: "Partnership",
-    importance: "high",
-    author: {
-      name: "Dr. Marie Umubyeyi",
-      role: "Director",
-      image: "/img/deanict.jpg"
-    }
-  },
-  {
-    id: "3",
-    title: "Equipment Donation from XYZ Technologies",
-    content: "We've received a generous donation of computer equipment from XYZ Technologies. The equipment includes 20 laptops, 5 3D printers, and various IoT devices that will be available for members to use.",
-    date: "2023-10-28",
-    category: "Donation",
-    importance: "medium",
-    author: {
-      name: "Eric Ndayishimiye",
-      role: "Resource Manager",
-      image: "/img/userr.png"
-    }
-  },
-  {
-    id: "4",
-    title: "Changes to Hub Operating Hours",
-    content: "Starting December 1st, Binary Hub will be open on Saturdays from 10 AM to 4 PM to accommodate member requests for weekend access. This is in addition to our regular weekday hours.",
-    date: "2023-10-20",
-    category: "Operations",
-    importance: "medium",
-    author: {
-      name: "Claire Uwase",
-      role: "Administrative Officer",
-      image: "/img/userr.png"
-    }
-  },
-  {
-    id: "5",
-    title: "End of Year Innovation Showcase - Call for Projects",
-    content: "We are now accepting submissions for the End of Year Innovation Showcase. This is your opportunity to present your project to industry leaders, potential investors, and the wider community.",
-    date: "2023-10-15",
-    category: "Event",
-    importance: "high",
-    author: {
-      name: "Jean Paul Habineza",
-      role: "Program Coordinator",
-      image: "/img/cordinator.jpg"
-    }
-  },
-  {
-    id: "6",
-    title: "New Resources Added to Digital Library",
-    content: "We've added over a hundred new e-books, research papers, and tutorials to our digital library, covering topics from machine learning to product design. Access these resources through your member portal.",
-    date: "2023-10-10",
-    category: "Resources",
-    importance: "low",
-    author: {
-      name: "Patrick Mutabazi",
-      role: "Knowledge Manager",
-      image: "/img/userr.png"
-    }
-  }
-];
+import { useAnnouncements } from "@/hooks/useAnnouncements";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Categories for filtering
 const categories = ["All", "Membership", "Partnership", "Donation", "Operations", "Event", "Resources"];
 
 const AnnouncementsPage = () => {
+  const { announcements, loading } = useAnnouncements();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
@@ -106,6 +27,64 @@ const AnnouncementsPage = () => {
 
     return (titleMatch || contentMatch) && categoryMatch;
   });
+
+  if (loading) {
+    return (
+      <div className="min-h-screen">
+        {/* Header */}
+        <section className="pt-20 pb-12 px-6 md:px-12 bg-secondary/50 dark:bg-secondary/20">
+          <div className="max-w-7xl mx-auto">
+            <div className="text-center max-w-3xl mx-auto">
+              <Skeleton className="h-6 w-32 mx-auto mb-6" />
+              <Skeleton className="h-12 w-64 mx-auto mb-6" />
+              <Skeleton className="h-6 w-80 mx-auto" />
+            </div>
+          </div>
+        </section>
+
+        {/* Search & Filters */}
+        <section className="py-10 px-6 md:px-12">
+          <div className="max-w-7xl mx-auto">
+            <div className="glass p-6 rounded-xl mb-10">
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+                <Skeleton className="h-10 md:col-span-6" />
+                <Skeleton className="h-10 md:col-span-6" />
+              </div>
+            </div>
+
+            <div className="space-y-6">
+              {Array.from({ length: 3 }).map((_, i) => (
+                <div key={i} className="glass overflow-hidden rounded-xl">
+                  <Card className="border-0 bg-transparent">
+                    <CardHeader className="pb-2">
+                      <Skeleton className="h-4 w-24 mb-2" />
+                      <Skeleton className="h-6 w-80" />
+                    </CardHeader>
+                    <CardContent>
+                      <Skeleton className="h-4 w-full mb-2" />
+                      <Skeleton className="h-4 w-3/4" />
+                    </CardContent>
+                    <CardFooter className="flex justify-between items-center border-t border-border pt-4">
+                      <div className="flex items-center gap-3">
+                        <Skeleton className="w-8 h-8 rounded-full" />
+                        <div>
+                          <Skeleton className="h-4 w-24 mb-1" />
+                          <Skeleton className="h-3 w-20" />
+                        </div>
+                      </div>
+                      <Skeleton className="h-8 w-20" />
+                    </CardFooter>
+                  </Card>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen">
@@ -200,10 +179,13 @@ const AnnouncementsPage = () => {
                             variant={announcement.importance === "high" ? "destructive" : "default"}
                             className={announcement.importance === "medium" ? "bg-yellow-500" : ""}
                           >
-                            {announcement.category}
+                            {announcement.category || "General"}
                           </Badge>
                           <span className="text-sm text-muted-foreground">
-                            {new Date(announcement.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                            {announcement.publish_date
+                              ? new Date(announcement.publish_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+                              : new Date(announcement.created_at).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
+                            }
                           </span>
                         </div>
                         <h3 className="text-xl font-semibold">
@@ -212,21 +194,24 @@ const AnnouncementsPage = () => {
                       </CardHeader>
                       <CardContent>
                         <p className="text-muted-foreground mb-4">
-                          {announcement.content}
+                          {announcement.excerpt || announcement.content.substring(0, 200) + (announcement.content.length > 200 ? '...' : '')}
                         </p>
                       </CardContent>
                       <CardFooter className="flex justify-between items-center border-t border-border pt-4">
                         <div className="flex items-center gap-3">
                           <div className="w-8 h-8 rounded-full overflow-hidden">
                             <img
-                              src={announcement.author.image}
-                              alt={announcement.author.name}
+                              src={announcement.image || "/img/userr.png"}
+                              alt="Author"
                               className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = "/img/userr.png";
+                              }}
                             />
                           </div>
                           <div>
-                            <p className="text-sm font-medium">{announcement.author.name}</p>
-                            <p className="text-xs text-muted-foreground">{announcement.author.role}</p>
+                            <p className="text-sm font-medium">Binary Hub Team</p>
+                            <p className="text-xs text-muted-foreground">Administrator</p>
                           </div>
                         </div>
 

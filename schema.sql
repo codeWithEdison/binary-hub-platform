@@ -144,3 +144,38 @@ CREATE TABLE public.user_roles (
   CONSTRAINT user_roles_pkey PRIMARY KEY (id),
   CONSTRAINT user_roles_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
 );
+
+-- Events table
+CREATE TABLE IF NOT EXISTS public.events (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    content TEXT,
+    date DATE NOT NULL,
+    time VARCHAR(100),
+    location VARCHAR(255),
+    category VARCHAR(100),
+    capacity INTEGER,
+    image VARCHAR(500),
+    published BOOLEAN DEFAULT false,
+    max_attendees INTEGER,
+    registration_deadline DATE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Announcements table
+CREATE TABLE IF NOT EXISTS public.announcements (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    title VARCHAR(255) NOT NULL,
+    content TEXT NOT NULL,
+    excerpt TEXT,
+    category VARCHAR(100),
+    importance VARCHAR(50) DEFAULT 'medium',
+    image VARCHAR(500),
+    published BOOLEAN DEFAULT false,
+    publish_date DATE,
+    author_id UUID REFERENCES public.innovators(id),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);

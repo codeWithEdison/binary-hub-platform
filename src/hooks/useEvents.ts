@@ -8,7 +8,10 @@ export interface Event {
   description: string;
   content: string | null;
   date: string;
+  time: string | null;
   location: string | null;
+  category: string | null;
+  capacity: number | null;
   image: string | null;
   published: boolean;
   max_attendees: number | null;
@@ -28,24 +31,112 @@ export const useEvents = () => {
 
   const fetchEvents = async () => {
     setLoading(true);
-    // Since events table doesn't exist yet, return empty array
-    setEvents([]);
+    const { data, error } = await supabase
+      .from("events")
+      .select("*")
+      .eq("published", true)
+      .order("date", { ascending: true });
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch events",
+        variant: "destructive"
+      });
+    } else {
+      setEvents((data as any) || []);
+    }
     setLoading(false);
   };
 
   const createEvent = async (event: Omit<Event, "id" | "created_at" | "updated_at">) => {
-    // Placeholder until events table is created
-    return { data: null, error: new Error("Events table not implemented yet") };
+    try {
+      const { data, error } = await (supabase as any)
+        .from("events")
+        .insert([event])
+        .select()
+        .single();
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to create event",
+          variant: "destructive"
+        });
+        return { data: null, error };
+      }
+
+      toast({
+        title: "Success",
+        description: "Event created successfully"
+      });
+      fetchEvents();
+
+      return { data, error: null };
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to create event",
+        variant: "destructive"
+      });
+      return { data: null, error };
+    }
   };
 
   const updateEvent = async (id: string, updates: Partial<Event>) => {
-    // Placeholder until events table is created
-    return { error: new Error("Events table not implemented yet") };
+    try {
+      const { error } = await (supabase as any)
+        .from("events")
+        .update(updates)
+        .eq("id", id);
+
+      if (error) {
+        toast({
+          title: "Error",
+          description: "Failed to update event",
+          variant: "destructive"
+        });
+        return { error };
+      }
+
+      toast({
+        title: "Success",
+        description: "Event updated successfully"
+      });
+      fetchEvents();
+
+      return { error: null };
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Failed to update event",
+        variant: "destructive"
+      });
+      return { error };
+    }
   };
 
   const deleteEvent = async (id: string) => {
-    // Placeholder until events table is created
-    return { error: new Error("Events table not implemented yet") };
+    const { error } = await supabase
+      .from("events")
+      .delete()
+      .eq("id", id);
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to delete event",
+        variant: "destructive"
+      });
+    } else {
+      toast({
+        title: "Success",
+        description: "Event deleted successfully"
+      });
+      fetchEvents();
+    }
+
+    return { error };
   };
 
   return {
