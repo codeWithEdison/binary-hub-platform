@@ -36,7 +36,7 @@ export const useReferenceData = () => {
 
   const fetchReferenceData = async () => {
     setLoading(true);
-    
+
     try {
       // Since reference tables don't exist yet, return empty arrays
       setDepartments([]);
@@ -49,7 +49,7 @@ export const useReferenceData = () => {
         variant: "destructive"
       });
     }
-    
+
     setLoading(false);
   };
 

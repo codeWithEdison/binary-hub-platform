@@ -11,6 +11,7 @@ import StatsSection from "@/components/StatsSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import AboutSection from "@/components/AboutSection";
 import { innovators, projects, services, stats } from "@/lib/data";
+import { useStakeholders } from "@/hooks/useStakeholders";
 
 const Index = () => {
   const [currentProject, setCurrentProject] = useState(0);
@@ -18,6 +19,7 @@ const Index = () => {
   const [isVisible, setIsVisible] = useState(false);
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 1000], [0, -200]);
+  const { stakeholders, loading: stakeholdersLoading } = useStakeholders();
 
   useEffect(() => {
     setIsVisible(true);
@@ -29,11 +31,13 @@ const Index = () => {
 
   // Auto-slide for stakeholders
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % 11);
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+    if (stakeholders.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentSlide((prev) => (prev + 1) % stakeholders.length);
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [stakeholders.length]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
@@ -114,14 +118,14 @@ const Index = () => {
           <div className="relative">
             {/* Navigation Arrows */}
             <button
-              onClick={() => setCurrentSlide(currentSlide > 0 ? currentSlide - 1 : 10)}
+              onClick={() => setCurrentSlide(currentSlide > 0 ? currentSlide - 1 : stakeholders.length - 1)}
               className="absolute left-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-white/30 hover:bg-white hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
             >
               <ChevronLeft className="w-6 h-6 text-[#00628b] group-hover:scale-110 transition-transform" />
             </button>
 
             <button
-              onClick={() => setCurrentSlide(currentSlide < 10 ? currentSlide + 1 : 0)}
+              onClick={() => setCurrentSlide(currentSlide < stakeholders.length - 1 ? currentSlide + 1 : 0)}
               className="absolute right-4 top-1/2 -translate-y-1/2 z-20 w-12 h-12 bg-white/90 backdrop-blur-sm rounded-full shadow-lg border border-white/30 hover:bg-white hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
             >
               <ChevronRight className="w-6 h-6 text-[#00628b] group-hover:scale-110 transition-transform" />
@@ -129,168 +133,170 @@ const Index = () => {
 
             {/* Mobile Grid Layout */}
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-6 lg:hidden">
-              {[
-                { name: "University of Rwanda", logo: "/img/stakeholder/UR.png", category: "Academic", contribution: "Policy oversight and coordination" },
-                { name: "UR Data Center", logo: "/img/stakeholder/datacenter.png", category: "Infrastructure", contribution: "Hosting and testing infrastructure" },
-                { name: "Ministry of ICT / RISA", logo: "/img/stakeholder/minict.png", category: "Government", contribution: "Prioritization aligned with national strategy" },
-                { name: "Center for Innovation", logo: "/img/stakeholder/RISALogo.jpg", category: "Innovation", contribution: "IP support and alignment with national goals" },
-                { name: "Mastercard Foundation", logo: "/img/stakeholder/mastercard foundation.png", category: "Funding", contribution: "Support activities and innovation programs" },
-                { name: "GIZ", logo: "/img/stakeholder/giz.png", category: "International", contribution: "Technical assistance and capacity building" },
-                { name: "ENABEL", logo: "/img/stakeholder/enabel.png", category: "International", contribution: "Development cooperation and support" },
-                { name: "AI & IoT Hub", logo: "/img/stakeholder/ICT CHAMBER.png", category: "Innovation", contribution: "Mentorship, resource sharing, project protection" },
-                { name: "Directorate of Research", logo: "/img/stakeholder/NCST.png", category: "Research", contribution: "Research fund access" },
-                { name: "Private Sector", logo: "/img/stakeholder/RDB_logo.png", category: "Industry", contribution: "Mentorship, co-development, sponsorship" },
-                { name: "Africa Centre of Excellence in IoT", logo: "/img/stakeholder/ACOEIOT.png", category: "Research", contribution: "IoT research and innovation in Africa" }
-              ].map((stakeholder, index) => (
-                <motion.div
-                  key={stakeholder.name}
-                  className="group relative"
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.6 }}
-                  whileHover={{ y: -5, scale: 1.02 }}
-                >
-                  <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-lg border border-white/30 hover:shadow-xl group-hover:shadow-[#00628b]/10 transition-all duration-500 relative overflow-hidden  ">
-                    {/* Background gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              {stakeholdersLoading ? (
+                // Loading skeleton
+                Array.from({ length: 10 }).map((_, index) => (
+                  <div key={index} className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-lg border border-white/30 animate-pulse">
+                    <div className="w-12 h-12 md:w-16 md:h-16 bg-gray-200 rounded-xl mb-3"></div>
+                    <div className="h-3 bg-gray-200 rounded mb-2"></div>
+                    <div className="h-2 bg-gray-200 rounded w-3/4"></div>
+                  </div>
+                ))
+              ) : (
+                stakeholders.map((stakeholder, index) => (
+                  <motion.div
+                    key={stakeholder.id}
+                    className="group relative"
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: index * 0.1, duration: 0.6 }}
+                    whileHover={{ y: -5, scale: 1.02 }}
+                  >
+                    <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 md:p-6 shadow-lg border border-white/30 hover:shadow-xl group-hover:shadow-[#00628b]/10 transition-all duration-500 relative overflow-hidden  ">
+                      {/* Background gradient overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                    {/* Category badge */}
-                    <div className="absolute top-2 right-2 z-30">
-                      <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#00628b]/10 text-[#00628b] border border-[#00628b]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
-                        {stakeholder.category}
-                      </span>
-                    </div>
+                      {/* Category badge */}
+                      <div className="absolute top-2 right-2 z-30">
+                        <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#00628b]/10 text-[#00628b] border border-[#00628b]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
+                          {stakeholder.category}
+                        </span>
+                      </div>
 
-                    <div className="relative z-10 flex flex-col items-center space-y-3">
-                      <div className="w-12 h-12 md:w-16 md:h-16 relative group-hover:scale-110 transition-transform duration-300">
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                        <img
-                          src={stakeholder.logo}
-                          alt={`${stakeholder.name} Logo`}
-                          className="relative w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                            e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                          }}
-                        />
-                        <div className="hidden w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center">
-                          <span className="text-xs text-gray-500 dark:text-gray-400 text-center font-semibold">
+                      <div className="relative z-10 flex flex-col items-center space-y-3">
+                        <div className="w-12 h-12 md:w-16 md:h-16 relative group-hover:scale-110 transition-transform duration-300">
+                          <div className="absolute inset-0 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-xl blur-lg opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                          <img
+                            src={stakeholder.logo || `/img/stakeholder/${stakeholder.name.toLowerCase().replace(/\s+/g, '_')}.png`}
+                            alt={`${stakeholder.name} Logo`}
+                            className="relative w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110"
+                            onError={(e) => {
+                              e.currentTarget.style.display = 'none';
+                              e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                            }}
+                          />
+                          <div className="hidden w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-xl flex items-center justify-center">
+                            <span className="text-xs text-gray-500 dark:text-gray-400 text-center font-semibold">
+                              {stakeholder.name}
+                            </span>
+                          </div>
+                        </div>
+                        <div className="text-center space-y-1">
+                          <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold leading-tight group-hover:text-[#00628b] transition-colors duration-300">
                             {stakeholder.name}
-                          </span>
+                          </p>
+                          <p className="text-xs text-gray-500 dark:text-gray-500 leading-tight opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                            {stakeholder.contribution}
+                          </p>
                         </div>
                       </div>
-                      <div className="text-center space-y-1">
-                        <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold leading-tight group-hover:text-[#00628b] transition-colors duration-300">
-                          {stakeholder.name}
-                        </p>
-                        <p className="text-xs text-gray-500 dark:text-gray-500 leading-tight opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                          {stakeholder.contribution}
-                        </p>
-                      </div>
-                    </div>
 
-                    {/* Decorative elements */}
-                    <motion.div
-                      className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-[#00628b] to-blue-400 rounded-full opacity-0 group-hover:opacity-30"
-                      animate={{
-                        scale: [1, 1.3, 1],
-                        opacity: [0, 0.3, 0]
-                      }}
-                      transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
-                    />
-                  </div>
-                </motion.div>
-              ))}
+                      {/* Decorative elements */}
+                      <motion.div
+                        className="absolute -top-1 -right-1 w-3 h-3 bg-gradient-to-r from-[#00628b] to-blue-400 rounded-full opacity-0 group-hover:opacity-30"
+                        animate={{
+                          scale: [1, 1.3, 1],
+                          opacity: [0, 0.3, 0]
+                        }}
+                        transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+                      />
+                    </div>
+                  </motion.div>
+                ))
+              )}
             </div>
 
             {/* Desktop Slideshow Layout */}
             <div className="hidden lg:block overflow-hidden  p-8 ">
-              <motion.div
-                className="flex gap-6 md:gap-8"
-                animate={{ x: `-${currentSlide * 20}%` }}
-                transition={{ duration: 0.5, ease: "easeInOut" }}
-              >
-                {[
-                  { name: "University of Rwanda", logo: "/img/stakeholder/UR.png", category: "Academic", contribution: "Policy oversight and coordination" },
-                  { name: "UR Data Center", logo: "/img/stakeholder/datacenter.png", category: "Infrastructure", contribution: "Hosting and testing infrastructure" },
-                  { name: "Ministry of ICT / RISA", logo: "/img/stakeholder/minict.png", category: "Government", contribution: "Prioritization aligned with national strategy" },
-                  { name: "Center for Innovation", logo: "/img/stakeholder/RISALogo.jpg", category: "Innovation", contribution: "IP support and alignment with national goals" },
-                  { name: "Mastercard Foundation", logo: "/img/stakeholder/mastercard foundation.png", category: "Funding", contribution: "Support activities and innovation programs" },
-                  { name: "GIZ", logo: "/img/stakeholder/giz.png", category: "International", contribution: "Technical assistance and capacity building" },
-                  { name: "ENABEL", logo: "/img/stakeholder/enabel.png", category: "International", contribution: "Development cooperation and support" },
-                  { name: "AI & IoT Hub", logo: "/img/stakeholder/ICT CHAMBER.png", category: "Innovation", contribution: "Mentorship, resource sharing, project protection" },
-                  { name: "Directorate of Research", logo: "/img/stakeholder/NCST.png", category: "Research", contribution: "Research fund access" },
-                  { name: "Private Sector", logo: "/img/stakeholder/RDB_logo.png", category: "Industry", contribution: "Mentorship, co-development, sponsorship" },
-                  { name: "Africa Centre of Excellence in IoT", logo: "/img/stakeholder/ACOEIOT.png", category: "Research", contribution: "IoT research and innovation in Africa" }
-                ].map((stakeholder, index) => (
-                  <div key={stakeholder.name} className="w-1/5 flex-shrink-0">
-                    <motion.div
-                      className="group relative"
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1, duration: 0.6 }}
-                      whileHover={{ y: -8, scale: 1.05 }}
-                    >
-                      <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/30 hover:shadow-2xl group-hover:shadow-[#00628b]/10 transition-all duration-500 relative overflow-hidden ">
-                        {/* Background gradient overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              {stakeholdersLoading ? (
+                // Loading skeleton for desktop
+                <div className="flex gap-6 md:gap-8">
+                  {Array.from({ length: 5 }).map((_, index) => (
+                    <div key={index} className="w-1/5 flex-shrink-0">
+                      <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/30 animate-pulse">
+                        <div className="w-16 h-16 md:w-20 md:h-20 bg-gray-200 rounded-2xl mb-4"></div>
+                        <div className="h-3 bg-gray-200 rounded mb-2"></div>
+                        <div className="h-2 bg-gray-200 rounded w-3/4"></div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <motion.div
+                  className="flex gap-6 md:gap-8"
+                  animate={{ x: `-${currentSlide * 20}%` }}
+                  transition={{ duration: 0.5, ease: "easeInOut" }}
+                >
+                  {stakeholders.map((stakeholder, index) => (
+                    <div key={stakeholder.id} className="w-1/5 flex-shrink-0">
+                      <motion.div
+                        className="group relative"
+                        initial={{ opacity: 0, y: 30 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ delay: index * 0.1, duration: 0.6 }}
+                        whileHover={{ y: -8, scale: 1.05 }}
+                      >
+                        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-6 shadow-xl border border-white/30 hover:shadow-2xl group-hover:shadow-[#00628b]/10 transition-all duration-500 relative overflow-hidden ">
+                          {/* Background gradient overlay */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 to-blue-400/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
-                        {/* Category badge */}
-                        <div className="absolute top-3 right-3 z-30">
-                          <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#00628b]/10 text-[#00628b] border border-[#00628b]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
-                            {stakeholder.category}
-                          </span>
-                        </div>
+                          {/* Category badge */}
+                          <div className="absolute top-3 right-3 z-30">
+                            <span className="px-2 py-1 text-xs font-semibold rounded-full bg-[#00628b]/10 text-[#00628b] border border-[#00628b]/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 shadow-lg">
+                              {stakeholder.category}
+                            </span>
+                          </div>
 
-                        <div className="relative z-10 flex flex-col items-center space-y-4">
-                          <div className="w-16 h-16 md:w-20 md:h-20 relative group-hover:scale-110 transition-transform duration-300">
-                            <div className="absolute inset-0 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                            <img
-                              src={stakeholder.logo}
-                              alt={`${stakeholder.name} Logo`}
-                              className="relative w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110"
-                              onError={(e) => {
-                                e.currentTarget.style.display = 'none';
-                                e.currentTarget.nextElementSibling?.classList.remove('hidden');
-                              }}
-                            />
-                            <div className="hidden w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-2xl flex items-center justify-center">
-                              <span className="text-xs text-gray-500 dark:text-gray-400 text-center font-semibold">
+                          <div className="relative z-10 flex flex-col items-center space-y-4">
+                            <div className="w-16 h-16 md:w-20 md:h-20 relative group-hover:scale-110 transition-transform duration-300">
+                              <div className="absolute inset-0 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-2xl blur-xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                              <img
+                                src={stakeholder.logo || `/img/stakeholder/${stakeholder.name.toLowerCase().replace(/\s+/g, '_')}.png`}
+                                alt={`${stakeholder.name} Logo`}
+                                className="relative w-full h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-500 group-hover:scale-110"
+                                onError={(e) => {
+                                  e.currentTarget.style.display = 'none';
+                                  e.currentTarget.nextElementSibling?.classList.remove('hidden');
+                                }}
+                              />
+                              <div className="hidden w-full h-full bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-600 rounded-2xl flex items-center justify-center">
+                                <span className="text-xs text-gray-500 dark:text-gray-400 text-center font-semibold">
+                                  {stakeholder.name}
+                                </span>
+                              </div>
+                            </div>
+                            <div className="text-center space-y-2">
+                              <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold leading-tight group-hover:text-[#00628b] transition-colors duration-300">
                                 {stakeholder.name}
-                              </span>
+                              </p>
+                              <p className="text-xs text-gray-500 dark:text-gray-500 leading-tight opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                {stakeholder.contribution}
+                              </p>
                             </div>
                           </div>
-                          <div className="text-center space-y-2">
-                            <p className="text-xs text-gray-600 dark:text-gray-400 font-semibold leading-tight group-hover:text-[#00628b] transition-colors duration-300">
-                              {stakeholder.name}
-                            </p>
-                            <p className="text-xs text-gray-500 dark:text-gray-500 leading-tight opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                              {stakeholder.contribution}
-                            </p>
-                          </div>
-                        </div>
 
-                        {/* Decorative elements */}
-                        <motion.div
-                          className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-r from-[#00628b] to-blue-400 rounded-full opacity-0 group-hover:opacity-30"
-                          animate={{
-                            scale: [1, 1.3, 1],
-                            opacity: [0, 0.3, 0]
-                          }}
-                          transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
-                        />
-                      </div>
-                    </motion.div>
-                  </div>
-                ))}
-              </motion.div>
+                          {/* Decorative elements */}
+                          <motion.div
+                            className="absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-r from-[#00628b] to-blue-400 rounded-full opacity-0 group-hover:opacity-30"
+                            animate={{
+                              scale: [1, 1.3, 1],
+                              opacity: [0, 0.3, 0]
+                            }}
+                            transition={{ duration: 2, repeat: Infinity, delay: index * 0.2 }}
+                          />
+                        </div>
+                      </motion.div>
+                    </div>
+                  ))}
+                </motion.div>
+              )}
             </div>
 
             {/* Slide Indicators - Desktop Only */}
             <div className="hidden lg:flex justify-center mt-8 space-x-2">
-              {Array.from({ length: 11 }, (_, i) => (
+              {Array.from({ length: stakeholders.length }, (_, i) => (
                 <button
                   key={i}
                   onClick={() => setCurrentSlide(i)}
