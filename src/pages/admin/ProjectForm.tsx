@@ -1,19 +1,23 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { 
-  FileText, 
-  Tag, 
-  Calendar, 
-  Link as LinkIcon, 
-  Image as ImageIcon, 
+import {
+  FileText,
+  Tag,
+  Calendar,
+  Link as LinkIcon,
+  Image as ImageIcon,
   Save,
   ArrowLeft,
   User,
   Clock,
   CheckCircle,
   Plus,
-  Trash2
+  Trash2,
+  X,
+  Loader2,
+  Upload,
+  Camera
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,199 +31,440 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
-import { innovators } from "@/lib/data";
+import { useProjects } from "@/hooks/useProjects";
+import { useInnovators } from "@/hooks/useInnovators";
+import { supabase } from "@/integrations/supabase/client";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Sample categories for selection
 const categories = [
-  "Agriculture", 
-  "Healthcare", 
-  "Education", 
-  "Fintech", 
+  "Agriculture",
+  "Healthcare",
+  "Education",
+  "Fintech",
   "Energy",
   "Sustainability",
   "AI/ML",
   "Mobile Apps",
-  "IoT"
+  "IoT",
+  "Asset Management",
+  "Fleet Management",
+  "Request Management",
+  "Customer Support"
 ];
 
 // Sample statuses for selection
 const statuses = ["Planning", "In Progress", "Completed", "On Hold"];
+
+const stageOptions = [
+  { value: "concept", label: "Concept" },
+  { value: "prototype", label: "Prototype" },
+  { value: "development", label: "Development" },
+  { value: "launched", label: "Launched" }
+];
+
+const linkTypeOptions = [
+  { value: "demo", label: "Demo" },
+  { value: "github", label: "GitHub" },
+  { value: "website", label: "Website" },
+  { value: "documentation", label: "Documentation" }
+];
 
 const ProjectForm = () => {
   const { id } = useParams();
   const isEditMode = Boolean(id);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { createProject, updateProject, projects, loading } = useProjects();
+  const { innovators } = useInnovators();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const galleryFileInputRef = useRef<HTMLInputElement>(null);
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [formData, setFormData] = useState({
     title: "",
     description: "",
-    fullDescription: "",
-    problemStatement: "",
+    full_description: "",
+    problem_statement: "",
     solution: "",
-    technologies: "",
-    results: "",
     impact: "",
-    futurePlans: "",
-    date: "",
+    results: "",
+    future_plans: "",
+    category: "",
+    stage: "concept" as "concept" | "prototype" | "development" | "launched",
     status: "",
-    image: "",
-    categories: [],
-    team: [],
-    gallery: [],
-    links: {
-      github: "",
-      demo: "",
-      documentation: ""
-    }
+    date: "",
+    image: ""
   });
 
-  const [selectedCategory, setSelectedCategory] = useState("");
-  const [selectedTeamMember, setSelectedTeamMember] = useState("");
-  const [galleryUrl, setGalleryUrl] = useState("");
+  const [categories, setCategories] = useState<string[]>([""]);
+  const [technologies, setTechnologies] = useState<string[]>([""]);
+  const [links, setLinks] = useState<Array<{ link_type: string; url: string }>>([{ link_type: "", url: "" }]);
+  const [team, setTeam] = useState<Array<{ id: string; name: string; role: string; image: string | null }>>([]);
+  const [selectedInnovator, setSelectedInnovator] = useState("");
+  const [gallery, setGallery] = useState<string[]>([""]);
+
+  // Image upload states
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  const [uploadedImageUrl, setUploadedImageUrl] = useState<string>("");
+  const [galleryImages, setGalleryImages] = useState<Array<{ url: string; preview: string }>>([]);
 
   // If in edit mode, fetch project data
   useEffect(() => {
-    if (isEditMode) {
-      // In a real app, fetch data from API based on ID
-      // For now, just use mock data
-      const mockData = {
-        title: "Smart Irrigation System",
-        description: "An IoT-based system for optimizing water usage in agriculture.",
-        fullDescription: "This project aims to develop an intelligent irrigation system that uses IoT sensors to monitor soil moisture, weather conditions, and water usage to optimize irrigation scheduling.",
-        problemStatement: "Traditional irrigation methods often waste water and are not responsive to actual plant needs or environmental conditions.",
-        solution: "Our solution uses a network of soil moisture sensors connected to a central control system that can automatically adjust irrigation schedules based on real-time data.",
-        technologies: "Arduino, IoT sensors, React, Node.js, Machine Learning algorithms",
-        results: "Initial tests show a 30% reduction in water usage while maintaining or improving crop yields.",
-        impact: "This technology could significantly reduce water usage in agriculture, which accounts for 70% of global freshwater consumption.",
-        futurePlans: "We plan to add climate prediction models and expand the system to support a wider range of crops and environments.",
-        date: "2023-06-15",
-        status: "In Progress",
-        image: "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
-        categories: ["Agriculture", "IoT", "Sustainability"],
-        team: [
-          {
-            id: "1",
-            name: "Jean Paul Habineza",
-            role: "Project Lead",
-            image: "/img/cordinator.jpg"
-          },
-          {
-            id: "2",
-            name: "Dr. Marie Umubyeyi",
-            role: "Advisor",
-            image: "/img/deanict.jpg"
-          }
-        ],
-        gallery: [
-          "https://images.unsplash.com/photo-1523348837708-15d4a09cfac2?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
-          "https://images.unsplash.com/photo-1581091226033-d5c48150dbaa?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
-        ],
-        links: {
-          github: "https://github.com/example/smart-irrigation",
-          demo: "https://smart-irrigation-demo.example.com",
-          documentation: "https://docs.smart-irrigation.example.com"
+    if (isEditMode && id) {
+      const project = projects.find(p => p.id === id);
+      if (project) {
+        setFormData({
+          title: project.title,
+          description: project.description,
+          full_description: project.full_description || "",
+          problem_statement: project.problem_statement || "",
+          solution: project.solution || "",
+          impact: project.impact || "",
+          results: project.results || "",
+          future_plans: project.future_plans || "",
+          category: project.category,
+          stage: project.stage,
+          status: project.status || "",
+          date: project.date || "",
+          image: project.image || ""
+        });
+
+        // Set main image preview
+        if (project.image) {
+          setImagePreview(project.image);
+          setUploadedImageUrl(project.image);
         }
-      };
-      setFormData(mockData);
+
+        // Set categories
+        if (project.categories && project.categories.length > 0) {
+          setCategories(project.categories.map(cat => cat.category));
+        } else {
+          setCategories([""]);
+        }
+
+        // Set technologies
+        if (project.technologies && project.technologies.length > 0) {
+          setTechnologies(project.technologies.map(tech => tech.technology));
+        } else {
+          setTechnologies([""]);
+        }
+
+        // Set links
+        if (project.links && project.links.length > 0) {
+          setLinks(project.links.map(link => ({ link_type: link.link_type, url: link.url })));
+        } else {
+          setLinks([{ link_type: "", url: "" }]);
+        }
+
+        // Set team
+        if (project.team && project.team.length > 0) {
+          setTeam(project.team.map(member => ({
+            id: member.name, // Using name as ID for existing data
+            name: member.name,
+            role: member.role,
+            image: member.image
+          })));
+        } else {
+          setTeam([]);
+        }
+
+        // Set gallery
+        if (project.gallery && project.gallery.length > 0) {
+          setGallery(project.gallery.map(item => item.image_url));
+          setGalleryImages(project.gallery.map(item => ({ url: item.image_url, preview: item.image_url })));
+        } else {
+          setGallery([""]);
+        }
+      }
     }
-  }, [isEditMode, id]);
+  }, [isEditMode, id, projects]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handleLinkChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ 
-      ...prev, 
-      links: {
-        ...prev.links,
-        [name]: value
-      }
-    }));
-  };
-
   const handleSelectChange = (name, value) => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const addCategory = () => {
-    if (selectedCategory && !formData.categories.includes(selectedCategory)) {
-      setFormData(prev => ({ 
-        ...prev, 
-        categories: [...prev.categories, selectedCategory]
-      }));
-      setSelectedCategory("");
+  // Image upload handlers
+  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Invalid file type",
+          description: "Please select an image file",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Validate file size (max 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File too large",
+          description: "Please select an image smaller than 5MB",
+          variant: "destructive"
+        });
+        return;
+      }
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const result = e.target?.result as string;
+        setImagePreview(result);
+        setUploadedImageUrl(result);
+      };
+      reader.readAsDataURL(file);
     }
   };
 
-  const removeCategory = (category) => {
-    setFormData(prev => ({ 
-      ...prev, 
-      categories: prev.categories.filter(c => c !== category)
-    }));
+  const removeImage = () => {
+    setImagePreview(null);
+    setUploadedImageUrl("");
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
+  const handleGalleryUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = event.target.files;
+    if (files) {
+      Array.from(files).forEach(file => {
+        // Validate file type
+        if (!file.type.startsWith('image/')) {
+          toast({
+            title: "Invalid file type",
+            description: "Please select image files only",
+            variant: "destructive"
+          });
+          return;
+        }
+
+        // Validate file size (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+          toast({
+            title: "File too large",
+            description: "Please select images smaller than 5MB",
+            variant: "destructive"
+          });
+          return;
+        }
+
+        // Create preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const result = e.target?.result as string;
+          setGalleryImages(prev => [...prev, { url: result, preview: result }]);
+          setGallery(prev => [...prev, result]);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+  };
+
+  const removeGalleryImage = (index: number) => {
+    setGalleryImages(prev => prev.filter((_, i) => i !== index));
+    setGallery(prev => prev.filter((_, i) => i !== index));
+  };
+
+  // Category management
+  const addCategory = () => {
+    setCategories([...categories, ""]);
+  };
+
+  const removeCategory = (index: number) => {
+    setCategories(categories.filter((_, i) => i !== index));
+  };
+
+  const updateCategory = (index: number, value: string) => {
+    const newCategories = [...categories];
+    newCategories[index] = value;
+    setCategories(newCategories);
+  };
+
+  // Technology management
+  const addTechnology = () => {
+    setTechnologies([...technologies, ""]);
+  };
+
+  const removeTechnology = (index: number) => {
+    setTechnologies(technologies.filter((_, i) => i !== index));
+  };
+
+  const updateTechnology = (index: number, value: string) => {
+    const newTechnologies = [...technologies];
+    newTechnologies[index] = value;
+    setTechnologies(newTechnologies);
+  };
+
+  // Link management
+  const addLink = () => {
+    setLinks([...links, { link_type: "", url: "" }]);
+  };
+
+  const removeLink = (index: number) => {
+    setLinks(links.filter((_, i) => i !== index));
+  };
+
+  const updateLink = (index: number, field: "link_type" | "url", value: string) => {
+    const newLinks = [...links];
+    newLinks[index] = { ...newLinks[index], [field]: value };
+    setLinks(newLinks);
+  };
+
+  // Team management
   const addTeamMember = () => {
-    if (selectedTeamMember) {
-      const innovator = innovators.find(i => i.id === selectedTeamMember);
-      if (innovator && !formData.team.some(t => t.id === innovator.id)) {
-        const newTeamMember = {
+    if (selectedInnovator) {
+      const innovator = innovators.find(i => i.id === selectedInnovator);
+      if (innovator && !team.some(t => t.id === innovator.id)) {
+        setTeam([...team, {
           id: innovator.id,
           name: innovator.name,
-          role: "Team Member", // Default role
+          role: innovator.role || "Team Member",
           image: innovator.image
-        };
-        setFormData(prev => ({ 
-          ...prev, 
-          team: [...prev.team, newTeamMember]
-        }));
+        }]);
+        setSelectedInnovator("");
       }
-      setSelectedTeamMember("");
     }
   };
 
-  const removeTeamMember = (id) => {
-    setFormData(prev => ({ 
-      ...prev, 
-      team: prev.team.filter(t => t.id !== id)
-    }));
+  const removeTeamMember = (id: string) => {
+    setTeam(team.filter(member => member.id !== id));
   };
 
-  const addGalleryImage = () => {
-    if (galleryUrl && !formData.gallery.includes(galleryUrl)) {
-      setFormData(prev => ({ 
-        ...prev, 
-        gallery: [...prev.gallery, galleryUrl]
-      }));
-      setGalleryUrl("");
+  // Create related records
+  const createRelatedRecords = async (projectId: string) => {
+    // Create categories
+    for (const category of categories.filter(cat => cat.trim())) {
+      await supabase.from("project_categories").insert({
+        project_id: projectId,
+        category: category.trim()
+      });
+    }
+
+    // Create technologies
+    for (const technology of technologies.filter(tech => tech.trim())) {
+      await supabase.from("project_technologies").insert({
+        project_id: projectId,
+        technology: technology.trim()
+      });
+    }
+
+    // Create links
+    for (const link of links.filter(l => l.url.trim() && l.link_type.trim())) {
+      await supabase.from("project_links").insert({
+        project_id: projectId,
+        link_type: link.link_type.trim(),
+        url: link.url.trim()
+      });
+    }
+
+    // Create team members
+    for (const member of team.filter(m => m.name.trim() && m.role.trim())) {
+      await supabase.from("project_team").insert({
+        project_id: projectId,
+        name: member.name.trim(),
+        role: member.role.trim(),
+        image: member.image?.trim() || null
+      });
+    }
+
+    // Create gallery images
+    for (const imageUrl of gallery.filter(url => url.trim())) {
+      await supabase.from("project_gallery").insert({
+        project_id: projectId,
+        image_url: imageUrl.trim()
+      });
     }
   };
 
-  const removeGalleryImage = (url) => {
-    setFormData(prev => ({ 
-      ...prev, 
-      gallery: prev.gallery.filter(u => u !== url)
-    }));
+  // Update related records
+  const updateRelatedRecords = async (projectId: string) => {
+    // Delete existing related records
+    await supabase.from("project_categories").delete().eq("project_id", projectId);
+    await supabase.from("project_technologies").delete().eq("project_id", projectId);
+    await supabase.from("project_links").delete().eq("project_id", projectId);
+    await supabase.from("project_team").delete().eq("project_id", projectId);
+    await supabase.from("project_gallery").delete().eq("project_id", projectId);
+
+    // Create new related records
+    await createRelatedRecords(projectId);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // In a real app, save to API
-    console.log("Form submitted:", formData);
-    
-    toast({
-      title: isEditMode ? "Project Updated" : "Project Created",
-      description: `Successfully ${isEditMode ? "updated" : "created"} ${formData.title}`,
-    });
-    
-    navigate("/admin/projects");
+    setIsSubmitting(true);
+
+    try {
+      const projectData = {
+        ...formData,
+        date: formData.date || null,
+        image: uploadedImageUrl || formData.image || null
+      };
+
+      if (isEditMode && id) {
+        const { error } = await updateProject(id, projectData);
+        if (!error) {
+          await updateRelatedRecords(id);
+        }
+      } else {
+        const { data, error } = await createProject(projectData);
+        if (!error && data) {
+          await createRelatedRecords(data.id);
+        }
+      }
+
+      navigate("/admin/projects");
+    } catch (error) {
+      console.error("Error saving project:", error);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
+
+  if (loading && isEditMode) {
+    return (
+      <div className="p-6">
+        <div className="max-w-4xl mx-auto">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <Skeleton className="h-8 w-48 mb-2" />
+              <Skeleton className="h-4 w-64" />
+            </div>
+            <Skeleton className="h-10 w-32" />
+          </div>
+          <div className="space-y-6">
+            {Array.from({ length: 3 }).map((_, i) => (
+              <Card key={i}>
+                <CardHeader>
+                  <Skeleton className="h-6 w-32" />
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {Array.from({ length: 4 }).map((_, j) => (
+                      <div key={j} className="space-y-2">
+                        <Skeleton className="h-4 w-24" />
+                        <Skeleton className="h-10 w-full" />
+                      </div>
+                    ))}
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="p-6">
@@ -230,8 +475,8 @@ const ProjectForm = () => {
               {isEditMode ? "Edit Project" : "Create New Project"}
             </h1>
             <p className="text-muted-foreground">
-              {isEditMode 
-                ? "Update the details of this project" 
+              {isEditMode
+                ? "Update the details of this project"
                 : "Fill in the details to create a new innovation project"}
             </p>
           </div>
@@ -249,24 +494,43 @@ const ProjectForm = () => {
               <CardTitle>Basic Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="title" className="flex items-center gap-2">
-                  <FileText className="h-4 w-4" />
-                  Project Title
-                </Label>
-                <Input 
-                  id="title"
-                  name="title"
-                  placeholder="Enter project title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="title" className="flex items-center gap-2">
+                    <FileText className="h-4 w-4" />
+                    Project Title *
+                  </Label>
+                  <Input
+                    id="title"
+                    name="title"
+                    placeholder="Enter project title"
+                    value={formData.title}
+                    onChange={handleChange}
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="category" className="flex items-center gap-2">
+                    <Tag className="h-4 w-4" />
+                    Category *
+                  </Label>
+                  <Input
+                    id="category"
+                    name="category"
+                    placeholder="e.g., Agriculture, Healthcare"
+                    value={formData.category}
+                    onChange={handleChange}
+                    required
+                    disabled={isSubmitting}
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="description">Short Description</Label>
-                <Textarea 
+                <Label htmlFor="description">Short Description *</Label>
+                <Textarea
                   id="description"
                   name="description"
                   placeholder="Brief summary of the project (1-2 sentences)"
@@ -274,46 +538,73 @@ const ProjectForm = () => {
                   onChange={handleChange}
                   required
                   rows={2}
+                  disabled={isSubmitting}
                 />
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="fullDescription">Full Description</Label>
-                <Textarea 
-                  id="fullDescription"
-                  name="fullDescription"
+                <Label htmlFor="full_description">Full Description *</Label>
+                <Textarea
+                  id="full_description"
+                  name="full_description"
                   placeholder="Detailed description of the project"
-                  value={formData.fullDescription}
+                  value={formData.full_description}
                   onChange={handleChange}
                   required
                   rows={5}
+                  disabled={isSubmitting}
                 />
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="stage" className="flex items-center gap-2">
+                    <Clock className="h-4 w-4" />
+                    Stage *
+                  </Label>
+                  <Select
+                    value={formData.stage}
+                    onValueChange={(value) => handleSelectChange("stage", value)}
+                    disabled={isSubmitting}
+                  >
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select project stage" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {stageOptions.map(option => (
+                        <SelectItem key={option.value} value={option.value}>
+                          {option.label}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <div className="space-y-2">
                   <Label htmlFor="date" className="flex items-center gap-2">
                     <Calendar className="h-4 w-4" />
-                    Start Date
+                    Start Date *
                   </Label>
-                  <Input 
+                  <Input
                     id="date"
                     name="date"
                     type="date"
                     value={formData.date}
                     onChange={handleChange}
                     required
+                    disabled={isSubmitting}
                   />
                 </div>
 
                 <div className="space-y-2">
                   <Label htmlFor="status" className="flex items-center gap-2">
                     <CheckCircle className="h-4 w-4" />
-                    Status
+                    Status *
                   </Label>
-                  <Select 
-                    value={formData.status} 
+                  <Select
+                    value={formData.status}
                     onValueChange={(value) => handleSelectChange("status", value)}
+                    disabled={isSubmitting}
                   >
                     <SelectTrigger>
                       <SelectValue placeholder="Select project status" />
@@ -328,74 +619,71 @@ const ProjectForm = () => {
                   </Select>
                 </div>
               </div>
+            </CardContent>
+          </Card>
 
-              <div className="space-y-2">
-                <Label htmlFor="image" className="flex items-center gap-2">
-                  <ImageIcon className="h-4 w-4" />
-                  Main Image URL
-                </Label>
-                <Input 
-                  id="image"
-                  name="image"
-                  placeholder="URL for main project image"
-                  value={formData.image}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
+          <Card className="mb-6">
+            <CardHeader>
+              <CardTitle>Project Image</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="relative">
+                    {imagePreview ? (
+                      <div className="relative w-32 h-32 rounded-lg overflow-hidden border-2 border-border">
+                        <img
+                          src={imagePreview}
+                          alt="Project preview"
+                          className="w-full h-full object-cover"
+                        />
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute -top-2 -right-2 h-6 w-6 rounded-full"
+                          onClick={removeImage}
+                          disabled={isSubmitting}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="w-32 h-32 rounded-lg border-2 border-dashed border-muted-foreground/25 flex items-center justify-center bg-muted/50">
+                        <Camera className="h-12 w-12 text-muted-foreground" />
+                      </div>
+                    )}
+                  </div>
 
-              <div className="space-y-2">
-                <Label className="flex items-center gap-2">
-                  <Tag className="h-4 w-4" />
-                  Categories
-                </Label>
-                <div className="flex flex-wrap gap-2 mb-3">
-                  {formData.categories.map(category => (
-                    <Badge 
-                      key={category} 
-                      className="flex items-center gap-1"
+                  <div className="flex-1">
+                    <Label htmlFor="image-upload" className="flex items-center gap-2">
+                      <Upload className="h-4 w-4" />
+                      Upload Project Image
+                    </Label>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Upload a main project image (JPG, PNG, GIF - max 5MB)
+                    </p>
+                    <input
+                      ref={fileInputRef}
+                      id="image-upload"
+                      type="file"
+                      accept="image/*"
+                      onChange={handleImageUpload}
+                      className="hidden"
+                      disabled={isSubmitting}
+                    />
+                    <Button
+                      type="button"
                       variant="outline"
+                      size="sm"
+                      className="mt-2"
+                      onClick={() => fileInputRef.current?.click()}
+                      disabled={isSubmitting}
                     >
-                      {category}
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="h-4 w-4 ml-1 rounded-full"
-                        onClick={() => removeCategory(category)}
-                      >
-                        <Trash2 className="h-3 w-3" />
-                      </Button>
-                    </Badge>
-                  ))}
-                  {formData.categories.length === 0 && (
-                    <span className="text-sm text-muted-foreground">No categories selected</span>
-                  )}
-                </div>
-                <div className="flex gap-2">
-                  <Select 
-                    value={selectedCategory} 
-                    onValueChange={setSelectedCategory}
-                  >
-                    <SelectTrigger className="flex-1">
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map(category => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  <Button 
-                    type="button" 
-                    size="icon" 
-                    onClick={addCategory}
-                    disabled={!selectedCategory}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </Button>
+                      <Upload className="h-4 w-4 mr-2" />
+                      Choose Image
+                    </Button>
+                  </div>
                 </div>
               </div>
             </CardContent>
@@ -406,75 +694,108 @@ const ProjectForm = () => {
               <CardTitle>Project Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="problemStatement">Problem Statement</Label>
-                <Textarea 
-                  id="problemStatement"
-                  name="problemStatement"
-                  placeholder="What problem does this project solve?"
-                  value={formData.problemStatement}
-                  onChange={handleChange}
-                  rows={3}
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="problem_statement">Problem Statement</Label>
+                  <Textarea
+                    id="problem_statement"
+                    name="problem_statement"
+                    placeholder="What problem does this project solve?"
+                    value={formData.problem_statement}
+                    onChange={handleChange}
+                    rows={3}
+                    disabled={isSubmitting}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="solution">Solution</Label>
+                  <Textarea
+                    id="solution"
+                    name="solution"
+                    placeholder="How does this project solve the problem?"
+                    value={formData.solution}
+                    onChange={handleChange}
+                    rows={3}
+                    disabled={isSubmitting}
+                  />
+                </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="impact">Impact</Label>
+                  <Textarea
+                    id="impact"
+                    name="impact"
+                    placeholder="What impact does this project have?"
+                    value={formData.impact}
+                    onChange={handleChange}
+                    rows={3}
+                    disabled={isSubmitting}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="results">Results</Label>
+                  <Textarea
+                    id="results"
+                    name="results"
+                    placeholder="What results have been achieved so far?"
+                    value={formData.results}
+                    onChange={handleChange}
+                    rows={3}
+                    disabled={isSubmitting}
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="solution">Solution</Label>
-                <Textarea 
-                  id="solution"
-                  name="solution"
-                  placeholder="How does this project solve the problem?"
-                  value={formData.solution}
-                  onChange={handleChange}
-                  rows={3}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="technologies">Technologies Used</Label>
-                <Input 
-                  id="technologies"
-                  name="technologies"
-                  placeholder="e.g., React, Node.js, Arduino, etc."
-                  value={formData.technologies}
-                  onChange={handleChange}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="results">Results</Label>
-                <Textarea 
-                  id="results"
-                  name="results"
-                  placeholder="What results have been achieved so far?"
-                  value={formData.results}
-                  onChange={handleChange}
-                  rows={3}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="impact">Impact</Label>
-                <Textarea 
-                  id="impact"
-                  name="impact"
-                  placeholder="What impact does this project have?"
-                  value={formData.impact}
-                  onChange={handleChange}
-                  rows={3}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="futurePlans">Future Plans</Label>
-                <Textarea 
-                  id="futurePlans"
-                  name="futurePlans"
+                <Label htmlFor="future_plans">Future Plans</Label>
+                <Textarea
+                  id="future_plans"
+                  name="future_plans"
                   placeholder="What are the future plans for this project?"
-                  value={formData.futurePlans}
+                  value={formData.future_plans}
                   onChange={handleChange}
                   rows={3}
+                  disabled={isSubmitting}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label>Technologies Used</Label>
+                <div className="space-y-2">
+                  {technologies.map((technology, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <Input
+                        value={technology}
+                        onChange={(e) => updateTechnology(index, e.target.value)}
+                        placeholder="Enter technology"
+                        disabled={isSubmitting}
+                      />
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => removeTechnology(index)}
+                        disabled={isSubmitting}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={addTechnology}
+                    disabled={isSubmitting}
+                  >
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Technology
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -484,64 +805,89 @@ const ProjectForm = () => {
               <CardTitle>Team Members</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <div className="grid gap-4">
-                  {formData.team.map(member => (
-                    <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg">
-                      <div className="flex items-center gap-3">
-                        <div className="w-10 h-10 rounded-full overflow-hidden">
-                          <img 
-                            src={member.image} 
-                            alt={member.name}
-                            className="w-full h-full object-cover"
-                          />
+              <div className="space-y-4">
+                {/* Team Members Display */}
+                {team.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {team.map((member) => (
+                      <div key={member.id} className="flex items-center justify-between p-3 border rounded-lg bg-card">
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-border">
+                            <img
+                              src={member.image || "/img/placeholder.svg"}
+                              alt={member.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                e.currentTarget.src = "/img/placeholder.svg";
+                              }}
+                            />
+                          </div>
+                          <div className="flex-1">
+                            <div className="font-medium text-sm">{member.name}</div>
+                            <div className="text-xs text-muted-foreground">{member.role}</div>
+                          </div>
                         </div>
-                        <div>
-                          <div className="font-medium">{member.name}</div>
-                          <div className="text-sm text-muted-foreground">{member.role}</div>
-                        </div>
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={() => removeTeamMember(member.id)}
+                          disabled={isSubmitting}
+                        >
+                          <X className="h-4 w-4" />
+                        </Button>
                       </div>
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon"
-                        className="rounded-full"
-                        onClick={() => removeTeamMember(member.id)}
-                      >
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                  {formData.team.length === 0 && (
-                    <div className="text-center p-4 border rounded-lg">
-                      <span className="text-sm text-muted-foreground">No team members added</span>
-                    </div>
-                  )}
-                </div>
-                
-                <div className="flex gap-2 mt-4">
-                  <Select 
-                    value={selectedTeamMember} 
-                    onValueChange={setSelectedTeamMember}
+                    ))}
+                  </div>
+                ) : (
+                  <div className="text-center p-6 border rounded-lg bg-muted/50">
+                    <User className="h-8 w-8 mx-auto mb-2 text-muted-foreground" />
+                    <p className="text-sm text-muted-foreground">No team members added yet</p>
+                  </div>
+                )}
+
+                {/* Add Team Member */}
+                <div className="flex gap-2">
+                  <Select
+                    value={selectedInnovator}
+                    onValueChange={setSelectedInnovator}
+                    disabled={isSubmitting}
                   >
                     <SelectTrigger className="flex-1">
-                      <SelectValue placeholder="Select an innovator" />
+                      <SelectValue placeholder="Select an innovator to add to team" />
                     </SelectTrigger>
                     <SelectContent>
-                      {innovators.map(innovator => (
-                        <SelectItem key={innovator.id} value={innovator.id}>
-                          {innovator.name} ({innovator.role})
-                        </SelectItem>
-                      ))}
+                      {innovators
+                        .filter(innovator => !team.some(member => member.id === innovator.id))
+                        .map(innovator => (
+                          <SelectItem key={innovator.id} value={innovator.id}>
+                            <div className="flex items-center gap-2">
+                              <div className="w-6 h-6 rounded-full overflow-hidden">
+                                <img
+                                  src={innovator.image || "/img/placeholder.svg"}
+                                  alt={innovator.name}
+                                  className="w-full h-full object-cover"
+                                  onError={(e) => {
+                                    e.currentTarget.src = "/img/placeholder.svg";
+                                  }}
+                                />
+                              </div>
+                              <span>{innovator.name} ({innovator.role})</span>
+                            </div>
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
-                  <Button 
-                    type="button" 
-                    size="icon" 
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
                     onClick={addTeamMember}
-                    disabled={!selectedTeamMember}
+                    disabled={!selectedInnovator || isSubmitting}
                   >
-                    <Plus className="h-4 w-4" />
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add
                   </Button>
                 </div>
               </div>
@@ -550,51 +896,68 @@ const ProjectForm = () => {
 
           <Card className="mb-6">
             <CardHeader>
-              <CardTitle>Gallery</CardTitle>
+              <CardTitle>Gallery Images</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                {formData.gallery.map((url, index) => (
-                  <div key={index} className="relative group">
-                    <div className="w-full h-32 rounded-lg overflow-hidden">
-                      <img 
-                        src={url} 
-                        alt={`Gallery item ${index+1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
+              <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                  <div className="flex-1">
+                    <Label htmlFor="gallery-upload" className="flex items-center gap-2">
+                      <Upload className="h-4 w-4" />
+                      Upload Gallery Images
+                    </Label>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Upload multiple project images (JPG, PNG, GIF - max 5MB each)
+                    </p>
+                    <input
+                      ref={galleryFileInputRef}
+                      id="gallery-upload"
+                      type="file"
+                      accept="image/*"
+                      multiple
+                      onChange={handleGalleryUpload}
+                      className="hidden"
+                      disabled={isSubmitting}
+                    />
                     <Button
                       type="button"
-                      variant="destructive"
-                      size="icon"
-                      className="absolute top-2 right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
-                      onClick={() => removeGalleryImage(url)}
+                      variant="outline"
+                      size="sm"
+                      className="mt-2"
+                      onClick={() => galleryFileInputRef.current?.click()}
+                      disabled={isSubmitting}
                     >
-                      <Trash2 className="h-3 w-3" />
+                      <Upload className="h-4 w-4 mr-2" />
+                      Choose Images
                     </Button>
                   </div>
-                ))}
-                {formData.gallery.length === 0 && (
-                  <div className="col-span-full text-center p-4 border rounded-lg">
-                    <span className="text-sm text-muted-foreground">No gallery images added</span>
+                </div>
+
+                {galleryImages.length > 0 && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {galleryImages.map((image, index) => (
+                      <div key={index} className="relative group">
+                        <div className="w-full h-32 rounded-lg overflow-hidden border-2 border-border">
+                          <img
+                            src={image.preview}
+                            alt={`Gallery item ${index + 1}`}
+                            className="w-full h-full object-cover"
+                          />
+                        </div>
+                        <Button
+                          type="button"
+                          variant="destructive"
+                          size="icon"
+                          className="absolute top-2 right-2 h-6 w-6 opacity-0 group-hover:opacity-100 transition-opacity"
+                          onClick={() => removeGalleryImage(index)}
+                          disabled={isSubmitting}
+                        >
+                          <X className="h-3 w-3" />
+                        </Button>
+                      </div>
+                    ))}
                   </div>
                 )}
-              </div>
-
-              <div className="flex gap-2 mt-4">
-                <Input 
-                  placeholder="Enter image URL"
-                  value={galleryUrl}
-                  onChange={(e) => setGalleryUrl(e.target.value)}
-                  className="flex-1"
-                />
-                <Button 
-                  type="button" 
-                  onClick={addGalleryImage}
-                  disabled={!galleryUrl}
-                >
-                  Add Image
-                </Button>
               </div>
             </CardContent>
           </Card>
@@ -605,60 +968,71 @@ const ProjectForm = () => {
             </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="github" className="flex items-center gap-2">
-                  <LinkIcon className="h-4 w-4" />
-                  GitHub Repository
-                </Label>
-                <Input 
-                  id="github"
-                  name="github"
-                  placeholder="GitHub repository URL"
-                  value={formData.links.github}
-                  onChange={handleLinkChange}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="demo" className="flex items-center gap-2">
-                  <LinkIcon className="h-4 w-4" />
-                  Demo Link
-                </Label>
-                <Input 
-                  id="demo"
-                  name="demo"
-                  placeholder="Live demo URL"
-                  value={formData.links.demo}
-                  onChange={handleLinkChange}
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="documentation" className="flex items-center gap-2">
-                  <LinkIcon className="h-4 w-4" />
-                  Documentation
-                </Label>
-                <Input 
-                  id="documentation"
-                  name="documentation"
-                  placeholder="Documentation URL"
-                  value={formData.links.documentation}
-                  onChange={handleLinkChange}
-                />
+                {links.map((link, index) => (
+                  <div key={index} className="flex items-center gap-2">
+                    <Select value={link.link_type} onValueChange={(value) => updateLink(index, "link_type", value)} disabled={isSubmitting}>
+                      <SelectTrigger className="w-32">
+                        <SelectValue placeholder="Type" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {linkTypeOptions.map(option => (
+                          <SelectItem key={option.value} value={option.value}>
+                            {option.label}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                    <Input
+                      value={link.url}
+                      onChange={(e) => updateLink(index, "url", e.target.value)}
+                      placeholder="Enter URL"
+                      className="flex-1"
+                      disabled={isSubmitting}
+                    />
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      size="icon"
+                      onClick={() => removeLink(index)}
+                      disabled={isSubmitting}
+                    >
+                      <X className="h-4 w-4" />
+                    </Button>
+                  </div>
+                ))}
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  onClick={addLink}
+                  disabled={isSubmitting}
+                >
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add Link
+                </Button>
               </div>
             </CardContent>
           </Card>
 
           <div className="flex justify-end gap-3">
-            <Button 
-              type="button" 
-              variant="outline" 
+            <Button
+              type="button"
+              variant="outline"
               onClick={() => navigate("/admin/projects")}
+              disabled={isSubmitting}
             >
               Cancel
             </Button>
-            <Button type="submit" className="flex items-center gap-2">
-              <Save className="h-4 w-4" />
-              {isEditMode ? "Update Project" : "Create Project"}
+            <Button type="submit" disabled={isSubmitting} className="flex items-center gap-2">
+              {isSubmitting ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+              ) : (
+                <Save className="h-4 w-4" />
+              )}
+              {isSubmitting
+                ? (isEditMode ? "Updating..." : "Creating...")
+                : (isEditMode ? "Update Project" : "Create Project")
+              }
             </Button>
           </div>
         </form>

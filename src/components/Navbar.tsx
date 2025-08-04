@@ -1,18 +1,28 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Bell, User } from "lucide-react";
+import { Menu, X, Bell, User, LogOut, Settings } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/hooks/useProfile";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, signOut } = useAuth();
   const { profile } = useProfile();
 
   const links = [
@@ -93,6 +103,31 @@ const Navbar = () => {
     }
   };
 
+  const handleLogout = async () => {
+    await signOut();
+    navigate("/");
+  };
+
+  const getUserInitials = () => {
+    if (profile?.first_name && profile?.last_name) {
+      return `${profile.first_name[0]}${profile.last_name[0]}`.toUpperCase();
+    }
+    if (user?.email) {
+      return user.email[0].toUpperCase();
+    }
+    return "U";
+  };
+
+  const getUserDisplayName = () => {
+    if (profile?.first_name && profile?.last_name) {
+      return `${profile.first_name} ${profile.last_name}`;
+    }
+    if (user?.user_metadata?.full_name) {
+      return user.user_metadata.full_name;
+    }
+    return user?.email || "User";
+  };
+
   return (
     <motion.header
       className={cn(
@@ -144,20 +179,66 @@ const Navbar = () => {
             </motion.div>
           ))}
 
-          {/* Admin link */}
-          <motion.div
-            custom={links.length}
-            initial="hidden"
-            animate="visible"
-            variants={linkVariants}
-          >
-            <button
-              onClick={handleAdminClick}
-              className="ml-2 p-2 rounded-full bg-[#00628b]/10 text-[#00628b] hover:bg-[#00628b]/20 transition-colors"
+          {/* User Menu */}
+          {user ? (
+            <motion.div
+              custom={links.length}
+              initial="hidden"
+              animate="visible"
+              variants={linkVariants}
             >
-              <User size={18} />
-            </button>
-          </motion.div>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="relative h-8 w-8 rounded-full">
+                    <Avatar className="h-8 w-8">
+                      <AvatarImage src={user.user_metadata?.avatar_url} alt={getUserDisplayName()} />
+                      <AvatarFallback className="bg-[#00628b] text-white text-xs">
+                        {getUserInitials()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="w-56" align="end" forceMount>
+                  <DropdownMenuLabel className="font-normal">
+                    <div className="flex flex-col space-y-1">
+                      <p className="text-sm font-medium leading-none">{getUserDisplayName()}</p>
+                      <p className="text-xs leading-none text-muted-foreground">
+                        {user.email}
+                      </p>
+                      <p className="text-xs leading-none text-muted-foreground capitalize">
+                        {profile?.role || "User"}
+                      </p>
+                    </div>
+                  </DropdownMenuLabel>
+                  <DropdownMenuSeparator />
+                  {profile?.role === "admin" && (
+                    <DropdownMenuItem onClick={() => navigate("/admin")}>
+                      <Settings className="mr-2 h-4 w-4" />
+                      <span>Admin Dashboard</span>
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuItem onClick={handleLogout}>
+                    <LogOut className="mr-2 h-4 w-4" />
+                    <span>Log out</span>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </motion.div>
+          ) : (
+            <motion.div
+              custom={links.length}
+              initial="hidden"
+              animate="visible"
+              variants={linkVariants}
+            >
+              <button
+                onClick={handleAdminClick}
+                className="ml-2 p-2 rounded-full bg-[#00628b]/10 text-[#00628b] hover:bg-[#00628b]/20 transition-colors"
+              >
+                <User size={18} />
+              </button>
+            </motion.div>
+          )}
         </nav>
 
         {/* Mobile Menu Toggle */}
@@ -206,6 +287,31 @@ const Navbar = () => {
                   </button>
                 </div>
 
+                {/* User Info (Mobile) */}
+                {user && (
+                  <div className="px-6 py-4 border-b border-gray-200 dark:border-gray-700">
+                    <div className="flex items-center space-x-3">
+                      <Avatar className="h-10 w-10">
+                        <AvatarImage src={user.user_metadata?.avatar_url} alt={getUserDisplayName()} />
+                        <AvatarFallback className="bg-[#00628b] text-white">
+                          {getUserInitials()}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                          {getUserDisplayName()}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">
+                          {user.email}
+                        </p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 capitalize">
+                          {profile?.role || "User"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Navigation Links */}
                 <nav className="flex-1 px-6 py-8">
                   <div className="space-y-2">
@@ -234,6 +340,52 @@ const Navbar = () => {
                         </Link>
                       </motion.div>
                     ))}
+
+                    {/* Mobile User Actions */}
+                    {user && (
+                      <>
+                        {profile?.role === "admin" && (
+                          <motion.div
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{
+                              opacity: 1,
+                              x: 0,
+                              transition: { delay: 0.1 + links.length * 0.1, duration: 0.3 }
+                            }}
+                          >
+                            <button
+                              onClick={() => {
+                                setIsOpen(false);
+                                navigate("/admin");
+                              }}
+                              className="flex items-center w-full px-4 py-4 text-lg font-medium rounded-xl text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-[#00628b] transition-all duration-200"
+                            >
+                              <Settings className="mr-3 h-5 w-5" />
+                              Admin Dashboard
+                            </button>
+                          </motion.div>
+                        )}
+                        <motion.div
+                          initial={{ opacity: 0, x: 20 }}
+                          animate={{
+                            opacity: 1,
+                            x: 0,
+                            transition: { delay: 0.1 + (links.length + (profile?.role === "admin" ? 1 : 0)) * 0.1, duration: 0.3 }
+                          }}
+                        >
+                          <button
+                            onClick={() => {
+                              setIsOpen(false);
+                              handleLogout();
+                            }}
+                            className="flex items-center w-full px-4 py-4 text-lg font-medium rounded-xl text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-all duration-200"
+                          >
+                            <LogOut className="mr-3 h-5 w-5" />
+                            Log out
+                          </button>
+                        </motion.div>
+                      </>
+                    )}
                   </div>
                 </nav>
 
