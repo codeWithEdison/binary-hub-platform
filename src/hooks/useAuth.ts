@@ -12,10 +12,57 @@ export const useAuth = () => {
   useEffect(() => {
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
+      async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
+
+        // Handle Google OAuth signup - assign innovator role for new users
+        if (event === 'SIGNED_IN' && session?.user) {
+          const user = session.user;
+
+          // Check if this is a new user (Google OAuth)
+          if (user.app_metadata?.provider === 'google') {
+            // Check if user role already exists in database
+            const { data: existingRole } = await supabase
+              .from("user_roles")
+              .select("role")
+              .eq("user_id", user.id)
+              .single();
+
+            if (!existingRole) {
+              // Insert innovator role for new Google users
+              const { error: roleError } = await supabase
+                .from("user_roles")
+                .insert({
+                  user_id: user.id,
+                  role: "innovator"
+                });
+
+              if (roleError) {
+                console.error("Error inserting user role for Google user:", roleError);
+                toast({
+                  title: "Warning",
+                  description: "Account created but role assignment failed. Please contact support.",
+                  variant: "destructive"
+                });
+              } else {
+                // Update user metadata with role
+                const { error: updateError } = await supabase.auth.updateUser({
+                  data: {
+                    role: "innovator",
+                    first_name: user.user_metadata?.full_name?.split(' ')[0] || '',
+                    last_name: user.user_metadata?.full_name?.split(' ').slice(1).join(' ') || ''
+                  }
+                });
+
+                if (updateError) {
+                  console.error("Error updating user metadata:", updateError);
+                }
+              }
+            }
+          }
+        }
       }
     );
 
@@ -27,7 +74,7 @@ export const useAuth = () => {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [toast]);
 
   const signUp = async (email: string, password: string, metadata?: any) => {
     const redirectUrl = `${window.location.origin}/`;
@@ -117,6 +164,31 @@ export const useAuth = () => {
     return { error };
   };
 
+  const signInWithGoogle = async () => {
+    const redirectUrl = `${window.location.origin}/`;
+
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: redirectUrl,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+      }
+    });
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive"
+      });
+    }
+
+    return { error };
+  };
+
   const signOut = async () => {
     const { error } = await supabase.auth.signOut();
 
@@ -137,6 +209,7 @@ export const useAuth = () => {
     loading,
     signUp,
     signIn,
+    signInWithGoogle,
     signOut
   };
 };
