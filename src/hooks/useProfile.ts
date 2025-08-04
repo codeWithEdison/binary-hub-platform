@@ -34,19 +34,42 @@ export const useProfile = () => {
     if (!user) return;
 
     setLoading(true);
-    // Since profiles table doesn't exist yet, create a mock profile
-    const mockProfile: Profile = {
-      id: user.id,
-      first_name: user.user_metadata?.first_name || null,
-      last_name: user.user_metadata?.last_name || null,
-      avatar_url: null,
-      role: user.user_metadata?.role || "innovator",
-      department_id: user.user_metadata?.department_id || null,
-      bio: user.user_metadata?.bio || null,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    };
-    setProfile(mockProfile);
+    try {
+      // Fetch user roles
+      const { data: userRoles } = await supabase
+        .from("user_roles")
+        .select("role")
+        .eq("user_id", user.id)
+        .single();
+
+      // Create profile with role from database or default to innovator
+      const profile: Profile = {
+        id: user.id,
+        first_name: user.user_metadata?.first_name || null,
+        last_name: user.user_metadata?.last_name || null,
+        avatar_url: null,
+        role: userRoles?.role || "innovator",
+        department_id: user.user_metadata?.department_id || null,
+        bio: user.user_metadata?.bio || null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      setProfile(profile);
+    } catch (error) {
+      // If no role found, default to innovator
+      const profile: Profile = {
+        id: user.id,
+        first_name: user.user_metadata?.first_name || null,
+        last_name: user.user_metadata?.last_name || null,
+        avatar_url: null,
+        role: "innovator",
+        department_id: user.user_metadata?.department_id || null,
+        bio: user.user_metadata?.bio || null,
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      };
+      setProfile(profile);
+    }
     setLoading(false);
   };
 

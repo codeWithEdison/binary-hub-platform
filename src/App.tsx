@@ -19,7 +19,8 @@ import ProjectDetail from "./pages/ProjectDetail";
 import InnovatorDetail from "./pages/InnovatorDetail";
 import AnnouncementsPage from "./pages/AnnouncementsPage";
 import AnnouncementDetail from "./pages/AnnouncementDetail";
-import Login from "./pages/Login";
+import Auth from "./pages/Auth";
+import { ProtectedRoute } from "./components/ProtectedRoute";
 
 // Admin Routes
 import AdminDashboard from "./pages/admin/Dashboard";
@@ -32,6 +33,7 @@ import InnovatorForm from "./pages/admin/InnovatorForm";
 import ProjectForm from "./pages/admin/ProjectForm";
 import EventForm from "./pages/admin/EventForm";
 import AnnouncementForm from "./pages/admin/AnnouncementForm";
+import { StakeholderManagement } from "./pages/admin/StakeholderManagement";
 
 const queryClient = new QueryClient();
 
@@ -44,7 +46,7 @@ const App = () => (
         <ScrollToTop />
         <Routes>
           {/* Auth Routes */}
-          <Route path="/login" element={<Login />} />
+          <Route path="/auth" element={<Auth />} />
 
           {/* Public Routes with Navbar */}
           <Route path="/" element={<><Navbar /><Index /></>} />
@@ -61,7 +63,11 @@ const App = () => (
           <Route path="/contact" element={<><Navbar /><Contact /></>} />
 
           {/* Admin Routes */}
-          <Route path="/admin" element={<AdminDashboard />}>
+          <Route path="/admin" element={
+            <ProtectedRoute requireRole="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }>
             <Route index element={<Overview />} />
             <Route path="innovators" element={<InnovatorManagement />} />
             <Route path="innovators/new" element={<InnovatorForm />} />
@@ -75,6 +81,7 @@ const App = () => (
             <Route path="announcements" element={<AnnouncementManagement />} />
             <Route path="announcements/new" element={<AnnouncementForm />} />
             <Route path="announcements/edit/:id" element={<AnnouncementForm />} />
+            <Route path="stakeholders" element={<StakeholderManagement />} />
           </Route>
 
           {/* Catch-all route for 404 */}

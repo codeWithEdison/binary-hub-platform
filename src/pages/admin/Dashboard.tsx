@@ -43,6 +43,11 @@ const AdminDashboard = () => {
       icon: Bell
     },
     {
+      name: "Stakeholders",
+      path: "/admin/stakeholders",
+      icon: Users
+    },
+    {
       name: "Settings",
       path: "/admin/settings",
       icon: Settings
