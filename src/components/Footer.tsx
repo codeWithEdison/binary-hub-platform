@@ -128,9 +128,17 @@ const Footer = () => {
               </li>
               <li className="flex items-center gap-3">
                 <Phone size={18} className="text-primary" />
-                <a href="tel:+250780123456" className="text-muted-foreground hover:text-primary transition-colors">
-                  +250 790 289 399
-                </a>
+                <div className="text-muted-foreground">
+                  <a href="tel:+250788695862" className="hover:text-primary transition-colors block">
+                    +250 788 695 862 - Coordinator
+                  </a>
+                  <a href="tel:+250786779666" className="hover:text-primary transition-colors block">
+                    +250 786 779 666 - Assistant Coordinator
+                  </a>
+                  <a href="tel:+250790289399" className="hover:text-primary transition-colors block">
+                    +250 790 289 399 - Assistant Administrator
+                  </a>
+                </div>
               </li>
             </ul>
           </motion.div>

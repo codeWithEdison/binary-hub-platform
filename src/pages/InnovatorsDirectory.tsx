@@ -198,9 +198,10 @@ const InnovatorsDirectory = () => {
                     onChange={(e) => setStatusFilter(e.target.value)}
                   >
                     <option value="all">All Status</option>
-                    <option value="student">Student</option>
-                    <option value="faculty">Faculty</option>
+                    <option value="innovator">Innovator</option>
+                    <option value="mentor">Mentor</option>
                     <option value="alumni">Alumni</option>
+                    <option value="staff">Staff</option>
                   </select>
                 </div>
 
@@ -379,15 +380,32 @@ const InnovatorsDirectory = () => {
 
                         {/* Skills Preview */}
                         <div className="absolute bottom-4 left-4 right-4">
-                          <div className="flex flex-wrap gap-2">
-                            {(innovator.skills || []).slice(0, 3).map((skillObj, skillIndex) => (
-                              <span
-                                key={`${skillObj.skill}-${skillIndex}`}
-                                className="px-3 py-1 bg-white/95 backdrop-blur-sm text-[#00628b] text-xs rounded-full font-semibold shadow-lg border border-white/50"
-                              >
-                                {skillObj.skill}
-                              </span>
-                            ))}
+                          <div className="flex flex-wrap gap-1 max-w-full overflow-hidden">
+                            {(() => {
+                              const skills = innovator.skills || [];
+                              const firstSkills = skills.slice(0, 3);
+                              const hasLongSkills = firstSkills.some(skill => skill.skill.length > 8);
+                              const maxSkills = hasLongSkills ? 2 : 3;
+                              const displayedSkills = skills.slice(0, maxSkills);
+
+                              return (
+                                <>
+                                  {displayedSkills.map((skillObj, skillIndex) => (
+                                    <span
+                                      key={`${skillObj.skill}-${skillIndex}`}
+                                      className="px-2 py-1 bg-white/95 backdrop-blur-sm text-[#00628b] text-xs rounded-full font-semibold shadow-lg border border-white/50 whitespace-nowrap flex-shrink-0"
+                                    >
+                                      {skillObj.skill}
+                                    </span>
+                                  ))}
+                                  {skills.length > maxSkills && (
+                                    <span className="px-2 py-1 bg-white/95 backdrop-blur-sm text-[#00628b] text-xs rounded-full font-semibold shadow-lg border border-white/50 whitespace-nowrap flex-shrink-0">
+                                      +{skills.length - maxSkills}
+                                    </span>
+                                  )}
+                                </>
+                              );
+                            })()}
                           </div>
                         </div>
 

@@ -479,22 +479,32 @@ const Index = () => {
                 whileHover={{ y: -5 }}
               >
                 <div className="bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300 group">
-                  <div className="relative h-48 overflow-hidden">
-                    <img
-                      src={innovator.image}
-                      alt={innovator.name}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
-                  </div>
-
                   <div className="p-6">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-[#00628b] transition-colors">
-                      {innovator.name}
-                    </h3>
-                    <p className="text-[#00628b] font-semibold text-sm mb-3">
-                      {innovator.role}
-                    </p>
+                    <div className="flex items-center space-x-4 mb-4">
+                      {/* Circular Image */}
+                      <div className="relative w-28 h-28 rounded-full overflow-hidden flex-shrink-0 border-2 border-gray-200 dark:border-gray-600">
+                        <img
+                          src={innovator.image}
+                          alt={innovator.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                          onError={(e) => {
+                            const target = e.target as HTMLImageElement;
+                            target.src = "/img/placeholder.svg";
+                            target.className = "w-full h-full object-contain opacity-50";
+                          }}
+                        />
+                      </div>
+
+                      <div className="flex-1">
+                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-[#00628b] transition-colors">
+                          {innovator.name}
+                        </h3>
+                        <p className="text-[#00628b] font-semibold text-sm">
+                          {innovator.role}
+                        </p>
+                      </div>
+                    </div>
+
                     <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4">
                       {innovator.bio}
                     </p>
