@@ -9,7 +9,8 @@ export interface Innovator {
   image: string | null;
   department: string;
   role: string;
-  status: "student" | "faculty" | "alumni";
+  status: "innovator" | "alumni" | "mentor";
+  featured?: boolean;
   created_at: string;
   updated_at: string;
   skills?: Array<{
@@ -25,11 +26,13 @@ export interface Innovator {
 
 export const useInnovators = () => {
   const [innovators, setInnovators] = useState<Innovator[]>([]);
+  const [featuredInnovators, setFeaturedInnovators] = useState<Innovator[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
     fetchInnovators();
+    fetchFeaturedInnovators();
   }, []);
 
   const fetchInnovators = async () => {
@@ -49,13 +52,34 @@ export const useInnovators = () => {
         variant: "destructive"
       });
     } else {
-      setInnovators(data || []);
+      setInnovators((data as any) || []);
     }
     setLoading(false);
   };
 
+  const fetchFeaturedInnovators = async () => {
+    const { data, error } = await (supabase as any)
+      .from("innovators")
+      .select(`
+        *,
+        skills:innovator_skills(skill)
+      `)
+      .eq("featured", true)
+      .order("created_at", { ascending: false });
+
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to fetch featured innovators",
+        variant: "destructive"
+      });
+    } else {
+      setFeaturedInnovators((data as any) || []);
+    }
+  };
+
   const createInnovator = async (innovator: Omit<Innovator, "id" | "created_at" | "updated_at">) => {
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("innovators")
       .insert([innovator])
       .select()
@@ -79,7 +103,7 @@ export const useInnovators = () => {
   };
 
   const updateInnovator = async (id: string, updates: Partial<Innovator>) => {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("innovators")
       .update(updates)
       .eq("id", id);
@@ -126,6 +150,7 @@ export const useInnovators = () => {
 
   return {
     innovators,
+    featuredInnovators,
     loading,
     createInnovator,
     updateInnovator,

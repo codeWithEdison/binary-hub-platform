@@ -63,7 +63,7 @@ const departments = [
 ];
 
 // Sample statuses for selection
-const statuses = ["student", "faculty", "alumni"];
+const statuses = ["innovator", "alumni", "mentor"];
 
 interface InnovatorFormProps {
     innovatorId?: string;
@@ -85,7 +85,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
         name: "",
         role: "",
         department: "",
-        status: "student" as "student" | "faculty" | "alumni",
+        status: "innovator" as "innovator" | "alumni" | "mentor",
         email: "",
         phone: "",
         website: "",
@@ -107,7 +107,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                     name: innovator.name || "",
                     role: innovator.role || "",
                     department: innovator.department || "",
-                    status: innovator.status || "student",
+                    status: innovator.status || "innovator",
                     email: "", // Not in current schema
                     phone: "", // Not in current schema
                     website: "", // Not in current schema

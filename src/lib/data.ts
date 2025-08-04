@@ -494,6 +494,6 @@ export const services: Service[] = [
 export const stats = [
   { value: "5", label: "Flagship Solutions" }, // UMUTUNGO Box, IMOTRAK, INUMA App, Customer Support System, Academic Records System
   { value: "22", label: "Total Innovators" }, // Core Team (12) + Junior Volunteers (10) = 22 total team members
-  { value: "5", label: "Professionals" }, // Alumni (3) + Faculty (1) + External Experts (1) = 5 professionals
+  { value: "5", label: "Mentors & Alumini " }, // Alumni (3) + Faculty (1) + External Experts (1) = 5 professionals
   { value: "8+", label: "Industry Partners" } // Mastercard Foundation, GIZ, ENABEL, Ministry of ICT/RISA, UR Data Center, Center for Innovation, Directorate of Research, Private Sector
 ];
