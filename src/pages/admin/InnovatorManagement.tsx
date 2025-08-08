@@ -279,9 +279,9 @@ const InnovatorManagement = () => {
                     <TableCell>
                       <div className="flex items-center">
                         <div
-                          className={`w-2 h-2 rounded-full mr-2 ${innovator.status === "student"
+                          className={`w-2 h-2 rounded-full mr-2 ${innovator.status === "innovator"
                             ? "bg-green-500"
-                            : innovator.status === "faculty"
+                            : innovator.status === "mentor"
                               ? "bg-blue-500"
                               : "bg-purple-500"
                             }`}

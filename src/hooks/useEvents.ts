@@ -31,7 +31,7 @@ export const useEvents = () => {
 
   const fetchEvents = async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("events")
       .select("*")
       .eq("published", true)
@@ -117,7 +117,7 @@ export const useEvents = () => {
   };
 
   const deleteEvent = async (id: string) => {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("events")
       .delete()
       .eq("id", id);

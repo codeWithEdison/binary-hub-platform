@@ -315,7 +315,7 @@ export const useProjects = () => {
   };
 
   const deleteProject = async (id: string) => {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("projects")
       .delete()
       .eq("id", id);

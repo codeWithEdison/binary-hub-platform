@@ -370,8 +370,8 @@ const InnovatorsDirectory = () => {
 
                         {/* Status Badge */}
                         <div className="absolute top-4 left-4">
-                          <span className={`px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm ${innovator.status === 'student' ? 'bg-blue-500/90 text-white shadow-lg' :
-                            innovator.status === 'faculty' ? 'bg-green-500/90 text-white shadow-lg' :
+                          <span className={`px-3 py-1 text-xs font-semibold rounded-full backdrop-blur-sm ${innovator.status === 'innovator' ? 'bg-blue-500/90 text-white shadow-lg' :
+                            innovator.status === 'mentor' ? 'bg-green-500/90 text-white shadow-lg' :
                               'bg-purple-500/90 text-white shadow-lg'
                             }`}>
                             {innovator.status.charAt(0).toUpperCase() + innovator.status.slice(1)}

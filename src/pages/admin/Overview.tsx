@@ -115,8 +115,8 @@ const Overview = () => {
 
       return {
         month,
-        students: monthInnovators.filter(i => i.status === "student").length,
-        faculty: monthInnovators.filter(i => i.status === "faculty").length,
+        innovators: monthInnovators.filter(i => i.status === "innovator").length,
+        mentors: monthInnovators.filter(i => i.status === "mentor").length,
         alumni: monthInnovators.filter(i => i.status === "alumni").length
       };
     });
@@ -365,14 +365,14 @@ const Overview = () => {
                     <Tooltip />
                     <Line
                       type="monotone"
-                      dataKey="students"
+                      dataKey="innovators"
                       stroke="#4f46e5"
                       activeDot={{ r: 8 }}
                       strokeWidth={2}
                     />
                     <Line
                       type="monotone"
-                      dataKey="faculty"
+                      dataKey="mentors"
                       stroke="#0ea5e9"
                       strokeWidth={2}
                     />

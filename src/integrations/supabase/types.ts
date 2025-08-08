@@ -14,6 +14,113 @@ export type Database = {
   }
   public: {
     Tables: {
+      announcements: {
+        Row: {
+          author_id: string | null
+          category: string | null
+          content: string
+          created_at: string | null
+          excerpt: string | null
+          id: string
+          image: string | null
+          importance: string | null
+          publish_date: string | null
+          published: boolean | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          author_id?: string | null
+          category?: string | null
+          content: string
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          image?: string | null
+          importance?: string | null
+          publish_date?: string | null
+          published?: boolean | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          author_id?: string | null
+          category?: string | null
+          content?: string
+          created_at?: string | null
+          excerpt?: string | null
+          id?: string
+          image?: string | null
+          importance?: string | null
+          publish_date?: string | null
+          published?: boolean | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "announcements_author_id_fkey"
+            columns: ["author_id"]
+            isOneToOne: false
+            referencedRelation: "innovators"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      events: {
+        Row: {
+          capacity: number | null
+          category: string | null
+          content: string | null
+          created_at: string | null
+          date: string
+          description: string
+          id: string
+          image: string | null
+          location: string | null
+          max_attendees: number | null
+          published: boolean | null
+          registration_deadline: string | null
+          time: string | null
+          title: string
+          updated_at: string | null
+        }
+        Insert: {
+          capacity?: number | null
+          category?: string | null
+          content?: string | null
+          created_at?: string | null
+          date: string
+          description: string
+          id?: string
+          image?: string | null
+          location?: string | null
+          max_attendees?: number | null
+          published?: boolean | null
+          registration_deadline?: string | null
+          time?: string | null
+          title: string
+          updated_at?: string | null
+        }
+        Update: {
+          capacity?: number | null
+          category?: string | null
+          content?: string | null
+          created_at?: string | null
+          date?: string
+          description?: string
+          id?: string
+          image?: string | null
+          location?: string | null
+          max_attendees?: number | null
+          published?: boolean | null
+          registration_deadline?: string | null
+          time?: string | null
+          title?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       innovator_skills: {
         Row: {
           created_at: string | null
@@ -48,34 +155,40 @@ export type Database = {
           bio: string | null
           created_at: string | null
           department: string
+          featured: boolean
           id: string
           image: string | null
           name: string
           role: string
           status: Database["public"]["Enums"]["innovator_status"]
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
           bio?: string | null
           created_at?: string | null
           department: string
+          featured?: boolean
           id?: string
           image?: string | null
           name: string
           role: string
           status: Database["public"]["Enums"]["innovator_status"]
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
           bio?: string | null
           created_at?: string | null
           department?: string
+          featured?: boolean
           id?: string
           image?: string | null
           name?: string
           role?: string
           status?: Database["public"]["Enums"]["innovator_status"]
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -310,6 +423,7 @@ export type Database = {
           created_at: string | null
           date: string | null
           description: string
+          featured: boolean
           full_description: string | null
           future_plans: string | null
           id: string
@@ -322,12 +436,14 @@ export type Database = {
           status: string | null
           title: string
           updated_at: string | null
+          user_id: string | null
         }
         Insert: {
           category: string
           created_at?: string | null
           date?: string | null
           description: string
+          featured?: boolean
           full_description?: string | null
           future_plans?: string | null
           id?: string
@@ -340,12 +456,14 @@ export type Database = {
           status?: string | null
           title: string
           updated_at?: string | null
+          user_id?: string | null
         }
         Update: {
           category?: string
           created_at?: string | null
           date?: string | null
           description?: string
+          featured?: boolean
           full_description?: string | null
           future_plans?: string | null
           id?: string
@@ -358,6 +476,7 @@ export type Database = {
           status?: string | null
           title?: string
           updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -477,6 +596,41 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_my_innovator_profile: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          name: string
+          role: string
+          status: Database["public"]["Enums"]["innovator_status"]
+          department: string
+          image: string
+          bio: string
+          created_at: string
+          updated_at: string
+        }[]
+      }
+      get_my_projects: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          id: string
+          title: string
+          description: string
+          stage: Database["public"]["Enums"]["project_stage"]
+          category: string
+          image: string
+          date: string
+          status: string
+          full_description: string
+          problem_statement: string
+          solution: string
+          results: string
+          impact: string
+          future_plans: string
+          created_at: string
+          updated_at: string
+        }[]
+      }
       has_role: {
         Args: {
           _user_id: string
@@ -486,7 +640,12 @@ export type Database = {
       }
     }
     Enums: {
-      innovator_status: "student" | "alumni" | "faculty"
+      innovator_status:
+        | "student"
+        | "alumni"
+        | "faculty"
+        | "innovator"
+        | "mentor"
       project_stage: "concept" | "prototype" | "development" | "launched"
       user_role: "admin" | "innovator"
     }
@@ -616,7 +775,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      innovator_status: ["student", "alumni", "faculty"],
+      innovator_status: ["student", "alumni", "faculty", "innovator", "mentor"],
       project_stage: ["concept", "prototype", "development", "launched"],
       user_role: ["admin", "innovator"],
     },

@@ -28,7 +28,7 @@ export const useAnnouncements = () => {
 
   const fetchAnnouncements = async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    const { data, error } = await (supabase as any)
       .from("announcements")
       .select("*")
       .eq("published", true)
@@ -114,7 +114,7 @@ export const useAnnouncements = () => {
   };
 
   const deleteAnnouncement = async (id: string) => {
-    const { error } = await supabase
+    const { error } = await (supabase as any)
       .from("announcements")
       .delete()
       .eq("id", id);
