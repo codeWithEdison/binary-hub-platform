@@ -10,8 +10,10 @@ import ServiceCard from "@/components/ServiceCard";
 import StatsSection from "@/components/StatsSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import AboutSection from "@/components/AboutSection";
-import { innovators, projects, services, stats } from "@/lib/data";
+import { services, stats } from "@/lib/data";
 import { useStakeholders } from "@/hooks/useStakeholders";
+import { useProjects } from "@/hooks/useProjects";
+import { useInnovators } from "@/hooks/useInnovators";
 
 const Index = () => {
   const [currentProject, setCurrentProject] = useState(0);
@@ -20,14 +22,18 @@ const Index = () => {
   const { scrollY } = useScroll();
   const y = useTransform(scrollY, [0, 1000], [0, -200]);
   const { stakeholders, loading: stakeholdersLoading } = useStakeholders();
+  const { projects } = useProjects();
+  const { featuredInnovators } = useInnovators();
 
   useEffect(() => {
     setIsVisible(true);
-    const interval = setInterval(() => {
-      setCurrentProject((prev) => (prev + 1) % projects.length);
-    }, 4000);
-    return () => clearInterval(interval);
-  }, []);
+    if (projects.length > 0) {
+      const interval = setInterval(() => {
+        setCurrentProject((prev) => (prev + 1) % projects.length);
+      }, 4000);
+      return () => clearInterval(interval);
+    }
+  }, [projects.length]);
 
   // Auto-slide for stakeholders
   useEffect(() => {
@@ -469,7 +475,7 @@ const Index = () => {
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {innovators.slice(0, 3).map((innovator, index) => (
+            {featuredInnovators.slice(0, 3).map((innovator, index) => (
               <motion.div
                 key={innovator.id}
                 initial={{ opacity: 0, y: 30 }}
@@ -510,12 +516,12 @@ const Index = () => {
                     </p>
 
                     <div className="flex flex-wrap gap-2">
-                      {innovator.skills.slice(0, 3).map((skill, skillIndex) => (
+                      {(innovator.skills || []).slice(0, 3).map((skill, skillIndex) => (
                         <span
                           key={skillIndex}
                           className="px-2 py-1 bg-[#00628b]/10 text-[#00628b] text-xs rounded-full"
                         >
-                          {skill}
+                          {skill.skill}
                         </span>
                       ))}
                     </div>
