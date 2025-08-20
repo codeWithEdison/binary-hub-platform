@@ -149,9 +149,14 @@ const Navbar = () => {
               alt="UR Binary Hub Logo"
               className="h-10 w-auto"
             />
-            <h1 className="text-xl font-display font-semibold">
-              <span className="text-[#00628b]">UR Binary Hub</span>
-            </h1>
+            <div className="flex flex-col">
+              <h1 className="text-xl font-display font-semibold">
+                <span className="text-[#00628b]">UR Binary Hub</span>
+              </h1>
+              <p className="text-xs text-gray-600 dark:text-gray-400 font-medium">
+                The Power of United Minds
+              </p>
+            </div>
           </div>
         </Link>
 
