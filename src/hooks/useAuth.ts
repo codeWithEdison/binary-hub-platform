@@ -165,6 +165,8 @@ export const useAuth = () => {
   };
 
   const signInWithGoogle = async () => {
+    // Always use the current origin for redirect
+    // This ensures it works in both development and production
     const redirectUrl = `${window.location.origin}/`;
 
     const { data, error } = await supabase.auth.signInWithOAuth({
