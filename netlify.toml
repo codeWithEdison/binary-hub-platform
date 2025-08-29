@@ -10,6 +10,7 @@
 [build.environment]
   NODE_VERSION = "18"
 
+# Security and SEO Headers
 [[headers]]
   for = "/*"
   [headers.values]
@@ -17,15 +18,1658 @@
     X-XSS-Protection = "1; mode=block"
     X-Content-Type-Options = "nosniff"
     Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://cdn.gpteng.co; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self' https://www.google-analytics.com; frame-src 'self' https://www.youtube.com;"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains; preload"
+    X-Download-Options = "noopen"
+    X-Permitted-Cross-Domain-Policies = "none"
 
+# Homepage - No cache for dynamic content
 [[headers]]
   for = "/index.html"
   [headers.values]
     Cache-Control = "no-cache, no-store, must-revalidate"
     Pragma = "no-cache"
     Expires = "0"
+    X-Robots-Tag = "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
 
+# Static assets - Long cache for performance
 [[headers]]
   for = "/assets/*"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+    X-Robots-Tag = "index, follow"
+
+# Images - Optimized caching
+[[headers]]
+  for = "/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+    X-Robots-Tag = "index, follow"
+
+# CSS and JS files
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "text/css"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/javascript"
+
+# Fonts
+[[headers]]
+  for = "/font/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Access-Control-Allow-Origin = "*"
+
+# Sitemap and robots - No cache
+[[headers]]
+  for = "/sitemap.xml"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Content-Type = "application/xml"
+    X-Robots-Tag = "noindex, nofollow"
+
+[[headers]]
+  for = "/robots.txt"
+  [headers.values]
+    Cache-Control = "no-cache"
+    Content-Type = "text/plain"
+    X-Robots-Tag = "noindex, nofollow"
+
+# SEO-friendly redirects for common searches
+[[redirects]]
+  from = "/binary-hub"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/rwanda-innovation"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/it-solutions-rwanda"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/university-rwanda-innovation"
+  to = "/about"
+  status = 301
+
+[[redirects]]
+  from = "/innovation-hub-rwanda"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/digital-innovation-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/software-development-rwanda"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/tech-startups-rwanda"
+  to = "/innovators"
+  status = 301
+
+[[redirects]]
+  from = "/rwanda-tech"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/africa-innovation"
+  to = "/about"
+  status = 301
+
+[[redirects]]
+  from = "/east-africa-technology"
+  to = "/about"
+  status = 301
+
+[[redirects]]
+  from = "/kigali-tech-hub"
+  to = "/"
+  status = 301
+
+[[redirects]]
+  from = "/rwanda-tech-ecosystem"
+  to = "/about"
+  status = 301
+
+[[redirects]]
+  from = "/university-technology-transfer"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/academic-innovation"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/stem-education-rwanda"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/computer-science-rwanda"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/information-technology-rwanda"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/software-engineering-rwanda"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/artificial-intelligence-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/machine-learning-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/data-science-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/cybersecurity-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/blockchain-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/fintech-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/ecommerce-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/mobile-apps-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/web-development-rwanda"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/digital-transformation-rwanda"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/smart-city-solutions"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/sustainable-technology"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/green-tech-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/renewable-energy-technology"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/agricultural-technology-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/health-tech-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/edtech-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/financial-technology-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/telecommunications-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/internet-of-things-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/cloud-computing-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/big-data-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/analytics-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/business-intelligence-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/enterprise-software-rwanda"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/open-source-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/digital-literacy-rwanda"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/tech-education-rwanda"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/innovation-ecosystem"
+  to = "/about"
+  status = 301
+
+[[redirects]]
+  from = "/startup-incubation"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/business-development"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/entrepreneurship-rwanda"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/youth-innovation"
+  to = "/innovators"
+  status = 301
+
+[[redirects]]
+  from = "/women-in-tech-rwanda"
+  to = "/innovators"
+  status = 301
+
+[[redirects]]
+  from = "/digital-skills-rwanda"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/coding-bootcamp-rwanda"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/hackathon-rwanda"
+  to = "/events"
+  status = 301
+
+[[redirects]]
+  from = "/innovation-challenge"
+  to = "/events"
+  status = 301
+
+[[redirects]]
+  from = "/tech-competition"
+  to = "/events"
+  status = 301
+
+[[redirects]]
+  from = "/research-collaboration"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/industry-partnership"
+  to = "/partners"
+  status = 301
+
+[[redirects]]
+  from = "/government-innovation"
+  to = "/partners"
+  status = 301
+
+[[redirects]]
+  from = "/public-sector-technology"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/civic-tech-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/social-innovation"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/community-development"
+  to = "/about"
+  status = 301
+
+[[redirects]]
+  from = "/economic-growth"
+  to = "/about"
+  status = 301
+
+[[redirects]]
+  from = "/job-creation"
+  to = "/about"
+  status = 301
+
+[[redirects]]
+  from = "/skills-development"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/capacity-building"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/knowledge-transfer"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/technology-adoption"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/digital-inclusion"
+  to = "/about"
+  status = 301
+
+[[redirects]]
+  from = "/rural-technology"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/urban-innovation"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/smart-infrastructure"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/digital-infrastructure"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/broadband-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/5g-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/fiber-optic-rwanda"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/wireless-technology"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/mobile-technology"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/smartphone-adoption"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/tablet-computing"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/laptop-distribution"
+  to = "/innovations"
+  status = 301
+
+[[redirects]]
+  from = "/computer-labs"
+  to = "/facilities"
+  status = 301
+
+[[redirects]]
+  from = "/digital-classrooms"
+  to = "/facilities"
+  status = 301
+
+[[redirects]]
+  from = "/online-learning"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/e-learning-rwanda"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/distance-education"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/blended-learning"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/hybrid-education"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/virtual-reality-education"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/augmented-reality-learning"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/gamification-education"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/adaptive-learning"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/personalized-education"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/student-centered-learning"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/project-based-learning"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/hands-on-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/practical-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/industry-experience"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/internship-programs"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/mentorship-programs"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/networking-events"
+  to = "/events"
+  status = 301
+
+[[redirects]]
+  from = "/tech-conferences"
+  to = "/events"
+  status = 301
+
+[[redirects]]
+  from = "/innovation-workshops"
+  to = "/events"
+  status = 301
+
+[[redirects]]
+  from = "/skill-development-programs"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/certification-courses"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/professional-development"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/continuing-education"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/lifelong-learning"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/upskilling"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/reskilling"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/digital-upskilling"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/technology-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/computer-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/internet-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/software-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/hardware-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/network-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/database-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/programming-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/coding-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/web-design-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/graphic-design-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/multimedia-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/video-production"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/audio-production"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/photography-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/animation-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/3d-modeling"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/game-development"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/mobile-app-development"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/web-application-development"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/desktop-application-development"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/system-administration"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/it-support"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/technical-support"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/help-desk"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/customer-service"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/quality-assurance"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/testing"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/debugging"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/maintenance"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/updates"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/upgrades"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/migrations"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/integrations"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/customizations"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/consulting-services"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/advisory-services"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/strategic-planning"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/technology-assessment"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/digital-audit"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/security-audit"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/performance-optimization"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/scalability-planning"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/disaster-recovery"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/backup-solutions"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/data-protection"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/privacy-protection"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/compliance"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/regulations"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/standards"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/best-practices"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/industry-standards"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/international-standards"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/local-standards"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/quality-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/process-improvement"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/continuous-improvement"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/innovation-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/change-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/project-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/risk-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/security-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/data-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/knowledge-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/information-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/document-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/content-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/asset-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/resource-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/budget-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/time-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/team-management"
+  to = "/services"
+  status = 301
+
+[[redirects]]
+  from = "/leadership-development"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/communication-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/presentation-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/negotiation-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/problem-solving"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/critical-thinking"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/analytical-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/research-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/writing-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/reading-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/listening-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/speaking-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/collaboration-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/teamwork-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/leadership-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/management-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/organizational-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/planning-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/decision-making-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/creativity-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/innovation-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/entrepreneurship-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/business-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/marketing-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/sales-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/customer-service-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/communication-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/interpersonal-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/social-skills"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/emotional-intelligence"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/cultural-awareness"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/diversity-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/inclusion-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/equity-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/accessibility-training"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/universal-design"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-experience-design"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-interface-design"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/human-computer-interaction"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/usability-testing"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-research"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-feedback"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-satisfaction"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-engagement"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-retention"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-acquisition"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-conversion"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-journey"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-flow"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-persona"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-story"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-scenario"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-task"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-goal"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-need"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-want"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-expectation"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-preference"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-behavior"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-pattern"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-trend"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-insight"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-data"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-analytics"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-metrics"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-performance"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-productivity"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-efficiency"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-effectiveness"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-satisfaction"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-happiness"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-delight"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-trust"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-confidence"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-loyalty"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-advocacy"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-referral"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-recommendation"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-review"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-rating"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-feedback"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-comment"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-suggestion"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-complaint"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-issue"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-problem"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-concern"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-question"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-inquiry"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-request"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-demand"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-requirement"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-specification"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-criteria"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-standard"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-benchmark"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-target"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-objective"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-outcome"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-result"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-impact"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-value"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-benefit"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-advantage"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-gain"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-profit"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-return"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-investment"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-cost"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-expense"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-budget"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-resource"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-asset"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-capital"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-equity"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-debt"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-liability"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-obligation"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-commitment"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-responsibility"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-accountability"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-ownership"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-control"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-power"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-influence"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-authority"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-permission"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-access"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-right"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-privilege"
+  to = "/training"
+  status = 301
+
+[[redirects]]
+  from = "/user-entitlement"
+  to = "/training"
+  status = 301
+
+# Handle 404 errors gracefully
+[[redirects]]
+  from = "/*"
+  to = "/404"
+  status = 404

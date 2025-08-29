@@ -1,51 +1,265 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- Homepage - Highest Priority -->
   <url>
-    <loc>http://urbinaryhub.rw/</loc>
+    <loc>https://urbinaryhub.rw/</loc>
     <lastmod>2025-01-27</lastmod>
-    <changefreq>weekly</changefreq>
+    <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
+  
+  <!-- Core Pages - High Priority -->
   <url>
-    <loc>http://urbinaryhub.rw/about</loc>
+    <loc>https://urbinaryhub.rw/about</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/innovators</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/innovations</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/projects</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/services</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
+  
+  <!-- Events and Activities - Medium High Priority -->
   <url>
-    <loc>http://urbinaryhub.rw/innovators</loc>
+    <loc>https://urbinaryhub.rw/events</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
+  
   <url>
-    <loc>http://urbinaryhub.rw/innovations</loc>
+    <loc>https://urbinaryhub.rw/announcements</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.8</priority>
+    <priority>0.7</priority>
   </url>
+  
   <url>
-    <loc>http://urbinaryhub.rw/contact</loc>
+    <loc>https://urbinaryhub.rw/workshops</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
+  
   <url>
-    <loc>http://urbinaryhub.rw/events</loc>
+    <loc>https://urbinaryhub.rw/hackathons</loc>
     <lastmod>2025-01-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
+  
+  <!-- Information Pages - Medium Priority -->
   <url>
-    <loc>http://urbinaryhub.rw/announcements</loc>
+    <loc>https://urbinaryhub.rw/contact</loc>
     <lastmod>2025-01-27</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
   </url>
+  
   <url>
-    <loc>http://urbinaryhub.rw/partners</loc>
+    <loc>https://urbinaryhub.rw/partners</loc>
     <lastmod>2025-01-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/team</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/facilities</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- Technology and Solutions Pages - Medium Priority -->
+  <url>
+    <loc>https://urbinaryhub.rw/it-solutions</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/software-development</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/digital-innovation</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/startup-incubation</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  
+  <!-- Educational and Training Pages - Medium Priority -->
+  <url>
+    <loc>https://urbinaryhub.rw/training</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/courses</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/certifications</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- Research and Development Pages - Medium Priority -->
+  <url>
+    <loc>https://urbinaryhub.rw/research</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/publications</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/case-studies</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <!-- Industry and Collaboration Pages - Medium Priority -->
+  <url>
+    <loc>https://urbinaryhub.rw/industry-collaboration</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/government-partnerships</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/international-partnerships</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <!-- News and Media Pages - Lower Priority -->
+  <url>
+    <loc>https://urbinaryhub.rw/news</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/media</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/gallery</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  
+  <!-- Support and Resources Pages - Lower Priority -->
+  <url>
+    <loc>https://urbinaryhub.rw/support</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/resources</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/faq</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  
+  <!-- Legal and Policy Pages - Lower Priority -->
+  <url>
+    <loc>https://urbinaryhub.rw/privacy-policy</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/terms-of-service</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://urbinaryhub.rw/cookie-policy</loc>
+    <lastmod>2025-01-27</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
   </url>
 </urlset> 

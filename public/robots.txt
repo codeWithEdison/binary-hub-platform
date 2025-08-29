@@ -2,20 +2,70 @@ User-agent: *
 Allow: /
 
 # Sitemap
-Sitemap: http://urbinaryhub.rw/sitemap.xml
+Sitemap: https://urbinaryhub.rw/sitemap.xml
 
-# Disallow admin areas
-Disallow: /admin/
-Disallow: /login
-
-# Allow all other content
+# Core Content - Allow all crawling
 Allow: /about
 Allow: /innovators
 Allow: /innovations
-Allow: /contact
+Allow: /projects
+Allow: /services
 Allow: /events
 Allow: /announcements
 Allow: /partners
+Allow: /team
+Allow: /facilities
+Allow: /contact
 
-# Crawl delay (optional)
-Crawl-delay: 1 
+# Technology and Solutions Pages
+Allow: /it-solutions
+Allow: /software-development
+Allow: /digital-innovation
+Allow: /startup-incubation
+
+# Educational and Training Pages
+Allow: /training
+Allow: /courses
+Allow: /certifications
+
+# Research and Development Pages
+Allow: /research
+Allow: /publications
+Allow: /case-studies
+
+# Industry and Collaboration Pages
+Allow: /industry-collaboration
+Allow: /government-partnerships
+Allow: /international-partnerships
+
+# News and Media Pages
+Allow: /news
+Allow: /media
+Allow: /gallery
+
+# Support and Resources Pages
+Allow: /support
+Allow: /resources
+Allow: /faq
+
+# Disallow admin areas and sensitive content
+Disallow: /admin/
+Disallow: /login
+Disallow: /api/
+Disallow: /_next/
+Disallow: /private/
+Disallow: /internal/
+
+# Allow all assets and media
+Allow: /img/
+Allow: /assets/
+Allow: /css/
+Allow: /js/
+Allow: /font/
+
+# Crawl delay for better server performance
+Crawl-delay: 1
+
+# Additional directives for better SEO
+Allow: /sitemap.xml
+Allow: /robots.txt 
