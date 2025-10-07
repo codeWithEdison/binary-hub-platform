@@ -26,9 +26,9 @@ serve(async (req) => {
 
     // Fetch real-time data from database
     const [projectsData, innovatorsData, stakeholdersData] = await Promise.all([
-      supabase.from("projects").select("*").limit(10),
-      supabase.from("innovators").select("*, skills:innovator_skills(skill)").limit(10),
-      supabase.from("stakeholders").select("*").limit(10),
+      supabase.from("projects").select("*").limit(100),
+      supabase.from("innovators").select("*, skills:innovator_skills(skill)").limit(100),
+      supabase.from("stakeholders").select("*").limit(100),
     ]);
 
     const projects = projectsData.data || [];
