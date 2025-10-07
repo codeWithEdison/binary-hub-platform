@@ -10,6 +10,7 @@ import ServiceCard from "@/components/ServiceCard";
 import StatsSection from "@/components/StatsSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import AboutSection from "@/components/AboutSection";
+import ChatWidget from "@/components/ChatWidget";
 import { services, stats } from "@/lib/data";
 import { useStakeholders } from "@/hooks/useStakeholders";
 import { useProjects } from "@/hooks/useProjects";
@@ -607,6 +608,9 @@ const Index = () => {
 
       {/* Footer */}
       <Footer />
+      
+      {/* AI Chat Widget */}
+      <ChatWidget />
     </div>
   );
 };
