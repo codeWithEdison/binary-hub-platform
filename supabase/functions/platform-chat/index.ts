@@ -3,7 +3,8 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
+  "Access-Control-Allow-Headers":
+    "authorization, x-client-info, apikey, content-type",
 };
 
 serve(async (req) => {
@@ -15,8 +16,10 @@ serve(async (req) => {
     const { messages } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
-    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
-    
+    const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get(
+      "SUPABASE_SERVICE_ROLE_KEY"
+    )!;
+
     if (!LOVABLE_API_KEY) {
       throw new Error("LOVABLE_API_KEY is not configured");
     }
@@ -27,26 +30,36 @@ serve(async (req) => {
     // Fetch real-time data from database
     const [projectsData, innovatorsData, stakeholdersData] = await Promise.all([
       supabase.from("projects").select("*").limit(100),
-      supabase.from("innovators").select("*, skills:innovator_skills(skill)").limit(100),
+      // Fetch innovators with an exact total count and a wide range to avoid truncation issues
+      supabase
+        .from("innovators")
+        .select("*, skills:innovator_skills(skill)", { count: "exact" })
+        .range(0, 999),
       supabase.from("stakeholders").select("*").limit(100),
     ]);
 
     const projects = projectsData.data || [];
     const innovators = innovatorsData.data || [];
+    const innovatorsCount =
+      "count" in innovatorsData && typeof innovatorsData.count === "number"
+        ? innovatorsData.count
+        : innovators.length;
     const stakeholders = stakeholdersData.data || [];
 
     // Build dynamic context from database
-    const projectsList = projects.map(p => 
-      `- **${p.title}** (${p.category || 'N/A'}) - ${p.description}`
-    ).join('\n');
+    const projectsList = projects
+      .map(
+        (p) => `- **${p.title}** (${p.category || "N/A"}) - ${p.description}`
+      )
+      .join("\n");
 
-    const innovatorsList = innovators.map(i => 
-      `- **${i.name}** - ${i.role} (${i.department || 'N/A'})`
-    ).join('\n');
+    const innovatorsList = innovators
+      .map((i) => `- **${i.name}** - ${i.role} (${i.department || "N/A"})`)
+      .join("\n");
 
-    const stakeholdersList = stakeholders.map(s => 
-      `- **${s.name}** (${s.category}) - ${s.contribution}`
-    ).join('\n');
+    const stakeholdersList = stakeholders
+      .map((s) => `- **${s.name}** (${s.category}) - ${s.contribution}`)
+      .join("\n");
 
     const systemPrompt = `You are a knowledgeable AI assistant for UR Binary Hub, the innovation and incubation hub at the University of Rwanda. You are an EXPERT on Binary Hub and ANSWER questions - you don't ask users to teach you.
 
@@ -59,13 +72,13 @@ Additional info: https://binaryhub.codewithedison.com
 CURRENT DATA FROM DATABASE:
 
 **PROJECTS (${projects.length} total):**
-${projectsList || 'No projects available'}
+${projectsList || "No projects available"}
 
-**TEAM MEMBERS (${innovators.length} total):**
-${innovatorsList || 'No team members available'}
+**TEAM MEMBERS (${innovatorsCount} total):**
+${innovatorsList || "No team members available"}
 
 **STAKEHOLDERS (${stakeholders.length} total):**
-${stakeholdersList || 'No stakeholders available'}
+${stakeholdersList || "No stakeholders available"}
 
 BENEFITS OF WORKING WITH BINARY HUB:
 - **Talent Access:** Work with developers, designers, mentors
@@ -94,26 +107,28 @@ IMPORTANT: Only answer questions related to UR Binary Hub, its projects, team me
 
 Keep responses concise, helpful, well-formatted, and focused on UR Binary Hub's mission.`;
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
-        messages: [
-          { role: "system", content: systemPrompt },
-          ...messages,
-        ],
-        stream: true,
-      }),
-    });
+    const response = await fetch(
+      "https://ai.gateway.lovable.dev/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.5-flash",
+          messages: [{ role: "system", content: systemPrompt }, ...messages],
+          stream: true,
+        }),
+      }
+    );
 
     if (!response.ok) {
       if (response.status === 429) {
         return new Response(
-          JSON.stringify({ error: "Rate limits exceeded, please try again later." }),
+          JSON.stringify({
+            error: "Rate limits exceeded, please try again later.",
+          }),
           {
             status: 429,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -122,7 +137,10 @@ Keep responses concise, helpful, well-formatted, and focused on UR Binary Hub's 
       }
       if (response.status === 402) {
         return new Response(
-          JSON.stringify({ error: "Payment required, please add funds to your Lovable AI workspace." }),
+          JSON.stringify({
+            error:
+              "Payment required, please add funds to your Lovable AI workspace.",
+          }),
           {
             status: 402,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -131,13 +149,10 @@ Keep responses concise, helpful, well-formatted, and focused on UR Binary Hub's 
       }
       const errorText = await response.text();
       console.error("AI gateway error:", response.status, errorText);
-      return new Response(
-        JSON.stringify({ error: "AI gateway error" }),
-        {
-          status: 500,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        }
-      );
+      return new Response(JSON.stringify({ error: "AI gateway error" }), {
+        status: 500,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     return new Response(response.body, {
@@ -146,7 +161,9 @@ Keep responses concise, helpful, well-formatted, and focused on UR Binary Hub's 
   } catch (error) {
     console.error("Chat error:", error);
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({
+        error: error instanceof Error ? error.message : "Unknown error",
+      }),
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
