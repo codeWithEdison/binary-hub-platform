@@ -190,7 +190,15 @@ const ChatWidget = () => {
                           : "bg-muted"
                       }`}
                     >
-                      <p className="text-sm whitespace-pre-wrap">{message.content}</p>
+                      <div 
+                        className="text-sm whitespace-pre-wrap prose prose-sm max-w-none dark:prose-invert"
+                        dangerouslySetInnerHTML={{
+                          __html: message.content
+                            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                            .replace(/\n- /g, '\n• ')
+                            .replace(/\n/g, '<br />')
+                        }}
+                      />
                     </div>
                   </div>
                 ))}
