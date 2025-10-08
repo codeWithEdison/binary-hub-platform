@@ -29,13 +29,12 @@ serve(async (req) => {
 
     // Fetch real-time data from database
     const [projectsData, innovatorsData, stakeholdersData] = await Promise.all([
-      supabase.from("projects").select("*").limit(100),
-      // Fetch innovators with an exact total count and a wide range to avoid truncation issues
+      supabase.from("projects").select("*"),
+      // Fetch innovators with an exact total count
       supabase
         .from("innovators")
-        .select("*, skills:innovator_skills(skill)", { count: "exact" })
-        .range(0, 999),
-      supabase.from("stakeholders").select("*").limit(100),
+        .select("*, skills:innovator_skills(skill)", { count: "exact" }),
+      supabase.from("stakeholders").select("*"),
     ]);
 
     const projects = projectsData.data || [];
