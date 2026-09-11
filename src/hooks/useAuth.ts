@@ -77,7 +77,7 @@ export const useAuth = () => {
   }, [toast]);
 
   const signUp = async (email: string, password: string, metadata?: any) => {
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/auth`;
 
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -165,9 +165,9 @@ export const useAuth = () => {
   };
 
   const signInWithGoogle = async () => {
-    // Always use the current origin for redirect
-    // This ensures it works in both development and production
-    const redirectUrl = `${window.location.origin}/`;
+    // Return to the auth route so it can restore any pending destination
+    // (for example, the applications page) after OAuth completes.
+    const redirectUrl = `${window.location.origin}/auth`;
 
     const { data, error } = await supabase.auth.signInWithOAuth({
       provider: 'google',

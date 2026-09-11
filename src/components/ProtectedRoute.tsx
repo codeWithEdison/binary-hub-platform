@@ -1,5 +1,5 @@
 import React from "react";
-import { Navigate } from "react-router-dom";
+import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/hooks/useProfile";
 
@@ -14,6 +14,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 }) => {
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading } = useProfile();
+  const location = useLocation();
 
   console.log("ProtectedRoute Debug:", {
     user: user?.id,
@@ -25,7 +26,7 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     roleMatch: requireRole ? profile?.role === requireRole : true
   });
 
-  if (authLoading || profileLoading || !profile) {
+  if (authLoading || profileLoading) {
     console.log("ProtectedRoute: Still loading or no profile", { authLoading, profileLoading, hasProfile: !!profile });
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -36,7 +37,27 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (!user) {
     console.log("ProtectedRoute: No user, redirecting to /auth");
-    return <Navigate to="/auth" replace />;
+    return (
+      <Navigate
+        to="/auth"
+        replace
+        state={{
+          from: location.pathname,
+          message: "Please log in or create an account to continue.",
+        }}
+      />
+    );
+  }
+
+  if (!profile) {
+    return (
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-center">
+          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-b-2 border-primary" />
+          <p className="mt-4 text-sm text-muted-foreground">Preparing your account...</p>
+        </div>
+      </div>
+    );
   }
 
   if (requireRole && profile?.role !== requireRole) {

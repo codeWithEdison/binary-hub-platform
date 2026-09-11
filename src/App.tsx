@@ -35,6 +35,8 @@ import ProjectForm from "./pages/admin/ProjectForm";
 import EventForm from "./pages/admin/EventForm";
 import AnnouncementForm from "./pages/admin/AnnouncementForm";
 import { StakeholderManagement } from "./pages/admin/StakeholderManagement";
+import Applications from "./pages/Applications";
+import ApplicationForm from "./pages/ApplicationForm";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +65,18 @@ const App = () => (
           <Route path="/announcements/:announcementId" element={<><Navbar /><AnnouncementDetail /></>} />
           <Route path="/partners" element={<><Navbar /><Partners /></>} />
           <Route path="/contact" element={<><Navbar /><Contact /></>} />
+
+          {/* Applications are available only to authenticated users. */}
+          <Route path="/applications" element={
+            <ProtectedRoute>
+              <Applications />
+            </ProtectedRoute>
+          } />
+          <Route path="/applications/form" element={
+            <ProtectedRoute>
+              <ApplicationForm />
+            </ProtectedRoute>
+          } />
 
           {/* Admin Routes */}
           <Route path="/admin" element={

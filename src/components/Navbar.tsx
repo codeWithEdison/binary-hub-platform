@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Menu, X, Bell, User, LogOut, Settings } from "lucide-react";
+import { Menu, X, User, LogOut, Settings } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
@@ -108,6 +108,22 @@ const Navbar = () => {
     navigate("/");
   };
 
+  const handleApplyClick = () => {
+    if (user) {
+      navigate("/applications");
+      return;
+    }
+
+    // Keep the intended destination for email/password and OAuth sign-in flows.
+    sessionStorage.setItem("postAuthRedirect", "/applications");
+    navigate("/auth", {
+      state: {
+        from: "/applications",
+        message: "Please log in or create an account to apply.",
+      },
+    });
+  };
+
   const getUserInitials = () => {
     if (profile?.first_name && profile?.last_name) {
       return `${profile.first_name[0]}${profile.last_name[0]}`.toUpperCase();
@@ -184,10 +200,24 @@ const Navbar = () => {
             </motion.div>
           ))}
 
+          <motion.div
+            custom={links.length}
+            initial="hidden"
+            animate="visible"
+            variants={linkVariants}
+          >
+            <Button
+              onClick={handleApplyClick}
+              className="rounded-full bg-[#00628b] px-5 text-white hover:bg-[#004f70]"
+            >
+              Apply
+            </Button>
+          </motion.div>
+
           {/* User Menu */}
           {user ? (
             <motion.div
-              custom={links.length}
+              custom={links.length + 1}
               initial="hidden"
               animate="visible"
               variants={linkVariants}
@@ -231,7 +261,7 @@ const Navbar = () => {
             </motion.div>
           ) : (
             <motion.div
-              custom={links.length}
+              custom={links.length + 1}
               initial="hidden"
               animate="visible"
               variants={linkVariants}
@@ -345,6 +375,25 @@ const Navbar = () => {
                         </Link>
                       </motion.div>
                     ))}
+
+                    <motion.div
+                      initial={{ opacity: 0, x: 20 }}
+                      animate={{
+                        opacity: 1,
+                        x: 0,
+                        transition: { delay: 0.1 + links.length * 0.1, duration: 0.3 }
+                      }}
+                    >
+                      <button
+                        onClick={() => {
+                          setIsOpen(false);
+                          handleApplyClick();
+                        }}
+                        className="flex w-full items-center rounded-xl bg-[#00628b] px-4 py-4 text-left text-lg font-medium text-white transition-colors hover:bg-[#004f70]"
+                      >
+                        Apply
+                      </button>
+                    </motion.div>
 
                     {/* Mobile User Actions */}
                     {user && (

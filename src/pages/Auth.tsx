@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -26,17 +26,27 @@ const Auth = () => {
   const { profile } = useProfile();
   const { departments } = useReferenceData();
   const navigate = useNavigate();
+  const location = useLocation();
+  const authState = location.state as { from?: string; message?: string } | null;
 
   useEffect(() => {
     if (user && profile) {
-      // Check user role and redirect accordingly (same as ProtectedRoute)
-      if (profile.role === "admin") {
+      const storedDestination = sessionStorage.getItem("postAuthRedirect");
+      const requestedDestination = authState?.from || storedDestination;
+      const destination = requestedDestination?.startsWith("/")
+        ? requestedDestination
+        : null;
+
+      if (destination) {
+        sessionStorage.removeItem("postAuthRedirect");
+        navigate(destination, { replace: true });
+      } else if (profile.role === "admin") {
         navigate("/admin");
       } else {
         navigate("/");
       }
     }
-  }, [user, profile, navigate]);
+  }, [user, profile, navigate, authState?.from]);
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -73,7 +83,7 @@ const Auth = () => {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Binary Hub</CardTitle>
           <CardDescription className="text-center">
-            Innovation & Technology Hub
+            {authState?.message || "Innovation & Technology Hub"}
           </CardDescription>
         </CardHeader>
         <CardContent>
