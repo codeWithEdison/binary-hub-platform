@@ -8,6 +8,13 @@ DROP POLICY IF EXISTS "Enable all operations for project_links" ON public.projec
 DROP POLICY IF EXISTS "Enable all operations for project_gallery" ON public.project_gallery;
 DROP POLICY IF EXISTS "Enable all operations for project_innovators" ON public.project_innovators;
 DROP POLICY IF EXISTS "Enable all operations for innovator_skills" ON public.innovator_skills;
+DROP POLICY IF EXISTS "project_categories_policy" ON public.project_categories;
+DROP POLICY IF EXISTS "project_technologies_policy" ON public.project_technologies;
+DROP POLICY IF EXISTS "project_team_policy" ON public.project_team;
+DROP POLICY IF EXISTS "project_links_policy" ON public.project_links;
+DROP POLICY IF EXISTS "project_gallery_policy" ON public.project_gallery;
+DROP POLICY IF EXISTS "project_innovators_policy" ON public.project_innovators;
+DROP POLICY IF EXISTS "innovator_skills_policy" ON public.innovator_skills;
 
 -- Create comprehensive policies for all project-related tables
 CREATE POLICY "project_categories_policy" 

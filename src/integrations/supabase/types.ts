@@ -16,6 +16,8 @@ export type Database = {
     Tables: {
       applications: {
         Row: {
+          applicant_email: string | null
+          applicant_name: string | null
           collaboration: string
           created_at: string
           id: string
@@ -23,13 +25,15 @@ export type Database = {
           motivation: string
           secondary_email: string | null
           skills: string[]
-          status: string
+          status: "draft" | "submitted" | "accepted" | "rejected"
           submitted_at: string | null
           university_year: string
           updated_at: string
           user_id: string
         }
         Insert: {
+          applicant_email?: string | null
+          applicant_name?: string | null
           collaboration?: string
           created_at?: string
           id?: string
@@ -37,13 +41,15 @@ export type Database = {
           motivation?: string
           secondary_email?: string | null
           skills?: string[]
-          status?: string
+          status?: "draft" | "submitted" | "accepted" | "rejected"
           submitted_at?: string | null
           university_year?: string
           updated_at?: string
           user_id: string
         }
         Update: {
+          applicant_email?: string | null
+          applicant_name?: string | null
           collaboration?: string
           created_at?: string
           id?: string
@@ -51,7 +57,7 @@ export type Database = {
           motivation?: string
           secondary_email?: string | null
           skills?: string[]
-          status?: string
+          status?: "draft" | "submitted" | "accepted" | "rejected"
           submitted_at?: string | null
           university_year?: string
           updated_at?: string

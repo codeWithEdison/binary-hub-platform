@@ -37,6 +37,9 @@ const ApplicationForm = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const applicationId = new URLSearchParams(window.location.search).get("id");
+  const applicantName = [user?.user_metadata?.first_name, user?.user_metadata?.last_name]
+    .filter(Boolean)
+    .join(" ") || user?.user_metadata?.full_name || "Applicant";
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [showSecondaryEmail, setShowSecondaryEmail] = useState(false);
@@ -125,6 +128,8 @@ const ApplicationForm = () => {
     const applicationData = {
       user_id: user.id,
       secondary_email: form.secondaryEmail.trim() || null,
+      applicant_name: applicantName,
+      applicant_email: user.email || null,
       university_year: form.universityYear,
       skills: form.skills,
       motivation: form.motivation,

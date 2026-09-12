@@ -30,6 +30,7 @@ import InnovatorManagement from "./pages/admin/InnovatorManagement";
 import ProjectManagement from "./pages/admin/ProjectManagement";
 import EventManagement from "./pages/admin/EventManagement";
 import AnnouncementManagement from "./pages/admin/AnnouncementManagement";
+import ApplicantManagement from "./pages/admin/ApplicantManagement";
 import InnovatorForm from "./pages/admin/InnovatorForm";
 import ProjectForm from "./pages/admin/ProjectForm";
 import EventForm from "./pages/admin/EventForm";
@@ -98,6 +99,7 @@ const App = () => (
             <Route path="announcements/new" element={<AnnouncementForm />} />
             <Route path="announcements/edit/:id" element={<AnnouncementForm />} />
             <Route path="stakeholders" element={<StakeholderManagement />} />
+            <Route path="applicants" element={<ApplicantManagement />} />
           </Route>
 
           {/* Catch-all route for 404 */}

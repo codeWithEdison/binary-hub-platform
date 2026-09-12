@@ -40,6 +40,7 @@ ALTER TABLE public.events ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.announcements ENABLE ROW LEVEL SECURITY;
 
 -- Create policies for events
+DROP POLICY IF EXISTS "events_policy" ON public.events;
 CREATE POLICY "events_policy" 
 ON public.events 
 FOR ALL 
@@ -47,6 +48,7 @@ USING (true)
 WITH CHECK (true);
 
 -- Create policies for announcements
+DROP POLICY IF EXISTS "announcements_policy" ON public.announcements;
 CREATE POLICY "announcements_policy" 
 ON public.announcements 
 FOR ALL 
