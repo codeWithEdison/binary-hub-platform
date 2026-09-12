@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      applications: {
+        Row: {
+          collaboration: string
+          created_at: string
+          id: string
+          interests: string
+          motivation: string
+          skills: string[]
+          status: string
+          submitted_at: string | null
+          university_year: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          collaboration?: string
+          created_at?: string
+          id?: string
+          interests?: string
+          motivation?: string
+          skills?: string[]
+          status?: string
+          submitted_at?: string | null
+          university_year?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          collaboration?: string
+          created_at?: string
+          id?: string
+          interests?: string
+          motivation?: string
+          skills?: string[]
+          status?: string
+          submitted_at?: string | null
+          university_year?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       announcements: {
         Row: {
           author_id: string | null

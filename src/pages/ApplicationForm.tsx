@@ -1,6 +1,9 @@
-import { useMemo, useState } from "react";
-import { ArrowLeft, ChevronRight, CircleAlert } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { ArrowLeft, ChevronRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 const questionSections = [
   "Profile",
@@ -31,6 +34,11 @@ const skillOptions = [
 
 const ApplicationForm = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const { toast } = useToast();
+  const applicationId = new URLSearchParams(window.location.search).get("id");
+  const [isLoading, setIsLoading] = useState(true);
+  const [isSaving, setIsSaving] = useState(false);
   const [form, setForm] = useState({
     universityYear: "",
     skills: [] as string[],
@@ -38,6 +46,35 @@ const ApplicationForm = () => {
     interests: "",
     collaboration: "",
   });
+
+  useEffect(() => {
+    if (!user) return;
+
+    const loadApplication = async () => {
+      const { data, error } = await supabase
+        .from("applications")
+        .select("university_year, skills, motivation, interests, collaboration, status")
+        .eq("user_id", user.id)
+        .eq("id", applicationId || "")
+        .maybeSingle();
+
+      if (error) {
+        toast({ title: "Unable to load application", description: error.message, variant: "destructive" });
+      } else if (data) {
+        setForm({
+          universityYear: data.university_year,
+          skills: data.skills,
+          motivation: data.motivation,
+          interests: data.interests,
+          collaboration: data.collaboration,
+        });
+      }
+
+      setIsLoading(false);
+    };
+
+    loadApplication();
+  }, [applicationId, toast, user]);
 
   const progress = useMemo(() => {
     const fields = Object.values(form);
@@ -65,8 +102,45 @@ const ApplicationForm = () => {
     });
   };
 
+  const saveApplication = async (status: "draft" | "submitted") => {
+    if (!user) return;
+
+    if (status === "submitted" && progress < 100) {
+      toast({ title: "Complete your application", description: "Please answer every question before submitting.", variant: "destructive" });
+      return;
+    }
+
+    setIsSaving(true);
+    const applicationData = {
+      user_id: user.id,
+      university_year: form.universityYear,
+      skills: form.skills,
+      motivation: form.motivation,
+      interests: form.interests,
+      collaboration: form.collaboration,
+      status,
+      submitted_at: status === "submitted" ? new Date().toISOString() : null,
+    };
+    const { error } = applicationId
+      ? await supabase.from("applications").update(applicationData).eq("id", applicationId).eq("user_id", user.id)
+      : await supabase.from("applications").insert(applicationData);
+    setIsSaving(false);
+
+    if (error) {
+      toast({ title: "Unable to save application", description: error.message, variant: "destructive" });
+      return;
+    }
+
+    toast({
+      title: status === "submitted" ? "Application submitted" : "Draft saved",
+      description: status === "submitted" ? "Thank you for applying to Binary Hub." : "You can return and continue later.",
+    });
+
+    if (status === "submitted") navigate("/applications");
+  };
+
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-4 py-8 text-[#111111] md:px-8 lg:px-12">
+    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-4 pt-28 pb-8 text-[#111111] md:px-8 md:pt-32 lg:px-12 lg:pt-32">
       <div className="mx-auto max-w-6xl">
         <button
           type="button"
@@ -78,32 +152,28 @@ const ApplicationForm = () => {
         </button>
 
         <header className="mb-10">
-          <h1 className="font-['ZurichBT','Georgia','serif'] text-[2.7rem] font-normal leading-none tracking-[-0.04em] not-italic md:text-[3.4rem] lg:text-[4.2rem]">
+          <h1 className="text-3xl font-bold leading-tight tracking-[-0.03em] text-gray-900 md:text-5xl">
             My Application
           </h1>
-          <p className="mt-4 text-xl text-[#111111]/70 md:text-2xl">Winter 2027</p>
+          <p className="mt-3 text-lg text-[#111111]/70 md:text-xl">Winter 2027</p>
         </header>
 
         <div className="grid gap-8 lg:grid-cols-[200px_minmax(0,1fr)]">
-          <aside className="pt-4 text-base text-[#111111]/65 md:text-lg">
+          <aside className="pt-4 text-sm text-[#111111]/65 md:text-base">
             {questionSections.map((item, index) => (
-              <div key={item} className={index === 0 ? "mb-4 text-[#111111]" : "mb-4"}>
+              <div key={item} className={index === 0 ? "mb-4 font-medium text-[#111111]" : "mb-4"}>
                 {item}
               </div>
             ))}
           </aside>
 
           <section className="w-full">
-            <h2 className="mb-6 text-[1.8rem] font-semibold tracking-[-0.03em] text-[#111111] md:text-[2rem]">Application</h2>
+            <h2 className="mb-6 text-2xl font-bold tracking-[-0.03em] text-[#111111] md:text-3xl">Application</h2>
 
             <div className="rounded-2xl border border-black/30 bg-white/30 p-3 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)] md:p-4">
               <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
                 <div className="flex items-center gap-3">
                   <div className="text-lg font-semibold text-[#111111] md:text-xl">Rukundo Wilson</div>
-                  <div className="inline-flex items-center gap-2 rounded-full bg-[#d84e42] px-3 py-1 text-xs font-semibold text-white md:text-sm">
-                    <CircleAlert className="h-3.5 w-3.5" />
-                    Profile incomplete
-                  </div>
                 </div>
 
                 <button
@@ -115,9 +185,9 @@ const ApplicationForm = () => {
               </div>
             </div>
 
-            <div className="mt-8 space-y-6">
+            <div className={`mt-8 space-y-6 ${isLoading ? "pointer-events-none opacity-60" : ""}`}>
               <div>
-                <label className="mb-3 block text-xl font-medium leading-tight text-[#111111] md:text-2xl">
+                <label className="mb-3 block text-lg font-semibold leading-tight text-[#111111] md:text-xl">
                   What year are you in at university?
                 </label>
                 <select
@@ -136,7 +206,7 @@ const ApplicationForm = () => {
               </div>
 
               <div>
-                <label className="mb-3 block text-xl font-medium leading-tight text-[#111111] md:text-2xl">
+                <label className="mb-3 block text-lg font-semibold leading-tight text-[#111111] md:text-xl">
                   What skills do you bring?
                 </label>
                 <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
@@ -166,7 +236,7 @@ const ApplicationForm = () => {
               </div>
 
               <div>
-                <label className="mb-3 block text-xl font-medium leading-tight text-[#111111] md:text-2xl">
+                <label className="mb-3 block text-lg font-semibold leading-tight text-[#111111] md:text-xl">
                   Why do you want to join Binary Hub?
                 </label>
                 <textarea
@@ -178,7 +248,7 @@ const ApplicationForm = () => {
               </div>
 
               <div>
-                <label className="mb-3 block text-xl font-medium leading-tight text-[#111111] md:text-2xl">
+                <label className="mb-3 block text-lg font-semibold leading-tight text-[#111111] md:text-xl">
                   What would you like to build or work on at Binary Hub?
                 </label>
                 <textarea
@@ -190,7 +260,7 @@ const ApplicationForm = () => {
               </div>
 
               <div>
-                <label className="mb-3 block text-xl font-medium leading-tight text-[#111111] md:text-2xl">
+                <label className="mb-3 block text-lg font-semibold leading-tight text-[#111111] md:text-xl">
                   Are you open to collaborating with others on a team?
                 </label>
                 <textarea
@@ -214,13 +284,17 @@ const ApplicationForm = () => {
               <div className="flex items-center gap-4">
                 <button
                   type="button"
-                  className="rounded-full border border-[#111111] bg-white px-4 py-2 text-base font-medium text-[#111111] transition hover:bg-[#f6f6f6]"
+                  disabled={isLoading || isSaving}
+                  onClick={() => saveApplication("draft")}
+                  className="rounded-full border border-[#111111] bg-white px-4 py-2 text-base font-medium text-[#111111] transition hover:bg-[#f6f6f6] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Save changes
+                  {isSaving ? "Saving..." : "Save changes"}
                 </button>
                 <button
                   type="button"
-                  className="rounded-full bg-[#4a4a4a] px-5 py-2 text-base font-medium text-white transition hover:bg-[#2d2d2d]"
+                  disabled={isLoading || isSaving}
+                  onClick={() => saveApplication("submitted")}
+                  className="rounded-full bg-[#4a4a4a] px-5 py-2 text-base font-medium text-white transition hover:bg-[#2d2d2d] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   Submit application
                 </button>

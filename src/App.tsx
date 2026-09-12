@@ -69,12 +69,12 @@ const App = () => (
           {/* Applications are available only to authenticated users. */}
           <Route path="/applications" element={
             <ProtectedRoute>
-              <Applications />
+              <><Navbar /><Applications /></>
             </ProtectedRoute>
           } />
           <Route path="/applications/form" element={
             <ProtectedRoute>
-              <ApplicationForm />
+              <><Navbar /><ApplicationForm /></>
             </ProtectedRoute>
           } />
 
