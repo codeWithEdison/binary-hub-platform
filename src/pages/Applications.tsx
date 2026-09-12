@@ -68,16 +68,16 @@ const Applications = () => {
 
           <div className="mt-10 flex border-b border-black/15">
             <button
-              onClick={() => setTab("drafts")}
-              className={`border-b-2 px-3 pb-3 text-lg font-medium ${tab === "drafts" ? "border-black" : "border-transparent text-black/45"}`}
-            >
-              Drafts ({draftApplications.length})
-            </button>
-            <button
               onClick={() => setTab("all")}
               className={`border-b-2 px-3 pb-3 text-lg font-medium ${tab === "all" ? "border-black" : "border-transparent text-black/45"}`}
             >
               All ({applications.length})
+            </button>
+            <button
+              onClick={() => setTab("drafts")}
+              className={`border-b-2 px-3 pb-3 text-lg font-medium ${tab === "drafts" ? "border-black" : "border-transparent text-black/45"}`}
+            >
+              Drafts ({draftApplications.length})
             </button>
           </div>
 

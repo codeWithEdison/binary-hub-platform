@@ -6,11 +6,11 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 const questionSections = [
-  "Profile",
-  "Skills",
-  "Motivation",
-  "Project interests",
-  "Collaboration",
+  { label: "Profile", id: "application-profile" },
+  { label: "Skills", id: "application-skills" },
+  { label: "Motivation", id: "application-motivation" },
+  { label: "Project interests", id: "application-interests" },
+  { label: "Collaboration", id: "application-collaboration" },
 ];
 
 const skillOptions = [
@@ -39,7 +39,9 @@ const ApplicationForm = () => {
   const applicationId = new URLSearchParams(window.location.search).get("id");
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
+  const [showSecondaryEmail, setShowSecondaryEmail] = useState(false);
   const [form, setForm] = useState({
+    secondaryEmail: "",
     universityYear: "",
     skills: [] as string[],
     motivation: "",
@@ -50,24 +52,33 @@ const ApplicationForm = () => {
   useEffect(() => {
     if (!user) return;
 
+    if (!applicationId) {
+      setIsLoading(false);
+      return;
+    }
+
     const loadApplication = async () => {
-      const { data, error } = await supabase
+      let applicationQuery = supabase
         .from("applications")
-        .select("university_year, skills, motivation, interests, collaboration, status")
-        .eq("user_id", user.id)
-        .eq("id", applicationId || "")
-        .maybeSingle();
+        .select("secondary_email, university_year, skills, motivation, interests, collaboration, status")
+        .eq("user_id", user.id);
+
+      applicationQuery = applicationQuery.eq("id", applicationId);
+
+      const { data, error } = await applicationQuery.maybeSingle();
 
       if (error) {
         toast({ title: "Unable to load application", description: error.message, variant: "destructive" });
       } else if (data) {
         setForm({
+          secondaryEmail: data.secondary_email || "",
           universityYear: data.university_year,
           skills: data.skills,
           motivation: data.motivation,
           interests: data.interests,
           collaboration: data.collaboration,
         });
+        setShowSecondaryEmail(Boolean(data.secondary_email));
       }
 
       setIsLoading(false);
@@ -102,7 +113,7 @@ const ApplicationForm = () => {
     });
   };
 
-  const saveApplication = async (status: "draft" | "submitted") => {
+  const saveApplication = async (status: "draft" | "submitted", navigateAfterSave = false) => {
     if (!user) return;
 
     if (status === "submitted" && progress < 100) {
@@ -113,6 +124,7 @@ const ApplicationForm = () => {
     setIsSaving(true);
     const applicationData = {
       user_id: user.id,
+      secondary_email: form.secondaryEmail.trim() || null,
       university_year: form.universityYear,
       skills: form.skills,
       motivation: form.motivation,
@@ -136,7 +148,11 @@ const ApplicationForm = () => {
       description: status === "submitted" ? "Thank you for applying to Binary Hub." : "You can return and continue later.",
     });
 
-    if (status === "submitted") navigate("/applications");
+    if (navigateAfterSave || status === "submitted") navigate("/applications");
+  };
+
+  const saveDraftAndGoBack = async () => {
+    await saveApplication("draft", true);
   };
 
   return (
@@ -144,8 +160,9 @@ const ApplicationForm = () => {
       <div className="mx-auto max-w-6xl">
         <button
           type="button"
-          onClick={() => navigate("/applications")}
-          className="mb-8 inline-flex items-center gap-2 text-xl font-medium text-[#111111] transition-opacity hover:opacity-80"
+          onClick={saveDraftAndGoBack}
+          disabled={isSaving}
+          className="mb-8 inline-flex items-center gap-2 text-xl font-medium text-[#111111] transition-opacity hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
         >
           <ArrowLeft className="h-5 w-5" />
           <span>Back</span>
@@ -161,32 +178,59 @@ const ApplicationForm = () => {
         <div className="grid gap-8 lg:grid-cols-[200px_minmax(0,1fr)]">
           <aside className="pt-4 text-sm text-[#111111]/65 md:text-base">
             {questionSections.map((item, index) => (
-              <div key={item} className={index === 0 ? "mb-4 font-medium text-[#111111]" : "mb-4"}>
-                {item}
-              </div>
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className={`mb-4 block transition-colors hover:text-[#00628b] ${index === 0 ? "font-medium text-[#111111]" : ""}`}
+              >
+                {item.label}
+              </a>
             ))}
           </aside>
 
           <section className="w-full">
             <h2 className="mb-6 text-2xl font-bold tracking-[-0.03em] text-[#111111] md:text-3xl">Application</h2>
 
-            <div className="rounded-2xl border border-black/30 bg-white/30 p-3 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)] md:p-4">
-              <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-                <div className="flex items-center gap-3">
-                  <div className="text-lg font-semibold text-[#111111] md:text-xl">Rukundo Wilson</div>
+            <div className="rounded-2xl border border-black/30 bg-white/30 p-4 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)] md:p-5">
+              <div className="grid gap-4 md:grid-cols-2">
+                <div>
+                  <p className="text-sm text-[#111111]/60">Name</p>
+                  <p className="mt-1 text-lg font-semibold text-[#111111]">
+                    {[user?.user_metadata?.first_name, user?.user_metadata?.last_name].filter(Boolean).join(" ") || user?.user_metadata?.full_name || "Applicant"}
+                  </p>
                 </div>
-
-                <button
-                  type="button"
-                  className="inline-flex items-center justify-center gap-2 self-start text-base font-medium text-[#111111] md:self-auto"
-                >
-                  Complete my profile <ChevronRight className="h-4 w-4" />
-                </button>
+                <div>
+                  <p className="text-sm text-[#111111]/60">Email</p>
+                  <p className="mt-1 break-all text-lg font-semibold text-[#111111]">{user?.email || "No email"}</p>
+                </div>
+              </div>
+              <div className="mt-5">
+                {!showSecondaryEmail ? (
+                  <button
+                    type="button"
+                    onClick={() => setShowSecondaryEmail(true)}
+                    className="inline-flex items-center gap-1 text-base font-medium text-[#00628b] hover:underline"
+                  >
+                    Add a secondary email <ChevronRight className="h-4 w-4" />
+                  </button>
+                ) : (
+                  <>
+                    <label htmlFor="secondary-email" className="mb-2 block text-sm text-[#111111]/60">Secondary email (optional)</label>
+                    <input
+                      id="secondary-email"
+                      type="email"
+                      value={form.secondaryEmail}
+                      onChange={(e) => updateField("secondaryEmail", e.target.value)}
+                      placeholder="Add another email address"
+                      className="w-full rounded-xl border border-black/30 bg-white/60 px-4 py-3 text-base outline-none transition focus:border-[#00628b] focus:ring-2 focus:ring-[#00628b]/20"
+                    />
+                  </>
+                )}
               </div>
             </div>
 
             <div className={`mt-8 space-y-6 ${isLoading ? "pointer-events-none opacity-60" : ""}`}>
-              <div>
+              <div id="application-profile">
                 <label className="mb-3 block text-lg font-semibold leading-tight text-[#111111] md:text-xl">
                   What year are you in at university?
                 </label>
@@ -205,7 +249,7 @@ const ApplicationForm = () => {
                 </select>
               </div>
 
-              <div>
+              <div id="application-skills">
                 <label className="mb-3 block text-lg font-semibold leading-tight text-[#111111] md:text-xl">
                   What skills do you bring?
                 </label>
@@ -235,7 +279,7 @@ const ApplicationForm = () => {
                 </div>
               </div>
 
-              <div>
+              <div id="application-motivation">
                 <label className="mb-3 block text-lg font-semibold leading-tight text-[#111111] md:text-xl">
                   Why do you want to join Binary Hub?
                 </label>
@@ -247,7 +291,7 @@ const ApplicationForm = () => {
                 />
               </div>
 
-              <div>
+              <div id="application-interests">
                 <label className="mb-3 block text-lg font-semibold leading-tight text-[#111111] md:text-xl">
                   What would you like to build or work on at Binary Hub?
                 </label>
@@ -259,7 +303,7 @@ const ApplicationForm = () => {
                 />
               </div>
 
-              <div>
+              <div id="application-collaboration">
                 <label className="mb-3 block text-lg font-semibold leading-tight text-[#111111] md:text-xl">
                   Are you open to collaborating with others on a team?
                 </label>
@@ -275,10 +319,11 @@ const ApplicationForm = () => {
             <div className="mt-10 flex items-center justify-between gap-4 border-t border-black/20 pt-6">
               <button
                 type="button"
-                onClick={() => navigate("/applications")}
-                className="text-base font-medium text-[#111111] hover:opacity-80"
+                onClick={saveDraftAndGoBack}
+                disabled={isLoading || isSaving}
+                className="text-base font-medium text-[#111111] hover:opacity-80 disabled:cursor-not-allowed disabled:opacity-50"
               >
-                ← Back
+                {isSaving ? "Saving..." : "← Back"}
               </button>
 
               <div className="flex items-center gap-4">

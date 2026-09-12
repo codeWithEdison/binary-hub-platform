@@ -40,7 +40,7 @@ export const useProfile = () => {
         .from("user_roles")
         .select("role")
         .eq("user_id", user.id)
-        .single();
+        .maybeSingle();
 
       console.log("User roles from database:", userRoles); // Debug log
 
