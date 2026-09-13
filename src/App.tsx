@@ -19,6 +19,7 @@ import ProjectDetail from "./pages/ProjectDetail";
 import InnovatorDetail from "./pages/InnovatorDetail";
 import AnnouncementsPage from "./pages/AnnouncementsPage";
 import AnnouncementDetail from "./pages/AnnouncementDetail";
+import Blog from "./pages/Blog";
 import Auth from "./pages/Auth";
 import Login from "./pages/Login";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -38,6 +39,8 @@ import AnnouncementForm from "./pages/admin/AnnouncementForm";
 import { StakeholderManagement } from "./pages/admin/StakeholderManagement";
 import Applications from "./pages/Applications";
 import ApplicationForm from "./pages/ApplicationForm";
+import BlogManagement from "./pages/admin/BlogManagement";
+import BlogForm from "./pages/admin/BlogForm";
 
 const queryClient = new QueryClient();
 
@@ -64,6 +67,7 @@ const App = () => (
           <Route path="/events/:eventId" element={<><Navbar /><EventDetail /></>} />
           <Route path="/announcements" element={<><Navbar /><AnnouncementsPage /></>} />
           <Route path="/announcements/:announcementId" element={<><Navbar /><AnnouncementDetail /></>} />
+          <Route path="/blog" element={<><Navbar /><Blog /></>} />
           <Route path="/partners" element={<><Navbar /><Partners /></>} />
           <Route path="/contact" element={<><Navbar /><Contact /></>} />
 
@@ -98,6 +102,9 @@ const App = () => (
             <Route path="announcements" element={<AnnouncementManagement />} />
             <Route path="announcements/new" element={<AnnouncementForm />} />
             <Route path="announcements/edit/:id" element={<AnnouncementForm />} />
+            <Route path="blog" element={<BlogManagement />} />
+            <Route path="blog/new" element={<BlogForm />} />
+            <Route path="blog/edit/:id" element={<BlogForm />} />
             <Route path="stakeholders" element={<StakeholderManagement />} />
             <Route path="applicants" element={<ApplicantManagement />} />
           </Route>

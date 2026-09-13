@@ -37,11 +37,12 @@ const Auth = () => {
         ? requestedDestination
         : null;
 
-      if (destination) {
+      if (profile.role === "admin") {
+        sessionStorage.removeItem("postAuthRedirect");
+        navigate("/admin", { replace: true });
+      } else if (destination) {
         sessionStorage.removeItem("postAuthRedirect");
         navigate(destination, { replace: true });
-      } else if (profile.role === "admin") {
-        navigate("/admin");
       } else {
         navigate("/");
       }
@@ -83,8 +84,13 @@ const Auth = () => {
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">Binary Hub</CardTitle>
           <CardDescription className="text-center">
-            {authState?.message || "Innovation & Technology Hub"}
+            Innovation & Technology Hub
           </CardDescription>
+          {authState?.message && (
+            <div className="mt-4 rounded-lg border border-[#00628b]/20 bg-[#00628b]/10 px-4 py-3 text-center text-sm font-medium text-[#00628b]">
+              {authState.message}
+            </div>
+          )}
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="signin" className="w-full">

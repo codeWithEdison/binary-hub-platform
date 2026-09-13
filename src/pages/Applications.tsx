@@ -14,7 +14,7 @@ const Applications = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [applications, setApplications] = useState<Array<{
     id: string;
-    status: "draft" | "submitted";
+    status: "draft" | "submitted" | "accepted" | "rejected";
     created_at: string;
     updated_at: string;
   }>>([]);
@@ -53,6 +53,13 @@ const Applications = () => {
 
   const draftApplications = applications.filter((application) => application.status === "draft");
   const visibleApplications = tab === "drafts" ? draftApplications : applications;
+
+  const statusPresentation = {
+    draft: { label: "Draft", className: "bg-amber-100 text-amber-800" },
+    submitted: { label: "Submitted", className: "bg-emerald-100 text-emerald-800" },
+    accepted: { label: "Accepted", className: "bg-blue-100 text-blue-800" },
+    rejected: { label: "Rejected", className: "bg-red-100 text-red-800" },
+  } as const;
 
   return (
     <main className="relative min-h-screen overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-5 pt-28 pb-12 md:px-12 md:pt-32 lg:px-20 lg:pt-32 lg:pb-16">
@@ -101,8 +108,8 @@ const Applications = () => {
                   </div>
                   <p className="mt-3 text-lg">Applicant: <span className="text-[#c53a30]">{applicantName}</span></p>
                 </div>
-                <span className={`w-fit rounded px-3 py-1.5 font-medium ${application.status === "submitted" ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}>
-                  {application.status === "submitted" ? "Submitted" : "Draft"}
+                <span className={`w-fit rounded px-3 py-1.5 font-medium ${statusPresentation[application.status].className}`}>
+                  {statusPresentation[application.status].label}
                 </span>
               </div>
 
@@ -111,7 +118,7 @@ const Applications = () => {
                   <ExternalLink /> Preview
                 </Button>
                 <Button className="rounded-full bg-[#00628b] px-5 text-base font-semibold text-white hover:bg-blue-600" onClick={() => navigate(`/applications/form?id=${application.id}`)}>
-                  {application.status === "submitted" ? "View application" : "Continue application"} <ArrowRight />
+                  {application.status === "draft" ? "Continue application" : "View application"} <ArrowRight />
                 </Button>
               </div>
             </article>

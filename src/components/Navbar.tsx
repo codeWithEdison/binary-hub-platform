@@ -30,6 +30,7 @@ const Navbar = () => {
     { name: "About", path: "/about" },
     { name: "Innovators", path: "/innovators" },
     { name: "Innovations", path: "/innovations" },
+    { name: "Blog", path: "/blog" },
     { name: "Contact", path: "/contact" }
     // { name: "Events", path: "/events" },
     // { name: "Announcements", path: "/announcements" },
@@ -119,7 +120,7 @@ const Navbar = () => {
     navigate("/auth", {
       state: {
         from: "/applications",
-        message: "Please log in or create an account to apply.",
+        message: "Log in to complete your application.",
       },
     });
   };

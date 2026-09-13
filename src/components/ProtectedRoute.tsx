@@ -37,13 +37,17 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (!user) {
     console.log("ProtectedRoute: No user, redirecting to /auth");
+    const destination = `${location.pathname}${location.search}`;
+    const isApplicationRoute = destination.startsWith("/applications");
     return (
       <Navigate
         to="/auth"
         replace
         state={{
-          from: location.pathname,
-          message: "Please log in or create an account to continue.",
+          from: destination,
+          message: isApplicationRoute
+            ? "Log in to complete your application."
+            : "Please log in or create an account to continue.",
         }}
       />
     );

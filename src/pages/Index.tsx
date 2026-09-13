@@ -11,6 +11,7 @@ import StatsSection from "@/components/StatsSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import AboutSection from "@/components/AboutSection";
 import ChatWidget from "@/components/ChatWidget";
+import BlogSection from "@/components/BlogSection";
 import { services, stats } from "@/lib/data";
 import { useStakeholders } from "@/hooks/useStakeholders";
 import { useProjects } from "@/hooks/useProjects";
@@ -83,6 +84,9 @@ const Index = () => {
         maxProjects={3}
         showViewAllButton={true}
       />
+
+      {/* Editorial Blog */}
+      <BlogSection compact />
 
       {/* Stakeholders & Contributions Section - Enhanced Design */}
       <section className="py-24  px-6 md:px-12 relative overflow-hidden" id="stakeholders" >
