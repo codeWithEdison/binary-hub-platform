@@ -2,12 +2,11 @@ import React, { useState, useEffect } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import { ArrowRight, Play, ChevronDown, Sparkles, Users, Code, Rocket, Globe, ChevronLeft, ChevronRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import Hero from "@/components/Hero";
+import HeroComparison from "@/components/HeroComparison";
 import Footer from "@/components/Footer";
 import FeatureCard from "@/components/FeatureCard";
 import InnovatorCard from "@/components/InnovatorCard";
 import ServiceCard from "@/components/ServiceCard";
-import StatsSection from "@/components/StatsSection";
 import ProjectsSection from "@/components/ProjectsSection";
 import AboutSection from "@/components/AboutSection";
 import ChatWidget from "@/components/ChatWidget";
@@ -50,7 +49,7 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
       {/* Hero Section */}
-      <Hero />
+      <HeroComparison />
 
       {/* Floating Navigation Indicator */}
       <motion.div
@@ -68,9 +67,6 @@ const Index = () => {
           ))}
         </div>
       </motion.div>
-
-      {/* Stats Section - Using Reusable Component */}
-      <StatsSection />
 
       {/* About Section - Using Reusable Component */}
       <AboutSection
