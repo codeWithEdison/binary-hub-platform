@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowRight, Check, ChevronLeft, ChevronRight, Play } from "lucide-react";
 import { Link } from "react-router-dom";
+import { useHeroSlides } from "@/hooks/useHeroSlides";
 import { useStats } from "@/hooks/useStats";
 
 const heroSlides = [
@@ -27,43 +28,57 @@ const heroSlides = [
   {
     image: "/img/presentation-img/IMG-20231019-WA0017.jpg",
     title: "From prototype to impact",
+    description: "A focused home for student innovators, mentors, and partners building Rwanda's digital future together.",
     alt: "Binary Hub innovation showcase",
   },
 ];
 
 const HeroComparison = () => {
   const [activeSlide, setActiveSlide] = useState(0);
+  const { slides } = useHeroSlides();
+  const displayedSlides = slides.length > 0
+    ? slides.map((slide) => ({
+        image: slide.image_url,
+        title: slide.title,
+        description: slide.description,
+        alt: slide.title,
+        buttonLabel: slide.button_label,
+        buttonUrl: slide.button_url,
+      }))
+    : heroSlides.map((slide) => ({
+        ...slide,
+        description: "A focused home for student innovators, mentors, and partners building Rwanda's digital future together.",
+        buttonLabel: "Explore the Hub",
+        buttonUrl: "/innovations",
+      }));
   const { stats, loading: statsLoading } = useStats();
 
   useEffect(() => {
     const interval = window.setInterval(() => {
-      setActiveSlide((current) => (current + 1) % heroSlides.length);
+      setActiveSlide((current) => (current + 1) % displayedSlides.length);
     }, 4500);
 
     return () => window.clearInterval(interval);
-  }, []);
+  }, [displayedSlides.length]);
 
   return (
     <section
       aria-labelledby="hero-comparison-title"
-      className="relative isolate overflow-hidden border-y border-[#00628b]/10 bg-[#f4f8f7] py-24 dark:bg-slate-950"
+      className="relative isolate overflow-hidden bg-white py-16 dark:bg-slate-950"
     >
-      <div className="absolute -right-24 top-16 -z-10 h-72 w-72 rounded-full bg-[#8dc63f]/20 blur-3xl" />
-      <div className="absolute -left-24 bottom-0 -z-10 h-80 w-80 rounded-full bg-[#00628b]/10 blur-3xl" />
-
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="grid items-center gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
           <div>
             <h2
               id="hero-comparison-title"
-              className="max-w-xl text-4xl font-bold leading-[1.08] text-slate-950 dark:text-white sm:text-5xl lg:text-[3.5rem]"
+              className="max-w-xl text-3xl font-bold leading-[1.08] text-slate-950 dark:text-white sm:text-4xl lg:text-[2.8rem]"
             >
-              A space for innovators to
-              <span className="block text-[#00628b]">build what matters.</span>
+              A space for innovators
+
             </h2>
 
-            <p className="mt-7 max-w-xl text-lg leading-8 text-slate-600 dark:text-slate-300">
-              A focused home for student innovators, mentors, and partners building Rwanda&apos;s digital future together.
+            <p className="mt-7 max-w-xl text-base leading-7 text-slate-600 dark:text-slate-300 md:text-lg md:leading-8">
+              We bring students, mentors, and partners together in one supportive space to explore ideas, build practical solutions, and create meaningful impact in Rwanda and beyond.
             </p>
 
             <div className="mt-9 flex flex-wrap gap-4">
@@ -82,10 +97,6 @@ const HeroComparison = () => {
                 Watch Video
               </Link>
             </div>
-            <p className="mt-4 text-sm text-slate-500 dark:text-slate-400">
-              Join a community moving from prototype to impact.
-            </p>
-
             <div className="mt-8 flex flex-wrap gap-x-6 gap-y-3 text-sm font-medium text-slate-600 dark:text-slate-300">
               {['Student-led', 'Mentor supported', 'Impact focused'].map((benefit) => (
                 <span key={benefit} className="inline-flex items-center gap-2">
@@ -98,8 +109,8 @@ const HeroComparison = () => {
 
           <div className="relative mx-auto w-full max-w-2xl">
             <div className="relative h-[25rem] overflow-hidden sm:h-[31rem]" aria-roledescription="carousel" aria-label="Binary Hub highlights">
-              {heroSlides.map((slide, index) => {
-                const offset = (index - activeSlide + heroSlides.length + 2) % heroSlides.length - 2;
+              {displayedSlides.map((slide, index) => {
+                const offset = (index - activeSlide + displayedSlides.length + 2) % displayedSlides.length - 2;
                 const distance = Math.abs(offset);
 
                 return (
@@ -123,8 +134,8 @@ const HeroComparison = () => {
                             <p className="text-xs font-medium uppercase tracking-[0.16em] text-white/75">From the community</p>
                             <p className="mt-1 truncate text-xl font-bold sm:text-2xl">{slide.title}</p>
                           </div>
-                          <Link
-                            to="/innovations"
+                            <Link
+                            to={slide.buttonUrl}
                             aria-label="View innovation showcase"
                             className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-[#00628b] shadow-lg transition hover:bg-[#8dc63f] hover:text-slate-950"
                           >
@@ -139,7 +150,7 @@ const HeroComparison = () => {
 
               <button
                 type="button"
-                onClick={() => setActiveSlide((current) => (current - 1 + heroSlides.length) % heroSlides.length)}
+                onClick={() => setActiveSlide((current) => (current - 1 + displayedSlides.length) % displayedSlides.length)}
                 aria-label="Previous highlight"
                 className="absolute left-1 top-1/2 z-30 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[#00628b] shadow-lg transition hover:bg-[#8dc63f] hover:text-slate-950 sm:left-4"
               >
@@ -147,7 +158,7 @@ const HeroComparison = () => {
               </button>
               <button
                 type="button"
-                onClick={() => setActiveSlide((current) => (current + 1) % heroSlides.length)}
+                onClick={() => setActiveSlide((current) => (current + 1) % displayedSlides.length)}
                 aria-label="Next highlight"
                 className="absolute right-1 top-1/2 z-30 grid h-10 w-10 -translate-y-1/2 place-items-center rounded-full bg-white/90 text-[#00628b] shadow-lg transition hover:bg-[#8dc63f] hover:text-slate-950 sm:right-4"
               >
@@ -155,7 +166,7 @@ const HeroComparison = () => {
               </button>
 
               <div className="absolute bottom-2 left-1/2 z-30 flex -translate-x-1/2 gap-2" aria-label="Choose highlight">
-                {heroSlides.map((slide, index) => (
+                {displayedSlides.map((slide, index) => (
                   <button
                     key={slide.title}
                     type="button"

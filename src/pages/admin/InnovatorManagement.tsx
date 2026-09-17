@@ -1,18 +1,12 @@
 
 import React, { useState } from "react";
 import {
-  Plus, Search, Filter, Edit, Trash2, MoreHorizontal, Eye, Download,
-  UserPlus, ArrowUpDown, ChevronDown, Loader2, User, ChevronLeft, ChevronRight
+  Plus, Search, Filter, Eye, Download,
+  UserPlus, ChevronDown, User, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from "@/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import {
   Select,
   SelectContent,
@@ -39,7 +33,7 @@ const InnovatorManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const { innovators, loading, deleteInnovator } = useInnovators();
+  const { innovators, loading } = useInnovators({ includeInactive: true });
 
   // Filter innovators based on search query and status
   const filteredInnovators = innovators.filter(innovator => {
@@ -48,7 +42,7 @@ const InnovatorManagement = () => {
       innovator.role.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (innovator.department || "").toLowerCase().includes(searchQuery.toLowerCase());
 
-    const matchesStatus = statusFilter === "all" || innovator.status === statusFilter;
+    const matchesStatus = statusFilter === "all" || innovator.account_status === statusFilter;
 
     return matchesSearch && matchesStatus;
   });
@@ -64,12 +58,6 @@ const InnovatorManagement = () => {
   React.useEffect(() => {
     setCurrentPage(1);
   }, [searchQuery, statusFilter]);
-
-  const handleDelete = async (id: string) => {
-    if (confirm("Are you sure you want to delete this innovator?")) {
-      await deleteInnovator(id);
-    }
-  };
 
   const handlePageChange = (page: number) => {
     setCurrentPage(page);
@@ -164,14 +152,11 @@ const InnovatorManagement = () => {
               <DropdownMenuItem onClick={() => setStatusFilter("all")}>
                 All
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter("student")}>
-                Student
+              <DropdownMenuItem onClick={() => setStatusFilter("active")}>
+                Active accounts
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter("faculty")}>
-                Faculty
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setStatusFilter("alumni")}>
-                Alumni
+              <DropdownMenuItem onClick={() => setStatusFilter("inactive")}>
+                Inactive accounts
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -277,7 +262,14 @@ const InnovatorManagement = () => {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="flex items-center">
+                      <div className="flex flex-col gap-1">
+                        <div className="flex items-center">
+                        <div
+                          className={`w-2 h-2 rounded-full mr-2 ${innovator.account_status === "active" ? "bg-green-500" : "bg-amber-500"}`}
+                        ></div>
+                        <span className="capitalize">Account {innovator.account_status || "inactive"}</span>
+                        </div>
+                        <div className="flex items-center text-xs text-muted-foreground">
                         <div
                           className={`w-2 h-2 rounded-full mr-2 ${innovator.status === "innovator"
                             ? "bg-green-500"
@@ -287,6 +279,7 @@ const InnovatorManagement = () => {
                             }`}
                         ></div>
                         <span className="capitalize">{innovator.status}</span>
+                        </div>
                       </div>
                     </TableCell>
                     <TableCell>{innovator.department || "N/A"}</TableCell>
@@ -310,35 +303,12 @@ const InnovatorManagement = () => {
                     </TableCell>
                     <TableCell>{(innovator.projects || []).length}</TableCell>
                     <TableCell className="text-right">
-                      <DropdownMenu>
-                        <DropdownMenuTrigger asChild>
-                          <Button variant="ghost" size="icon">
-                            <MoreHorizontal className="h-4 w-4" />
-                          </Button>
-                        </DropdownMenuTrigger>
-                        <DropdownMenuContent align="end">
-                          <DropdownMenuItem asChild>
-                            <Link to={`/innovators/${innovator.id}`} className="flex items-center">
-                              <Eye className="h-4 w-4 mr-2" />
-                              View
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuItem asChild>
-                            <Link to={`/admin/innovators/edit/${innovator.id}`} className="flex items-center">
-                              <Edit className="h-4 w-4 mr-2" />
-                              Edit
-                            </Link>
-                          </DropdownMenuItem>
-                          <DropdownMenuSeparator />
-                          <DropdownMenuItem
-                            className="text-destructive"
-                            onClick={() => handleDelete(innovator.id)}
-                          >
-                            <Trash2 className="h-4 w-4 mr-2" />
-                            Delete
-                          </DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
+                      <Button asChild variant="outline" size="sm">
+                        <Link to={`/admin/innovators/edit/${innovator.id}`} className="flex items-center gap-2">
+                          <Eye className="h-4 w-4" />
+                          Review
+                        </Link>
+                      </Button>
                     </TableCell>
                   </TableRow>
                 ))

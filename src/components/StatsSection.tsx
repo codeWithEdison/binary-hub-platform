@@ -48,7 +48,7 @@ const StatsSection: React.FC<StatsSectionProps> = ({
   });
 
   return (
-    <section className={`py-24 px-6 md:px-12 relative overflow-hidden ${className}`}>
+    <section className={`py-14 px-6 md:px-12 relative overflow-hidden ${className}`}>
       <div className="absolute inset-0 bg-gradient-to-r from-[#00628b]/5 via-blue-50/30 to-transparent"></div>
       <div className="max-w-7xl mx-auto relative z-10">
         <motion.div
@@ -56,12 +56,12 @@ const StatsSection: React.FC<StatsSectionProps> = ({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-20"
+          className="text-center mb-12"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-[#00628b] mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-[#00628b] mb-4">
             UR Binary Hub in Numbers
           </h2>
-          <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8">
+          <p className="text-base text-gray-600 dark:text-gray-300 max-w-2xl mx-auto mb-8 md:text-lg">
             Real impact through flagship solutions, dedicated team members, and strategic partnerships
           </p>
           {showDivider && (

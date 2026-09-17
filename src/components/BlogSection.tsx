@@ -116,7 +116,7 @@ const BlogSection = ({ compact = false }: BlogSectionProps) => {
   };
 
   return (
-    <section className={`relative overflow-hidden bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-6 md:px-12 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 ${compact ? "py-20" : "min-h-screen pb-24 pt-36"}`}>
+    <section className={`relative overflow-hidden bg-white px-6 md:px-12 dark:bg-slate-900 ${compact ? "py-20" : "min-h-screen pb-24 pt-36"}`}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_8%_12%,rgba(255,255,255,0.7),transparent_30%),linear-gradient(120deg,rgba(255,255,255,0.1),transparent_55%)] dark:opacity-20" />
 
       <div className="relative z-10 mx-auto max-w-7xl">

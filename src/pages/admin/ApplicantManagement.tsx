@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ClipboardList, Eye, Search } from "lucide-react";
+import { ClipboardList, Eye, Search, UserPlus, EyeOff, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -32,7 +32,7 @@ import { supabase } from "@/integrations/supabase/client";
 
 type Application = {
   id: string;
-  user_id: string;
+  user_id: string | null;
   applicant_name: string | null;
   applicant_email: string | null;
   university_year: string;
@@ -44,6 +44,20 @@ type Application = {
   created_at: string;
   updated_at: string;
   submitted_at: string | null;
+  city?: string | null;
+  phone?: string | null;
+  gender?: string | null;
+  role?: string | null;
+  department?: string | null;
+  bio?: string | null;
+  image?: string | null;
+  linkedin?: string | null;
+  facebook?: string | null;
+  twitter?: string | null;
+  github?: string | null;
+  website?: string | null;
+  highest_education?: string | null;
+  discovery_source?: string | null;
 };
 
 type ApplicationStatus = Application["status"];
@@ -55,14 +69,14 @@ const ApplicantManagement = () => {
   const [statusFilter, setStatusFilter] = useState("all");
   const [loading, setLoading] = useState(true);
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
-  const [selectedStatus, setSelectedStatus] = useState<ApplicationStatus>("draft");
   const [isSaving, setIsSaving] = useState(false);
+  const [profileStatuses, setProfileStatuses] = useState<Record<string, "active" | "inactive" | "missing">>({});
 
   useEffect(() => {
     const loadApplications = async () => {
       const { data, error } = await supabase
         .from("applications")
-        .select("id, user_id, applicant_name, applicant_email, university_year, skills, motivation, interests, collaboration, status, created_at, updated_at, submitted_at")
+        .select("*")
         .order("updated_at", { ascending: false });
 
       if (error) {
@@ -73,6 +87,25 @@ const ApplicantManagement = () => {
         });
       } else {
         setApplications((data as Application[]) || []);
+        const userIds = ((data as Application[]) || []).map((application) => application.user_id).filter(Boolean);
+        if (userIds.length) {
+          const { data: profiles } = await (supabase as any).from("innovators").select("user_id, account_status").in("user_id", userIds);
+          setProfileStatuses(Object.fromEntries(userIds.map((userId) => {
+            const profile = (profiles || []).find((item: { user_id: string; account_status: "active" | "inactive" }) => item.user_id === userId);
+            return [userId, profile?.account_status || "missing"];
+          })));
+        }
+        const applicationIds = ((data as Application[]) || []).map((application) => application.id);
+        if (applicationIds.length) {
+          const { data: profiles } = await (supabase as any).from("innovators").select("application_id, account_status").in("application_id", applicationIds);
+          setProfileStatuses((current) => ({
+            ...current,
+            ...Object.fromEntries(applicationIds.map((applicationId) => {
+              const profile = (profiles || []).find((item: { application_id: string; account_status: "active" | "inactive" }) => item.application_id === applicationId);
+              return [applicationId, profile?.account_status || current[applicationId] || "missing"];
+            })),
+          }));
+        }
       }
       setLoading(false);
     };
@@ -104,54 +137,78 @@ const ApplicantManagement = () => {
 
   const openStatusModal = (application: Application) => {
     setSelectedApplication(application);
-    setSelectedStatus(application.status);
   };
 
-  const updateApplicationStatus = async () => {
-    if (!selectedApplication) return;
-
+  const acceptAndGenerateProfile = async (application: Application) => {
+    if (application.status !== "submitted" && application.status !== "accepted") return;
     setIsSaving(true);
-    const submittedAt = selectedStatus === "submitted" || selectedStatus === "accepted" || selectedStatus === "rejected"
-      ? selectedApplication.submitted_at || new Date().toISOString()
-      : null;
-    const { error } = await supabase
-      .from("applications")
-      .update({ status: selectedStatus, submitted_at: submittedAt })
-      .eq("id", selectedApplication.id);
+    let reviewedApplication = application;
 
-    if (error) {
-      toast({
-        title: "Unable to update status",
-        description: error.message,
-        variant: "destructive",
-      });
-    } else {
-      let notificationError: Error | null = null;
-      if (selectedStatus !== selectedApplication.status && selectedStatus !== "draft") {
-        const { error } = await supabase.functions.invoke("send-application-status-email", {
-          body: {
-            applicationId: selectedApplication.id,
-            status: selectedStatus,
-          },
-        });
-        notificationError = error;
+    if (application.status === "submitted") {
+      const { error: statusError } = await supabase
+        .from("applications")
+        .update({ status: "accepted" })
+        .eq("id", application.id)
+        .eq("status", "submitted");
+
+      if (statusError) {
+        toast({ title: "Unable to accept application", description: statusError.message, variant: "destructive" });
+        setIsSaving(false);
+        return;
       }
 
-      setApplications((current) => current.map((application) => (
-        application.id === selectedApplication.id
-          ? { ...application, status: selectedStatus as Application["status"], submitted_at: submittedAt, updated_at: new Date().toISOString() }
-          : application
-      )));
-      setSelectedApplication(null);
-      toast({
-        title: "Application status updated",
-        description: notificationError
-          ? "The status was saved, but the notification email could not be sent."
-          : selectedStatus !== "draft"
-            ? "The applicant was notified by email."
-            : undefined,
-        variant: notificationError ? "destructive" : undefined,
-      });
+      reviewedApplication = { ...application, status: "accepted" };
+      setApplications((current) => current.map((item) => item.id === application.id ? reviewedApplication : item));
+      setSelectedApplication(reviewedApplication);
+    }
+
+    const { data: applicationProfile } = await (supabase as any)
+      .from("innovators")
+      .select("id, account_status")
+      .eq("application_id", application.id)
+      .maybeSingle();
+    const { data: userProfile } = !applicationProfile && application.user_id
+      ? await (supabase as any).from("innovators").select("id, account_status").eq("user_id", application.user_id).maybeSingle()
+      : { data: null };
+    const existing = applicationProfile || userProfile;
+    const profileData = {
+      application_id: application.id,
+      user_id: application.user_id,
+      name: application.applicant_name || "Applicant",
+      role: application.role || "Innovator",
+      department: application.department || "Not specified",
+      gender: application.gender || null,
+      bio: application.bio || "",
+      image: application.image || null,
+      linkedin: application.linkedin || null,
+      facebook: application.facebook || null,
+      twitter: application.twitter || null,
+      github: application.github || null,
+      website: application.website || null,
+      status: "innovator",
+      account_status: existing?.account_status || "inactive",
+    };
+    const { data: profile, error } = existing
+      ? await (supabase as any).from("innovators").update(profileData).eq("id", existing.id).select("id, account_status").single()
+      : await (supabase as any).from("innovators").insert(profileData).select("id, account_status").single();
+    if (error) {
+      toast({ title: "Application accepted, but profile generation failed", description: error.message, variant: "destructive" });
+    } else {
+      await (supabase as any).from("innovator_skills").delete().eq("innovator_id", profile.id);
+      if (application.skills?.length) await (supabase as any).from("innovator_skills").insert(application.skills.map((skill) => ({ innovator_id: profile.id, skill })));
+      setProfileStatuses((current) => ({ ...current, [application.id]: profile.account_status }));
+      toast({ title: "Application accepted", description: "Profile generated from the submitted data and kept inactive until activated." });
+    }
+    setIsSaving(false);
+  };
+
+  const setProfileVisibility = async (application: Application, accountStatus: "active" | "inactive") => {
+    setIsSaving(true);
+    const { error } = await (supabase as any).from("innovators").update({ account_status: accountStatus }).eq("application_id", application.id);
+    if (error) toast({ title: "Unable to update visibility", description: error.message, variant: "destructive" });
+    else {
+      setProfileStatuses((current) => ({ ...current, [application.id]: accountStatus }));
+      toast({ title: accountStatus === "active" ? "Profile activated" : "Profile deactivated", description: accountStatus === "active" ? "The profile is now public." : "The profile is hidden from the public directory." });
     }
     setIsSaving(false);
   };
@@ -207,6 +264,7 @@ const ApplicantManagement = () => {
                 <TableHead>Skills</TableHead>
                 <TableHead>Last updated</TableHead>
                 <TableHead>Submitted</TableHead>
+                <TableHead className="text-right">Review</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -215,6 +273,7 @@ const ApplicantManagement = () => {
                   <TableCell><Skeleton className="h-4 w-48" /></TableCell>
                   <TableCell><Skeleton className="h-6 w-20" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-24" /></TableCell>
+                  <TableCell><Skeleton className="ml-auto h-8 w-28" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-32" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-24" /></TableCell>
                   <TableCell><Skeleton className="h-4 w-24" /></TableCell>
@@ -222,8 +281,7 @@ const ApplicantManagement = () => {
               )) : filteredApplications.length > 0 ? filteredApplications.map((application) => (
                 <TableRow
                   key={application.id}
-                  className={application.status === "draft" ? "bg-muted/20 text-muted-foreground" : "cursor-pointer hover:bg-muted/50"}
-                  onClick={() => application.status !== "draft" && openStatusModal(application)}
+                  className={application.status === "draft" ? "bg-muted/20 text-muted-foreground" : "hover:bg-muted/50"}
                 >
                   <TableCell>
                     <div className="flex items-center gap-2">
@@ -259,10 +317,17 @@ const ApplicantManagement = () => {
                   </TableCell>
                   <TableCell>{new Date(application.updated_at).toLocaleDateString()}</TableCell>
                   <TableCell>{application.status === "draft" ? "—" : application.submitted_at ? new Date(application.submitted_at).toLocaleDateString() : "-"}</TableCell>
+                  <TableCell className="text-right">
+                    {application.status === "draft" ? <span className="text-xs text-muted-foreground">Submit first</span> : (
+                      <Button size="sm" variant="outline" onClick={() => openStatusModal(application)}>
+                        <Eye className="mr-2 h-4 w-4" /> Review
+                      </Button>
+                    )}
+                  </TableCell>
                 </TableRow>
               )) : (
                 <TableRow>
-                  <TableCell colSpan={6} className="h-32 text-center text-muted-foreground">No applications found.</TableCell>
+                  <TableCell colSpan={7} className="h-32 text-center text-muted-foreground">No applications found.</TableCell>
                 </TableRow>
               )}
             </TableBody>
@@ -272,34 +337,64 @@ const ApplicantManagement = () => {
       </div>
 
       <Dialog open={Boolean(selectedApplication)} onOpenChange={(open) => !open && setSelectedApplication(null)}>
-        <DialogContent>
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle>Update application status</DialogTitle>
+            <DialogTitle>Review application</DialogTitle>
             <DialogDescription>
               {selectedApplication?.applicant_name || "Applicant"} · {selectedApplication?.applicant_email || "Email not saved"}
             </DialogDescription>
           </DialogHeader>
 
-          <div className="space-y-2 py-3">
-            <label htmlFor="application-status" className="text-sm font-medium">Status</label>
-            <Select value={selectedStatus} onValueChange={(value: ApplicationStatus) => setSelectedStatus(value)}>
-              <SelectTrigger id="application-status">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="draft">Draft</SelectItem>
-                <SelectItem value="submitted">Submitted</SelectItem>
-                <SelectItem value="accepted">Accepted</SelectItem>
-                <SelectItem value="rejected">Rejected</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          {selectedApplication && (
+            <div className="grid gap-4 border-y py-4 text-sm md:grid-cols-2">
+              {selectedApplication.image && (
+                <div className="md:col-span-2">
+                  <img src={selectedApplication.image} alt={`${selectedApplication.applicant_name || "Applicant"} profile`} className="h-24 w-24 rounded-full object-cover ring-1 ring-border" />
+                </div>
+              )}
+              {!selectedApplication.image && (
+                <div className="md:col-span-2 rounded-md border border-dashed p-4 text-muted-foreground">
+                  No profile picture was submitted.
+                </div>
+              )}
+              <div><span className="font-medium">Phone:</span> {selectedApplication.phone || "Not provided"}</div>
+              <div><span className="font-medium">City:</span> {selectedApplication.city || "Not provided"}</div>
+              <div><span className="font-medium">Gender:</span> {selectedApplication.gender || "Not provided"}</div>
+              <div><span className="font-medium">Role:</span> {selectedApplication.role || "Not provided"}</div>
+              <div><span className="font-medium">Department:</span> {selectedApplication.department || "Not provided"}</div>
+              <div><span className="font-medium">Education:</span> {selectedApplication.highest_education || "Not provided"}</div>
+              <div className="md:col-span-2"><span className="font-medium">Skills:</span> {selectedApplication.skills?.join(", ") || "Not provided"}</div>
+              <div><span className="font-medium">LinkedIn:</span> {selectedApplication.linkedin || "Not provided"}</div>
+              <div><span className="font-medium">Facebook:</span> {selectedApplication.facebook || "Not provided"}</div>
+              <div><span className="font-medium">X:</span> {selectedApplication.twitter || "Not provided"}</div>
+              <div><span className="font-medium">GitHub:</span> {selectedApplication.github || "Not provided"}</div>
+              <div><span className="font-medium">Website:</span> {selectedApplication.website || "Not provided"}</div>
+              <div><span className="font-medium">How they found us:</span> {selectedApplication.discovery_source || "Not provided"}</div>
+              <div className="md:col-span-2"><span className="font-medium">Bio:</span><p className="mt-1 whitespace-pre-wrap text-muted-foreground">{selectedApplication.bio || "Not provided"}</p></div>
+              <div className="md:col-span-2"><span className="font-medium">Motivation:</span><p className="mt-1 whitespace-pre-wrap text-muted-foreground">{selectedApplication.motivation || "Not provided"}</p></div>
+              <div className="md:col-span-2"><span className="font-medium">Project interests:</span><p className="mt-1 whitespace-pre-wrap text-muted-foreground">{selectedApplication.interests || "Not provided"}</p></div>
+              <div className="md:col-span-2"><span className="font-medium">Collaboration:</span><p className="mt-1 whitespace-pre-wrap text-muted-foreground">{selectedApplication.collaboration || "Not provided"}</p></div>
+            </div>
+          )}
 
           <DialogFooter>
             <Button variant="outline" onClick={() => setSelectedApplication(null)} disabled={isSaving}>Cancel</Button>
-            <Button onClick={updateApplicationStatus} disabled={isSaving}>
-              {isSaving ? "Saving..." : "Save status"}
-            </Button>
+            {selectedApplication && profileStatuses[selectedApplication.id] === "missing" && (
+              <Button variant="outline" onClick={() => acceptAndGenerateProfile(selectedApplication)} disabled={isSaving}>
+                <UserPlus className="mr-2 h-4 w-4" />
+                {selectedApplication.status === "submitted" ? "Accept & generate profile" : "Generate profile"}
+              </Button>
+            )}
+            {selectedApplication && profileStatuses[selectedApplication.id] === "active" && (
+              <Button variant="outline" onClick={() => setProfileVisibility(selectedApplication, "inactive")} disabled={isSaving}>
+                <EyeOff className="mr-2 h-4 w-4" /> Close profile
+              </Button>
+            )}
+            {selectedApplication && profileStatuses[selectedApplication.id] === "inactive" && (
+              <Button className="bg-[#00628b] text-white hover:bg-[#004f70]" onClick={() => setProfileVisibility(selectedApplication, "active")} disabled={isSaving}>
+                <CheckCircle2 className="mr-2 h-4 w-4" /> Activate profile
+              </Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

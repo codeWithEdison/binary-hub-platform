@@ -21,6 +21,7 @@ export type Database = {
           collaboration: string
           created_at: string
           id: string
+          image: string | null
           interests: string
           motivation: string
           secondary_email: string | null
@@ -29,7 +30,7 @@ export type Database = {
           submitted_at: string | null
           university_year: string
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           applicant_email?: string | null
@@ -37,6 +38,7 @@ export type Database = {
           collaboration?: string
           created_at?: string
           id?: string
+          image?: string | null
           interests?: string
           motivation?: string
           secondary_email?: string | null
@@ -45,7 +47,7 @@ export type Database = {
           submitted_at?: string | null
           university_year?: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           applicant_email?: string | null
@@ -53,6 +55,7 @@ export type Database = {
           collaboration?: string
           created_at?: string
           id?: string
+          image?: string | null
           interests?: string
           motivation?: string
           secondary_email?: string | null
@@ -626,7 +629,7 @@ export type Database = {
           created_at: string | null
           id: string
           role: Database["public"]["Enums"]["user_role"]
-          user_id: string
+          user_id?: string | null
         }
         Insert: {
           created_at?: string | null

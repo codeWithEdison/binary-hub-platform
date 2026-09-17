@@ -1,5 +1,5 @@
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Menu, X, User, LogOut, Settings } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -20,6 +20,9 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
+  const navbarHeight = 96;
   const location = useLocation();
   const navigate = useNavigate();
   const { user, signOut } = useAuth();
@@ -39,10 +42,14 @@ const Navbar = () => {
   useEffect(() => {
     const handleScroll = () => {
       const offset = window.scrollY;
+      const shouldShow = offset <= navbarHeight || offset < lastScrollY.current;
+
+      setIsVisible(shouldShow);
       setScrolled(offset > 50);
+      lastScrollY.current = offset;
     };
 
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -65,7 +72,7 @@ const Navbar = () => {
   }, [isOpen]);
 
   const navVariants = {
-    hidden: { opacity: 0, y: -20 },
+    hidden: { opacity: 0, y: -120 },
     visible: { opacity: 1, y: 0 }
   };
 
@@ -110,19 +117,7 @@ const Navbar = () => {
   };
 
   const handleApplyClick = () => {
-    if (user) {
-      navigate("/applications");
-      return;
-    }
-
-    // Keep the intended destination for email/password and OAuth sign-in flows.
-    sessionStorage.setItem("postAuthRedirect", "/applications");
-    navigate("/auth", {
-      state: {
-        from: "/applications",
-        message: "Log in to complete your application.",
-      },
-    });
+    navigate("/applications/form");
   };
 
   const getUserInitials = () => {
@@ -155,8 +150,9 @@ const Navbar = () => {
         }
       )}
       initial="hidden"
-      animate="visible"
+      animate={isVisible ? "visible" : "hidden"}
       variants={navVariants}
+      transition={{ duration: 0.2, ease: "easeOut" }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Link to="/" className="relative z-50">

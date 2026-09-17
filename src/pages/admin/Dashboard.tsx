@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, Outlet, useLocation } from "react-router-dom";
 import {
   ChevronLeft, ChevronRight, LayoutDashboard, Users, Calendar, FileText,
-  Settings, LogOut, Menu, X, Bell, ClipboardList, Newspaper
+  Settings, LogOut, Menu, X, Bell, ClipboardList, Newspaper, Images, SlidersHorizontal
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
@@ -28,6 +28,11 @@ const AdminDashboard = () => {
       icon: Users
     },
     {
+      name: "Members",
+      path: "/admin/members",
+      icon: Users
+    },
+    {
       name: "Projects",
       path: "/admin/projects",
       icon: FileText
@@ -48,9 +53,19 @@ const AdminDashboard = () => {
       icon: Newspaper
     },
     {
+      name: "Hero Slides",
+      path: "/admin/hero-slides",
+      icon: Images
+    },
+    {
       name: "Applicants",
       path: "/admin/applicants",
       icon: ClipboardList
+    },
+    {
+      name: "Application setup",
+      path: "/admin/application-setup",
+      icon: SlidersHorizontal
     },
     {
       name: "Stakeholders",

@@ -1,0 +1,15 @@
+ALTER TABLE public.applications
+  ADD COLUMN IF NOT EXISTS city text,
+  ADD COLUMN IF NOT EXISTS phone text,
+  ADD COLUMN IF NOT EXISTS gender text,
+  ADD COLUMN IF NOT EXISTS role text,
+  ADD COLUMN IF NOT EXISTS department text,
+  ADD COLUMN IF NOT EXISTS bio text,
+  ADD COLUMN IF NOT EXISTS image text,
+  ADD COLUMN IF NOT EXISTS linkedin text,
+  ADD COLUMN IF NOT EXISTS facebook text,
+  ADD COLUMN IF NOT EXISTS twitter text,
+  ADD COLUMN IF NOT EXISTS github text,
+  ADD COLUMN IF NOT EXISTS website text,
+  ADD COLUMN IF NOT EXISTS highest_education text,
+  ADD COLUMN IF NOT EXISTS discovery_source text;

@@ -28,19 +28,23 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import AdminDashboard from "./pages/admin/Dashboard";
 import Overview from "./pages/admin/Overview";
 import InnovatorManagement from "./pages/admin/InnovatorManagement";
+import Members from "./pages/admin/Members";
 import ProjectManagement from "./pages/admin/ProjectManagement";
 import EventManagement from "./pages/admin/EventManagement";
 import AnnouncementManagement from "./pages/admin/AnnouncementManagement";
 import ApplicantManagement from "./pages/admin/ApplicantManagement";
+import ApplicationSetup from "./pages/admin/ApplicationSetup";
 import InnovatorForm from "./pages/admin/InnovatorForm";
 import ProjectForm from "./pages/admin/ProjectForm";
 import EventForm from "./pages/admin/EventForm";
 import AnnouncementForm from "./pages/admin/AnnouncementForm";
 import { StakeholderManagement } from "./pages/admin/StakeholderManagement";
-import Applications from "./pages/Applications";
 import ApplicationForm from "./pages/ApplicationForm";
+import ApplicationFormRedesigned from "./pages/ApplicationFormRedesigned";
 import BlogManagement from "./pages/admin/BlogManagement";
 import BlogForm from "./pages/admin/BlogForm";
+import HeroSlidesManagement from "./pages/admin/HeroSlidesManagement";
+import HeroSlideForm from "./pages/admin/HeroSlideForm";
 
 const queryClient = new QueryClient();
 
@@ -71,17 +75,16 @@ const App = () => (
           <Route path="/partners" element={<><Navbar /><Partners /></>} />
           <Route path="/contact" element={<><Navbar /><Contact /></>} />
 
-          {/* Applications are available only to authenticated users. */}
-          <Route path="/applications" element={
-            <ProtectedRoute>
-              <><Navbar /><Applications /></>
+          {/* Applications can be started anonymously and saved in this browser. */}
+          <Route path="/applications/form" element={<><Navbar /><ApplicationFormRedesigned /></>} />
+          <Route path="/applications/profile" element={<Navigate to="/applications/form" replace />} />
+          <Route path="/members" element={
+            <ProtectedRoute requireRole="admin">
+              <AdminDashboard />
             </ProtectedRoute>
-          } />
-          <Route path="/applications/form" element={
-            <ProtectedRoute>
-              <><Navbar /><ApplicationForm /></>
-            </ProtectedRoute>
-          } />
+          }>
+            <Route index element={<Members />} />
+          </Route>
 
           {/* Admin Routes */}
           <Route path="/admin" element={
@@ -91,6 +94,7 @@ const App = () => (
           }>
             <Route index element={<Overview />} />
             <Route path="innovators" element={<InnovatorManagement />} />
+            <Route path="members" element={<Members />} />
             <Route path="innovators/new" element={<InnovatorForm />} />
             <Route path="innovators/edit/:id" element={<InnovatorForm />} />
             <Route path="projects" element={<ProjectManagement />} />
@@ -105,8 +109,12 @@ const App = () => (
             <Route path="blog" element={<BlogManagement />} />
             <Route path="blog/new" element={<BlogForm />} />
             <Route path="blog/edit/:id" element={<BlogForm />} />
+            <Route path="hero-slides" element={<HeroSlidesManagement />} />
+            <Route path="hero-slides/new" element={<HeroSlideForm />} />
+            <Route path="hero-slides/edit/:id" element={<HeroSlideForm />} />
             <Route path="stakeholders" element={<StakeholderManagement />} />
             <Route path="applicants" element={<ApplicantManagement />} />
+            <Route path="application-setup" element={<ApplicationSetup />} />
           </Route>
 
           {/* Catch-all route for 404 */}

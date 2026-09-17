@@ -78,7 +78,7 @@ const ProjectForm = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { createProject, updateProject, projects, loading } = useProjects();
-  const { innovators } = useInnovators();
+  const { innovators } = useInnovators({ includeInactive: true });
   const fileInputRef = useRef<HTMLInputElement>(null);
   const galleryFileInputRef = useRef<HTMLInputElement>(null);
 
@@ -163,8 +163,11 @@ const ProjectForm = () => {
 
         // Set team
         if (project.team && project.team.length > 0) {
+          const linkedInnovatorIds = (project.innovators || []).map((item) => item.innovator_id);
           setTeam(project.team.map(member => ({
-            id: member.name, // Using name as ID for existing data
+            id: innovators.find((innovator) => innovator.name === member.name && linkedInnovatorIds.includes(innovator.id))?.id
+              || linkedInnovatorIds.find((innovatorId) => innovators.some((innovator) => innovator.id === innovatorId && innovator.name === member.name))
+              || member.name,
             name: member.name,
             role: member.role,
             image: member.image
@@ -182,7 +185,7 @@ const ProjectForm = () => {
         }
       }
     }
-  }, [isEditMode, id, projects]);
+  }, [isEditMode, id, projects, innovators]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

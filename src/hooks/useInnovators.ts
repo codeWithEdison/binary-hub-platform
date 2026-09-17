@@ -4,12 +4,23 @@ import { useToast } from "@/hooks/use-toast";
 
 export interface Innovator {
   id: string;
+  application_id?: string | null;
+  user_id?: string | null;
+  application_answers?: {
+    email?: string;
+    universityYear?: string;
+    skills?: string[];
+    motivation?: string;
+    interests?: string;
+    collaboration?: string;
+  } | null;
   name: string;
   bio: string | null;
   image: string | null;
   department: string;
   role: string;
   status: "innovator" | "alumni" | "mentor";
+  account_status?: "active" | "inactive";
   featured?: boolean;
   created_at: string;
   updated_at: string;
@@ -24,7 +35,7 @@ export interface Innovator {
   }>;
 }
 
-export const useInnovators = () => {
+export const useInnovators = ({ includeInactive = false }: { includeInactive?: boolean } = {}) => {
   const [innovators, setInnovators] = useState<Innovator[]>([]);
   const [featuredInnovators, setFeaturedInnovators] = useState<Innovator[]>([]);
   const [loading, setLoading] = useState(true);
@@ -33,17 +44,22 @@ export const useInnovators = () => {
   useEffect(() => {
     fetchInnovators();
     fetchFeaturedInnovators();
-  }, []);
+  }, [includeInactive]);
 
   const fetchInnovators = async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    let innovatorsQuery = supabase
       .from("innovators")
       .select(`
         *,
         skills:innovator_skills(skill)
-      `)
-      .order("created_at", { ascending: false });
+      `);
+
+    if (!includeInactive) {
+      innovatorsQuery = innovatorsQuery.eq("account_status", "active");
+    }
+
+    const { data, error } = await innovatorsQuery.order("created_at", { ascending: false });
 
     if (error) {
       toast({
@@ -58,14 +74,19 @@ export const useInnovators = () => {
   };
 
   const fetchFeaturedInnovators = async () => {
-    const { data, error } = await (supabase as any)
+    let featuredQuery = (supabase as any)
       .from("innovators")
       .select(`
         *,
         skills:innovator_skills(skill)
       `)
-      .eq("featured", true)
-      .order("created_at", { ascending: false });
+      .eq("featured", true);
+
+    if (!includeInactive) {
+      featuredQuery = featuredQuery.eq("account_status", "active");
+    }
+
+    const { data, error } = await featuredQuery.order("created_at", { ascending: false });
 
     if (error) {
       toast({
@@ -81,9 +102,7 @@ export const useInnovators = () => {
   const createInnovator = async (innovator: Omit<Innovator, "id" | "created_at" | "updated_at">) => {
     const { data, error } = await (supabase as any)
       .from("innovators")
-      .insert([innovator])
-      .select()
-      .single();
+      .insert([innovator]);
 
     if (error) {
       toast({

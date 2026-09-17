@@ -106,7 +106,7 @@ const Applications = () => {
                     <h2 className="text-2xl font-medium text-slate-700">Application</h2>
                     <span className="rounded bg-slate-100 px-3 py-1 text-sm font-medium">{new Date(application.created_at).toLocaleDateString()}</span>
                   </div>
-                  <p className="mt-3 text-lg">Applicant: <span className="text-[#c53a30]">{applicantName}</span></p>
+                  <p className="mt-3 text-lg">Application from <span className="text-[#c53a30]">{applicantName}</span></p>
                 </div>
                 <span className={`w-fit rounded px-3 py-1.5 font-medium ${statusPresentation[application.status].className}`}>
                   {statusPresentation[application.status].label}

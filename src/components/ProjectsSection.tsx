@@ -27,16 +27,16 @@ const ProjectsSection: React.FC<ProjectsSectionProps> = ({
   const projectsToShow = showAllProjects ? projects : projects.slice(0, maxProjects);
 
   return (
-    <section className={`py-24 px-6 md:px-12 ${className}`}>
+    <section className={`py-14 px-6 md:px-12 ${className}`}>
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
-          <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
             {title.split(' ').map((word, index) =>
               index === 0 ? (
                 <span key={index}>{word} </span>

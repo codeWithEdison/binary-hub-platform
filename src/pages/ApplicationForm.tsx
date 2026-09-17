@@ -1,16 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
-import { ArrowLeft, ChevronRight } from "lucide-react";
+import { AlertCircle, ArrowLeft, CheckCircle2, Circle, Plus, Minus, UserRound } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 
 const questionSections = [
-  { label: "Profile", id: "application-profile" },
-  { label: "Skills", id: "application-skills" },
-  { label: "Motivation", id: "application-motivation" },
-  { label: "Project interests", id: "application-interests" },
-  { label: "Collaboration", id: "application-collaboration" },
+  { label: "Personal information", id: "application-personal", fields: ["firstName", "lastName", "role", "department"] },
+  { label: "Email", id: "application-email", fields: ["email"] },
+  { label: "University year", id: "application-profile", fields: ["universityYear"] },
+  { label: "Skills", id: "application-skills", fields: ["skills"] },
+  { label: "Motivation", id: "application-motivation", fields: ["motivation"] },
+  { label: "Project interests", id: "application-interests", fields: ["interests"] },
+  { label: "Collaboration", id: "application-collaboration", fields: ["collaboration"] },
+  { label: "Profile bio", id: "application-bio", fields: ["bio"] },
 ];
 
 const skillOptions = [
@@ -42,9 +45,16 @@ const ApplicationForm = () => {
     .join(" ") || user?.user_metadata?.full_name || "Applicant";
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
-  const [showSecondaryEmail, setShowSecondaryEmail] = useState(false);
+  const [activeSection, setActiveSection] = useState("application-email");
+  const [showAllSkills, setShowAllSkills] = useState(false);
   const [form, setForm] = useState({
-    secondaryEmail: "",
+    firstName: "",
+    lastName: "",
+    role: "",
+    department: "",
+    bio: "",
+    image: "",
+    email: "",
     universityYear: "",
     skills: [] as string[],
     motivation: "",
@@ -53,7 +63,14 @@ const ApplicationForm = () => {
   });
 
   useEffect(() => {
-    if (!user) return;
+    if (user?.email) {
+      setForm((current) => ({ ...current, email: current.email || user.email || "" }));
+    }
+
+    if (!user) {
+      setIsLoading(false);
+      return;
+    }
 
     if (!applicationId) {
       setIsLoading(false);
@@ -74,14 +91,13 @@ const ApplicationForm = () => {
         toast({ title: "Unable to load application", description: error.message, variant: "destructive" });
       } else if (data) {
         setForm({
-          secondaryEmail: data.secondary_email || "",
+          email: data.applicant_email || user.email || "",
           universityYear: data.university_year,
           skills: data.skills,
           motivation: data.motivation,
           interests: data.interests,
           collaboration: data.collaboration,
         });
-        setShowSecondaryEmail(Boolean(data.secondary_email));
       }
 
       setIsLoading(false);
@@ -91,7 +107,7 @@ const ApplicationForm = () => {
   }, [applicationId, toast, user]);
 
   const progress = useMemo(() => {
-    const fields = Object.values(form);
+    const fields = [form.firstName, form.lastName, form.role, form.department, form.email, form.universityYear, form.skills, form.motivation, form.interests, form.collaboration, form.bio];
     const filled = fields.filter((value) => {
       if (Array.isArray(value)) return value.length > 0;
       if (typeof value === "string") return value.trim().length > 0;
@@ -99,6 +115,11 @@ const ApplicationForm = () => {
     }).length;
     return Math.round((filled / fields.length) * 100);
   }, [form]);
+
+  const isSectionComplete = (fields: string[]) => fields.every((field) => {
+    const value = form[field as keyof typeof form];
+    return Array.isArray(value) ? value.length > 0 : Boolean(value.trim());
+  });
 
   const updateField = (field: keyof typeof form, value: string | string[]) => {
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -117,19 +138,20 @@ const ApplicationForm = () => {
   };
 
   const saveApplication = async (status: "draft" | "submitted", navigateAfterSave = false) => {
-    if (!user) return;
-
     if (status === "submitted" && progress < 100) {
       toast({ title: "Complete your application", description: "Please answer every question before submitting.", variant: "destructive" });
-      return;
+      return false;
     }
 
     setIsSaving(true);
+    const applicationUser = user;
+    const fullName = `${form.firstName.trim()} ${form.lastName.trim()}`.trim();
     const applicationData = {
-      user_id: user.id,
-      secondary_email: form.secondaryEmail.trim() || null,
-      applicant_name: applicantName,
-      applicant_email: user.email || null,
+      user_id: applicationUser?.id || null,
+      secondary_email: null,
+      applicant_name: fullName || applicantName,
+      applicant_email: form.email.trim() || null,
+      image: form.image.trim() || null,
       university_year: form.universityYear,
       skills: form.skills,
       motivation: form.motivation,
@@ -139,13 +161,13 @@ const ApplicationForm = () => {
       submitted_at: status === "submitted" ? new Date().toISOString() : null,
     };
     const { error } = applicationId
-      ? await supabase.from("applications").update(applicationData).eq("id", applicationId).eq("user_id", user.id)
+      ? await supabase.from("applications").update(applicationData).eq("id", applicationId)
       : await supabase.from("applications").insert(applicationData);
     setIsSaving(false);
 
     if (error) {
       toast({ title: "Unable to save application", description: error.message, variant: "destructive" });
-      return;
+      return false;
     }
 
     toast({
@@ -153,7 +175,9 @@ const ApplicationForm = () => {
       description: status === "submitted" ? "Thank you for applying to Binary Hub." : "You can return and continue later.",
     });
 
-    if (navigateAfterSave || status === "submitted") navigate("/applications");
+    if (navigateAfterSave) navigate("/applications/form");
+    if (status === "submitted") navigate("/");
+    return true;
   };
 
   const saveDraftAndGoBack = async () => {
@@ -161,7 +185,7 @@ const ApplicationForm = () => {
   };
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 px-4 pt-28 pb-8 text-[#111111] md:px-8 md:pt-32 lg:px-12 lg:pt-32">
+    <main className="min-h-screen bg-white px-4 pt-28 pb-8 text-[#111111] md:px-8 md:pt-32 lg:px-12 lg:pt-32">
       <div className="mx-auto max-w-6xl">
         <button
           type="button"
@@ -175,63 +199,83 @@ const ApplicationForm = () => {
 
         <header className="mb-10">
           <h1 className="text-3xl font-bold leading-tight tracking-[-0.03em] text-gray-900 md:text-5xl">
-            My Application
+            Application form
           </h1>
           <p className="mt-3 text-lg text-[#111111]/70 md:text-xl">Winter 2027</p>
         </header>
 
         <div className="grid gap-8 lg:grid-cols-[200px_minmax(0,1fr)]">
           <aside className="pt-4 text-sm text-[#111111]/65 md:text-base">
-            {questionSections.map((item, index) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className={`mb-4 block transition-colors hover:text-[#00628b] ${index === 0 ? "font-medium text-[#111111]" : ""}`}
-              >
-                {item.label}
-              </a>
-            ))}
+            {questionSections.map((item) => {
+              const complete = isSectionComplete(item.fields);
+              const selected = activeSection === item.id;
+
+              return (
+                <a
+                  key={item.id}
+                  href={`#${item.id}`}
+                  onClick={() => setActiveSection(item.id)}
+                  className={`mb-3 flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-[#00628b]/10 ${
+                    selected ? "bg-[#00628b]/10 font-semibold text-[#00628b]" : complete ? "text-emerald-700" : "text-red-600"
+                  }`}
+                >
+                  {complete ? <CheckCircle2 className="h-4 w-4" /> : selected ? <AlertCircle className="h-4 w-4" /> : <Circle className="h-4 w-4" />}
+                  <span>{item.label}</span>
+                </a>
+              );
+            })}
           </aside>
 
           <section className="w-full">
-            <h2 className="mb-6 text-2xl font-bold tracking-[-0.03em] text-[#111111] md:text-3xl">Application</h2>
+            <h2 className="mb-6 text-2xl font-bold tracking-[-0.03em] text-[#111111] md:text-3xl">Your application</h2>
 
-            <div className="rounded-2xl border border-black/30 bg-white/30 p-4 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)] md:p-5">
-              <div className="grid gap-4 md:grid-cols-2">
+            <div id="application-personal" className="mb-8 border-b border-black/10 pb-8">
+              <div className="mb-5 flex items-center gap-3">
+                <UserRound className="h-5 w-5 text-[#00628b]" />
                 <div>
-                  <p className="text-sm text-[#111111]/60">Name</p>
-                  <p className="mt-1 text-lg font-semibold text-[#111111]">
-                    {[user?.user_metadata?.first_name, user?.user_metadata?.last_name].filter(Boolean).join(" ") || user?.user_metadata?.full_name || "Applicant"}
-                  </p>
-                </div>
-                <div>
-                  <p className="text-sm text-[#111111]/60">Email</p>
-                  <p className="mt-1 break-all text-lg font-semibold text-[#111111]">{user?.email || "No email"}</p>
+                  <h3 className="text-xl font-semibold text-[#111111]">Personal information</h3>
+                  <p className="text-sm text-[#111111]/60">This information will be used to create your public Binary Hub profile.</p>
                 </div>
               </div>
-              <div className="mt-5">
-                {!showSecondaryEmail ? (
-                  <button
-                    type="button"
-                    onClick={() => setShowSecondaryEmail(true)}
-                    className="inline-flex items-center gap-1 text-base font-medium text-[#00628b] hover:underline"
-                  >
-                    Add a secondary email <ChevronRight className="h-4 w-4" />
-                  </button>
-                ) : (
-                  <>
-                    <label htmlFor="secondary-email" className="mb-2 block text-sm text-[#111111]/60">Secondary email (optional)</label>
-                    <input
-                      id="secondary-email"
-                      type="email"
-                      value={form.secondaryEmail}
-                      onChange={(e) => updateField("secondaryEmail", e.target.value)}
-                      placeholder="Add another email address"
-                      className="w-full rounded-xl border border-black/30 bg-white/60 px-4 py-3 text-base outline-none transition focus:border-[#00628b] focus:ring-2 focus:ring-[#00628b]/20"
-                    />
-                  </>
-                )}
+              <div className="grid gap-5 md:grid-cols-2">
+                <div>
+                  <label htmlFor="first-name" className="text-sm font-medium text-[#111111]">First name <span className="text-red-600">*</span></label>
+                  <input id="first-name" required value={form.firstName} onChange={(e) => updateField("firstName", e.target.value)} placeholder="First name" className="mt-2 w-full rounded-xl border border-black/30 bg-white px-4 py-3 text-base outline-none transition focus:border-[#00628b] focus:ring-2 focus:ring-[#00628b]/20" />
+                </div>
+                <div>
+                  <label htmlFor="last-name" className="text-sm font-medium text-[#111111]">Last name <span className="text-red-600">*</span></label>
+                  <input id="last-name" required value={form.lastName} onChange={(e) => updateField("lastName", e.target.value)} placeholder="Last name" className="mt-2 w-full rounded-xl border border-black/30 bg-white px-4 py-3 text-base outline-none transition focus:border-[#00628b] focus:ring-2 focus:ring-[#00628b]/20" />
+                </div>
+                <div>
+                  <label htmlFor="profile-role" className="text-sm font-medium text-[#111111]">Role <span className="text-red-600">*</span></label>
+                  <input id="profile-role" required value={form.role} onChange={(e) => updateField("role", e.target.value)} placeholder="e.g. Student, Developer, Designer" className="mt-2 w-full rounded-xl border border-black/30 bg-white px-4 py-3 text-base outline-none transition focus:border-[#00628b] focus:ring-2 focus:ring-[#00628b]/20" />
+                </div>
+                <div>
+                  <label htmlFor="profile-department" className="text-sm font-medium text-[#111111]">Department <span className="text-red-600">*</span></label>
+                  <input id="profile-department" required value={form.department} onChange={(e) => updateField("department", e.target.value)} placeholder="Your department or field" className="mt-2 w-full rounded-xl border border-black/30 bg-white px-4 py-3 text-base outline-none transition focus:border-[#00628b] focus:ring-2 focus:ring-[#00628b]/20" />
+                </div>
+                <div className="md:col-span-2">
+                  <label htmlFor="profile-image" className="text-sm font-medium text-[#111111]">Profile image URL</label>
+                  <input id="profile-image" type="url" value={form.image} onChange={(e) => updateField("image", e.target.value)} placeholder="https://example.com/your-photo.jpg" className="mt-2 w-full rounded-xl border border-black/30 bg-white px-4 py-3 text-base outline-none transition focus:border-[#00628b] focus:ring-2 focus:ring-[#00628b]/20" />
+                </div>
+                <div className="md:col-span-2">
+                  <label htmlFor="profile-bio" className="text-sm font-medium text-[#111111]">Short biography <span className="text-red-600">*</span></label>
+                  <textarea id="profile-bio" required value={form.bio} onChange={(e) => updateField("bio", e.target.value)} placeholder="Tell the Binary Hub community about yourself." className="mt-2 min-h-[120px] w-full rounded-xl border border-black/30 bg-white px-4 py-3 text-base outline-none transition focus:border-[#00628b] focus:ring-2 focus:ring-[#00628b]/20" />
+                </div>
               </div>
+            </div>
+
+            <div id="application-email" className="rounded-2xl border border-black/30 bg-white/30 p-4 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.04)] md:p-5">
+              <label htmlFor="applicant-email" className="text-lg font-semibold text-[#111111]">Email <span className="text-red-600">*</span></label>
+              <input
+                id="applicant-email"
+                type="email"
+                required
+                value={form.email}
+                onChange={(e) => updateField("email", e.target.value)}
+                placeholder="you@example.com"
+                className="mt-2 w-full rounded-xl border border-black/30 bg-white/60 px-4 py-3 text-base outline-none transition focus:border-[#00628b] focus:ring-2 focus:ring-[#00628b]/20"
+              />
             </div>
 
             <div className={`mt-8 space-y-6 ${isLoading ? "pointer-events-none opacity-60" : ""}`}>
@@ -259,7 +303,7 @@ const ApplicationForm = () => {
                   What skills do you bring?
                 </label>
                 <div className="grid grid-cols-2 gap-3 md:grid-cols-3">
-                  {skillOptions.map((skill) => {
+                  {(showAllSkills ? skillOptions : skillOptions.slice(0, 6)).map((skill) => {
                     const checked = form.skills.includes(skill);
 
                     return (
@@ -282,6 +326,14 @@ const ApplicationForm = () => {
                     );
                   })}
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setShowAllSkills((current) => !current)}
+                  className="mt-3 inline-flex items-center gap-1 text-sm font-medium text-[#00628b] hover:underline"
+                >
+                  {showAllSkills ? <Minus className="h-4 w-4" /> : <Plus className="h-4 w-4" />}
+                  {showAllSkills ? "Less" : "More"}
+                </button>
               </div>
 
               <div id="application-motivation">
@@ -346,7 +398,7 @@ const ApplicationForm = () => {
                   onClick={() => saveApplication("submitted")}
                   className="rounded-full bg-[#4a4a4a] px-5 py-2 text-base font-medium text-white transition hover:bg-[#2d2d2d] disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  Submit application
+                  {isSaving ? "Saving..." : "Submit application"}
                 </button>
               </div>
             </div>
