@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { innovators as fallbackInnovators } from "@/lib/data";
 
 export interface Innovator {
   id: string;
@@ -67,8 +68,9 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
         description: "Failed to fetch innovators",
         variant: "destructive"
       });
+      setInnovators(fallbackInnovators);
     } else {
-      setInnovators((data as any) || []);
+      setInnovators((data as any)?.length ? (data as any) : fallbackInnovators);
     }
     setLoading(false);
   };
@@ -94,8 +96,9 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
         description: "Failed to fetch featured innovators",
         variant: "destructive"
       });
+      setFeaturedInnovators(fallbackInnovators.slice(0, 3));
     } else {
-      setFeaturedInnovators((data as any) || []);
+      setFeaturedInnovators((data as any)?.length ? (data as any).slice(0, 3) : fallbackInnovators.slice(0, 3));
     }
   };
 

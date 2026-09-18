@@ -107,3 +107,48 @@
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
+
+/* Sliding partner logo marquee */
+.partner-marquee {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+}
+
+.partner-track {
+  display: flex;
+  width: max-content;
+  min-width: 100%;
+  gap: 2rem;
+  align-items: center;
+  animation: partner-marquee 32s linear infinite;
+  will-change: transform;
+  padding-inline: 1rem;
+}
+
+.partner-logo-item {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  height: 64px;
+  padding: 0.5rem 0.75rem;
+  background: transparent;
+}
+
+@keyframes partner-marquee {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@media (min-width: 768px) {
+  .partner-logo-item {
+    min-width: 180px;
+    height: 76px;
+  }
+}

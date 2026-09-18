@@ -5,16 +5,20 @@ interface AboutSectionProps {
   className?: string;
   showLearnMoreLink?: boolean;
   variant?: "index" | "about";
+  imageSrc?: string;
+  showImage?: boolean;
 }
 
 const AboutSection: React.FC<AboutSectionProps> = ({
-  className = ""
+  className = "",
+  imageSrc = "/img/presentation-img/team.jpg",
+  showImage = true
 }) => {
   return (
     <section className={`bg-white px-6 py-8 md:px-12 lg:py-10 ${className}`} id="about">
       <div className="mx-auto max-w-7xl">
-        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.05fr] lg:gap-16">
-          <motion.div
+        <div className={`grid items-center gap-12 ${showImage ? "lg:grid-cols-[1fr_1.05fr] lg:gap-16" : "max-w-3xl"}`}>
+          {showImage && <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
@@ -33,7 +37,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                 UR Binary Hub is the innovation and incubation hub of the University of Rwanda, supporting students, staff, experts, and alumni to develop homegrown digital solutions for national and institutional challenges.
               </p>
             </div>
-          </motion.div>
+          </motion.div>}
 
           <motion.div
             className="relative w-full"
@@ -44,7 +48,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
           >
             <div className="overflow-hidden">
               <img
-                src="/img/presentation-img/team.jpg"
+                src={imageSrc}
                 alt="UR Binary Hub Team"
                 className="aspect-[1.35] w-full object-cover object-center"
               />

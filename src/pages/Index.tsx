@@ -4,6 +4,7 @@ import { ArrowRight, Code2, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import HeroComparison from "@/components/HeroComparison";
 import Footer from "@/components/Footer";
+import CallToAction from "@/components/CallToAction";
 import InnovatorCard from "@/components/InnovatorCard";
 import ServiceCard from "@/components/ServiceCard";
 import AboutSection from "@/components/AboutSection";
@@ -21,7 +22,8 @@ const Index = () => {
   const y = useTransform(scrollY, [0, 1000], [0, -200]);
   const { stakeholders, loading: stakeholdersLoading } = useStakeholders();
   const { projects, loading: projectsLoading } = useProjects();
-  const { featuredInnovators } = useInnovators();
+  const { innovators, featuredInnovators } = useInnovators();
+  const landingInnovators = featuredInnovators.length > 0 ? featuredInnovators : innovators;
 
   useEffect(() => {
     setIsVisible(true);
@@ -62,7 +64,7 @@ const Index = () => {
       />
 
       {/* Flagship Projects */}
-      <section className="relative overflow-hidden bg-white px-6 py-20 dark:bg-slate-900 md:px-12 lg:py-24" id="projects">
+      <section className="relative overflow-hidden bg-white px-6 py-12 dark:bg-slate-900 md:px-12 md:py-14 lg:py-16" id="projects">
         <div className="mx-auto max-w-7xl">
           <motion.div
             initial={{ opacity: 0, y: 24 }}
@@ -71,25 +73,22 @@ const Index = () => {
             transition={{ duration: 0.6 }}
             className="mx-auto max-w-3xl text-center"
           >
-            <p className="mx-auto mb-5 inline-flex rounded-full bg-[#00628b]/10 px-5 py-2 text-sm font-medium text-slate-950 dark:text-white">
-              FLAGSHIP PROJECTS
-            </p>
-            <h2 className="text-3xl font-bold leading-tight text-slate-950 dark:text-white md:text-4xl">
+            <h2 className="text-2xl font-bold leading-tight text-slate-950 dark:text-white md:text-3xl">
               Our Flagship Projects
             </h2>
-            <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-slate-500 dark:text-slate-300 md:text-lg md:leading-8">
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-slate-500 dark:text-slate-300 md:text-base md:leading-7">
               Homegrown digital solutions developed by UR Binary Hub innovators to address real challenges.
             </p>
           </motion.div>
 
           {projectsLoading ? (
-            <div className="mt-12 grid grid-cols-1 gap-7 md:grid-cols-3 lg:mt-16 lg:gap-10">
+            <div className="mt-8 grid grid-cols-1 gap-7 md:grid-cols-3 lg:mt-10 lg:gap-10">
               {Array.from({ length: 3 }).map((_, index) => (
                 <div key={index} className="h-[18rem] animate-pulse rounded-lg border border-slate-100 bg-white p-6 shadow-[0_18px_55px_rgba(15,23,42,0.08)] dark:border-slate-700 dark:bg-slate-900" />
               ))}
             </div>
           ) : (
-            <div className="mt-12 grid grid-cols-1 gap-7 md:grid-cols-3 lg:mt-16 lg:gap-10">
+            <div className="mt-8 grid grid-cols-1 gap-7 md:grid-cols-3 lg:mt-10 lg:gap-10">
               {projects.slice(0, 6).map((project, index) => (
                 <motion.article
                   key={project.id}
@@ -129,122 +128,6 @@ const Index = () => {
       {/* Editorial Blog */}
       <BlogSection compact />
 
-      {/* Stakeholders & Contributions Section */}
-      <section className="py-10 px-6 md:px-12 relative overflow-hidden" id="stakeholders">
-        <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-8"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Our{" "}
-              <span className="text-[#00628b] bg-gradient-to-r from-[#00628b] to-blue-600 bg-clip-text text-transparent">
-                Key Stakeholders
-              </span>
-            </h2>
-          </motion.div>
-
-          <div className="overflow-hidden border-y border-slate-200 py-6">
-            {stakeholdersLoading ? (
-              <div className="flex gap-4 overflow-x-auto pb-2 md:gap-6">
-                {Array.from({ length: 6 }).map((_, index) => (
-                  <div key={index} className="min-w-[150px] flex-shrink-0 animate-pulse text-center">
-                    <div className="mx-auto mb-3 h-12 w-12 rounded-xl bg-slate-200 md:h-14 md:w-14"></div>
-                    <div className="mx-auto h-3 w-20 rounded bg-slate-200"></div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div className="flex gap-5 overflow-x-auto pb-2 md:gap-8 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {stakeholders.map((stakeholder, index) => (
-                  <motion.div
-                    key={stakeholder.id}
-                    initial={{ opacity: 0, y: 16 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: index * 0.05, duration: 0.45 }}
-                    whileHover={{ y: -2 }}
-                    className="min-w-[150px] flex-shrink-0 text-center md:min-w-[180px]"
-                  >
-                    <div className="flex flex-col items-center justify-center gap-3">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-white ring-1 ring-slate-200 shadow-sm md:h-14 md:w-14">
-                        <img
-                          src={stakeholder.logo || `/img/stakeholder/${stakeholder.name.toLowerCase().replace(/\s+/g, '_')}.png`}
-                          alt={`${stakeholder.name} Logo`}
-                          className="h-full w-full object-contain p-2"
-                          onError={(e) => {
-                            e.currentTarget.style.display = 'none';
-                            const fallback = e.currentTarget.parentElement?.lastElementChild as HTMLElement | null;
-                            if (fallback) fallback.classList.remove('hidden');
-                          }}
-                        />
-                        <div className="hidden flex h-full w-full items-center justify-center bg-slate-100 text-center text-[8px] font-semibold text-slate-600 md:text-[10px]">
-                          {stakeholder.name}
-                        </div>
-                      </div>
-                      <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-700 md:text-[11px]">
-                        {stakeholder.name}
-                      </p>
-                    </div>
-                  </motion.div>
-                ))}
-              </div>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {/* Services Section - Redesigned */}
-      <section className="py-14 px-6 md:px-12" id="services">
-        <div className="max-w-7xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
-            className="text-center mb-10"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Benefits of Working with{" "}
-              <span className="text-[#00628b]">
-                Binary Hub
-              </span>
-            </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              We provide comprehensive support designed to nurture innovators at every stage of their journey, from concept to commercialization.
-            </p>
-          </motion.div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {services.slice(0, 6).map((service, index) => (
-              <motion.div
-                key={service.id}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
-                whileHover={{ y: -5 }}
-              >
-                <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300 group">
-                  <div className="w-12 h-12 bg-[#00628b] rounded-xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                    <Sparkles className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4 group-hover:text-[#00628b] transition-colors">
-                    {service.title}
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                    {service.description}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* Featured Innovators - Redesigned */}
       <section className="bg-white py-14 px-6 md:px-12 dark:bg-slate-900" id="team">
         <div className="max-w-7xl mx-auto">
@@ -253,73 +136,67 @@ const Index = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="text-center mb-10"
+            className="mb-10 text-center"
           >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
-              Meet Our{" "}
-              <span className="text-[#00628b]">
-                Core Team
-              </span>
+            <h2 className="text-xl font-bold text-slate-800 dark:text-white md:text-2xl">
+              Meet Our Core Team
             </h2>
-            <p className="text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-              Discover the talented individuals who are driving innovation and creating impact through UR Binary Hub.
-            </p>
+            <div className="mt-4 inline-flex items-center rounded-full border border-slate-300 bg-slate-100 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-700">
+              Meet the team
+            </div>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {featuredInnovators.slice(0, 3).map((innovator, index) => (
-              <motion.div
+          <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+            {landingInnovators.slice(0, 3).map((innovator, index) => (
+              <motion.article
                 key={innovator.id}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: index * 0.1, duration: 0.6 }}
+                transition={{ delay: index * 0.1, duration: 0.5 }}
                 whileHover={{ y: -5 }}
+                className="group flex min-h-[290px] flex-col rounded-lg border border-slate-200 bg-white p-5 transition hover:border-[#7898f4]/50 hover:shadow-[0_12px_28px_rgba(73,91,170,0.12)]"
               >
-                <div className="bg-white/90 backdrop-blur-sm rounded-2xl overflow-hidden shadow-lg border border-white/20 hover:shadow-xl transition-all duration-300 group">
-                  <div className="p-6">
-                    <div className="flex items-center space-x-4 mb-4">
-                      {/* Circular Image */}
-                      <div className="relative w-28 h-28 rounded-full overflow-hidden flex-shrink-0 border-2 border-gray-200 dark:border-gray-600">
-                        <img
-                          src={innovator.image}
-                          alt={innovator.name}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                          onError={(e) => {
-                            const target = e.target as HTMLImageElement;
-                            target.src = "/img/placeholder.svg";
-                            target.className = "w-full h-full object-contain opacity-50";
-                          }}
-                        />
-                      </div>
-
-                      <div className="flex-1">
-                        <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 group-hover:text-[#00628b] transition-colors">
-                          {innovator.name}
-                        </h3>
-                        <p className="text-[#00628b] font-semibold text-sm">
-                          {innovator.role}
-                        </p>
-                      </div>
+                <div className="flex items-start gap-4">
+                  {innovator.image ? (
+                    <img src={innovator.image} alt={innovator.name} className="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-white" />
+                  ) : (
+                    <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#dbe5ff] text-sm font-bold text-[#3e5ea9]">
+                      {innovator.name.split(/\s+/).filter(Boolean).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("") || "IN"}
                     </div>
-
-                    <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed mb-4">
-                      {innovator.bio}
-                    </p>
-
-                    <div className="flex flex-wrap gap-2">
-                      {(innovator.skills || []).slice(0, 3).map((skill, skillIndex) => (
-                        <span
-                          key={skillIndex}
-                          className="px-2 py-1 bg-[#00628b]/10 text-[#00628b] text-xs rounded-full"
-                        >
-                          {skill.skill}
-                        </span>
-                      ))}
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="truncate text-lg font-semibold leading-6 text-slate-950">{innovator.name}</h3>
+                      <span title="Active profile" className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-500" />
                     </div>
+                    <p className="mt-1 truncate text-sm font-medium text-slate-700">{innovator.role || "Innovator"}</p>
+                    <p className="truncate text-sm text-slate-500">{innovator.department || "Department not provided"}</p>
                   </div>
                 </div>
-              </motion.div>
+
+                <div className="mt-4 flex min-h-6 flex-wrap gap-1.5">
+                  {(innovator.skills || []).slice(0, 3).map((skill, skillIndex) => (
+                    <span key={skillIndex} className="rounded-full border border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-600">
+                      {typeof skill === "string" ? skill : skill.skill}
+                    </span>
+                  ))}
+                  {((innovator.skills || []).length === 0) && (
+                    <span className="text-sm text-slate-500">No skills listed</span>
+                  )}
+                </div>
+
+                <div className="mt-auto flex items-center justify-between border-t border-slate-200 pt-4 text-sm text-slate-600">
+                  <span className="inline-flex items-center gap-1.5">Public profile</span>
+                  <span>{innovator.status}</span>
+                </div>
+                <Link
+                  to={`/innovators/${innovator.id}`}
+                  className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-md bg-[#00628b] px-4 text-sm font-semibold text-white transition hover:bg-[#004f70] focus:outline-none focus:ring-2 focus:ring-[#00628b]/30 focus:ring-offset-2"
+                >
+                  View details
+                </Link>
+              </motion.article>
             ))}
           </div>
 
@@ -341,61 +218,62 @@ const Index = () => {
         </div>
       </section>
 
-      {/* CTA Section - Redesigned */}
-      <section className="py-16 px-6 md:px-12 relative overflow-hidden" id="cta">
-        <div className="absolute inset-0 bg-gradient-to-r from-[#00628b] to-blue-600"></div>
-        <div className="absolute inset-0 bg-[url('/img/presentation-img/team.jpg')] bg-cover bg-center opacity-10"></div>
-
-        <div className="max-w-7xl mx-auto relative z-10">
-          <div className="text-center max-w-4xl mx-auto">
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.8 }}
-              className="text-4xl md:text-5xl font-bold text-white mb-6"
-            >
-              Ready to Join the{" "}
-              <span className="text-yellow-300">
-                Innovation Hub?
-              </span>
-            </motion.h2>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2, duration: 0.6 }}
-              className="text-xl text-white/90 mb-8 leading-relaxed"
-            >
-              Whether you're a student with a new idea, a faculty member interested in innovation, or an industry partner looking to collaborate, we welcome you to be part of UR Binary Hub. Our co-ownership model ensures that solutions are co-owned by the University and the developers, creating sustainable partnerships.
-            </motion.p>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.6 }}
-              className="flex flex-wrap gap-6 justify-center"
-            >
-              <Link
-                to="/about"
-                className="inline-flex items-center px-8 py-4 bg-white text-[#00628b] rounded-full font-semibold hover:shadow-lg hover:shadow-white/25 transition-all duration-300 group"
-              >
-                <span>Get Started</span>
-                <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <Link
-                to="/contact"
-                className="inline-flex items-center px-8 py-4 border-2 border-white text-white rounded-full font-semibold hover:bg-white hover:text-[#00628b] transition-all duration-300 group"
-              >
-                <span>Contact Us</span>
-                <ArrowRight size={18} className="ml-2 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </motion.div>
-          </div>
+      {/* Stakeholders & Contributions Section */}
+      <section className="relative overflow-hidden bg-white px-0 py-5 md:py-7" id="stakeholders">
+        <div className="mx-auto max-w-[1800px]">
+          {stakeholdersLoading ? (
+            <div className="flex gap-4 overflow-hidden px-6 md:gap-8">
+              {Array.from({ length: 6 }).map((_, index) => (
+                <div key={index} className="min-w-[150px] flex-shrink-0 animate-pulse p-3 md:min-w-[180px]">
+                  <div className="mx-auto h-8 w-24 rounded bg-slate-200 md:h-10 md:w-32"></div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="partner-marquee py-2 md:py-3">
+              <div className="partner-track">
+                {Array.from({ length: 2 }).flatMap((_, duplication) =>
+                  stakeholders.map((stakeholder, index) => (
+                    <motion.div
+                      key={`${stakeholder.id}-${duplication}`}
+                      initial={{ opacity: 0, y: 12 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: index * 0.04, duration: 0.45 }}
+                      className="partner-logo-item"
+                    >
+                      <img
+                        src={stakeholder.logo || `/img/stakeholder/${stakeholder.name.toLowerCase().replace(/\s+/g, '_')}.png`}
+                        alt={`${stakeholder.name} Logo`}
+                        className="h-8 w-auto max-w-[170px] object-contain md:h-10 lg:h-12"
+                        onError={(e) => {
+                          const fallback = e.currentTarget.parentElement?.lastElementChild as HTMLElement | null;
+                          if (fallback) {
+                            fallback.classList.remove('hidden');
+                            e.currentTarget.style.display = 'none';
+                          }
+                        }}
+                      />
+                      <div className="hidden h-full w-full items-center justify-center rounded-xl bg-slate-100 px-3 text-center text-[10px] font-semibold uppercase tracking-[0.12em] text-slate-700 md:text-[11px]">
+                        {stakeholder.name}
+                      </div>
+                    </motion.div>
+                  ))
+                )}
+              </div>
+            </div>
+          )}
         </div>
       </section>
+
+      <CallToAction
+        title="Ready to Join the Innovation Hub?"
+        description="We welcome students, faculty, and partners to collaborate with UR Binary Hub and turn ideas into real impact."
+        primaryLabel="Get Started"
+        primaryHref="/about"
+        secondaryLabel="Contact Us"
+        secondaryHref="/contact"
+      />
 
       {/* Footer */}
       <Footer />

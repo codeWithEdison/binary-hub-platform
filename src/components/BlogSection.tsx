@@ -116,7 +116,7 @@ const BlogSection = ({ compact = false }: BlogSectionProps) => {
   };
 
   return (
-    <section className={`relative overflow-hidden bg-white px-6 md:px-12 dark:bg-slate-900 ${compact ? "py-20" : "min-h-screen pb-24 pt-36"}`}>
+    <section className={`relative overflow-hidden bg-white px-6 md:px-12 dark:bg-slate-900 ${compact ? "py-12 md:py-16" : "min-h-screen pb-24 pt-36"}`}>
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_8%_12%,rgba(255,255,255,0.7),transparent_30%),linear-gradient(120deg,rgba(255,255,255,0.1),transparent_55%)] dark:opacity-20" />
 
       <div className="relative z-10 mx-auto max-w-7xl">
@@ -129,10 +129,9 @@ const BlogSection = ({ compact = false }: BlogSectionProps) => {
         >
           <div className="max-w-xl">
             <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#1d526d]">The Binary Hub journal</p>
-            <h2 className="font-display text-4xl leading-[0.95] text-[#15394d] md:text-6xl">Latest news</h2>
-            <p className="mt-4 max-w-md text-sm leading-relaxed text-[#416175] md:text-base">
-              Stories, insights, and ideas from the people building Rwanda's next digital chapter.
-            </p>
+            <h2 className="font-display text-3xl leading-[1.05] text-[#15394d] md:text-4xl">
+              Latest <span className="text-[#00628b]">[News]</span>
+            </h2>
           </div>
           <Link
             to="/blog"

@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useInnovators } from "@/hooks/useInnovators";
 import { useProjects } from "@/hooks/useProjects";
+import { innovators as fallbackInnovators } from "@/lib/data";
 
 const getInitials = (name: string) => name
   .split(/\s+/)
@@ -12,6 +13,12 @@ const getInitials = (name: string) => name
   .slice(0, 2)
   .map((part) => part[0]?.toUpperCase())
   .join("");
+
+const getSkillName = (skill: unknown) => (
+  typeof skill === "string"
+    ? skill
+    : (skill as { skill?: string } | null)?.skill || ""
+);
 
 const Field = ({ label, value }: { label: string; value: string }) => (
   <div className="space-y-2">
@@ -26,7 +33,8 @@ const InnovatorDetail = () => {
   const { innovatorId } = useParams<{ innovatorId: string }>();
   const { innovators, loading: innovatorsLoading } = useInnovators();
   const { projects, loading: projectsLoading } = useProjects();
-  const innovator = innovators.find((item) => item.id === innovatorId);
+  const innovator = innovators.find((item) => item.id === innovatorId)
+    || fallbackInnovators.find((item) => item.id === innovatorId);
   const innovatorProjects = projects.filter((project) => (
     project.innovators?.some((item) => item.innovator_id === innovatorId)
   ));
@@ -111,8 +119,8 @@ const InnovatorDetail = () => {
                   <Code2 className="h-4 w-4 text-[#00628b]" /> Skills and expertise
                 </div>
                 <div className="mt-3 flex min-h-10 flex-wrap gap-2">
-                  {(innovator.skills || []).length > 0 ? (innovator.skills || []).map(({ skill }) => (
-                    <Badge key={skill} variant="outline" className="rounded-full border-slate-300 px-3 py-1 text-xs font-medium text-slate-600">{skill}</Badge>
+                  {(innovator.skills || []).length > 0 ? (innovator.skills || []).map((skill, index) => (
+                    <Badge key={`${getSkillName(skill)}-${index}`} variant="outline" className="rounded-full border-slate-300 px-3 py-1 text-xs font-medium text-slate-600">{getSkillName(skill)}</Badge>
                   )) : <span className="text-sm text-slate-500">No skills listed</span>}
                 </div>
               </div>

@@ -3,6 +3,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Mail, Phone, MapPin, Github, Linkedin, Twitter, Instagram } from "lucide-react";
+import ContactSection from "@/components/ContactSection";
 
 const Footer = () => {
   // Animation variants
@@ -23,8 +24,10 @@ const Footer = () => {
   };
 
   return (
-    <motion.footer
-      className="bg-secondary/50 dark:bg-secondary/20 py-16 px-6 md:px-12"
+    <>
+      <ContactSection />
+      <motion.footer
+      className="bg-[#00628b] px-6 py-16 text-white md:px-12"
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.3 }}
@@ -42,7 +45,7 @@ const Footer = () => {
               />
               <h3 className="text-xl font-semibold">UR Binary Hub</h3>
             </div>
-            <p className="text-muted-foreground mb-6 max-w-md">
+            <p className="mb-6 max-w-md text-white/80">
               The innovation and incubation hub of the University of Rwanda, nurturing student and staff innovations focused on developing homegrown digital solutions.
             </p>
             <div className="flex space-x-4">
@@ -50,7 +53,7 @@ const Footer = () => {
                 href="https://github.com/binaryhubrw"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-primary transition-colors"
+                className="text-white/80 transition-colors hover:text-white"
                 aria-label="GitHub"
               >
                 <Github size={20} />
@@ -59,7 +62,7 @@ const Footer = () => {
                 href="https://www.instagram.com/ur_tekinovahub?igsh=bjQ0cWd3YzZ1ODE1"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-primary transition-colors"
+                className="text-white/80 transition-colors hover:text-white"
                 aria-label="Instagram"
               >
                 <Instagram size={20} />
@@ -68,7 +71,7 @@ const Footer = () => {
                 href="https://youtube.com/@urtekinova_hub?si=PYU7RoxBYqKkQiJF"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hover:text-primary transition-colors"
+                className="text-white/80 transition-colors hover:text-white"
                 aria-label="YouTube"
               >
                 <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -83,32 +86,32 @@ const Footer = () => {
             <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
             <ul className="space-y-3">
               <li>
-                <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/" className="text-white/80 transition-colors hover:text-white">
                   Home
                 </Link>
               </li>
               <li>
-                <Link to="/about" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/about" className="text-white/80 transition-colors hover:text-white">
                   About Us
                 </Link>
               </li>
               <li>
-                <Link to="/innovators" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/innovators" className="text-white/80 transition-colors hover:text-white">
                   Innovators
                 </Link>
               </li>
               <li>
-                <Link to="/blog" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/blog" className="text-white/80 transition-colors hover:text-white">
                   Blog
                 </Link>
               </li>
               {/* <li>
-                <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/" className="text-white/80 transition-colors hover:text-white">
                   Events
                 </Link>
               </li> */}
               <li>
-                <Link to="/" className="text-muted-foreground hover:text-primary transition-colors">
+                <Link to="/contact" className="text-white/80 transition-colors hover:text-white">
                   Contact
                 </Link>
               </li>
@@ -120,27 +123,27 @@ const Footer = () => {
             <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
             <ul className="space-y-4">
               <li className="flex items-center gap-3">
-                <MapPin size={18} className="text-primary" />
-                <span className="text-muted-foreground">
+                <MapPin size={18} className="text-white" />
+                <span className="text-white/80">
                   Binary Hub , University of Rwanda - Nyarugenge Campus
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <Mail size={18} className="text-primary" />
-                <a href="mailto:urbinaryhub@gmail.com" className="text-muted-foreground hover:text-primary transition-colors">
+                <Mail size={18} className="text-white" />
+                <a href="mailto:urbinaryhub@gmail.com" className="text-white/80 transition-colors hover:text-white">
                   urbinaryhub@gmail.com
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Phone size={18} className="text-primary" />
-                <div className="text-muted-foreground">
-                  <a href="tel:+250788695862" className="hover:text-primary transition-colors block">
+                <Phone size={18} className="text-white" />
+                <div className="text-white/80">
+                  <a href="tel:+250788695862" className="block transition-colors hover:text-white">
                     +250 788 695 862 - Coordinator
                   </a>
-                  <a href="tel:+250786779666" className="hover:text-primary transition-colors block">
+                  <a href="tel:+250786779666" className="block transition-colors hover:text-white">
                     +250 786 779 666 - Assistant Coordinator
                   </a>
-                  <a href="tel:+250790289399" className="hover:text-primary transition-colors block">
+                  <a href="tel:+250790289399" className="block transition-colors hover:text-white">
                     +250 790 289 399 - Assistant Administrator
                   </a>
                 </div>
@@ -150,13 +153,14 @@ const Footer = () => {
         </div>
 
         <motion.div
-          className="border-t border-border mt-12 pt-8 text-center text-sm text-muted-foreground"
+          className="mt-12 border-t border-white/20 pt-8 text-center text-sm text-white/70"
           variants={itemVariants}
         >
           <p>© {new Date().getFullYear()} UR Binary Hub. All rights reserved.</p>
         </motion.div>
       </div>
-    </motion.footer>
+      </motion.footer>
+    </>
   );
 };
 
