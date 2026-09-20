@@ -64,7 +64,7 @@ const HeroComparison = () => {
   return (
     <section
       aria-labelledby="hero-comparison-title"
-      className="relative isolate overflow-hidden bg-white py-16 dark:bg-slate-950"
+      className="relative isolate overflow-hidden bg-white pb-16 pt-28 dark:bg-slate-950 sm:pt-24 md:py-16"
     >
       <div className="mx-auto max-w-7xl px-6 md:px-12">
         <div className="grid items-center gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
