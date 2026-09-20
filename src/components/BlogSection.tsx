@@ -13,63 +13,6 @@ type BlogStory = {
   image: string;
 };
 
-const stories: BlogStory[] = [
-  {
-    title: "Binary Hub at the Global AI Summit on Africa",
-    excerpt: "From 3-4th April, Binary Hub showed up and stood tall at the Global AI Summit on Africa, joining bold minds and visionary ideas shaping the future of AI, innovation, and impact on our continent.",
-    category: "AI & Africa",
-    readTime: "3 min read",
-    date: "3-4 April 2025",
-    image: "/img/blog/From 3-4th April, Binary Hub showed up and stood tall at the Global AI Summit on Africa. an even (2).jpg",
-  },
-  {
-    title: "Empowering innovation together with HitamoSpace",
-    excerpt: "Binary Hub proudly supports HitamoSpace, a next-generation event and venue management platform transforming how the University of Rwanda manages events and spaces.",
-    category: "Product Spotlight",
-    readTime: "2 min read",
-    date: "47 weeks ago",
-    image: "/img/blog/🚀 Empowering innovation together!Binary Hub proudly supporting the HitamoSpace system, a next-.webp",
-  },
-  {
-    title: "Building with purpose: what makes a strong prototype",
-    excerpt: "A practical look at the choices that help promising ideas move from a sketch to something people can use.",
-    category: "Resources",
-    readTime: "4 min read",
-    date: "Innovation in practice",
-    image: "/img/blog/From 3-4th April, Binary Hub showed up and stood tall at the Global AI Summit on Africa. an even.jpg",
-  },
-  {
-    title: "The people behind the projects changing campus life",
-    excerpt: "Meet the students and staff turning everyday observations into useful, ambitious digital solutions.",
-    category: "Community",
-    readTime: "5 min read",
-    date: "The Binary Hub community",
-    image: "/img/blog/From 3-4th April, Binary Hub showed up and stood tall at the Global AI Summit on Africa. an even (1).jpg",
-  },
-  {
-    title: "From first conversation to lasting collaboration",
-    excerpt: "Why the best innovation partnerships begin by listening carefully and building trust early.",
-    category: "Partnerships",
-    readTime: "3 min read",
-    date: "Working together",
-    image: "/img/presentation-img/IMG-20231019-WA0013.jpg",
-  },
-  {
-    title: "Designing digital tools for the context they serve",
-    excerpt: "Local insight is more than a constraint. It is the advantage that helps solutions stay relevant after launch.",
-    category: "Perspective",
-    readTime: "4 min read",
-    date: "Designing for impact",
-    image: "/img/presentation-img/IMG-20231019-WA0016.jpg",
-  },
-];
-
-const summitImages = [
-  "/img/blog/From 3-4th April, Binary Hub showed up and stood tall at the Global AI Summit on Africa. an even (2).jpg",
-  "/img/blog/From 3-4th April, Binary Hub showed up and stood tall at the Global AI Summit on Africa. an even.jpg",
-  "/img/blog/From 3-4th April, Binary Hub showed up and stood tall at the Global AI Summit on Africa. an even (1).jpg",
-];
-
 type BlogSectionProps = {
   compact?: boolean;
 };
@@ -87,17 +30,17 @@ const BlogSection = ({ compact = false }: BlogSectionProps) => {
   const mainManagedStory = managedStories.find((story) => posts.find((post) => post.title === story.title)?.is_main);
   const availableStories = compact
     ? mainManagedStory
-      ? [mainManagedStory, ...stories.slice(1)]
-      : stories
-    : managedStories.length > 0
-      ? managedStories
-      : stories;
+      ? [mainManagedStory, ...managedStories.filter((story) => story.title !== mainManagedStory.title)]
+      : managedStories
+    : managedStories;
   const visibleStories = compact ? availableStories.slice(0, 5) : availableStories;
-  const [featuredStory, ...gridStories] = visibleStories;
-  const activeImages = managedStories.length > 0 ? [featuredStory?.image].filter((image): image is string => Boolean(image)) : summitImages;
+  const featuredStory = visibleStories[0];
+  const gridStories = visibleStories.slice(1);
+  const activeImages = [featuredStory?.image].filter((image): image is string => Boolean(image));
   const [activeImage, setActiveImage] = useState(0);
 
   useEffect(() => {
+    if (!featuredStory) return;
     setActiveImage(0);
     if (activeImages.length <= 1) return;
     const interval = window.setInterval(() => {
@@ -106,6 +49,10 @@ const BlogSection = ({ compact = false }: BlogSectionProps) => {
 
     return () => window.clearInterval(interval);
   }, [activeImages.length, featuredStory?.image]);
+
+  if (!featuredStory) {
+    return null;
+  }
 
   const showPreviousImage = () => {
     setActiveImage((current) => (current - 1 + activeImages.length) % activeImages.length);
@@ -133,13 +80,6 @@ const BlogSection = ({ compact = false }: BlogSectionProps) => {
               Latest <span className="text-[#00628b]">[News]</span>
             </h2>
           </div>
-          <Link
-            to="/blog"
-            className="inline-flex w-fit items-center gap-2 rounded-full border border-[#2d5d75]/30 bg-white/40 px-4 py-2 text-xs font-semibold text-[#1d526d] backdrop-blur-sm transition hover:bg-white/75"
-          >
-            Explore all stories
-            <ArrowUpRight className="h-4 w-4" />
-          </Link>
         </motion.div>
 
         <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-4 lg:grid-rows-2">

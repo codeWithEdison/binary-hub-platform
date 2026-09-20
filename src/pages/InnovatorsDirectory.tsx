@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { Search, ShieldCheck, UserRound, UsersRound } from "lucide-react";
+import { Search, UserRound, UsersRound } from "lucide-react";
 import { Link } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
@@ -122,7 +122,9 @@ const InnovatorsDirectory = () => {
                     </div>
 
                     <div className="mt-auto flex items-center justify-between border-t border-slate-200 pt-4 text-sm text-slate-600">
-                      <span className="inline-flex items-center gap-1.5"><ShieldCheck className="h-4 w-4" /> Public profile</span>
+                      <span>
+                        {innovator.projects?.length || 0} {innovator.projects?.length === 1 ? "project" : "projects"}
+                      </span>
                       <span>{innovator.status}</span>
                     </div>
                     <Link

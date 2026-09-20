@@ -29,7 +29,8 @@ export interface Innovator {
     skill: string;
   }>;
   projects?: Array<{
-    project: {
+    project_id?: string;
+    project?: {
       id: string;
       title: string;
     };
@@ -53,7 +54,8 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
       .from("innovators")
       .select(`
         *,
-        skills:innovator_skills(skill)
+        skills:innovator_skills(skill),
+        projects:project_innovators(project_id)
       `);
 
     if (!includeInactive) {
@@ -80,7 +82,8 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
       .from("innovators")
       .select(`
         *,
-        skills:innovator_skills(skill)
+        skills:innovator_skills(skill),
+        projects:project_innovators(project_id)
       `)
       .eq("featured", true);
 
