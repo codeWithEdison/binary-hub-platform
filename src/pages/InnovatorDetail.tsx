@@ -1,5 +1,5 @@
 import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, BriefcaseBusiness, Building2, Code2, Github, Globe, Instagram, Linkedin, UserRound, Users } from "lucide-react";
+import { ArrowLeft, BriefcaseBusiness, Building2, Code2, Github, Globe, Linkedin, UserRound, Users } from "lucide-react";
 import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -107,10 +107,14 @@ const InnovatorDetail = () => {
               <div className="mt-8">
                 <p className="text-xs font-semibold text-slate-700">Social media</p>
                 <div className="mt-4 flex flex-wrap gap-x-8 gap-y-4 text-sm text-slate-600">
-                  <a href="https://github.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><Github className="h-4 w-4" /> GitHub</a>
-                  <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><Linkedin className="h-4 w-4" /> LinkedIn</a>
-                  <a href="https://instagram.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><Instagram className="h-4 w-4" /> Instagram</a>
-                  <a href="https://example.com" target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><Globe className="h-4 w-4" /> Website</a>
+                  {innovator.github && <a href={innovator.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><Github className="h-4 w-4" /> GitHub</a>}
+                  {innovator.linkedin && <a href={innovator.linkedin} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><Linkedin className="h-4 w-4" /> LinkedIn</a>}
+                  {innovator.facebook && <a href={innovator.facebook} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><Users className="h-4 w-4" /> Facebook</a>}
+                  {innovator.twitter && <a href={innovator.twitter} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><span className="text-sm font-semibold">X</span> X / Twitter</a>}
+                  {innovator.website && <a href={innovator.website} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><Globe className="h-4 w-4" /> Website</a>}
+                  {!innovator.github && !innovator.linkedin && !innovator.facebook && !innovator.twitter && !innovator.website && (
+                    <span className="text-sm text-slate-500">No platforms provided</span>
+                  )}
                 </div>
               </div>
 

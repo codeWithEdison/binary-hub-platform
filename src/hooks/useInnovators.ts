@@ -20,6 +20,11 @@ export interface Innovator {
   image: string | null;
   department: string;
   role: string;
+  linkedin?: string | null;
+  facebook?: string | null;
+  twitter?: string | null;
+  github?: string | null;
+  website?: string | null;
   status: "innovator" | "alumni" | "mentor";
   account_status?: "active" | "inactive";
   featured?: boolean;

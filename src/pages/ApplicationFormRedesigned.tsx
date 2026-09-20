@@ -110,7 +110,7 @@ const ApplicationFormRedesigned = () => {
     load();
   }, [applicationId, toast, user]);
 
-  const stepOneValues = [form.firstName, form.lastName, form.email, form.city, form.phone, form.universityYear, form.role, form.gender];
+  const stepOneValues = [form.firstName, form.lastName, form.email, form.city, form.phone, form.universityYear, form.role, form.gender, form.image];
   const stepTwoValues = [form.bio, form.skills, form.motivation, form.interests, form.collaboration, form.highestEducation, form.discoverySource];
   const stepOneComplete = stepOneValues.every(isFilled);
   const stepTwoComplete = stepTwoValues.every(isFilled);
@@ -143,6 +143,11 @@ const ApplicationFormRedesigned = () => {
   const save = async (status: "draft" | "submitted") => {
     if (status === "submitted" && (!stepOneComplete || !stepTwoComplete)) {
       toast({ title: "Complete your application", description: "Please complete every required field before submitting.", variant: "destructive" });
+      return;
+    }
+    if (status === "submitted" && !form.image) {
+      toast({ title: "Profile image required", description: "Please upload a profile image before submitting your application.", variant: "destructive" });
+      setCurrentStep(1);
       return;
     }
 
@@ -217,8 +222,9 @@ const ApplicationFormRedesigned = () => {
               <h1 className="text-3xl font-semibold tracking-tight text-slate-950 md:text-4xl">Personal information</h1>
               <p className="mt-2 text-base text-slate-700">Fields marked with <span className="text-red-600">*</span> are required.</p>
             </div>
-            <div className="relative mb-8 h-32 w-32">
-              <button type="button" onClick={() => imageInputRef.current?.click()} className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-full bg-slate-200 text-slate-400 transition hover:bg-slate-300" aria-label="Upload profile image">
+            <div className="relative mb-8 h-40 w-40">
+              <p className="mb-2 text-sm font-medium text-slate-700">Profile image <span className="text-red-600">*</span></p>
+              <button type="button" onClick={() => imageInputRef.current?.click()} className="flex h-32 w-32 items-center justify-center overflow-hidden rounded-full bg-slate-200 text-slate-400 transition hover:bg-slate-300" aria-label="Upload profile image" aria-required="true">
                 {form.image ? <img src={form.image} alt="Profile preview" className="h-full w-full object-cover" /> : <UserRound className="h-16 w-16" />}
               </button>
               <span className="pointer-events-none absolute right-[-6px] top-3 grid h-9 w-9 place-items-center rounded-full bg-slate-700 text-white shadow-sm"><Edit3 className="h-5 w-5" /></span>

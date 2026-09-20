@@ -1,475 +1,60 @@
-
-import React from "react";
-import { useParams } from "react-router-dom";
-import { motion } from "framer-motion";
-import { ArrowLeft, Calendar, Globe, Users, Link as LinkIcon, Github, ExternalLink, Clock, Award, TrendingUp, MapPin } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Link } from "react-router-dom";
+import { ArrowLeft, Award, Building2, Calendar, Code2, ExternalLink, Github, Globe, Image as ImageIcon, Link as LinkIcon, TrendingUp, Users } from "lucide-react";
+import { Link, useParams } from "react-router-dom";
 import Footer from "@/components/Footer";
 import { Badge } from "@/components/ui/badge";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useProjects } from "@/hooks/useProjects";
 
 const ProjectDetail = () => {
   const { projectId } = useParams();
   const { projects, loading } = useProjects();
+  const project = projects.find((item) => item.id === projectId);
 
-  // Find the project with the matching ID
-  const project = projects.find(p => p.id === projectId);
-
-  // Show loading state
   if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-        <div className="pt-24 pb-16 px-6 md:px-12">
-          <div className="max-w-7xl mx-auto">
-            <Skeleton className="h-8 w-32 mb-8" />
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-              <div className="space-y-6">
-                <Skeleton className="h-6 w-24" />
-                <Skeleton className="h-12 w-full" />
-                <Skeleton className="h-6 w-3/4" />
-              </div>
-              <div className="space-y-6">
-                <Skeleton className="h-64 w-full rounded-3xl" />
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    );
+    return <div className="min-h-screen bg-[#fafafa] px-4 pb-12 pt-28 md:px-8 md:pt-32"><div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[320px_1fr]"><Skeleton className="h-[560px] rounded-md bg-white" /><Skeleton className="h-[680px] rounded-md bg-white" /></div></div>;
   }
 
-  // Handle case where project is not found
   if (!project) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center px-6 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
-          className="text-center"
-        >
-          <div className="w-20 h-20 bg-[#00628b]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-            <Globe size={40} className="text-[#00628b]" />
-          </div>
-          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">Project Not Found</h1>
-          <p className="text-gray-600 dark:text-gray-300 mb-8 max-w-md">
-            The project you're looking for doesn't exist or has been removed.
-          </p>
-          <Button asChild className="bg-[#00628b] hover:bg-blue-600 text-white px-8 py-3 rounded-xl font-semibold">
-            <Link to="/innovations">Back to Projects</Link>
-          </Button>
-        </motion.div>
-      </div>
-    );
+    return <div className="flex min-h-screen flex-col bg-[#fafafa]"><main className="flex flex-1 items-center justify-center px-6 pt-24"><div className="text-center"><Globe className="mx-auto h-10 w-10 text-slate-300" /><h1 className="mt-4 text-xl font-semibold text-slate-900">Project not found</h1><p className="mt-2 text-sm text-slate-500">This project may have been removed.</p><Link to="/innovations" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#00628b]"><ArrowLeft className="h-4 w-4" /> Back to projects</Link></div></main><Footer /></div>;
   }
+
+  const projectLinks = project.links || [];
+  const relatedProjects = projects.filter((item) => item.id !== projectId && item.category === project.category).slice(0, 3);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900">
-      {/* Header */}
-      <section className="pt-24 pb-16 px-6 md:px-12 relative overflow-hidden">
-        {/* Background Elements */}
-        <div className="absolute inset-0 bg-gradient-to-br from-[#00628b]/5 via-blue-50/30 to-transparent"></div>
-        <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-r from-[#00628b]/10 to-blue-400/10 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-20 right-10 w-40 h-40 bg-gradient-to-r from-blue-400/10 to-[#00628b]/10 rounded-full blur-3xl"></div>
+    <div className="flex min-h-screen flex-col bg-[#fafafa] font-zurich text-slate-900">
+      <main className="flex-1 px-4 pb-12 pt-28 md:px-8 md:pt-32">
+        <div className="mx-auto max-w-7xl">
+          <Link to="/innovations" className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-[#00628b] transition hover:text-[#004f70]"><ArrowLeft className="h-4 w-4" /> Back to projects</Link>
+          <div className="grid items-start gap-5 lg:grid-cols-[320px_minmax(0,1fr)]">
+            <aside className="self-start rounded-md border border-slate-200 bg-white p-5">
+              <div className="relative mt-4 aspect-[4/3] w-full overflow-hidden rounded-md bg-slate-100">{project.image ? <img src={project.image} alt={project.title} className="block h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-slate-400"><Building2 className="h-12 w-12" /></div>}</div>
+              <div className="mt-5 border-t border-slate-100 pt-5"><h1 className="text-lg font-semibold text-slate-950">{project.title}</h1><p className="mt-1 text-sm font-medium text-slate-700">{project.category}</p><p className="mt-1 text-sm capitalize text-slate-500">{project.stage}</p></div>
+              <div className="mt-5 space-y-3 text-sm text-slate-600"><div className="flex items-center gap-2"><Building2 className="h-4 w-4 text-slate-400" /> {project.status || "In progress"}</div><div className="flex items-center gap-2"><Users className="h-4 w-4 text-slate-400" /> {project.team?.length || 0} team members</div>{project.date && <div className="flex items-center gap-2"><Calendar className="h-4 w-4 text-slate-400" /> {new Date(project.date).toLocaleDateString("en-US", { year: "numeric", month: "long" })}</div>}</div>
+            </aside>
 
-        <div className="max-w-7xl mx-auto relative z-10">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6 }}
-          >
-            <Button variant="ghost" asChild className="mb-8 group">
-              <Link to="/innovations" className="flex items-center gap-2 text-[#00628b] hover:text-blue-600">
-                <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform" />
-                Back to Projects
-              </Link>
-            </Button>
+            <section className="rounded-md border border-slate-200 bg-white p-6 md:p-8">
+              <p className="text-xs font-semibold text-slate-500">Project overview</p>
+              <h2 className="mt-2 text-2xl font-semibold text-slate-950 md:text-3xl">{project.title}</h2>
+              <p className="mt-4 text-sm leading-7 text-slate-600">{project.full_description || project.description}</p>
 
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-start">
-              <div className="space-y-6">
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.1, duration: 0.6 }}
-                  className="flex flex-wrap gap-2"
-                >
-                  <Badge
-                    className="bg-[#00628b]/10 text-[#00628b] border-[#00628b]/20 hover:bg-[#00628b]/20 transition-colors"
-                  >
-                    {project.category}
-                  </Badge>
-                  <Badge
-                    className="bg-blue-500/10 text-blue-600 border-blue-500/20 hover:bg-blue-500/20 transition-colors"
-                  >
-                    {project.stage.charAt(0).toUpperCase() + project.stage.slice(1)}
-                  </Badge>
-                </motion.div>
+              {projectLinks.length > 0 && <div className="mt-8 border-t border-slate-100 pt-6"><p className="text-xs font-semibold text-slate-700">Project links</p><div className="mt-4 flex flex-wrap gap-x-8 gap-y-4 text-sm text-slate-600">{projectLinks.map((link) => <a key={`${link.link_type}-${link.url}`} href={link.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]">{link.link_type === "github" ? <Github className="h-4 w-4" /> : link.link_type === "demo" ? <ExternalLink className="h-4 w-4" /> : <LinkIcon className="h-4 w-4" />} {link.link_type === "demo" ? "Live demo" : link.link_type === "github" ? "Source code" : "Website"}</a>)}</div></div>}
 
-                <motion.h1
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.2, duration: 0.6 }}
-                  className="text-4xl md:text-5xl lg:text-6xl font-bold leading-tight"
-                >
-                  {project.title}
-                </motion.h1>
+              <div className="mt-8 border-t border-slate-100 pt-6"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><Award className="h-4 w-4 text-[#00628b]" /> Problem and solution</div><div className="mt-4 grid gap-6 md:grid-cols-2"><div><p className="text-xs font-semibold text-slate-500">Problem statement</p><p className="mt-2 text-sm leading-6 text-slate-600">{project.problem_statement || "No problem statement provided."}</p></div><div><p className="text-xs font-semibold text-slate-500">Solution approach</p><p className="mt-2 text-sm leading-6 text-slate-600">{project.solution || "No solution details provided."}</p></div></div></div>
 
-                <motion.p
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.3, duration: 0.6 }}
-                  className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed"
-                >
-                  {project.description}
-                </motion.p>
+              <div className="mt-8 border-t border-slate-100 pt-6"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><Code2 className="h-4 w-4 text-[#00628b]" /> Technologies used</div><div className="mt-3 flex min-h-10 flex-wrap gap-2">{project.technologies?.length ? project.technologies.map((technology, index) => <Badge key={`${technology.technology}-${index}`} variant="outline" className="rounded-full border-slate-300 px-3 py-1 text-xs font-medium text-slate-600">{technology.technology}</Badge>) : <span className="text-sm text-slate-500">No technologies listed</span>}</div></div>
 
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4, duration: 0.6 }}
-                  className="grid grid-cols-1 sm:grid-cols-3 gap-4"
-                >
-                  <div className="flex items-center gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-white/30">
-                    <div className="w-10 h-10 bg-[#00628b]/10 rounded-lg flex items-center justify-center">
-                      <Calendar size={20} className="text-[#00628b]" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Started</p>
-                      <p className="font-semibold text-gray-900 dark:text-white">
-                        {new Date(project.date).toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
-                      </p>
-                    </div>
-                  </div>
+              <div className="mt-8 border-t border-slate-100 pt-6"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><TrendingUp className="h-4 w-4 text-[#00628b]" /> Impact and outcomes</div><div className="mt-4 grid gap-6 md:grid-cols-3"><div><p className="text-xs font-semibold text-slate-500">Results</p><p className="mt-2 text-sm leading-6 text-slate-600">{project.results || "No results provided."}</p></div><div><p className="text-xs font-semibold text-slate-500">Impact</p><p className="mt-2 text-sm leading-6 text-slate-600">{project.impact || "No impact details provided."}</p></div><div><p className="text-xs font-semibold text-slate-500">Future plans</p><p className="mt-2 text-sm leading-6 text-slate-600">{project.future_plans || "No future plans provided."}</p></div></div></div>
 
-                  <div className="flex items-center gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-white/30">
-                    <div className="w-10 h-10 bg-[#00628b]/10 rounded-lg flex items-center justify-center">
-                      <Globe size={20} className="text-[#00628b]" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Status</p>
-                      <p className="font-semibold text-gray-900 dark:text-white">{project.status}</p>
-                    </div>
-                  </div>
+              <div className="mt-8 border-t border-slate-100 pt-6"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><Users className="h-4 w-4 text-[#00628b]" /> Project team</div><div className="mt-3 grid gap-3 sm:grid-cols-2">{project.team?.length ? project.team.map((member, index) => <div key={`${member.name}-${index}`} className="flex items-center gap-3 rounded-md border border-slate-200 px-3 py-3"><div className="h-10 w-10 overflow-hidden rounded-full bg-slate-100">{member.image && <img src={member.image} alt="" className="h-full w-full object-cover" />}</div><div><p className="text-sm font-semibold text-slate-800">{member.name}</p><p className="text-xs text-slate-500">{member.role}</p></div></div>) : <span className="text-sm text-slate-500">No team members listed</span>}</div></div>
 
-                  <div className="flex items-center gap-3 p-4 bg-white/80 backdrop-blur-sm rounded-xl border border-white/30">
-                    <div className="w-10 h-10 bg-[#00628b]/10 rounded-lg flex items-center justify-center">
-                      <Users size={20} className="text-[#00628b]" />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500 dark:text-gray-400">Team</p>
-                      <p className="font-semibold text-gray-900 dark:text-white">{project.team.length} Members</p>
-                    </div>
-                  </div>
-                </motion.div>
-
-                <motion.div
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5, duration: 0.6 }}
-                  className="flex flex-wrap gap-3"
-                >
-                  {(project.links || []).find(link => link.link_type === 'demo') && (
-                    <Button asChild className="bg-[#00628b] hover:bg-blue-600 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 group">
-                      <a href={(project.links || []).find(link => link.link_type === 'demo')?.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                        <ExternalLink size={16} />
-                        Live Demo
-                      </a>
-                    </Button>
-                  )}
-
-                  {(project.links || []).find(link => link.link_type === 'github') && (
-                    <Button variant="outline" asChild className="border-[#00628b]/20 text-[#00628b] hover:bg-[#00628b]/10 px-6 py-3 rounded-xl font-semibold transition-all duration-300">
-                      <a href={(project.links || []).find(link => link.link_type === 'github')?.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                        <Github size={16} />
-                        Source Code
-                      </a>
-                    </Button>
-                  )}
-
-                  {(project.links || []).find(link => link.link_type === 'website') && (
-                    <Button variant="outline" asChild className="border-[#00628b]/20 text-[#00628b] hover:bg-[#00628b]/10 px-6 py-3 rounded-xl font-semibold transition-all duration-300">
-                      <a href={(project.links || []).find(link => link.link_type === 'website')?.url} target="_blank" rel="noopener noreferrer" className="flex items-center gap-2">
-                        <LinkIcon size={16} />
-                        Website
-                      </a>
-                    </Button>
-                  )}
-                </motion.div>
-              </div>
-
-              <motion.div
-                initial={{ opacity: 0, x: 50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3, duration: 0.8 }}
-                className="relative"
-              >
-                <div className="bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-2xl border border-white/30">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full aspect-video object-cover"
-                  />
-                </div>
-              </motion.div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Project Content */}
-      <section className="py-16 px-6 md:px-12">
-        <div className="max-w-7xl mx-auto">
-          <Tabs defaultValue="overview" className="w-full">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <TabsList className="mb-8 bg-white/80 backdrop-blur-sm border border-white/30 rounded-2xl p-1">
-                <TabsTrigger value="overview" className="rounded-xl data-[state=active]:bg-[#00628b] data-[state=active]:text-white">Overview</TabsTrigger>
-                <TabsTrigger value="team" className="rounded-xl data-[state=active]:bg-[#00628b] data-[state=active]:text-white">Team</TabsTrigger>
-                <TabsTrigger value="gallery" className="rounded-xl data-[state=active]:bg-[#00628b] data-[state=active]:text-white">Gallery</TabsTrigger>
-                <TabsTrigger value="updates" className="rounded-xl data-[state=active]:bg-[#00628b] data-[state=active]:text-white">Updates</TabsTrigger>
-              </TabsList>
-            </motion.div>
-
-            <TabsContent value="overview" className="space-y-8">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/30"
-              >
-                <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Project Overview</h2>
-                <div className="prose max-w-none dark:prose-invert">
-                  <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-                    {project.full_description || project.description}
-                  </p>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-8">
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                        <Award className="w-5 h-5 text-[#00628b]" />
-                        Problem Statement
-                      </h3>
-                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        The project addresses {project.problem_statement || "the critical need for innovative solutions in the agricultural sector in Rwanda, focusing specifically on improving crop yield prediction using machine learning algorithms that are adapted to local conditions."}
-                      </p>
-                    </div>
-
-                    <div>
-                      <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white flex items-center gap-2">
-                        <TrendingUp className="w-5 h-5 text-[#00628b]" />
-                        Solution Approach
-                      </h3>
-                      <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                        {project.solution || "Our solution combines IoT sensors deployed in agricultural fields with machine learning models trained on both historical and real-time data. The system provides farmers with actionable insights through a simple mobile application available in Kinyarwanda, English, and French."}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="mt-8">
-                    <h3 className="text-xl font-semibold mb-4 text-gray-900 dark:text-white">Technologies Used</h3>
-                    <div className="flex flex-wrap gap-3">
-                      {(project.technologies || []).map((techObj, index) => (
-                        <Badge key={index} className="bg-[#00628b]/10 text-[#00628b] border-[#00628b]/20 px-4 py-2 text-sm font-medium">
-                          {techObj.technology}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/30"
-              >
-                <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Impact & Outcomes</h2>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                  <div className="p-6 bg-gradient-to-br from-[#00628b]/10 to-blue-400/10 rounded-2xl border border-[#00628b]/20">
-                    <div className="w-12 h-12 bg-[#00628b]/20 rounded-xl flex items-center justify-center mb-4">
-                      <Award size={24} className="text-[#00628b]" />
-                    </div>
-                    <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Results</h3>
-                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                      {project.results || "Initial field tests showed 78% improvement in prediction accuracy compared to traditional methods."}
-                    </p>
-                  </div>
-
-                  <div className="p-6 bg-gradient-to-br from-[#00628b]/10 to-blue-400/10 rounded-2xl border border-[#00628b]/20">
-                    <div className="w-12 h-12 bg-[#00628b]/20 rounded-xl flex items-center justify-center mb-4">
-                      <TrendingUp size={24} className="text-[#00628b]" />
-                    </div>
-                    <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Impact</h3>
-                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                      {project.impact || "The solution has been adopted by 150+ small-scale farmers in Eastern Province since its launch."}
-                    </p>
-                  </div>
-
-                  <div className="p-6 bg-gradient-to-br from-[#00628b]/10 to-blue-400/10 rounded-2xl border border-[#00628b]/20">
-                    <div className="w-12 h-12 bg-[#00628b]/20 rounded-xl flex items-center justify-center mb-4">
-                      <MapPin size={24} className="text-[#00628b]" />
-                    </div>
-                    <h3 className="text-lg font-semibold mb-3 text-gray-900 dark:text-white">Future Plans</h3>
-                    <p className="text-gray-600 dark:text-gray-300 leading-relaxed">
-                      {project.future_plans || "Scaling to 5 more districts in Rwanda and exploring partnerships with the Ministry of Agriculture."}
-                    </p>
-                  </div>
-                </div>
-              </motion.div>
-            </TabsContent>
-
-            <TabsContent value="team">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/30"
-              >
-                <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Project Team</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                  {project.team.map((member, index) => (
-                    <motion.div
-                      key={index}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: index * 0.1, duration: 0.5 }}
-                      className="p-6 bg-white/80 backdrop-blur-sm rounded-2xl border border-white/30 hover:shadow-lg transition-all duration-300"
-                    >
-                      <div className="w-16 h-16 rounded-2xl overflow-hidden bg-gradient-to-br from-[#00628b]/20 to-blue-400/20 mb-4">
-                        <img
-                          src={member.image || "/placeholder.svg"}
-                          alt={member.name}
-                          className="w-full h-full object-cover"
-                        />
-                      </div>
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2">{member.name}</h3>
-                      <p className="text-[#00628b] font-medium">{member.role}</p>
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
-            </TabsContent>
-
-            <TabsContent value="gallery">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/30"
-              >
-                <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Project Gallery</h2>
-                {project.gallery && project.gallery.length > 0 ? (
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {project.gallery.map((image, index) => (
-                      <motion.div
-                        key={index}
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ delay: index * 0.1, duration: 0.5 }}
-                        className="rounded-2xl overflow-hidden aspect-video bg-white/80 backdrop-blur-sm border border-white/30 hover:shadow-lg transition-all duration-300"
-                      >
-                        <img
-                          src={image.image_url}
-                          alt={`${project.title} gallery ${index + 1}`}
-                          className="w-full h-full object-cover"
-                        />
-                      </motion.div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-12">
-                    <div className="w-20 h-20 bg-[#00628b]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                      <Globe size={40} className="text-[#00628b]" />
-                    </div>
-                    <p className="text-gray-600 dark:text-gray-300">No gallery images available for this project.</p>
-                  </div>
-                )}
-              </motion.div>
-            </TabsContent>
-
-            <TabsContent value="updates">
-              <motion.div
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.6 }}
-                className="bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/30"
-              >
-                <h2 className="text-3xl font-bold mb-8 text-gray-900 dark:text-white">Project Updates</h2>
-                <div className="text-center py-12">
-                  <div className="w-20 h-20 bg-[#00628b]/10 rounded-full flex items-center justify-center mx-auto mb-6">
-                    <Clock size={40} className="text-[#00628b]" />
-                  </div>
-                  <p className="text-gray-600 dark:text-gray-300">No updates available for this project.</p>
-                </div>
-              </motion.div>
-            </TabsContent>
-          </Tabs>
-        </div>
-      </section>
-
-      {/* Related Projects */}
-      <section className="py-16 px-6 md:px-12">
-        <div className="max-w-7xl mx-auto">
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-3xl font-bold mb-8 text-gray-900 dark:text-white"
-          >
-            Related Projects
-          </motion.h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {projects
-              .filter(p => p.id !== projectId && p.category === project.category)
-              .slice(0, 3)
-              .map((relatedProject, index) => (
-                <motion.div
-                  key={relatedProject.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1, duration: 0.5 }}
-                  whileHover={{ y: -8, scale: 1.02 }}
-                >
-                  <Link
-                    to={`/projects/${relatedProject.id}`}
-                    className="block bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden shadow-xl border border-white/30 hover:shadow-2xl hover:shadow-[#00628b]/10 transition-all duration-500"
-                  >
-                    <div className="aspect-video">
-                      <img
-                        src={relatedProject.image}
-                        alt={relatedProject.title}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                    <div className="p-6">
-                      <h3 className="text-lg font-semibold mb-2 text-gray-900 dark:text-white">{relatedProject.title}</h3>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 line-clamp-2">{relatedProject.description}</p>
-                    </div>
-                  </Link>
-                </motion.div>
-              ))}
+              {project.gallery?.length ? <div className="mt-8 border-t border-slate-100 pt-6"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><ImageIcon className="h-4 w-4 text-[#00628b]" /> Gallery</div><div className="mt-3 grid gap-3 sm:grid-cols-2">{project.gallery.map((image, index) => <img key={`${image.image_url}-${index}`} src={image.image_url} alt={`${project.title} gallery ${index + 1}`} className="aspect-video w-full rounded-md object-cover" />)}</div></div> : null}
+            </section>
           </div>
-        </div>
-      </section>
 
+          {relatedProjects.length > 0 && <section className="mt-8"><h2 className="mb-4 text-xl font-semibold text-slate-950">Related projects</h2><div className="grid gap-4 md:grid-cols-3">{relatedProjects.map((relatedProject) => <Link key={relatedProject.id} to={`/projects/${relatedProject.id}`} className="rounded-md border border-slate-200 bg-white p-4 transition hover:border-[#00628b]/40"><p className="text-sm font-semibold text-slate-800">{relatedProject.title}</p><p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-500">{relatedProject.description}</p></Link>)}</div></section>}
+        </div>
+      </main>
       <Footer />
     </div>
   );
