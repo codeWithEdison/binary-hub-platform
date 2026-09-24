@@ -12,6 +12,7 @@ export interface BlogPost {
   story_date: string | null;
   read_time_minutes: number;
   image: string | null;
+  images: string[];
   published: boolean;
   is_main: boolean;
   publish_date: string | null;

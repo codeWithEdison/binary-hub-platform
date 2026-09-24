@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion } from "framer-motion";
 import { ArrowRight, Code2, Sparkles } from "lucide-react";
 import { Link } from "react-router-dom";
 import HeroComparison from "@/components/HeroComparison";
@@ -18,8 +18,6 @@ import { useInnovators } from "@/hooks/useInnovators";
 const Index = () => {
   const [currentProject, setCurrentProject] = useState(0);
   const [isVisible, setIsVisible] = useState(false);
-  const { scrollY } = useScroll();
-  const y = useTransform(scrollY, [0, 1000], [0, -200]);
   const { stakeholders, loading: stakeholdersLoading } = useStakeholders();
   const { projects, loading: projectsLoading } = useProjects();
   const { innovators, featuredInnovators } = useInnovators();
@@ -39,23 +37,6 @@ const Index = () => {
     <div className="min-h-screen bg-white dark:bg-slate-900">
       {/* Hero Section */}
       <HeroComparison />
-
-      {/* Floating Navigation Indicator */}
-      <motion.div
-        className="fixed top-1/2 right-8 z-50 hidden lg:block"
-        style={{ y }}
-      >
-        <div className="flex flex-col gap-4">
-          {['hero', 'about', 'projects', 'stakeholders', 'services', 'team', 'cta'].map((section, index) => (
-            <motion.div
-              key={section}
-              className="w-3 h-3 rounded-full bg-[#00628b]/30 border-2 border-[#00628b] cursor-pointer hover:bg-[#00628b] transition-all duration-300"
-              whileHover={{ scale: 1.2 }}
-              whileTap={{ scale: 0.9 }}
-            />
-          ))}
-        </div>
-      </motion.div>
 
       {/* About Section - Using Reusable Component */}
       <AboutSection

@@ -20,6 +20,7 @@ import InnovatorDetail from "./pages/InnovatorDetail";
 import AnnouncementsPage from "./pages/AnnouncementsPage";
 import AnnouncementDetail from "./pages/AnnouncementDetail";
 import Blog from "./pages/Blog";
+import BlogDetail from "./pages/BlogDetail";
 import Auth from "./pages/Auth";
 import Login from "./pages/Login";
 import { ProtectedRoute } from "./components/ProtectedRoute";
@@ -27,7 +28,6 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 // Admin Routes
 import AdminDashboard from "./pages/admin/Dashboard";
 import Overview from "./pages/admin/Overview";
-import InnovatorManagement from "./pages/admin/InnovatorManagement";
 import Members from "./pages/admin/Members";
 import ProjectManagement from "./pages/admin/ProjectManagement";
 import EventManagement from "./pages/admin/EventManagement";
@@ -45,6 +45,7 @@ import BlogManagement from "./pages/admin/BlogManagement";
 import BlogForm from "./pages/admin/BlogForm";
 import HeroSlidesManagement from "./pages/admin/HeroSlidesManagement";
 import HeroSlideForm from "./pages/admin/HeroSlideForm";
+import Inquiries from "./pages/admin/Inquiries";
 
 const queryClient = new QueryClient();
 
@@ -73,12 +74,20 @@ const App = () => (
           <Route path="/announcements" element={<><Navbar /><AnnouncementsPage /></>} />
           <Route path="/announcements/:announcementId" element={<><Navbar /><AnnouncementDetail /></>} />
           <Route path="/blog" element={<><Navbar /><Blog /></>} />
+          <Route path="/blog/:slug" element={<><Navbar /><BlogDetail /></>} />
           <Route path="/partners" element={<><Navbar /><Partners /></>} />
           <Route path="/contact" element={<><Navbar /><Contact /></>} />
 
           {/* Applications can be started anonymously and saved in this browser. */}
           <Route path="/applications/form" element={<><Navbar /><ApplicationFormRedesigned /></>} />
           <Route path="/applications/profile" element={<Navigate to="/applications/form" replace />} />
+          <Route path="/inquiries" element={
+            <ProtectedRoute requireRole="admin">
+              <AdminDashboard />
+            </ProtectedRoute>
+          }>
+            <Route index element={<Inquiries />} />
+          </Route>
           <Route path="/members" element={
             <ProtectedRoute requireRole="admin">
               <AdminDashboard />
@@ -94,9 +103,10 @@ const App = () => (
             </ProtectedRoute>
           }>
             <Route index element={<Overview />} />
-            <Route path="innovators" element={<InnovatorManagement />} />
+            <Route path="innovators" element={<Navigate to="/admin/members" replace />} />
             <Route path="members" element={<Members />} />
-            <Route path="innovators/new" element={<InnovatorForm />} />
+            <Route path="innovators/new" element={<Navigate to="/admin/members" replace />} />
+            <Route path="members/new" element={<InnovatorForm />} />
             <Route path="innovators/edit/:id" element={<InnovatorForm />} />
             <Route path="projects" element={<ProjectManagement />} />
             <Route path="projects/new" element={<ProjectForm />} />
@@ -115,6 +125,7 @@ const App = () => (
             <Route path="hero-slides/edit/:id" element={<HeroSlideForm />} />
             <Route path="stakeholders" element={<StakeholderManagement />} />
             <Route path="applicants" element={<ApplicantManagement />} />
+            <Route path="inquiries" element={<Inquiries />} />
             <Route path="application-setup" element={<ApplicationSetup />} />
           </Route>
 

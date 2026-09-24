@@ -28,7 +28,7 @@ const blogCategories = [
 ];
 
 const emptyForm: BlogPostInput = {
-  title: "", slug: "", excerpt: "", content: "", category: "General", image: null,
+  title: "", slug: "", excerpt: "", content: "", category: "General", image: null, images: [],
   story_date: "", read_time_minutes: 3, published: false, is_main: false,
   publish_date: new Date().toISOString(), author_id: null,
 };
@@ -55,33 +55,48 @@ const BlogForm = () => {
     }
   }, [id, isEditMode, posts, user?.id]);
 
-  const updateField = (field: keyof BlogPostInput, value: string | boolean | number | null) => {
+  const updateField = (field: keyof BlogPostInput, value: string | boolean | number | null | string[]) => {
     setFormData((current) => ({ ...current, [field]: value }));
   };
 
   const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-    if (!file.type.startsWith("image/")) {
+    const files = Array.from(event.target.files || []);
+    if (!files.length) return;
+    const invalidFile = files.find((file) => !file.type.startsWith("image/"));
+    if (invalidFile) {
       toast({ title: "Invalid file", description: "Please choose an image file.", variant: "destructive" });
       return;
     }
-    if (file.size > 5 * 1024 * 1024) {
+    const oversizedFile = files.find((file) => file.size > 5 * 1024 * 1024);
+    if (oversizedFile) {
       toast({ title: "File too large", description: "Please choose an image smaller than 5MB.", variant: "destructive" });
       return;
     }
 
     setIsUploading(true);
-    const extension = file.name.split(".").pop() || "jpg";
-    const path = `blog/${crypto.randomUUID()}.${extension}`;
-    const { error } = await supabase.storage.from("images").upload(path, file, { upsert: false, contentType: file.type });
-    if (error) {
-      toast({ title: "Upload failed", description: error.message, variant: "destructive" });
-    } else {
+    const uploadedUrls: string[] = [];
+    for (const file of files) {
+      const extension = file.name.split(".").pop() || "jpg";
+      const path = `blog/${crypto.randomUUID()}.${extension}`;
+      const { error } = await supabase.storage.from("images").upload(path, file, { upsert: false, contentType: file.type });
+      if (error) {
+        toast({ title: "Upload failed", description: error.message, variant: "destructive" });
+        setIsUploading(false);
+        return;
+      }
       const { data } = supabase.storage.from("images").getPublicUrl(path);
-      updateField("image", data.publicUrl);
+      uploadedUrls.push(data.publicUrl);
     }
+    const images = [...(formData.images || []), ...uploadedUrls];
+    updateField("images", images);
+    if (!formData.image && images[0]) updateField("image", images[0]);
     setIsUploading(false);
+  };
+
+  const removeImage = (imageToRemove: string) => {
+    const images = (formData.images || []).filter((image) => image !== imageToRemove);
+    updateField("images", images);
+    if (formData.image === imageToRemove) updateField("image", images[0] || null);
   };
 
   const handleSubmit = async (event: FormEvent) => {
@@ -107,7 +122,7 @@ const BlogForm = () => {
           <div className="space-y-2"><Label htmlFor="excerpt">Short summary (Excerpt)</Label><Textarea id="excerpt" required rows={3} placeholder="Write a short summary that will appear on the blog card." value={formData.excerpt} onChange={(event) => updateField("excerpt", event.target.value)} /><p className="text-xs text-muted-foreground">Write 1-2 sentences that tell readers what the story is about.</p></div>
           <div className="space-y-2"><Label htmlFor="content">Full content</Label><Textarea id="content" required rows={10} value={formData.content} onChange={(event) => updateField("content", event.target.value)} /></div>
         </CardContent></Card>
-        <Card><CardHeader><CardTitle>Cover Image</CardTitle></CardHeader><CardContent className="space-y-4"><input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" /><Button type="button" variant="outline" disabled={isUploading} onClick={() => fileInputRef.current?.click()}><Upload className="mr-2 h-4 w-4" />{isUploading ? "Uploading..." : "Upload image"}</Button>{formData.image ? <img src={formData.image} alt="Blog cover preview" className="max-h-72 w-full object-cover" /> : <div className="flex h-40 items-center justify-center border border-dashed text-muted-foreground"><ImageIcon className="mr-2 h-5 w-5" />No cover image selected</div>}</CardContent></Card>
+        <Card><CardHeader><CardTitle>Story Images</CardTitle></CardHeader><CardContent className="space-y-4"><input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleImageUpload} className="hidden" /><Button type="button" variant="outline" disabled={isUploading} onClick={() => fileInputRef.current?.click()}><Upload className="mr-2 h-4 w-4" />{isUploading ? "Uploading..." : "Upload images"}</Button><p className="text-xs text-muted-foreground">Select multiple images for the main story slider. The first image is used as the cover.</p>{formData.images?.length ? <div className="grid gap-4 sm:grid-cols-2">{formData.images.map((image, index) => <div key={image} className="space-y-2"><img src={image} alt={`Blog story image ${index + 1}`} className="aspect-video w-full object-cover" /><Button type="button" variant="outline" size="sm" onClick={() => removeImage(image)}>Remove image</Button></div>)}</div> : <div className="flex h-40 items-center justify-center border border-dashed text-muted-foreground"><ImageIcon className="mr-2 h-5 w-5" />No story images selected</div>}</CardContent></Card>
         <Card><CardHeader><CardTitle>Publishing</CardTitle></CardHeader><CardContent className="space-y-4"><label className="flex cursor-pointer items-start gap-3 rounded-lg border p-4"><input type="checkbox" className="mt-1 h-4 w-4" checked={formData.published} onChange={(event) => updateField("published", event.target.checked)} /><span><span className="font-medium">Publish this post</span><span className="block text-sm text-muted-foreground">Published posts appear on the public blog.</span></span></label><label className="flex cursor-pointer items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4"><input type="checkbox" className="mt-1 h-4 w-4" checked={formData.is_main} onChange={(event) => updateField("is_main", event.target.checked)} /><span><span className="flex items-center gap-2 font-medium"><Star className="h-4 w-4 text-amber-500" /> Main blog post</span><span className="block text-sm text-muted-foreground">This is the primary story highlighted on the public blog. Saving it replaces the current main post.</span></span></label></CardContent></Card>
         <div className="flex justify-end gap-3"><Button type="button" variant="outline" onClick={() => navigate("/admin/blog")}>Cancel</Button><Button type="submit" disabled={isSubmitting || isUploading}><Save className="mr-2 h-4 w-4" />{isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : isEditMode ? "Update post" : "Create post"}</Button></div>
       </form>

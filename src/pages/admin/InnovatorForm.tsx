@@ -8,11 +8,11 @@ const AdminInnovatorForm = () => {
   const navigate = useNavigate();
 
   const handleSuccess = () => {
-    navigate("/admin/innovators");
+    navigate("/admin/members");
   };
 
   const handleCancel = () => {
-    navigate("/admin/innovators");
+    navigate("/admin/members");
   };
 
   return (

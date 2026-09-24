@@ -42,14 +42,10 @@ const HeroComparison = () => {
         title: slide.title,
         description: slide.description,
         alt: slide.title,
-        buttonLabel: slide.button_label,
-        buttonUrl: slide.button_url,
       }))
     : heroSlides.map((slide) => ({
         ...slide,
         description: "A focused home for student innovators, mentors, and partners building Rwanda's digital future together.",
-        buttonLabel: "Explore the Hub",
-        buttonUrl: "/innovations",
       }));
   const { stats, loading: statsLoading } = useStats();
 
@@ -134,13 +130,6 @@ const HeroComparison = () => {
                             <p className="text-xs font-medium uppercase tracking-[0.16em] text-white/75">From the community</p>
                             <p className="mt-1 truncate text-xl font-bold sm:text-2xl">{slide.title}</p>
                           </div>
-                            <Link
-                            to={slide.buttonUrl}
-                            aria-label="View innovation showcase"
-                            className="grid h-11 w-11 shrink-0 place-items-center rounded-full bg-white text-[#00628b] shadow-lg transition hover:bg-[#8dc63f] hover:text-slate-950"
-                          >
-                            <ArrowRight className="h-5 w-5" />
-                          </Link>
                         </div>
                       </>
                     )}

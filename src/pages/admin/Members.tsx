@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Search, ShieldCheck, UserRound, UsersRound } from "lucide-react";
+import { Search, ShieldCheck, UserPlus, UserRound, UsersRound } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -87,6 +87,14 @@ const Members = () => {
               <UsersRound className="h-4 w-4" /> Community directory
             </div>
           </div>
+
+          <Link
+            to="/admin/members/new"
+            className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-[#00628b] px-4 text-sm font-semibold text-white transition hover:bg-[#004f70] focus:outline-none focus:ring-2 focus:ring-[#00628b]/30 focus:ring-offset-2"
+          >
+            <UserPlus className="h-4 w-4" />
+            Add Member
+          </Link>
 
           <div className="relative w-full max-w-sm">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />

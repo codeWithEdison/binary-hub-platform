@@ -498,7 +498,7 @@ const Overview = () => {
           <CardContent>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
               <Button asChild variant="outline" className="h-auto flex flex-col items-center justify-center p-4">
-                <Link to="/admin/innovators/new">
+                <Link to="/admin/members/new">
                   <Users className="h-6 w-6 mb-2" />
                   <span>Add Innovator</span>
                 </Link>

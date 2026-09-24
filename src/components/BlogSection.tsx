@@ -8,9 +8,11 @@ type BlogStory = {
   title: string;
   excerpt: string;
   category: string;
+  slug: string;
   readTime: string;
   date?: string;
   image: string;
+  images: string[];
 };
 
 type BlogSectionProps = {
@@ -23,9 +25,11 @@ const BlogSection = ({ compact = false }: BlogSectionProps) => {
     title: post.title,
     excerpt: post.excerpt,
     category: post.category,
+    slug: post.slug,
     readTime: `${post.read_time_minutes} min read`,
     date: post.story_date || undefined,
     image: post.image || "/img/placeholder.svg",
+    images: post.images || [],
   }));
   const mainManagedStory = managedStories.find((story) => posts.find((post) => post.title === story.title)?.is_main);
   const availableStories = compact
@@ -36,7 +40,7 @@ const BlogSection = ({ compact = false }: BlogSectionProps) => {
   const visibleStories = compact ? availableStories.slice(0, 5) : availableStories;
   const featuredStory = visibleStories[0];
   const gridStories = visibleStories.slice(1);
-  const activeImages = [featuredStory?.image].filter((image): image is string => Boolean(image));
+  const activeImages = featuredStory?.images.length ? featuredStory.images : [featuredStory?.image].filter((image): image is string => Boolean(image));
   const [activeImage, setActiveImage] = useState(0);
 
   useEffect(() => {
@@ -107,9 +111,11 @@ const BlogSection = ({ compact = false }: BlogSectionProps) => {
                 <span>{featuredStory.date}</span>
                 <span className="flex items-center gap-1"><Clock className="h-3 w-3" />{featuredStory.readTime}</span>
               </div>
-              <h3 className="max-w-lg font-display text-2xl leading-tight text-white md:text-4xl">{featuredStory.title}</h3>
+              <Link to={`/blog/${featuredStory.slug}`} className="group/title max-w-lg">
+                <h3 className="font-display text-2xl leading-tight text-white transition group-hover/title:text-[#b8e6f6] md:text-4xl">{featuredStory.title}</h3>
+              </Link>
               <p className="mt-3 max-w-lg text-sm leading-relaxed text-white/75">{featuredStory.excerpt}</p>
-              <Link to="/blog" className="mt-6 inline-flex w-fit items-center gap-2 text-sm font-semibold text-white">
+              <Link to={`/blog/${featuredStory.slug}`} className="mt-6 inline-flex w-fit items-center gap-2 text-sm font-semibold text-white">
                 Read story <ArrowUpRight className="h-4 w-4 transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5" />
               </Link>
               <div className="mt-6 flex items-center gap-2">
@@ -122,9 +128,9 @@ const BlogSection = ({ compact = false }: BlogSectionProps) => {
                   <ArrowLeft className="h-3.5 w-3.5" />
                 </button>
                 <div className="flex items-center gap-1.5" aria-label={`Featured image ${activeImage + 1} of ${activeImages.length}`}>
-                  {activeImages.map((image, index) => (
+                    {activeImages.map((image, index) => (
                     <button
-                      key={image}
+                      key={`${image}-${index}`}
                       type="button"
                       onClick={() => setActiveImage(index)}
                       aria-label={`Show featured image ${index + 1}`}
@@ -145,6 +151,7 @@ const BlogSection = ({ compact = false }: BlogSectionProps) => {
           </motion.article>
 
           {gridStories.map((story, index) => (
+            <Link to={`/blog/${story.slug}`} className="group block">
             <motion.article
               key={story.title}
               initial={{ opacity: 0, y: 20 }}
@@ -167,6 +174,7 @@ const BlogSection = ({ compact = false }: BlogSectionProps) => {
                 <p className="mt-3 line-clamp-2 text-xs leading-relaxed text-[#587181]">{story.excerpt}</p>
               </div>
             </motion.article>
+            </Link>
           ))}
         </div>
       </div>

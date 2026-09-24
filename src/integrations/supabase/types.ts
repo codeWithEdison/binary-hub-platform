@@ -600,6 +600,45 @@ export type Database = {
         }
         Relationships: []
       }
+      inquiries: {
+        Row: {
+          company: string | null
+          created_at: string
+          email: string
+          first_name: string
+          id: string
+          inquiry_type: "collaboration" | "partnership" | "innovation" | "general"
+          last_name: string
+          message: string
+          status: "new" | "read" | "archived"
+          updated_at: string
+        }
+        Insert: {
+          company?: string | null
+          created_at?: string
+          email: string
+          first_name: string
+          id?: string
+          inquiry_type: "collaboration" | "partnership" | "innovation" | "general"
+          last_name: string
+          message: string
+          status?: "new" | "read" | "archived"
+          updated_at?: string
+        }
+        Update: {
+          company?: string | null
+          created_at?: string
+          email?: string
+          first_name?: string
+          id?: string
+          inquiry_type?: "collaboration" | "partnership" | "innovation" | "general"
+          last_name?: string
+          message?: string
+          status?: "new" | "read" | "archived"
+          updated_at?: string
+        }
+        Relationships: []
+      }
       stats: {
         Row: {
           created_at: string | null
