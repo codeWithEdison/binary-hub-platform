@@ -25,6 +25,7 @@ import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { Link } from "react-router-dom";
 import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
+import { useAdminFormDraft } from "@/hooks/useAdminFormDraft";
 
 // Sample data
 const announcementCategories = [
@@ -56,9 +57,12 @@ const AnnouncementForm = () => {
       image: "/img/cordinator.jpg"
     }
   });
+  const draftKey = `announcement:${id || "new"}`;
+  const { ready: draftReady, clearDraft, wasRestored } = useAdminFormDraft(draftKey, formData, setFormData);
 
   // If in edit mode, fetch announcement data
   useEffect(() => {
+    if (!draftReady || wasRestored) return;
     if (isEditMode) {
       // In a real app, fetch data from API based on ID
       // For now, just use mock data
@@ -80,10 +84,10 @@ const AnnouncementForm = () => {
       const today = new Date().toISOString().split('T')[0];
       setFormData(prev => ({
         ...prev,
-        date: today
+        date: prev.date || today
       }));
     }
-  }, [isEditMode, id]);
+  }, [isEditMode, id, draftReady, wasRestored]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -104,6 +108,7 @@ const AnnouncementForm = () => {
       description: `Successfully ${isEditMode ? "updated" : "created"} ${formData.title}`,
     });
 
+    clearDraft();
     navigate("/admin/announcements");
   };
 

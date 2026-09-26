@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { ChangeEvent, useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { Image as ImageIcon, Upload, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -20,7 +21,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useStakeholders, type Stakeholder } from "@/hooks/useStakeholders";
+import { useStakeholders } from "@/hooks/useStakeholders";
+import { useAdminFormDraft } from "@/hooks/useAdminFormDraft";
+import { useToast } from "@/hooks/use-toast";
+import { uploadPublicImage } from "@/lib/uploadImage";
+import { InlineLoadingOrb } from "@/components/LoadingOrb";
 
 const stakeholderSchema = z.object({
   name: z.string().min(1, "Name is required"),
@@ -42,13 +47,13 @@ interface StakeholderFormProps {
 
 const categories = [
   "Academic",
-  "Infrastructure", 
+  "Infrastructure",
   "Government",
   "Innovation",
   "Funding",
   "International",
   "Research",
-  "Industry"
+  "Industry",
 ];
 
 export const StakeholderForm: React.FC<StakeholderFormProps> = ({
@@ -57,7 +62,11 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
   onCancel,
 }) => {
   const { stakeholders, createStakeholder, updateStakeholder } = useStakeholders();
-  
+  const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
   const form = useForm<StakeholderFormData>({
     resolver: zodResolver(stakeholderSchema),
     defaultValues: {
@@ -71,7 +80,17 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
     },
   });
 
+  const draftKey = `stakeholder:${stakeholderId || "new"}`;
+  const watchedValues = form.watch();
+  const logoUrl = form.watch("logo");
+  const { ready: draftReady, clearDraft, wasRestored } = useAdminFormDraft(
+    draftKey,
+    watchedValues,
+    (draft) => form.reset(draft)
+  );
+
   useEffect(() => {
+    if (!draftReady || wasRestored) return;
     if (stakeholderId) {
       const stakeholder = stakeholders.find((s) => s.id === stakeholderId);
       if (stakeholder) {
@@ -86,9 +105,35 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
         });
       }
     }
-  }, [stakeholderId, stakeholders, form]);
+  }, [stakeholderId, stakeholders, form, draftReady, wasRestored]);
+
+  const handleLogoUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const result = await uploadPublicImage(file, "stakeholders");
+    setIsUploading(false);
+
+    if (result.error) {
+      toast({
+        title: "Upload failed",
+        description: result.error,
+        variant: "destructive",
+      });
+    } else if (result.url) {
+      form.setValue("logo", result.url, { shouldDirty: true, shouldValidate: true });
+    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeLogo = () => {
+    form.setValue("logo", "", { shouldDirty: true });
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
 
   const onSubmit = async (data: StakeholderFormData) => {
+    setIsSubmitting(true);
     const stakeholderData = {
       name: data.name,
       category: data.category,
@@ -106,7 +151,9 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
       result = await createStakeholder(stakeholderData);
     }
 
+    setIsSubmitting(false);
     if (!result.error) {
+      clearDraft();
       onSuccess();
     }
   };
@@ -131,11 +178,53 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
         <FormField
           control={form.control}
           name="logo"
-          render={({ field }) => (
+          render={() => (
             <FormItem>
-              <FormLabel>Logo URL</FormLabel>
+              <FormLabel>Logo</FormLabel>
               <FormControl>
-                <Input placeholder="https://example.com/logo.png" {...field} />
+                <div className="space-y-3">
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleLogoUpload}
+                  />
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      disabled={isUploading}
+                      onClick={() => fileInputRef.current?.click()}
+                    >
+                      <Upload className="mr-2 h-4 w-4" />
+                      {isUploading ? "Uploading..." : logoUrl ? "Replace logo" : "Upload logo"}
+                    </Button>
+                    {logoUrl ? (
+                      <Button type="button" variant="ghost" onClick={removeLogo}>
+                        <X className="mr-2 h-4 w-4" />
+                        Remove
+                      </Button>
+                    ) : null}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    JPG, PNG, or WebP. Maximum 5MB.
+                  </p>
+                  {logoUrl ? (
+                    <div className="flex h-28 w-28 items-center justify-center rounded-md border bg-muted/30 p-2">
+                      <img
+                        src={logoUrl}
+                        alt="Stakeholder logo preview"
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    </div>
+                  ) : (
+                    <div className="flex h-28 w-full items-center justify-center rounded-md border border-dashed text-muted-foreground">
+                      <ImageIcon className="mr-2 h-5 w-5" />
+                      No logo selected
+                    </div>
+                  )}
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -148,7 +237,7 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Category</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select onValueChange={field.onChange} value={field.value || undefined}>
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Select a category" />
@@ -174,9 +263,9 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
             <FormItem>
               <FormLabel>Contribution</FormLabel>
               <FormControl>
-                <Textarea 
+                <Textarea
                   placeholder="Describe their contribution to the project"
-                  {...field} 
+                  {...field}
                 />
               </FormControl>
               <FormMessage />
@@ -230,8 +319,14 @@ export const StakeholderForm: React.FC<StakeholderFormProps> = ({
           <Button type="button" variant="outline" onClick={onCancel}>
             Cancel
           </Button>
-          <Button type="submit">
-            {stakeholderId ? "Update" : "Create"} Stakeholder
+          <Button type="submit" disabled={isSubmitting || isUploading}>
+            {isSubmitting ? (
+              <InlineLoadingOrb state="working" label="Saving" />
+            ) : stakeholderId ? (
+              "Update Stakeholder"
+            ) : (
+              "Create Stakeholder"
+            )}
           </Button>
         </div>
       </form>

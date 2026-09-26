@@ -33,6 +33,8 @@ import { Link } from "react-router-dom";
 import { useInnovators } from "@/hooks/useInnovators";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAdminFormDraft } from "@/hooks/useAdminFormDraft";
+import { uploadPublicImage } from "@/lib/uploadImage";
 
 const statuses = ["innovator", "alumni", "mentor"] as const;
 
@@ -107,6 +109,31 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
     } | null>(null);
 
     const [skillDraft, setSkillDraft] = useState("");
+    const [isUploadingImage, setIsUploadingImage] = useState(false);
+
+    const draftKey = `innovator:${innovatorId || (localOnly ? "local" : "new")}`;
+    const draftPayload = {
+        formData,
+        imagePreview,
+        uploadedImageUrl,
+        skillDraft,
+        accountStatus,
+    };
+    const applyDraft = (draft: typeof draftPayload) => {
+        if (draft.formData) setFormData(draft.formData);
+        if (draft.imagePreview !== undefined) setImagePreview(draft.imagePreview);
+        if (typeof draft.uploadedImageUrl === "string") setUploadedImageUrl(draft.uploadedImageUrl);
+        if (typeof draft.skillDraft === "string") setSkillDraft(draft.skillDraft);
+        if (draft.accountStatus === "active" || draft.accountStatus === "inactive") {
+            setAccountStatus(draft.accountStatus);
+        }
+    };
+    const { ready: draftReady, clearDraft, wasRestored } = useAdminFormDraft(
+        draftKey,
+        draftPayload,
+        applyDraft,
+        !localOnly
+    );
 
     const selectedSkills = useMemo(
         () => formData.skills.split(",").map((item) => item.trim()).filter(Boolean),
@@ -128,6 +155,10 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
     // Load innovator by id for admin edit (does not depend on the cached list)
     useEffect(() => {
         if (!isEditMode || !innovatorId || localOnly) return;
+        if (!draftReady || wasRestored) {
+            if (wasRestored) setRecordLoading(false);
+            return;
+        }
 
         let cancelled = false;
 
@@ -236,7 +267,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
         return () => {
             cancelled = true;
         };
-    }, [isEditMode, innovatorId, localOnly, toast]);
+    }, [isEditMode, innovatorId, localOnly, toast, draftReady, wasRestored]);
 
     const toggleAccountStatus = async () => {
         if (!innovatorId) return;
@@ -295,43 +326,32 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
         });
     };
 
-    const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
-        if (file) {
-            // Validate file type
-            if (!file.type.startsWith('image/')) {
-                toast({
-                    title: "Invalid file type",
-                    description: "Please select an image file",
-                    variant: "destructive"
-                });
-                return;
-            }
+        if (!file) return;
 
-            // Validate file size (max 5MB)
-            if (file.size > 5 * 1024 * 1024) {
-                toast({
-                    title: "File too large",
-                    description: "Please select an image smaller than 5MB",
-                    variant: "destructive"
-                });
-                return;
-            }
+        setIsUploadingImage(true);
+        const result = await uploadPublicImage(file, "innovators");
+        setIsUploadingImage(false);
 
-            // Create preview
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                const result = e.target?.result as string;
-                setImagePreview(result);
-                setUploadedImageUrl(result);
-            };
-            reader.readAsDataURL(file);
+        if (result.error) {
+            toast({
+                title: "Upload failed",
+                description: result.error,
+                variant: "destructive",
+            });
+        } else if (result.url) {
+            setImagePreview(result.url);
+            setUploadedImageUrl(result.url);
+            setFormData((current) => ({ ...current, image: result.url }));
         }
+        if (fileInputRef.current) fileInputRef.current.value = "";
     };
 
     const removeImage = () => {
         setImagePreview(null);
         setUploadedImageUrl("");
+        setFormData((current) => ({ ...current, image: "" }));
         if (fileInputRef.current) {
             fileInputRef.current.value = "";
         }
@@ -364,11 +384,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                 ...(userId ? { user_id: userId } : {}),
                 ...(!applicationMode && !isEditMode ? { account_status: "active" as const } : {}),
                 bio: formData.bio.trim() || null,
-                // Never persist raw base64 data-URLs; keep existing hosted image instead
-                image:
-                    (uploadedImageUrl || formData.image || "").startsWith("data:")
-                        ? formData.image || null
-                        : uploadedImageUrl || formData.image || null,
+                image: uploadedImageUrl || formData.image || null,
             };
 
             if (localOnly && !applicationMode) {
@@ -439,6 +455,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                 }
             }
 
+            clearDraft();
             onSuccess?.();
         } catch (error) {
             const message =
@@ -701,10 +718,10 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                             size="sm"
                                             className="mt-2"
                                             onClick={() => fileInputRef.current?.click()}
-                                            disabled={isSubmitting}
+                                            disabled={isSubmitting || isUploadingImage}
                                         >
                                             <Upload className="h-4 w-4 mr-2" />
-                                            Choose Image
+                                            {isUploadingImage ? "Uploading..." : "Choose Image"}
                                         </Button>
                                     </div>
                                 </div>

@@ -11,24 +11,15 @@ interface ProtectedRouteProps {
 
 export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   children,
-  requireRole
+  requireRole,
 }) => {
   const { user, loading: authLoading } = useAuth();
   const { profile, loading: profileLoading } = useProfile();
   const location = useLocation();
 
-  console.log("ProtectedRoute Debug:", {
-    user: user?.id,
-    authLoading,
-    profileLoading,
-    profile: profile?.role,
-    requireRole,
-    hasUser: !!user,
-    roleMatch: requireRole ? profile?.role === requireRole : true
-  });
-
-  if (authLoading || profileLoading) {
-    console.log("ProtectedRoute: Still loading or no profile", { authLoading, profileLoading, hasProfile: !!profile });
+  // Only block on the first auth/profile resolution.
+  // Re-fetches on tab focus must NOT unmount children or form input is lost.
+  if (authLoading && !user) {
     return (
       <CenteredLoadingOrb
         state="connecting"
@@ -39,7 +30,6 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   }
 
   if (!user) {
-    console.log("ProtectedRoute: No user, redirecting to /auth");
     const destination = `${location.pathname}${location.search}`;
     const isApplicationRoute = destination.startsWith("/applications");
     return (
@@ -56,6 +46,15 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
+  if (profileLoading && !profile) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+        <LoadingOrb state="weaving" size={64} label="Preparing account" />
+        <p className="text-sm text-muted-foreground">Preparing your account...</p>
+      </div>
+    );
+  }
+
   if (!profile) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center gap-4">
@@ -65,11 +64,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
     );
   }
 
-  if (requireRole && profile?.role !== requireRole) {
-    console.log("ProtectedRoute: Role mismatch", { profileRole: profile?.role, requireRole });
+  if (requireRole && profile.role !== requireRole) {
     return <Navigate to="/" replace />;
   }
 
-  console.log("ProtectedRoute: Access granted");
   return <>{children}</>;
 };

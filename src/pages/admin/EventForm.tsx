@@ -1,15 +1,15 @@
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, ChangeEvent } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { 
-  CalendarRange, 
-  Clock, 
-  MapPin, 
-  Users, 
-  Link as LinkIcon, 
-  Image as ImageIcon, 
+import {
+  CalendarRange,
+  Clock,
+  MapPin,
+  Users,
+  Image as ImageIcon,
   Save,
-  ArrowLeft
+  ArrowLeft,
+  Upload,
+  X,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -25,9 +25,11 @@ import {
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { Link } from "react-router-dom";
-import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
+import { AdminPage } from "@/components/admin/AdminPage";
+import { useAdminFormDraft } from "@/hooks/useAdminFormDraft";
+import { uploadPublicImage } from "@/lib/uploadImage";
+import { InlineLoadingOrb } from "@/components/LoadingOrb";
 
-// Sample event categories for selection
 const categories = ["Hackathon", "Workshop", "Masterclass", "Networking", "Showcase"];
 
 const EventForm = () => {
@@ -35,6 +37,8 @@ const EventForm = () => {
   const isEditMode = Boolean(id);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isUploading, setIsUploading] = useState(false);
 
   const [formData, setFormData] = useState({
     title: "",
@@ -46,45 +50,79 @@ const EventForm = () => {
     capacity: "",
     image: "",
   });
+  const draftKey = `event:${id || "new"}`;
+  const { ready: draftReady, clearDraft, wasRestored } = useAdminFormDraft(
+    draftKey,
+    formData,
+    setFormData
+  );
 
-  // If in edit mode, fetch event data
   useEffect(() => {
+    if (!draftReady || wasRestored) return;
     if (isEditMode) {
-      // In a real app, fetch data from API based on ID
-      // For now, just use mock data
       const mockData = {
         title: "AI in Healthcare Workshop",
-        description: "Learn how artificial intelligence is transforming healthcare delivery in Africa.",
+        description:
+          "Learn how artificial intelligence is transforming healthcare delivery in Africa.",
         date: "2023-11-22",
         time: "14:00",
         location: "Virtual Event (Zoom)",
         category: "Workshop",
         capacity: "50",
-        image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3"
+        image:
+          "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
       };
       setFormData(mockData);
     }
-  }, [isEditMode, id]);
+  }, [isEditMode, id, draftReady, wasRestored]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSelectChange = (name, value) => {
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setIsUploading(true);
+    const result = await uploadPublicImage(file, "events");
+    setIsUploading(false);
+
+    if (result.error) {
+      toast({ title: "Upload failed", description: result.error, variant: "destructive" });
+    } else if (result.url) {
+      setFormData((prev) => ({ ...prev, image: result.url }));
+    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const removeImage = () => {
+    setFormData((prev) => ({ ...prev, image: "" }));
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // In a real app, save to API
-    console.log("Form submitted:", formData);
-    
+    if (!formData.image) {
+      toast({
+        title: "Image required",
+        description: "Upload an event image before saving.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     toast({
       title: isEditMode ? "Event Updated" : "Event Created",
       description: `Successfully ${isEditMode ? "updated" : "created"} ${formData.title}`,
     });
-    
+
+    clearDraft();
     navigate("/admin/events");
   };
 
@@ -97,8 +135,8 @@ const EventForm = () => {
               {isEditMode ? "Edit Event" : "Create New Event"}
             </h1>
             <p className="text-muted-foreground">
-              {isEditMode 
-                ? "Update the details of this event" 
+              {isEditMode
+                ? "Update the details of this event"
                 : "Fill in the details to create a new event"}
             </p>
           </div>
@@ -119,7 +157,7 @@ const EventForm = () => {
               <div className="grid grid-cols-1 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="title">Event Title</Label>
-                  <Input 
+                  <Input
                     id="title"
                     name="title"
                     placeholder="Enter event title"
@@ -131,7 +169,7 @@ const EventForm = () => {
 
                 <div className="space-y-2">
                   <Label htmlFor="description">Description</Label>
-                  <Textarea 
+                  <Textarea
                     id="description"
                     name="description"
                     placeholder="Provide a detailed description of the event"
@@ -156,7 +194,7 @@ const EventForm = () => {
                     <CalendarRange className="h-4 w-4" />
                     Date
                   </Label>
-                  <Input 
+                  <Input
                     id="date"
                     name="date"
                     type="date"
@@ -171,7 +209,7 @@ const EventForm = () => {
                     <Clock className="h-4 w-4" />
                     Time
                   </Label>
-                  <Input 
+                  <Input
                     id="time"
                     name="time"
                     type="time"
@@ -188,7 +226,7 @@ const EventForm = () => {
                     <MapPin className="h-4 w-4" />
                     Location
                   </Label>
-                  <Input 
+                  <Input
                     id="location"
                     name="location"
                     placeholder="Physical or virtual location"
@@ -203,7 +241,7 @@ const EventForm = () => {
                     <Users className="h-4 w-4" />
                     Capacity
                   </Label>
-                  <Input 
+                  <Input
                     id="capacity"
                     name="capacity"
                     type="number"
@@ -215,55 +253,94 @@ const EventForm = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="category">Category</Label>
-                  <Select 
-                    value={formData.category} 
-                    onValueChange={(value) => handleSelectChange("category", value)}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {categories.map(category => (
-                        <SelectItem key={category} value={category}>
-                          {category}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="category">Category</Label>
+                <Select
+                  value={formData.category}
+                  onValueChange={(value) => handleSelectChange("category", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {categories.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        {category}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="image" className="flex items-center gap-2">
-                    <ImageIcon className="h-4 w-4" />
-                    Image URL
-                  </Label>
-                  <Input 
-                    id="image"
-                    name="image"
-                    placeholder="URL for event image"
-                    value={formData.image}
-                    onChange={handleChange}
-                    required
-                  />
+              <div className="space-y-3">
+                <Label className="flex items-center gap-2">
+                  <ImageIcon className="h-4 w-4" />
+                  Event image
+                </Label>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleImageUpload}
+                />
+                <div className="flex flex-wrap gap-2">
+                  <Button
+                    type="button"
+                    variant="outline"
+                    disabled={isUploading}
+                    onClick={() => fileInputRef.current?.click()}
+                  >
+                    <Upload className="mr-2 h-4 w-4" />
+                    {isUploading
+                      ? "Uploading..."
+                      : formData.image
+                        ? "Replace image"
+                        : "Upload image"}
+                  </Button>
+                  {formData.image ? (
+                    <Button type="button" variant="ghost" onClick={removeImage}>
+                      <X className="mr-2 h-4 w-4" />
+                      Remove
+                    </Button>
+                  ) : null}
                 </div>
+                <p className="text-xs text-muted-foreground">
+                  JPG, PNG, or WebP. Maximum 5MB.
+                </p>
+                {formData.image ? (
+                  <img
+                    src={formData.image}
+                    alt="Event preview"
+                    className="max-h-64 w-full rounded-md object-cover"
+                  />
+                ) : (
+                  <div className="flex h-40 items-center justify-center rounded-md border border-dashed text-muted-foreground">
+                    <ImageIcon className="mr-2 h-5 w-5" />
+                    No image selected
+                  </div>
+                )}
               </div>
             </CardContent>
           </Card>
 
           <div className="flex justify-end gap-3">
-            <Button 
-              type="button" 
-              variant="outline" 
+            <Button
+              type="button"
+              variant="outline"
               onClick={() => navigate("/admin/events")}
             >
               Cancel
             </Button>
-            <Button type="submit" className="flex items-center gap-2">
+            <Button type="submit" className="flex items-center gap-2" disabled={isUploading}>
               <Save className="h-4 w-4" />
-              {isEditMode ? "Update Event" : "Create Event"}
+              {isUploading ? (
+                <InlineLoadingOrb state="working" label="Uploading" />
+              ) : isEditMode ? (
+                "Update Event"
+              ) : (
+                "Create Event"
+              )}
             </Button>
           </div>
         </form>

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useApplicationSetup, SetupCategory } from "@/hooks/useApplicationSetup";
 import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
+import { useAdminFormDraft } from "@/hooks/useAdminFormDraft";
 
 const groups: Array<{ category: SetupCategory; title: string; description: string }> = [
   { category: "role", title: "Roles", description: "Roles applicants can select." },
@@ -14,6 +15,7 @@ const groups: Array<{ category: SetupCategory; title: string; description: strin
 const ApplicationSetup = () => {
   const { options, loading, addOption, removeOption } = useApplicationSetup(true);
   const [values, setValues] = useState<Record<SetupCategory, string>>({ role: "", department: "", skill: "" });
+  useAdminFormDraft("application-setup", values, setValues);
 
   const handleAdd = async (category: SetupCategory) => {
     const value = values[category].trim();

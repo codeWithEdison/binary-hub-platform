@@ -13,6 +13,7 @@ import { useHeroSlides } from "@/hooks/useHeroSlides";
 import { HERO_SLIDE_LIMITS, HeroSlideInput } from "@/lib/heroSlides";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
+import { useAdminFormDraft } from "@/hooks/useAdminFormDraft";
 
 const emptyForm: HeroSlideInput = {
   title: "",
@@ -36,15 +37,18 @@ const HeroSlideForm = () => {
   const [formData, setFormData] = useState<HeroSlideInput>(emptyForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const draftKey = `hero-slide:${id || "new"}`;
+  const { ready: draftReady, clearDraft, wasRestored } = useAdminFormDraft(draftKey, formData, setFormData);
 
   useEffect(() => {
+    if (!draftReady || wasRestored) return;
     if (isEditMode && id) {
       const slide = slides.find((item) => item.id === id);
       if (slide) setFormData({ ...slide });
     } else if (!isEditMode && user?.id) {
       setFormData((current) => ({ ...current, created_by: user.id }));
     }
-  }, [id, isEditMode, slides, user?.id]);
+  }, [id, isEditMode, slides, user?.id, draftReady, wasRestored]);
 
   const updateField = <K extends keyof HeroSlideInput>(field: K, value: HeroSlideInput[K]) => {
     setFormData((current) => ({ ...current, [field]: value }));
@@ -85,8 +89,10 @@ const HeroSlideForm = () => {
     const payload = { ...formData, created_by: formData.created_by || user?.id || null };
     const result = isEditMode && id ? await updateSlide(id, payload) : await createSlide(payload);
     setIsSubmitting(false);
-    if (!result.error) navigate("/admin/hero-slides");
-    else toast({ title: "Could not save slide", description: result.error.message, variant: "destructive" });
+    if (!result.error) {
+      clearDraft();
+      navigate("/admin/hero-slides");
+    } else toast({ title: "Could not save slide", description: result.error.message, variant: "destructive" });
   };
 
   if (isEditMode && loading) return <AdminPage>Loading hero slide...</AdminPage>;

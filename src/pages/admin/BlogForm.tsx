@@ -13,6 +13,7 @@ import { useBlogPosts, BlogPostInput } from "@/hooks/useBlogPosts";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
+import { useAdminFormDraft } from "@/hooks/useAdminFormDraft";
 
 const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -46,16 +47,19 @@ const BlogForm = () => {
   const [formData, setFormData] = useState<BlogPostInput>(emptyForm);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
+  const draftKey = `blog:${id || "new"}`;
+  const { ready: draftReady, clearDraft, wasRestored } = useAdminFormDraft(draftKey, formData, setFormData);
   const usesCustomCategory = formData.category === "Other" || !blogCategories.includes(formData.category);
 
   useEffect(() => {
+    if (!draftReady || wasRestored) return;
     if (isEditMode && id) {
       const post = posts.find((item) => item.id === id);
       if (post) setFormData({ ...post });
     } else if (!isEditMode && user?.id) {
       setFormData((current) => ({ ...current, author_id: user.id }));
     }
-  }, [id, isEditMode, posts, user?.id]);
+  }, [id, isEditMode, posts, user?.id, draftReady, wasRestored]);
 
   const updateField = (field: keyof BlogPostInput, value: string | boolean | number | null | string[]) => {
     setFormData((current) => ({ ...current, [field]: value }));
@@ -107,7 +111,10 @@ const BlogForm = () => {
     const payload = { ...formData, author_id: formData.author_id || user?.id || null };
     const result = isEditMode && id ? await updatePost(id, payload) : await createPost(payload);
     setIsSubmitting(false);
-    if (!result.error) navigate("/admin/blog");
+    if (!result.error) {
+      clearDraft();
+      navigate("/admin/blog");
+    }
   };
 
   if (isEditMode && loading) return <AdminPage>Loading blog post...</AdminPage>;

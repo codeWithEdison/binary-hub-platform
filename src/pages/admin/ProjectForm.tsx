@@ -38,9 +38,11 @@ import { useProjects } from "@/hooks/useProjects";
 import { useInnovators } from "@/hooks/useInnovators";
 import { Skeleton } from "@/components/ui/skeleton";
 import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
+import { useAdminFormDraft } from "@/hooks/useAdminFormDraft";
+import { uploadPublicImage } from "@/lib/uploadImage";
 
 // Sample categories for selection
-const categories = [
+const categoryOptions = [
   "Agriculture",
   "Healthcare",
   "Education",
@@ -112,9 +114,37 @@ const ProjectForm = () => {
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [uploadedImageUrl, setUploadedImageUrl] = useState<string>("");
   const [galleryImages, setGalleryImages] = useState<Array<{ url: string; preview: string }>>([]);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isUploadingGallery, setIsUploadingGallery] = useState(false);
+
+  const draftKey = `project:${id || "new"}`;
+  const draftPayload = {
+    formData,
+    categories,
+    technologies,
+    links,
+    team,
+    gallery,
+    uploadedImageUrl,
+    imagePreview,
+    galleryImages,
+  };
+  const applyDraft = (draft: typeof draftPayload) => {
+    if (draft.formData) setFormData(draft.formData);
+    if (draft.categories) setCategories(draft.categories.length ? draft.categories : [""]);
+    if (draft.technologies) setTechnologies(draft.technologies.length ? draft.technologies : [""]);
+    if (draft.links) setLinks(draft.links.length ? draft.links : [{ link_type: "", url: "" }]);
+    if (draft.team) setTeam(draft.team);
+    if (draft.gallery) setGallery(draft.gallery.length ? draft.gallery : [""]);
+    if (typeof draft.uploadedImageUrl === "string") setUploadedImageUrl(draft.uploadedImageUrl);
+    if (draft.imagePreview !== undefined) setImagePreview(draft.imagePreview);
+    if (draft.galleryImages) setGalleryImages(draft.galleryImages);
+  };
+  const { ready: draftReady, clearDraft, wasRestored } = useAdminFormDraft(draftKey, draftPayload, applyDraft);
 
   // If in edit mode, fetch project data
   useEffect(() => {
+    if (!draftReady || wasRestored) return;
     if (isEditMode && id) {
       const project = projects.find(p => p.id === id);
       if (project) {
@@ -186,7 +216,7 @@ const ProjectForm = () => {
         }
       }
     }
-  }, [isEditMode, id, projects, innovators]);
+  }, [isEditMode, id, projects, innovators, draftReady, wasRestored]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -198,82 +228,59 @@ const ProjectForm = () => {
   };
 
   // Image upload handlers
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      // Validate file type
-      if (!file.type.startsWith('image/')) {
-        toast({
-          title: "Invalid file type",
-          description: "Please select an image file",
-          variant: "destructive"
-        });
-        return;
-      }
+    if (!file) return;
 
-      // Validate file size (max 5MB)
-      if (file.size > 5 * 1024 * 1024) {
-        toast({
-          title: "File too large",
-          description: "Please select an image smaller than 5MB",
-          variant: "destructive"
-        });
-        return;
-      }
+    setIsUploadingImage(true);
+    const result = await uploadPublicImage(file, "projects");
+    setIsUploadingImage(false);
 
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const result = e.target?.result as string;
-        setImagePreview(result);
-        setUploadedImageUrl(result);
-      };
-      reader.readAsDataURL(file);
+    if (result.error) {
+      toast({
+        title: "Upload failed",
+        description: result.error,
+        variant: "destructive",
+      });
+    } else if (result.url) {
+      setImagePreview(result.url);
+      setUploadedImageUrl(result.url);
+      setFormData((prev) => ({ ...prev, image: result.url }));
     }
+    if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
   const removeImage = () => {
     setImagePreview(null);
     setUploadedImageUrl("");
+    setFormData((prev) => ({ ...prev, image: "" }));
     if (fileInputRef.current) {
       fileInputRef.current.value = "";
     }
   };
 
-  const handleGalleryUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files) {
-      Array.from(files).forEach(file => {
-        // Validate file type
-        if (!file.type.startsWith('image/')) {
-          toast({
-            title: "Invalid file type",
-            description: "Please select image files only",
-            variant: "destructive"
-          });
-          return;
-        }
+  const handleGalleryUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const files = Array.from(event.target.files || []);
+    if (!files.length) return;
 
-        // Validate file size (max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-          toast({
-            title: "File too large",
-            description: "Please select images smaller than 5MB",
-            variant: "destructive"
-          });
-          return;
-        }
-
-        // Create preview
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const result = e.target?.result as string;
-          setGalleryImages(prev => [...prev, { url: result, preview: result }]);
-          setGallery(prev => [...prev, result]);
-        };
-        reader.readAsDataURL(file);
-      });
+    setIsUploadingGallery(true);
+    for (const file of files) {
+      const result = await uploadPublicImage(file, "projects/gallery");
+      if (result.error) {
+        toast({
+          title: "Upload failed",
+          description: result.error,
+          variant: "destructive",
+        });
+        continue;
+      }
+      if (result.url) {
+        setGalleryImages((prev) => [...prev, { url: result.url, preview: result.url }]);
+        setGallery((prev) => [...prev.filter((url) => url.trim()), result.url]);
+      }
     }
+    setIsUploadingGallery(false);
+    if (galleryFileInputRef.current) galleryFileInputRef.current.value = "";
   };
 
   const removeGalleryImage = (index: number) => {
@@ -387,6 +394,7 @@ const ProjectForm = () => {
             title: "Success",
             description: "Project updated successfully"
           });
+          clearDraft();
           navigate("/admin/projects");
         } else {
           toast({
@@ -404,6 +412,7 @@ const ProjectForm = () => {
             title: "Success",
             description: "Project created successfully"
           });
+          clearDraft();
           navigate("/admin/projects");
         } else {
           toast({
@@ -688,10 +697,10 @@ const ProjectForm = () => {
                       size="sm"
                       className="mt-2"
                       onClick={() => fileInputRef.current?.click()}
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || isUploadingImage}
                     >
                       <Upload className="h-4 w-4 mr-2" />
-                      Choose Image
+                      {isUploadingImage ? "Uploading..." : "Choose Image"}
                     </Button>
                   </div>
                 </div>
@@ -935,10 +944,10 @@ const ProjectForm = () => {
                       size="sm"
                       className="mt-2"
                       onClick={() => galleryFileInputRef.current?.click()}
-                      disabled={isSubmitting}
+                      disabled={isSubmitting || isUploadingGallery}
                     >
                       <Upload className="h-4 w-4 mr-2" />
-                      Choose Images
+                      {isUploadingGallery ? "Uploading..." : "Choose Images"}
                     </Button>
                   </div>
                 </div>
