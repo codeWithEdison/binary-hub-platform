@@ -1,65 +1,78 @@
-import { useParams, Link } from "react-router-dom";
-import { ArrowLeft, BriefcaseBusiness, Building2, Code2, Github, Globe, Linkedin, UserRound, Users } from "lucide-react";
+import { motion } from "framer-motion";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  Github,
+  Globe,
+  Linkedin,
+  Users,
+} from "lucide-react";
+import { Link, useParams } from "react-router-dom";
 import Footer from "@/components/Footer";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import InnovatorDirectoryCard from "@/components/InnovatorDirectoryCard";
+import ProjectCard from "@/components/ProjectCard";
 import { useInnovators } from "@/hooks/useInnovators";
 import { useProjects } from "@/hooks/useProjects";
 import { innovators as fallbackInnovators } from "@/lib/data";
-
-const getInitials = (name: string) => name
-  .split(/\s+/)
-  .filter(Boolean)
-  .slice(0, 2)
-  .map((part) => part[0]?.toUpperCase())
-  .join("");
-
-const getSkillName = (skill: unknown) => (
-  typeof skill === "string"
-    ? skill
-    : (skill as { skill?: string } | null)?.skill || ""
-);
-
-const Field = ({ label, value }: { label: string; value: string }) => (
-  <div className="space-y-2">
-    <p className="text-xs font-semibold text-slate-500">{label}</p>
-    <div className="text-sm leading-6 text-slate-600">
-      {value || "Not provided"}
-    </div>
-  </div>
-);
+import {
+  getInnovatorInitials,
+  getInnovatorSkills,
+  statusLabel,
+} from "@/lib/innovatorUtils";
 
 const InnovatorDetail = () => {
   const { innovatorId } = useParams<{ innovatorId: string }>();
   const { innovators, loading: innovatorsLoading } = useInnovators();
   const { projects, loading: projectsLoading } = useProjects();
-  const innovator = innovators.find((item) => item.id === innovatorId)
-    || fallbackInnovators.find((item) => item.id === innovatorId);
-  const innovatorProjects = projects.filter((project) => (
+
+  const innovator =
+    innovators.find((item) => item.id === innovatorId) ||
+    fallbackInnovators.find((item) => item.id === innovatorId);
+
+  const innovatorProjects = projects.filter((project) =>
     project.innovators?.some((item) => item.innovator_id === innovatorId)
-  ));
+  );
+
+  const relatedInnovators = innovators
+    .filter(
+      (person) =>
+        person.id !== innovatorId &&
+        (person.status === innovator?.status ||
+          person.department === innovator?.department)
+    )
+    .slice(0, 3);
 
   if (innovatorsLoading) {
     return (
-      <div className="min-h-screen bg-[#fafafa] px-4 pb-12 pt-28 md:px-8 md:pt-32">
-        <div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[280px_1fr]">
-          <Skeleton className="h-[520px] rounded-md bg-white" />
-          <Skeleton className="h-[620px] rounded-md bg-white" />
+      <div className="bh-innovator-detail-page">
+        <div className="bh-innovator-detail-loading">
+          <div className="bh-innovator-detail-hero-skeleton animate-pulse" />
+          <div className="bh-innovator-detail-container space-y-4 py-10">
+            <div className="h-8 w-1/2 animate-pulse rounded bg-slate-200" />
+            <div className="h-4 w-full animate-pulse rounded bg-slate-200" />
+            <div className="h-4 w-4/5 animate-pulse rounded bg-slate-200" />
+          </div>
         </div>
+        <Footer />
       </div>
     );
   }
 
   if (!innovator) {
     return (
-      <div className="flex min-h-screen flex-col bg-[#fafafa]">
-        <main className="flex flex-1 items-center justify-center px-6 pt-24">
+      <div className="bh-innovator-detail-page">
+        <main className="flex flex-1 items-center justify-center px-6 pt-28 pb-20">
           <div className="text-center">
             <Users className="mx-auto h-10 w-10 text-slate-300" />
-            <h1 className="mt-4 text-xl font-semibold text-slate-900">Profile not found</h1>
-            <p className="mt-2 text-sm text-slate-500">This public profile may have been removed.</p>
-            <Link to="/innovators" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#00628b]">
-              <ArrowLeft className="h-4 w-4" /> Back to innovators
+            <h1 className="mt-4 font-display text-xl font-bold text-slate-900">
+              Profile not found
+            </h1>
+            <p className="mt-2 text-sm text-slate-500">
+              This public profile may have been removed.
+            </p>
+            <Link to="/innovators" className="bh-innovator-detail-back mt-6">
+              <ArrowLeft className="h-4 w-4" />
+              Back to innovators
             </Link>
           </div>
         </main>
@@ -68,96 +81,245 @@ const InnovatorDetail = () => {
     );
   }
 
-  return (
-    <div className="flex min-h-screen flex-col bg-[#fafafa] font-zurich text-slate-900">
-      <main className="flex-1 px-4 pb-12 pt-28 md:px-8 md:pt-32">
-        <div className="mx-auto max-w-7xl">
-          <Link to="/innovators" className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-[#00628b] transition hover:text-[#004f70]">
-            <ArrowLeft className="h-4 w-4" /> Back to innovators
-          </Link>
+  const skills = getInnovatorSkills(innovator);
+  const socials = [
+    innovator.linkedin && {
+      label: "LinkedIn",
+      href: innovator.linkedin,
+      icon: Linkedin,
+    },
+    innovator.github && {
+      label: "GitHub",
+      href: innovator.github,
+      icon: Github,
+    },
+    innovator.website && {
+      label: "Website",
+      href: innovator.website,
+      icon: Globe,
+    },
+    innovator.twitter && {
+      label: "X / Twitter",
+      href: innovator.twitter,
+      icon: null,
+    },
+    innovator.facebook && {
+      label: "Facebook",
+      href: innovator.facebook,
+      icon: Users,
+    },
+  ].filter(Boolean) as Array<{
+    label: string;
+    href: string;
+    icon: typeof Linkedin | typeof Github | typeof Globe | typeof Users | null;
+  }>;
 
-          <div className="grid items-start gap-5 lg:grid-cols-[280px_minmax(0,1fr)]">
-            <aside className="self-start rounded-md border border-slate-200 bg-white p-5">
-              <div className="relative mt-4 h-64 w-full max-w-full overflow-hidden rounded-md bg-[#f1dfdb] sm:h-72">
+  return (
+    <div className="bh-innovator-detail-page">
+      <main>
+        <section className="bh-innovator-detail-hero">
+          <div className="bh-innovator-detail-container">
+            <Link to="/innovators" className="bh-innovator-detail-back">
+              <ArrowLeft className="h-4 w-4" />
+              Back to innovators
+            </Link>
+
+            <div className="bh-innovator-detail-hero-grid">
+              <motion.div
+                className="bh-innovator-detail-photo"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55 }}
+              >
                 {innovator.image ? (
-                  <img src={innovator.image} alt={innovator.name} className="block h-full max-h-full w-full max-w-full object-cover object-top" />
+                  <img src={innovator.image} alt={innovator.name} />
                 ) : (
-                  <div className="flex h-full items-center justify-center bg-[#dbe5ff] text-4xl font-bold text-[#3e5ea9]">
-                    {getInitials(innovator.name) || <UserRound className="h-12 w-12" />}
+                  <div className="bh-innovator-detail-photo-fallback">
+                    {getInnovatorInitials(innovator.name)}
                   </div>
                 )}
-              </div>
-              <div className="mt-5 border-t border-slate-100 pt-5">
-                <h1 className="truncate text-lg font-semibold text-slate-950">{innovator.name}</h1>
-                <p className="mt-1 text-sm font-medium text-slate-700">{innovator.role || "Innovator"}</p>
-                <p className="mt-1 text-sm text-slate-500">{innovator.department || "Department not provided"}</p>
-              </div>
-              <div className="mt-5 space-y-3">
-                <div className="flex items-center gap-2 text-sm text-slate-600">
-                  <BriefcaseBusiness className="h-4 w-4 text-slate-400" /> {innovator.status}
-                </div>
-              </div>
-            </aside>
+              </motion.div>
 
-            <section className="rounded-md border border-slate-200 bg-white p-6 md:p-8">
-              <div className="grid gap-5 md:grid-cols-2">
-                <Field label="Community role" value={innovator.role || "Innovator"} />
-              </div>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.08, duration: 0.55 }}
+              >
+                <p className="bh-innovator-detail-eyebrow">
+                  {statusLabel(innovator.status)}
+                  {innovator.department ? (
+                    <>
+                      <span aria-hidden="true"> · </span>
+                      {innovator.department}
+                    </>
+                  ) : null}
+                </p>
+                <h1>{innovator.name}</h1>
+                <p className="bh-innovator-detail-role">
+                  {innovator.role || "Innovator"}
+                </p>
+                <p className="bh-innovator-detail-lead">
+                  {innovator.bio ||
+                    "This member has not added a public biography yet."}
+                </p>
 
-              <div className="mt-8">
-                <p className="text-xs font-semibold text-slate-700">Social media</p>
-                <div className="mt-4 flex flex-wrap gap-x-8 gap-y-4 text-sm text-slate-600">
-                  {innovator.github && <a href={innovator.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><Github className="h-4 w-4" /> GitHub</a>}
-                  {innovator.linkedin && <a href={innovator.linkedin} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><Linkedin className="h-4 w-4" /> LinkedIn</a>}
-                  {innovator.facebook && <a href={innovator.facebook} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><Users className="h-4 w-4" /> Facebook</a>}
-                  {innovator.twitter && <a href={innovator.twitter} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><span className="text-sm font-semibold">X</span> X / Twitter</a>}
-                  {innovator.website && <a href={innovator.website} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]"><Globe className="h-4 w-4" /> Website</a>}
-                  {!innovator.github && !innovator.linkedin && !innovator.facebook && !innovator.twitter && !innovator.website && (
-                    <span className="text-sm text-slate-500">No platforms provided</span>
-                  )}
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                  <Code2 className="h-4 w-4 text-[#00628b]" /> Skills and expertise
-                </div>
-                <div className="mt-3 flex min-h-10 flex-wrap gap-2">
-                  {(innovator.skills || []).length > 0 ? (innovator.skills || []).map((skill, index) => (
-                    <Badge key={`${getSkillName(skill)}-${index}`} variant="outline" className="rounded-full border-slate-300 px-3 py-1 text-xs font-medium text-slate-600">{getSkillName(skill)}</Badge>
-                  )) : <span className="text-sm text-slate-500">No skills listed</span>}
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                  <UserRound className="h-4 w-4 text-[#00628b]" /> About the member
-                </div>
-                <div className="mt-3 text-sm leading-6 text-slate-600">
-                  {innovator.bio || "This member has not added a public biography yet."}
-                </div>
-              </div>
-
-              <div className="mt-8">
-                <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                  <Building2 className="h-4 w-4 text-[#00628b]" /> Projects
-                </div>
-                {projectsLoading ? (
-                  <div className="mt-3 space-y-3"><Skeleton className="h-12 w-full" /><Skeleton className="h-12 w-full" /></div>
-                ) : innovatorProjects.length > 0 ? (
-                  <div className="mt-3 space-y-3">
-                    {innovatorProjects.map((project) => (
-                      <Link key={project.id} to={`/projects/${project.id}`} className="block rounded-md border border-slate-200 px-4 py-3 transition hover:border-[#00628b]/40 hover:bg-slate-50">
-                        <p className="text-sm font-semibold text-slate-800">{project.title}</p>
-                        <p className="mt-1 text-xs text-slate-500">View project details</p>
-                      </Link>
+                {socials.length > 0 && (
+                  <div className="bh-innovator-detail-actions">
+                    {socials.map((social) => (
+                      <a
+                        key={social.label}
+                        href={social.href}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="bh-innovator-detail-btn"
+                      >
+                        {social.icon ? (
+                          <social.icon className="h-4 w-4" />
+                        ) : (
+                          <span className="text-xs font-bold">X</span>
+                        )}
+                        {social.label}
+                        <ArrowUpRight size={13} />
+                      </a>
                     ))}
                   </div>
-                ) : <p className="mt-3 rounded-md border border-slate-200 px-4 py-3 text-sm text-slate-500">No public projects listed.</p>}
-              </div>
-            </section>
+                )}
+              </motion.div>
+            </div>
           </div>
-        </div>
+        </section>
+
+        <section className="bh-innovator-detail-body">
+          <div className="bh-innovator-detail-container bh-innovator-detail-layout">
+            <div className="bh-innovator-detail-main">
+              <article>
+                <p className="bh-innovator-detail-label">About</p>
+                <p className="bh-innovator-detail-prose">
+                  {innovator.bio ||
+                    "This member has not added a public biography yet."}
+                </p>
+              </article>
+
+              <article>
+                <p className="bh-innovator-detail-label">Skills & expertise</p>
+                <div className="bh-innovator-detail-skills">
+                  {skills.length > 0 ? (
+                    skills.map((skill, index) => (
+                      <span key={`${skill}-${index}`}>{skill}</span>
+                    ))
+                  ) : (
+                    <p className="bh-innovator-detail-muted">No skills listed</p>
+                  )}
+                </div>
+              </article>
+
+              <article>
+                <p className="bh-innovator-detail-label">Projects</p>
+                {projectsLoading ? (
+                  <div className="bh-projects-grid">
+                    {Array.from({ length: 2 }).map((_, index) => (
+                      <div
+                        key={index}
+                        className="bh-project-card h-64 animate-pulse bg-slate-100"
+                      />
+                    ))}
+                  </div>
+                ) : innovatorProjects.length > 0 ? (
+                  <div className="bh-projects-board bh-innovator-detail-projects">
+                    <div className="bh-projects-grid">
+                      {innovatorProjects.map((project, index) => (
+                        <ProjectCard
+                          key={project.id}
+                          project={project}
+                          index={index}
+                        />
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <p className="bh-innovator-detail-muted">
+                    No public projects listed.
+                  </p>
+                )}
+              </article>
+            </div>
+
+            <aside className="bh-innovator-detail-aside">
+              <div className="bh-innovator-detail-aside-block">
+                <p className="bh-innovator-detail-label">Profile</p>
+                <dl className="bh-innovator-detail-facts">
+                  <div>
+                    <dt>Status</dt>
+                    <dd>{statusLabel(innovator.status)}</dd>
+                  </div>
+                  <div>
+                    <dt>Role</dt>
+                    <dd>{innovator.role || "Innovator"}</dd>
+                  </div>
+                  <div>
+                    <dt>Department</dt>
+                    <dd>{innovator.department || "Not provided"}</dd>
+                  </div>
+                  <div>
+                    <dt>Projects</dt>
+                    <dd>
+                      {innovatorProjects.length ||
+                        innovator.projects?.length ||
+                        0}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+
+              {socials.length > 0 && (
+                <div className="bh-innovator-detail-aside-block">
+                  <p className="bh-innovator-detail-label">Connect</p>
+                  <ul className="bh-innovator-detail-links">
+                    {socials.map((social) => (
+                      <li key={social.label}>
+                        <a href={social.href} target="_blank" rel="noreferrer">
+                          {social.icon ? (
+                            <social.icon className="h-4 w-4" />
+                          ) : (
+                            <span className="text-xs font-bold">X</span>
+                          )}
+                          {social.label}
+                          <ArrowUpRight size={13} />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </aside>
+          </div>
+        </section>
+
+        {relatedInnovators.length > 0 && (
+          <section className="bh-innovator-detail-related">
+            <div className="bh-innovator-detail-container">
+              <div className="bh-section-heading">
+                <div>
+                  <h2 className="bh-section-title font-display">
+                    Related <span>people</span>
+                  </h2>
+                  <p className="bh-section-intro">
+                    More members from the Binary Hub community.
+                  </p>
+                </div>
+              </div>
+              <div className="bh-innovators-grid">
+                {relatedInnovators.map((person, index) => (
+                  <InnovatorDirectoryCard
+                    key={person.id}
+                    innovator={person}
+                    index={index}
+                  />
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
     </div>

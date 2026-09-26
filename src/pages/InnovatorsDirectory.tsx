@@ -1,22 +1,25 @@
-import { useMemo, useState } from "react";
-import { Search, UserRound, UsersRound } from "lucide-react";
-import { Link } from "react-router-dom";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { Loader2, Search, UsersRound } from "lucide-react";
 import Footer from "@/components/Footer";
-import { Badge } from "@/components/ui/badge";
-import { Input } from "@/components/ui/input";
+import InnovatorDirectoryCard, {
+  InnovatorDirectoryCardSkeleton,
+} from "@/components/InnovatorDirectoryCard";
 import { useInnovators } from "@/hooks/useInnovators";
+import { cn } from "@/lib/utils";
 
-const innovatorTabs = ["All innovators", "Innovators", "Mentors", "Alumni"] as const;
+const PAGE_SIZE = 9;
+
+const innovatorTabs = [
+  "All",
+  "Management",
+  "Innovators",
+  "Mentors",
+  "Alumni",
+] as const;
 type InnovatorTab = (typeof innovatorTabs)[number];
 
-const getInitials = (name: string) => name
-  .split(/\s+/)
-  .filter(Boolean)
-  .slice(0, 2)
-  .map((part) => part[0]?.toUpperCase())
-  .join("");
-
-const tabStatuses: Record<Exclude<InnovatorTab, "All innovators">, string> = {
+const tabStatuses: Record<"Innovators" | "Mentors" | "Alumni", string> = {
   Innovators: "innovator",
   Mentors: "mentor",
   Alumni: "alumni",
@@ -24,127 +27,255 @@ const tabStatuses: Record<Exclude<InnovatorTab, "All innovators">, string> = {
 
 const InnovatorsDirectory = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeTab, setActiveTab] = useState<InnovatorTab>("All innovators");
-  const { innovators, loading } = useInnovators();
+  const [activeTab, setActiveTab] = useState<InnovatorTab>("All");
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
+  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const { innovators, managementInnovators, loading } = useInnovators();
+
+  const management = useMemo(() => {
+    if (managementInnovators.length > 0) return managementInnovators;
+    return innovators.filter((person) => person.featured);
+  }, [managementInnovators, innovators]);
+
+  const managementIds = useMemo(
+    () => new Set(management.map((person) => person.id)),
+    [management]
+  );
 
   const filteredInnovators = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
     return innovators.filter((innovator) => {
-      const matchesTab = activeTab === "All innovators"
-        || innovator.status === tabStatuses[activeTab];
+      const matchesTab =
+        activeTab === "All"
+          ? true
+          : activeTab === "Management"
+            ? managementIds.has(innovator.id) || Boolean(innovator.featured)
+            : innovator.status === tabStatuses[activeTab];
+
       const searchableText = [
         innovator.name,
         innovator.role,
         innovator.department,
         ...(innovator.skills || []).map(({ skill }) => skill),
-      ].join(" ").toLowerCase();
+      ]
+        .join(" ")
+        .toLowerCase();
 
       return matchesTab && (!query || searchableText.includes(query));
     });
-  }, [activeTab, innovators, searchQuery]);
+  }, [activeTab, innovators, managementIds, searchQuery]);
+
+  const visibleInnovators = useMemo(
+    () => filteredInnovators.slice(0, visibleCount),
+    [filteredInnovators, visibleCount]
+  );
+
+  const hasMore = visibleCount < filteredInnovators.length;
+
+  const tabCounts = useMemo(
+    () => ({
+      All: innovators.length,
+      Management: management.length,
+      Innovators: innovators.filter((p) => p.status === "innovator").length,
+      Mentors: innovators.filter((p) => p.status === "mentor").length,
+      Alumni: innovators.filter((p) => p.status === "alumni").length,
+    }),
+    [innovators, management.length]
+  );
+
+  // Reset pagination when filters change
+  useEffect(() => {
+    setVisibleCount(PAGE_SIZE);
+    setIsLoadingMore(false);
+  }, [activeTab, searchQuery]);
+
+  const loadMore = useCallback(() => {
+    if (!hasMore || isLoadingMore) return;
+    setIsLoadingMore(true);
+    // Brief delay so the loading state is visible on fast devices
+    window.setTimeout(() => {
+      setVisibleCount((count) =>
+        Math.min(count + PAGE_SIZE, filteredInnovators.length)
+      );
+      setIsLoadingMore(false);
+    }, 220);
+  }, [filteredInnovators.length, hasMore, isLoadingMore]);
+
+  // Infinite scroll via sentinel
+  useEffect(() => {
+    const node = loadMoreRef.current;
+    if (!node || !hasMore || loading) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting)) {
+          loadMore();
+        }
+      },
+      { root: null, rootMargin: "240px 0px", threshold: 0.01 }
+    );
+
+    observer.observe(node);
+    return () => observer.disconnect();
+  }, [hasMore, loadMore, loading, visibleCount]);
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#fafafa] font-zurich text-slate-900">
-      <main className="flex-1 px-4 pb-8 pt-28 md:px-8 md:pb-10 md:pt-32">
-        <section className="mx-auto max-w-7xl px-2 py-2 md:px-4 md:py-4">
-          <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
-            <div>
-              <div className="mb-3 flex items-center gap-2 text-sm font-medium text-[#00628b]">
-                <UsersRound className="h-4 w-4" /> Community directory
-              </div>
+    <div className="bh-innovators-page">
+      <section className="bh-innovators-hero">
+        <div className="bh-innovators-hero-inner">
+          <motion.p
+            className="bh-innovators-brand"
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            UR Binary Hub
+          </motion.p>
+          <motion.h1
+            initial={{ opacity: 0, y: 18 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.06, duration: 0.55 }}
+          >
+            Innovators
+          </motion.h1>
+          <motion.p
+            initial={{ opacity: 0, y: 14 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.12, duration: 0.5 }}
+          >
+            Students, mentors, and alumni building homegrown digital solutions
+            for Rwanda and beyond.
+          </motion.p>
+        </div>
+      </section>
+
+      {!loading && management.length > 0 && activeTab !== "Management" && (
+        <section className="bh-innovators-featured">
+          <div className="bh-innovators-container">
+            <div className="bh-innovators-featured-heading">
+              <p className="bh-innovators-eyebrow">Leadership</p>
+              <h2>Meet the management</h2>
             </div>
-            <div className="relative w-full max-w-sm">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-              <Input
+            <div className="bh-innovators-featured-grid">
+              {management.map((person, index) => (
+                <InnovatorDirectoryCard
+                  key={person.id}
+                  innovator={person}
+                  index={index}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
+      <section className="bh-innovators-directory">
+        <div className="bh-innovators-container">
+          <div className="bh-innovators-toolbar">
+            <div>
+              <p className="bh-innovators-eyebrow">Directory</p>
+              <h2>All community members</h2>
+            </div>
+
+            <div className="bh-innovators-search">
+              <Search className="h-4 w-4" aria-hidden="true" />
+              <input
                 value={searchQuery}
                 onChange={(event) => setSearchQuery(event.target.value)}
-                placeholder="Search innovators"
-                className="h-11 border-slate-200 pl-9 text-sm shadow-none focus-visible:ring-[#00628b]/20"
+                placeholder="Search by name, role, or skill"
                 aria-label="Search innovators"
               />
             </div>
           </div>
 
-          <div className="mt-8 flex flex-wrap items-center gap-2 border-b border-slate-100 pb-4">
+          <div
+            className="bh-innovators-tabs"
+            role="tablist"
+            aria-label="Filter innovators"
+          >
             {innovatorTabs.map((tab) => (
               <button
                 key={tab}
                 type="button"
+                role="tab"
+                aria-selected={activeTab === tab}
                 onClick={() => setActiveTab(tab)}
-                className={`rounded-md px-4 py-2.5 text-sm font-semibold transition ${activeTab === tab
-                  ? "bg-[#00628b] text-white shadow-sm"
-                  : "text-slate-500 hover:bg-slate-50 hover:text-slate-900"}`}
+                className={cn(
+                  "bh-innovators-tab",
+                  activeTab === tab && "is-active"
+                )}
               >
                 {tab}
-                {tab === "All innovators" && <span className="ml-2 text-xs opacity-70">{innovators.length}</span>}
+                <span>{tabCounts[tab]}</span>
               </button>
             ))}
           </div>
 
           {loading ? (
-            <div className="grid gap-4 pt-8 sm:grid-cols-2 xl:grid-cols-3">
+            <div className="bh-innovators-grid">
               {Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="h-[286px] animate-pulse rounded-lg bg-slate-100" />
+                <InnovatorDirectoryCardSkeleton key={index} />
               ))}
             </div>
           ) : filteredInnovators.length > 0 ? (
-            <div className="grid gap-4 pt-8 sm:grid-cols-2 xl:grid-cols-3">
-              {filteredInnovators.map((innovator) => {
-                const skills = (innovator.skills || []).map(({ skill }) => skill).slice(0, 3);
-
-                return (
-                  <article
+            <>
+              <div className="bh-innovators-grid">
+                {visibleInnovators.map((innovator, index) => (
+                  <InnovatorDirectoryCard
                     key={innovator.id}
-                    className="group flex min-h-[286px] flex-col rounded-lg border border-slate-200 bg-white p-6 transition hover:-translate-y-0.5 hover:border-[#7898f4]/50 hover:shadow-[0_12px_28px_rgba(73,91,170,0.12)]"
-                  >
-                    <div className="flex items-start gap-4">
-                      {innovator.image ? (
-                        <img src={innovator.image} alt={innovator.name} className="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-white" />
-                      ) : (
-                        <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#dbe5ff] text-sm font-bold text-[#3e5ea9]">
-                          {getInitials(innovator.name) || <UserRound className="h-6 w-6" />}
-                        </div>
-                      )}
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-start justify-between gap-2">
-                          <h2 className="truncate text-lg font-semibold leading-6 text-slate-950">{innovator.name}</h2>
-                          <span title="Active profile" className="mt-1 h-2.5 w-2.5 shrink-0 rounded-full bg-emerald-500" />
-                        </div>
-                        <p className="mt-1 truncate text-sm font-medium text-slate-700">{innovator.role || "Innovator"}</p>
-                        <p className="truncate text-sm text-slate-500">{innovator.department || "Department not provided"}</p>
-                      </div>
-                    </div>
+                    innovator={innovator}
+                    index={index % PAGE_SIZE}
+                  />
+                ))}
+              </div>
 
-                    <div className="mt-4 flex min-h-6 flex-wrap gap-1.5">
-                      {skills.map((skill) => <Badge key={skill} variant="outline" className="rounded-full border-slate-300 px-2.5 py-1 text-xs font-medium text-slate-600">{skill}</Badge>)}
-                      {skills.length === 0 && <span className="text-sm text-slate-500">No skills listed</span>}
-                    </div>
+              <div className="bh-innovators-pagination">
+                <p className="bh-innovators-pagination-meta">
+                  Showing {visibleInnovators.length} of{" "}
+                  {filteredInnovators.length}
+                </p>
 
-                    <div className="mt-auto flex items-center justify-between border-t border-slate-200 pt-4 text-sm text-slate-600">
-                      <span>
-                        {innovator.projects?.length || 0} {innovator.projects?.length === 1 ? "project" : "projects"}
-                      </span>
-                      <span>{innovator.status}</span>
-                    </div>
-                    <Link
-                      to={`/innovators/${innovator.id}`}
-                      className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-md bg-[#00628b] px-4 text-sm font-semibold text-white transition hover:bg-[#004f70] focus:outline-none focus:ring-2 focus:ring-[#00628b]/30 focus:ring-offset-2"
+                {hasMore ? (
+                  <>
+                    <button
+                      type="button"
+                      className="bh-innovators-load-more"
+                      onClick={loadMore}
+                      disabled={isLoadingMore}
                     >
-                      View details
-                    </Link>
-                  </article>
-                );
-              })}
-            </div>
+                      {isLoadingMore ? (
+                        <>
+                          <Loader2 className="h-4 w-4 animate-spin" />
+                          Loading…
+                        </>
+                      ) : (
+                        "Load more"
+                      )}
+                    </button>
+                    <div
+                      ref={loadMoreRef}
+                      className="bh-innovators-scroll-sentinel"
+                      aria-hidden="true"
+                    />
+                  </>
+                ) : (
+                  <p className="bh-innovators-pagination-end">
+                    You’ve reached the end of the list
+                  </p>
+                )}
+              </div>
+            </>
           ) : (
-            <div className="py-20 text-center">
-              <UsersRound className="mx-auto h-9 w-9 text-slate-300" />
-              <p className="mt-3 text-sm text-slate-500">No innovators match your search.</p>
+            <div className="bh-innovators-empty">
+              <UsersRound className="h-9 w-9" />
+              <p>No innovators match your search.</p>
             </div>
           )}
-        </section>
-      </main>
+        </div>
+      </section>
+
       <Footer />
     </div>
   );
