@@ -1,28 +1,27 @@
-import React, { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/hooks/useProfile";
 import { useReferenceData } from "@/hooks/useReferenceData";
-import { Textarea } from "@/components/ui/textarea";
-import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
 
 const Auth = () => {
+  const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [departmentId, setDepartmentId] = useState("");
   const [bio, setBio] = useState("");
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
 
-  const { user, signIn, signUp, signInWithGoogle } = useAuth();
+  const { user, signIn, signUp } = useAuth();
   const { profile } = useProfile();
   const { departments } = useReferenceData();
   const navigate = useNavigate();
@@ -63,248 +62,253 @@ const Auth = () => {
     const metadata = {
       first_name: firstName,
       last_name: lastName,
-      role: "innovator", // Automatically assign innovator role
+      role: "innovator",
       department_id: departmentId || null,
-      bio: bio || null
+      bio: bio || null,
     };
 
     await signUp(email, password, metadata);
     setLoading(false);
   };
 
-  const handleGoogleSignIn = async () => {
-    setGoogleLoading(true);
-    await signInWithGoogle();
-    setGoogleLoading(false);
-  };
-
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/10 via-background to-secondary/10 p-4">
-      <Card className="w-full max-w-md">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold text-center">Binary Hub</CardTitle>
-          <CardDescription className="text-center">
-            Innovation & Technology Hub
-          </CardDescription>
-          {authState?.message && (
-            <div className="mt-4 rounded-lg border border-[#00628b]/20 bg-[#00628b]/10 px-4 py-3 text-center text-sm font-medium text-[#00628b]">
-              {authState.message}
+    <div className="bh-auth-page">
+      <div className="bh-auth-atmosphere" aria-hidden="true" />
+
+      <div className="bh-auth-shell">
+        <aside className="bh-auth-brand-panel">
+          <Link to="/" className="bh-auth-brand-link">
+            <img src="/img/logo.png" alt="" className="bh-auth-logo" />
+            <div>
+              <p className="bh-auth-brand-name">UR Binary Hub</p>
+              <p className="bh-auth-brand-tag">The Power of United Minds</p>
             </div>
-          )}
-        </CardHeader>
-        <CardContent>
-          <Tabs defaultValue="signin" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
-              <TabsTrigger value="signin">Sign In</TabsTrigger>
-              <TabsTrigger value="signup">Sign Up</TabsTrigger>
-            </TabsList>
+          </Link>
 
-            <TabsContent value="signin">
-              <div className="space-y-4">
-                <Button
-                  onClick={handleGoogleSignIn}
-                  variant="outline"
-                  className="w-full"
-                  disabled={googleLoading}
-                >
-                  {googleLoading ? (
-                    "Signing in..."
-                  ) : (
-                    <>
-                      <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                        <path
-                          fill="currentColor"
-                          d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                        />
-                      </svg>
-                      Continue with Google
-                    </>
-                  )}
-                </Button>
+          <div className="bh-auth-brand-copy">
+            <h1>
+              A space for{" "}
+              <span>innovators</span>
+            </h1>
+            <p>
+              Sign in to access your portal, applications, and the Binary Hub
+              community.
+            </p>
+          </div>
 
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <Separator className="w-full" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                      Or continue with
-                    </span>
-                  </div>
+          <p className="bh-auth-brand-foot">
+            University of Rwanda · School of ICT
+          </p>
+        </aside>
+
+        <main className="bh-auth-panel">
+          <div className="bh-auth-panel-inner">
+            <div className="bh-auth-mobile-brand">
+              <Link to="/" className="bh-auth-brand-link">
+                <img src="/img/logo.png" alt="" className="bh-auth-logo" />
+                <span className="bh-auth-brand-name">UR Binary Hub</span>
+              </Link>
+            </div>
+
+            <h2 className="bh-auth-title">
+              {mode === "signin" ? "Welcome back" : "Create your account"}
+            </h2>
+            <p className="bh-auth-subtitle">
+              {mode === "signin"
+                ? "Sign in with your email to continue."
+                : "Join as an innovator and start building with the hub."}
+            </p>
+
+            {authState?.message && (
+              <div className="bh-auth-banner">{authState.message}</div>
+            )}
+
+            <div className="bh-auth-tabs" role="tablist" aria-label="Auth mode">
+              <button
+                type="button"
+                role="tab"
+                aria-selected={mode === "signin"}
+                className={cn("bh-auth-tab", mode === "signin" && "is-active")}
+                onClick={() => setMode("signin")}
+              >
+                Sign in
+              </button>
+              <button
+                type="button"
+                role="tab"
+                aria-selected={mode === "signup"}
+                className={cn("bh-auth-tab", mode === "signup" && "is-active")}
+                onClick={() => setMode("signup")}
+              >
+                Sign up
+              </button>
+            </div>
+
+            {mode === "signin" ? (
+              <form onSubmit={handleSignIn} className="bh-auth-form">
+                <div className="bh-auth-field">
+                  <Label htmlFor="email">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="bh-auth-input"
+                  />
                 </div>
 
-                <form onSubmit={handleSignIn} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
-                    <Input
-                      id="email"
-                      type="email"
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                <div className="bh-auth-field">
+                  <Label htmlFor="password">Password</Label>
+                  <div className="bh-auth-password">
                     <Input
                       id="password"
-                      type="password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="current-password"
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
+                      className="bh-auth-input"
                     />
-                  </div>
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Signing in..." : "Sign In"}
-                  </Button>
-                </form>
-              </div>
-            </TabsContent>
-
-            <TabsContent value="signup">
-              <div className="space-y-4">
-                <Button
-                  onClick={handleGoogleSignIn}
-                  variant="outline"
-                  className="w-full"
-                  disabled={googleLoading}
-                >
-                  {googleLoading ? (
-                    "Signing up..."
-                  ) : (
-                    <>
-                      <svg className="w-5 h-5 mr-2" viewBox="0 0 24 24">
-                        <path
-                          fill="currentColor"
-                          d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"
-                        />
-                        <path
-                          fill="currentColor"
-                          d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-                        />
-                      </svg>
-                      Continue with Google
-                    </>
-                  )}
-                </Button>
-
-                <div className="relative">
-                  <div className="absolute inset-0 flex items-center">
-                    <Separator className="w-full" />
-                  </div>
-                  <div className="relative flex justify-center text-xs uppercase">
-                    <span className="bg-background px-2 text-muted-foreground">
-                      Or continue with
-                    </span>
+                    <button
+                      type="button"
+                      className="bh-auth-eye"
+                      onClick={() => setShowPassword((value) => !value)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
                   </div>
                 </div>
 
-                <form onSubmit={handleSignUp} className="space-y-4">
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="space-y-2">
-                      <Label htmlFor="firstName">First Name</Label>
-                      <Input
-                        id="firstName"
-                        placeholder="First name"
-                        value={firstName}
-                        onChange={(e) => setFirstName(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="lastName">Last Name</Label>
-                      <Input
-                        id="lastName"
-                        placeholder="Last name"
-                        value={lastName}
-                        onChange={(e) => setLastName(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                <button type="submit" className="bh-auth-submit" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Signing in…
+                    </>
+                  ) : (
+                    "Sign in"
+                  )}
+                </button>
+              </form>
+            ) : (
+              <form onSubmit={handleSignUp} className="bh-auth-form">
+                <div className="bh-auth-grid-2">
+                  <div className="bh-auth-field">
+                    <Label htmlFor="firstName">First name</Label>
                     <Input
-                      id="email"
-                      type="email"
-                      placeholder="Enter your email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      id="firstName"
+                      autoComplete="given-name"
+                      placeholder="First name"
+                      value={firstName}
+                      onChange={(e) => setFirstName(e.target.value)}
                       required
+                      className="bh-auth-input"
                     />
                   </div>
-
-                  <div className="space-y-2">
-                    <Label htmlFor="password">Password</Label>
+                  <div className="bh-auth-field">
+                    <Label htmlFor="lastName">Last name</Label>
                     <Input
-                      id="password"
-                      type="password"
-                      placeholder="Enter your password"
+                      id="lastName"
+                      autoComplete="family-name"
+                      placeholder="Last name"
+                      value={lastName}
+                      onChange={(e) => setLastName(e.target.value)}
+                      required
+                      className="bh-auth-input"
+                    />
+                  </div>
+                </div>
+
+                <div className="bh-auth-field">
+                  <Label htmlFor="signup-email">Email</Label>
+                  <Input
+                    id="signup-email"
+                    type="email"
+                    autoComplete="email"
+                    placeholder="name@example.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    className="bh-auth-input"
+                  />
+                </div>
+
+                <div className="bh-auth-field">
+                  <Label htmlFor="signup-password">Password</Label>
+                  <div className="bh-auth-password">
+                    <Input
+                      id="signup-password"
+                      type={showPassword ? "text" : "password"}
+                      autoComplete="new-password"
+                      placeholder="Create a password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
                       required
+                      className="bh-auth-input"
                     />
+                    <button
+                      type="button"
+                      className="bh-auth-eye"
+                      onClick={() => setShowPassword((value) => !value)}
+                      aria-label={showPassword ? "Hide password" : "Show password"}
+                    >
+                      {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                    </button>
                   </div>
+                </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="department">Department</Label>
-                    <Select value={departmentId} onValueChange={setDepartmentId}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select your department" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {departments.map((dept) => (
-                          <SelectItem key={dept.id} value={dept.id}>
-                            {dept.name}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
+                <div className="bh-auth-field">
+                  <Label htmlFor="department">Department</Label>
+                  <Select value={departmentId} onValueChange={setDepartmentId}>
+                    <SelectTrigger id="department" className="bh-auth-input">
+                      <SelectValue placeholder="Select your department" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {departments.map((dept) => (
+                        <SelectItem key={dept.id} value={dept.id}>
+                          {dept.name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="bio">Bio (optional)</Label>
-                    <Textarea
-                      id="bio"
-                      placeholder="Tell us about yourself..."
-                      value={bio}
-                      onChange={(e) => setBio(e.target.value)}
-                      rows={3}
-                    />
-                  </div>
+                <div className="bh-auth-field">
+                  <Label htmlFor="bio">Bio (optional)</Label>
+                  <Textarea
+                    id="bio"
+                    placeholder="Tell us about yourself…"
+                    value={bio}
+                    onChange={(e) => setBio(e.target.value)}
+                    rows={3}
+                    className="bh-auth-input min-h-[5rem]"
+                  />
+                </div>
 
-                  <Button type="submit" className="w-full" disabled={loading}>
-                    {loading ? "Creating account..." : "Sign Up"}
-                  </Button>
-                </form>
-              </div>
-            </TabsContent>
-          </Tabs>
-        </CardContent>
-      </Card>
+                <button type="submit" className="bh-auth-submit" disabled={loading}>
+                  {loading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Creating account…
+                    </>
+                  ) : (
+                    "Create account"
+                  )}
+                </button>
+              </form>
+            )}
+
+            <p className="bh-auth-footer">
+              <Link to="/">← Back to homepage</Link>
+            </p>
+          </div>
+        </main>
+      </div>
     </div>
   );
 };
