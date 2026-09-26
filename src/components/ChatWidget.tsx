@@ -1,9 +1,10 @@
 import React, { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Loader2 } from "lucide-react";
+import { MessageCircle, X, Send } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { motion, AnimatePresence } from "framer-motion";
+import { LoadingOrb } from "@/components/LoadingOrb";
 
 type Message = {
   role: "user" | "assistant";
@@ -204,8 +205,8 @@ const ChatWidget = () => {
                 ))}
                 {isLoading && (
                   <div className="flex justify-start">
-                    <div className="bg-muted rounded-2xl px-4 py-2">
-                      <Loader2 className="h-4 w-4 animate-spin" />
+                    <div className="rounded-2xl bg-muted px-3 py-2">
+                      <LoadingOrb state="composing" size={64} label="Thinking" />
                     </div>
                   </div>
                 )}

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { Eye, EyeOff } from "lucide-react";
+import { InlineLoadingOrb } from "@/components/LoadingOrb";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuth } from "@/hooks/useAuth";
@@ -132,7 +133,7 @@ const Auth = () => {
               <button type="submit" className="bh-auth-submit" disabled={loading}>
                 {loading ? (
                   <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
+                    <InlineLoadingOrb state="connecting" label="Signing in" />
                     Signing in…
                   </>
                 ) : (

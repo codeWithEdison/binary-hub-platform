@@ -2,6 +2,7 @@ import React from "react";
 import { Navigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useProfile } from "@/hooks/useProfile";
+import { CenteredLoadingOrb, LoadingOrb } from "@/components/LoadingOrb";
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
@@ -29,9 +30,11 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
   if (authLoading || profileLoading) {
     console.log("ProtectedRoute: Still loading or no profile", { authLoading, profileLoading, hasProfile: !!profile });
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>
+      <CenteredLoadingOrb
+        state="connecting"
+        label="Checking access"
+        minHeightClassName="min-h-screen"
+      />
     );
   }
 
@@ -55,11 +58,9 @@ export const ProtectedRoute: React.FC<ProtectedRouteProps> = ({
 
   if (!profile) {
     return (
-      <div className="flex min-h-screen items-center justify-center">
-        <div className="text-center">
-          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-b-2 border-primary" />
-          <p className="mt-4 text-sm text-muted-foreground">Preparing your account...</p>
-        </div>
+      <div className="flex min-h-screen flex-col items-center justify-center gap-4">
+        <LoadingOrb state="weaving" size={64} label="Preparing account" />
+        <p className="text-sm text-muted-foreground">Preparing your account...</p>
       </div>
     );
   }

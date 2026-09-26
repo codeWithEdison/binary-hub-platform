@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { ArrowUpRight, Loader2, Search, UsersRound } from "lucide-react";
+import { ArrowUpRight, Search, UsersRound } from "lucide-react";
+import { InlineLoadingOrb } from "@/components/LoadingOrb";
 import Footer from "@/components/Footer";
 import { useInnovators, type Innovator } from "@/hooks/useInnovators";
 import { resolveManagement } from "@/lib/resolveManagement";
@@ -347,7 +348,7 @@ const InnovatorsDirectory = () => {
                     >
                       {isLoadingMore ? (
                         <>
-                          <Loader2 className="h-4 w-4 animate-spin" />
+                          <InlineLoadingOrb state="searching" label="Loading more" />
                           Loading…
                         </>
                       ) : (
