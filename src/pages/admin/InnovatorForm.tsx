@@ -1,7 +1,6 @@
-
-import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import InnovatorForm from "@/components/InnovatorForm";
+import { AdminPage } from "@/components/admin/AdminPage";
 
 const AdminInnovatorForm = () => {
   const { id } = useParams();
@@ -16,11 +15,13 @@ const AdminInnovatorForm = () => {
   };
 
   return (
-    <InnovatorForm
-      innovatorId={id}
-      onSuccess={handleSuccess}
-      onCancel={handleCancel}
-    />
+    <AdminPage>
+      <InnovatorForm
+        innovatorId={id}
+        onSuccess={handleSuccess}
+        onCancel={handleCancel}
+      />
+    </AdminPage>
   );
 };
 

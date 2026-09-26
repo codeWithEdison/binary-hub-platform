@@ -1,7 +1,7 @@
 
 import React, { useState } from "react";
 import {
-  Plus, Search, Filter, Eye, Download,
+  Plus, Search, Filter, Pencil, Download,
   UserPlus, ChevronDown, User, ChevronLeft, ChevronRight
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -120,7 +120,7 @@ const InnovatorManagement = () => {
               Export
             </Button>
             <Button asChild>
-              <Link to="/admin/innovators/new" className="flex items-center gap-2">
+              <Link to="/admin/members/new" className="flex items-center gap-2">
                 <UserPlus className="h-4 w-4" />
                 Add Innovator
               </Link>
@@ -304,9 +304,9 @@ const InnovatorManagement = () => {
                     <TableCell>{(innovator.projects || []).length}</TableCell>
                     <TableCell className="text-right">
                       <Button asChild variant="outline" size="sm">
-                        <Link to={`/admin/innovators/edit/${innovator.id}`} className="flex items-center gap-2">
-                          <Eye className="h-4 w-4" />
-                          Review
+                        <Link to={`/admin/members/edit/${innovator.id}`} className="flex items-center gap-2">
+                          <Pencil className="h-4 w-4" />
+                          Edit
                         </Link>
                       </Button>
                     </TableCell>
@@ -324,7 +324,7 @@ const InnovatorManagement = () => {
                     </div>
                     {!searchQuery && statusFilter === "all" && (
                       <Button asChild className="mt-2" size="sm">
-                        <Link to="/admin/innovators/new">
+                        <Link to="/admin/members/new">
                           <Plus className="h-4 w-4 mr-2" />
                           Add First Innovator
                         </Link>

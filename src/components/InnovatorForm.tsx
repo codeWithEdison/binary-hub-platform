@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useMemo, useRef } from "react";
 import {
     User,
     Building,
@@ -11,11 +11,11 @@ import {
     ArrowLeft,
     Tag,
     Image as ImageIcon,
-    Loader2,
     Upload,
     X,
     Camera
 } from "lucide-react";
+import { InlineLoadingOrb } from "@/components/LoadingOrb";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -35,37 +35,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useApplicationSetup } from "@/hooks/useApplicationSetup";
 
-// Sample departments for selection
-const departments = [
-    "Computer Science",
-    "Information Technology",
-    "Electrical Engineering",
-    "Mechanical Engineering",
-    "Business Administration",
-    "Civil Engineering",
-    "Chemical Engineering",
-    "Biomedical Engineering",
-    "Mathematics",
-    "Physics",
-    "Chemistry",
-    "Biology",
-    "Economics",
-    "Management",
-    "Marketing",
-    "Finance",
-    "Accounting",
-    "Law",
-    "Medicine",
-    "Nursing",
-    "Pharmacy",
-    "Agriculture",
-    "Environmental Science",
-    "Architecture",
-    "Urban Planning"
-];
-
-// Sample statuses for selection
-const statuses = ["innovator", "alumni", "mentor"];
+const statuses = ["innovator", "alumni", "mentor"] as const;
 
 interface InnovatorFormProps {
     innovatorId?: string;
@@ -86,7 +56,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
 }) => {
     const isEditMode = Boolean(innovatorId);
     const { toast } = useToast();
-    const { innovators, createInnovator, updateInnovator, deleteInnovator, loading } = useInnovators({ includeInactive: !localOnly });
+    const { createInnovator, updateInnovator, deleteInnovator } = useInnovators({ includeInactive: !localOnly });
     const { options: applicationSetupOptions } = useApplicationSetup();
     const roleOptions = applicationSetupOptions.filter((option) => option.category === "role");
     const departmentOptions = applicationSetupOptions.filter((option) => option.category === "department");
@@ -114,6 +84,8 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
     });
 
     const [isSubmitting, setIsSubmitting] = useState(false);
+    const [recordLoading, setRecordLoading] = useState(isEditMode && !localOnly);
+    const [accountStatus, setAccountStatus] = useState<"active" | "inactive">("inactive");
     const [imagePreview, setImagePreview] = useState<string | null>(null);
     const [uploadedImageUrl, setUploadedImageUrl] = useState<string>("");
     const [application, setApplication] = useState<{
@@ -139,6 +111,27 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
         website?: string | null;
     } | null>(null);
 
+    const roleSelectOptions = useMemo(() => {
+        const names = new Set(roleOptions.map((option) => option.name));
+        if (formData.role && !names.has(formData.role)) {
+            return [...roleOptions, { id: `custom-role-${formData.role}`, name: formData.role }];
+        }
+        return roleOptions;
+    }, [roleOptions, formData.role]);
+
+    const departmentSelectOptions = useMemo(() => {
+        const names = new Set(departmentOptions.map((option) => option.name));
+        if (formData.department && !names.has(formData.department)) {
+            return [...departmentOptions, { id: `custom-dept-${formData.department}`, name: formData.department }];
+        }
+        return departmentOptions;
+    }, [departmentOptions, formData.department]);
+
+    const skillSelectOptions = useMemo(() => {
+        const selected = formData.skills.split(",").map((item) => item.trim()).filter(Boolean);
+        return Array.from(new Set([...skillOptions, ...selected]));
+    }, [skillOptions, formData.skills]);
+
     useEffect(() => {
         if (!localOnly) return;
         const savedProfile = localStorage.getItem("binaryhub.innovator.profile");
@@ -151,95 +144,123 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
         }
     }, [localOnly]);
 
-    // If in edit mode, fetch innovator data
+    // Load innovator by id for admin edit (does not depend on the cached list)
     useEffect(() => {
-        if (isEditMode && innovatorId) {
-            const innovator = innovators.find(i => i.id === innovatorId);
-            if (innovator) {
-                setFormData({
-                    name: innovator.name || "",
-                    role: innovator.role || "",
-                    department: innovator.department || "",
-                    status: innovator.status || "innovator",
-                    featured: Boolean(innovator.featured),
-                    email: "", // Not in current schema
-                    phone: "", // Not in current schema
-                    city: "",
-                    gender: "",
-                    linkedin: innovator.linkedin || "",
-                    facebook: innovator.facebook || "",
-                    twitter: innovator.twitter || "",
-                    github: innovator.github || "",
-                    website: innovator.website || "",
-                    bio: innovator.bio || "",
-                    image: innovator.image || "",
-                    skills: innovator.skills?.map(s => s.skill).join(", ") || "",
+        if (!isEditMode || !innovatorId || localOnly) return;
+
+        let cancelled = false;
+
+        const loadInnovator = async () => {
+            setRecordLoading(true);
+            const { data: innovator, error } = await (supabase as any)
+                .from("innovators")
+                .select("*, skills:innovator_skills(skill)")
+                .eq("id", innovatorId)
+                .maybeSingle();
+
+            if (cancelled) return;
+
+            if (error || !innovator) {
+                toast({
+                    title: "Innovator not found",
+                    description: error?.message || "This member could not be loaded for editing.",
+                    variant: "destructive",
                 });
-                if (innovator.image) {
-                    setImagePreview(innovator.image);
-                    setUploadedImageUrl(innovator.image);
-                }
+                setRecordLoading(false);
+                return;
+            }
 
-                const applicationQuery = supabase
-                    .from("applications")
-                    .select("*")
-                    .limit(1);
-                const loadApplication = innovator.application_id
-                    ? applicationQuery.eq("id", innovator.application_id).maybeSingle()
-                    : innovator.user_id
-                        ? applicationQuery.eq("user_id", innovator.user_id).order("created_at", { ascending: false }).maybeSingle()
-                        : Promise.resolve({ data: null, error: null });
+            setAccountStatus(innovator.account_status === "active" ? "active" : "inactive");
+            setFormData({
+                name: innovator.name || "",
+                role: innovator.role || "",
+                department: innovator.department || "",
+                status: innovator.status || "innovator",
+                featured: Boolean(innovator.featured),
+                email: "",
+                phone: "",
+                city: "",
+                gender: "",
+                linkedin: innovator.linkedin || "",
+                facebook: innovator.facebook || "",
+                twitter: innovator.twitter || "",
+                github: innovator.github || "",
+                website: innovator.website || "",
+                bio: innovator.bio || "",
+                image: innovator.image || "",
+                skills: innovator.skills?.map((s: { skill: string }) => s.skill).join(", ") || "",
+            });
+            if (innovator.image) {
+                setImagePreview(innovator.image);
+                setUploadedImageUrl(innovator.image);
+            }
 
-                loadApplication.then(({ data }) => {
-                    if (!data) {
-                        if (innovator.application_answers) {
-                            setApplication({
-                                status: "submitted",
-                                applicant_email: innovator.application_answers.email || null,
-                                university_year: innovator.application_answers.universityYear || "",
-                                skills: innovator.application_answers.skills || [],
-                                motivation: innovator.application_answers.motivation || "",
-                                interests: innovator.application_answers.interests || "",
-                                collaboration: innovator.application_answers.collaboration || "",
-                            });
-                        }
-                        return;
-                    }
+            const applicationQuery = (supabase as any).from("applications").select("*").limit(1);
+            const loadApplication = innovator.application_id
+                ? applicationQuery.eq("id", innovator.application_id).maybeSingle()
+                : innovator.user_id
+                    ? applicationQuery.eq("user_id", innovator.user_id).order("created_at", { ascending: false }).maybeSingle()
+                    : Promise.resolve({ data: null, error: null });
 
-                    setApplication(data);
+            const { data } = await loadApplication;
+            if (cancelled) return;
+
+            if (!data) {
+                if (innovator.application_answers) {
+                    setApplication({
+                        status: "linked",
+                        applicant_email: innovator.application_answers.email || null,
+                        university_year: innovator.application_answers.universityYear || "",
+                        skills: innovator.application_answers.skills || [],
+                        motivation: innovator.application_answers.motivation || "",
+                        interests: innovator.application_answers.interests || "",
+                        collaboration: innovator.application_answers.collaboration || "",
+                    });
                     setFormData((current) => ({
                         ...current,
-                        name: data.applicant_name || current.name,
-                        email: data.applicant_email || current.email,
-                        phone: data.phone || current.phone,
-                        city: data.city || current.city,
-                        gender: data.gender || current.gender,
-                        role: data.role || current.role,
-                        department: data.department || current.department,
-                        bio: data.bio || current.bio,
-                        image: data.image || current.image,
-                        linkedin: data.linkedin || current.linkedin,
-                        facebook: data.facebook || current.facebook,
-                        twitter: data.twitter || current.twitter,
-                        github: data.github || current.github,
-                        website: data.website || current.website,
-                        skills: data.skills?.length ? data.skills.join(", ") : current.skills,
+                        email: innovator.application_answers.email || current.email,
                     }));
-                    if (data.image && !imagePreview) {
-                        setImagePreview(data.image);
-                        setUploadedImageUrl(data.image);
-                    }
-                });
+                }
+            } else {
+                setApplication(data);
+                setFormData((current) => ({
+                    ...current,
+                    name: data.applicant_name || current.name,
+                    email: data.applicant_email || current.email,
+                    phone: data.phone || current.phone,
+                    city: data.city || current.city,
+                    gender: data.gender || current.gender,
+                    role: data.role || current.role,
+                    department: data.department || current.department,
+                    bio: data.bio || current.bio,
+                    image: data.image || current.image,
+                    linkedin: data.linkedin || current.linkedin,
+                    facebook: data.facebook || current.facebook,
+                    twitter: data.twitter || current.twitter,
+                    github: data.github || current.github,
+                    website: data.website || current.website,
+                    skills: data.skills?.length ? data.skills.join(", ") : current.skills,
+                }));
+                if (data.image) {
+                    setImagePreview(data.image);
+                    setUploadedImageUrl(data.image);
+                }
             }
-        }
-    }, [isEditMode, innovatorId, innovators, imagePreview]);
+
+            setRecordLoading(false);
+        };
+
+        loadInnovator();
+        return () => {
+            cancelled = true;
+        };
+    }, [isEditMode, innovatorId, localOnly, toast]);
 
     const toggleAccountStatus = async () => {
         if (!innovatorId) return;
-        const nextStatus = innovators.find((innovator) => innovator.id === innovatorId)?.account_status === "active"
-            ? "inactive"
-            : "active";
-        await updateInnovator(innovatorId, { account_status: nextStatus });
+        const nextStatus = accountStatus === "active" ? "inactive" : "active";
+        const { error } = await updateInnovator(innovatorId, { account_status: nextStatus });
+        if (!error) setAccountStatus(nextStatus);
     };
 
     const handleDelete = async () => {
@@ -344,7 +365,8 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                     image: uploadedImageUrl || formData.image,
                 }));
             } else if (isEditMode && innovatorId) {
-                await updateInnovator(innovatorId, innovatorData);
+                const { error } = await updateInnovator(innovatorId, innovatorData);
+                if (error) throw error;
                 if (application?.id) {
                     const { error: applicationError } = await (supabase as any)
                         .from("applications")
@@ -363,34 +385,38 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                             twitter: formData.twitter || null,
                             github: formData.github || null,
                             website: formData.website || null,
+                            skills: skillsArray.map(({ skill }) => skill),
                         })
                         .eq("id", application.id);
                     if (applicationError) throw applicationError;
                 }
-                await (supabase as any).from("innovator_skills").delete().eq("innovator_id", innovatorId);
+                const { error: skillsDeleteError } = await (supabase as any)
+                    .from("innovator_skills")
+                    .delete()
+                    .eq("innovator_id", innovatorId);
+                if (skillsDeleteError) throw skillsDeleteError;
                 if (skillsArray.length) {
-                    await (supabase as any).from("innovator_skills").insert(
+                    const { error: skillsInsertError } = await (supabase as any).from("innovator_skills").insert(
                         skillsArray.map(({ skill }) => ({ innovator_id: innovatorId, skill }))
                     );
+                    if (skillsInsertError) throw skillsInsertError;
                 }
-                toast({
-                    title: "Innovator Updated",
-                    description: `Successfully updated ${formData.name}`,
-                });
             } else {
-                const { error } = await createInnovator(innovatorData);
+                const { data, error } = await createInnovator(innovatorData);
                 if (error) throw error;
-                toast({
-                    title: "Innovator Created",
-                    description: `Successfully created ${formData.name}`,
-                });
+                const createdId = (data as { id?: string } | null)?.id;
+                if (createdId && skillsArray.length) {
+                    await (supabase as any).from("innovator_skills").insert(
+                        skillsArray.map(({ skill }) => ({ innovator_id: createdId, skill }))
+                    );
+                }
             }
 
             onSuccess?.();
         } catch (error) {
             toast({
                 title: "Error",
-                description: `Failed to ${isEditMode ? "update" : "create"} innovator`,
+                description: error instanceof Error ? error.message : `Failed to ${isEditMode ? "update" : "create"} innovator`,
                 variant: "destructive"
             });
         } finally {
@@ -398,7 +424,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
         }
     };
 
-    if (loading && isEditMode) {
+    if (recordLoading && isEditMode) {
         return (
             <div className="p-6">
                 <div className="max-w-4xl mx-auto">
@@ -439,7 +465,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                 <div className="flex items-center justify-between mb-6">
                     <div>
                         <h1 className="text-2xl font-semibold mb-1">
-                            {applicationMode ? "Final application details" : localOnly ? "Complete your profile" : isEditMode ? "Review innovator" : "Add New Innovator"}
+                            {applicationMode ? "Final application details" : localOnly ? "Complete your profile" : isEditMode ? "Edit innovator" : "Add New Innovator"}
                         </h1>
                         <p className="text-muted-foreground">
                             {applicationMode
@@ -447,7 +473,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                 : localOnly
                                 ? "Complete your profile details."
                                 : isEditMode
-                                ? "Update the details of this innovator"
+                                ? "Update this member’s profile, skills, and visibility."
                                 : "Fill in the details to add a new innovator"}
                         </p>
                     </div>
@@ -487,12 +513,23 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                         <Briefcase className="h-4 w-4" />
                                         Role *
                                     </Label>
-                                    <Select value={formData.role} onValueChange={(value) => handleSelectChange("role", value)} disabled={isSubmitting}>
+                                    <Select value={formData.role || undefined} onValueChange={(value) => handleSelectChange("role", value)} disabled={isSubmitting}>
                                         <SelectTrigger><SelectValue placeholder="Select your role" /></SelectTrigger>
                                         <SelectContent>
-                                            {roleOptions.map((option) => <SelectItem key={option.id} value={option.name}>{option.name}</SelectItem>)}
+                                            {roleSelectOptions
+                                              .filter((option) => option.name.trim().length > 0)
+                                              .map((option) => <SelectItem key={option.id} value={option.name}>{option.name}</SelectItem>)}
                                         </SelectContent>
                                     </Select>
+                                    {!applicationMode && !localOnly && (
+                                        <Input
+                                            name="role"
+                                            placeholder="Or type a custom role"
+                                            value={formData.role}
+                                            onChange={handleChange}
+                                            disabled={isSubmitting}
+                                        />
+                                    )}
                                 </div>
                             </div>
 
@@ -501,18 +538,29 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                     <Label htmlFor="department" className="flex items-center gap-2">
                                         <Building className="h-4 w-4" /> Department or field
                                     </Label>
-                                    <Select value={formData.department} onValueChange={(value) => handleSelectChange("department", value)} disabled={isSubmitting}>
+                                    <Select value={formData.department || undefined} onValueChange={(value) => handleSelectChange("department", value)} disabled={isSubmitting}>
                                         <SelectTrigger><SelectValue placeholder="Select your department or field" /></SelectTrigger>
                                         <SelectContent>
-                                            {departmentOptions.map((option) => <SelectItem key={option.id} value={option.name}>{option.name}</SelectItem>)}
+                                            {departmentSelectOptions
+                                              .filter((option) => option.name.trim().length > 0)
+                                              .map((option) => <SelectItem key={option.id} value={option.name}>{option.name}</SelectItem>)}
                                         </SelectContent>
                                     </Select>
+                                    {!applicationMode && !localOnly && (
+                                        <Input
+                                            name="department"
+                                            placeholder="Or type a custom department"
+                                            value={formData.department}
+                                            onChange={handleChange}
+                                            disabled={isSubmitting}
+                                        />
+                                    )}
                                 </div>
 
                                 {!applicationMode && (
                                     <div className="space-y-2">
                                         <Label htmlFor="status" className="flex items-center gap-2"><GraduationCap className="h-4 w-4" /> Status *</Label>
-                                        <Select value={formData.status} onValueChange={(value) => handleSelectChange("status", value)} disabled={isSubmitting}>
+                                        <Select value={formData.status || undefined} onValueChange={(value) => handleSelectChange("status", value)} disabled={isSubmitting}>
                                             <SelectTrigger><SelectValue placeholder="Select a status" /></SelectTrigger>
                                             <SelectContent>{statuses.map((status) => <SelectItem key={status} value={status}><span className="capitalize">{status}</span></SelectItem>)}</SelectContent>
                                         </Select>
@@ -644,7 +692,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                 </Label>
                                 {skillOptions.length > 0 ? (
                                     <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3">
-                                        {skillOptions.map((skill) => {
+                                        {skillSelectOptions.map((skill) => {
                                             const selected = formData.skills.split(",").map((item) => item.trim()).includes(skill);
                                             return (
                                                 <label key={skill} className="flex cursor-pointer items-center gap-2 rounded-md border border-border px-3 py-2 text-sm">
@@ -707,7 +755,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                         </Button>
                         <Button type="submit" disabled={isSubmitting} className="flex items-center gap-2">
                             {isSubmitting ? (
-                                <Loader2 className="h-4 w-4 animate-spin" />
+                                <InlineLoadingOrb state="working" label="Saving" />
                             ) : (
                                 <Save className="h-4 w-4" />
                             )}
@@ -719,7 +767,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                         {isEditMode && (
                             <>
                                 <Button type="button" variant="outline" onClick={toggleAccountStatus}>
-                                    {innovators.find((innovator) => innovator.id === innovatorId)?.account_status === "active"
+                                    {accountStatus === "active"
                                         ? "Deactivate account"
                                         : "Activate account"}
                                 </Button>
