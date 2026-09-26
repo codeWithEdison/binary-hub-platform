@@ -22,6 +22,7 @@ export interface Innovator {
   department: string;
   role: string;
   gender?: string | null;
+  binary_hub_code?: string | null;
   linkedin?: string | null;
   facebook?: string | null;
   twitter?: string | null;
@@ -156,6 +157,7 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
       "role",
       "department",
       "gender",
+      "binary_hub_code",
       "bio",
       "image",
       "status",

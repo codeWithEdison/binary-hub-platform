@@ -207,6 +207,7 @@ export type Database = {
       innovators: {
         Row: {
           bio: string | null
+          binary_hub_code: string | null
           created_at: string | null
           department: string
           featured: boolean
@@ -220,6 +221,7 @@ export type Database = {
         }
         Insert: {
           bio?: string | null
+          binary_hub_code?: string | null
           created_at?: string | null
           department: string
           featured?: boolean
@@ -233,6 +235,7 @@ export type Database = {
         }
         Update: {
           bio?: string | null
+          binary_hub_code?: string | null
           created_at?: string | null
           department?: string
           featured?: boolean

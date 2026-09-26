@@ -6,6 +6,7 @@ import { InlineLoadingOrb } from "@/components/LoadingOrb";
 import Footer from "@/components/Footer";
 import { useInnovators, type Innovator } from "@/hooks/useInnovators";
 import { resolveManagement } from "@/lib/resolveManagement";
+import { getInnovatorPath } from "@/lib/innovatorPath";
 import { cn } from "@/lib/utils";
 
 const PAGE_SIZE = 12;
@@ -195,7 +196,7 @@ const InnovatorsDirectory = () => {
                     viewport={{ once: true }}
                     transition={{ delay: Math.min(index * 0.06, 0.35), duration: 0.45 }}
                   >
-                    <Link to={`/innovators/${person.id}`} className="bh-hall-featured">
+                    <Link to={getInnovatorPath(person)} className="bh-hall-featured">
                       <div className="bh-hall-featured-ring">
                         <Avatar
                           person={person}
@@ -318,7 +319,7 @@ const InnovatorsDirectory = () => {
                       duration: 0.4,
                     }}
                   >
-                    <Link to={`/innovators/${person.id}`} className="bh-hall-person">
+                    <Link to={getInnovatorPath(person)} className="bh-hall-person">
                       <Avatar
                         person={person}
                         className="bh-hall-avatar"

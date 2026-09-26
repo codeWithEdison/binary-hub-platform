@@ -7,7 +7,8 @@ import {
   Linkedin,
   Users,
 } from "lucide-react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import { useEffect } from "react";
 import Footer from "@/components/Footer";
 import ProjectCard from "@/components/ProjectCard";
 import { useInnovators } from "@/hooks/useInnovators";
@@ -18,26 +19,38 @@ import {
   getInnovatorSkills,
   statusLabel,
 } from "@/lib/innovatorUtils";
+import { getInnovatorPath, matchesInnovatorParam } from "@/lib/innovatorPath";
 
 const InnovatorDetail = () => {
   const { innovatorId } = useParams<{ innovatorId: string }>();
+  const navigate = useNavigate();
   const { innovators, loading: innovatorsLoading } = useInnovators();
   const { projects, loading: projectsLoading } = useProjects();
 
   const innovator =
-    innovators.find((item) => item.id === innovatorId) ||
-    fallbackInnovators.find((item) => item.id === innovatorId);
+    innovators.find((item) => matchesInnovatorParam(item, innovatorId)) ||
+    fallbackInnovators.find((item) => matchesInnovatorParam(item as any, innovatorId));
+
+  // Prefer canonical code URL when someone opens the UUID link
+  useEffect(() => {
+    if (!innovator?.binary_hub_code || !innovatorId) return;
+    const code = innovator.binary_hub_code.trim();
+    if (code && innovatorId !== code && innovatorId === innovator.id) {
+      navigate(getInnovatorPath(innovator), { replace: true });
+    }
+  }, [innovator, innovatorId, navigate]);
 
   const innovatorProjects = projects.filter((project) =>
-    project.innovators?.some((item) => item.innovator_id === innovatorId)
+    project.innovators?.some((item) => item.innovator_id === innovator?.id)
   );
 
   const relatedInnovators = (() => {
-    const others = innovators.filter((person) => person.id !== innovatorId);
+    if (!innovator) return [];
+    const others = innovators.filter((person) => person.id !== innovator.id);
     const sameCircle = others.filter(
       (person) =>
-        person.status === innovator?.status ||
-        person.department === innovator?.department
+        person.status === innovator.status ||
+        person.department === innovator.department
     );
     const pool = sameCircle.length >= 2 ? sameCircle : others;
     return pool.slice(0, 4);
@@ -148,6 +161,12 @@ const InnovatorDetail = () => {
               >
                 <p className="bh-innovator-detail-eyebrow">
                   {statusLabel(innovator.status)}
+                  {innovator.binary_hub_code ? (
+                    <>
+                      <span aria-hidden="true"> · </span>
+                      BH-{innovator.binary_hub_code}
+                    </>
+                  ) : null}
                   {innovator.department ? (
                     <>
                       <span aria-hidden="true"> · </span>
@@ -312,7 +331,7 @@ const InnovatorDetail = () => {
                 {relatedInnovators.map((person) => (
                   <Link
                     key={person.id}
-                    to={`/innovators/${person.id}`}
+                    to={getInnovatorPath(person)}
                     className="bh-hall-person"
                   >
                     {person.image ? (

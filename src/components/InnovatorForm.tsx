@@ -66,6 +66,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
         department: "",
         status: "innovator" as "innovator" | "alumni" | "mentor",
         featured: false,
+        binaryHubCode: "",
         email: "",
         phone: "",
         city: "",
@@ -189,6 +190,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                 department: innovator.department || "",
                 status: innovator.status || "innovator",
                 featured: Boolean(innovator.featured),
+                binaryHubCode: innovator.binary_hub_code || "",
                 email: "",
                 phone: "",
                 city: "",
@@ -374,6 +376,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                 role: formData.role.trim(),
                 department: formData.department.trim(),
                 gender: formData.gender || null,
+                binary_hub_code: formData.binaryHubCode.trim() || null,
                 linkedin: formData.linkedin.trim() || null,
                 facebook: formData.facebook.trim() || null,
                 twitter: formData.twitter.trim() || null,
@@ -621,6 +624,32 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                     </Select>
                                     <p className="text-xs text-muted-foreground">
                                         Yes shows this person in Meet the management on the landing page and innovators directory.
+                                    </p>
+                                </div>
+                            )}
+
+                            {!applicationMode && (
+                                <div className="space-y-2">
+                                    <Label htmlFor="binaryHubCode">Binary Hub code</Label>
+                                    <Input
+                                        id="binaryHubCode"
+                                        name="binaryHubCode"
+                                        placeholder="e.g. 003"
+                                        value={formData.binaryHubCode}
+                                        onChange={(event) => {
+                                            const value = event.target.value
+                                                .replace(/[^A-Za-z0-9_-]/g, "")
+                                                .slice(0, 32);
+                                            setFormData((prev) => ({ ...prev, binaryHubCode: value }));
+                                        }}
+                                        disabled={isSubmitting}
+                                    />
+                                    <p className="text-xs text-muted-foreground">
+                                        Public profile URL:{" "}
+                                        <span className="font-medium text-foreground">
+                                          /innovators/{formData.binaryHubCode.trim() || "…"}
+                                        </span>
+                                        . Letters, numbers, hyphen, or underscore.
                                     </p>
                                 </div>
                             )}

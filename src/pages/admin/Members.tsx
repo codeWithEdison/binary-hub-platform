@@ -170,6 +170,11 @@ const Members = () => {
                         </div>
                       </div>
                       <p className="mt-1 truncate text-sm font-medium text-slate-700">{member.role || "Member"}</p>
+                      {member.binary_hub_code ? (
+                        <p className="truncate text-xs font-semibold tracking-wide text-[#00628b]">
+                          BH-{member.binary_hub_code}
+                        </p>
+                      ) : null}
                       <p className="truncate text-sm text-slate-500">{member.department || "Department not provided"}</p>
                     </div>
                   </div>

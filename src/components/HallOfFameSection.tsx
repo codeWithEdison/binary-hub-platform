@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useInnovators, type Innovator } from "@/hooks/useInnovators";
 import { resolveManagement } from "@/lib/resolveManagement";
+import { getInnovatorPath } from "@/lib/innovatorPath";
 import { cn } from "@/lib/utils";
 
 interface HallOfFameSectionProps {
@@ -95,7 +96,7 @@ const HallOfFameSection: React.FC<HallOfFameSectionProps> = ({
                 viewport={{ once: true }}
                 transition={{ delay: Math.min(index * 0.06, 0.35), duration: 0.45 }}
               >
-                <Link to={`/innovators/${person.id}`} className="bh-hall-featured">
+                <Link to={getInnovatorPath(person)} className="bh-hall-featured">
                   <div className="bh-hall-featured-ring">
                     <Avatar
                       person={person}
@@ -178,7 +179,7 @@ const HallOfFameSection: React.FC<HallOfFameSectionProps> = ({
                 viewport={{ once: true, margin: "-30px" }}
                 transition={{ delay: Math.min(index * 0.03, 0.35), duration: 0.4 }}
               >
-                <Link to={`/innovators/${person.id}`} className="bh-hall-person">
+                <Link to={getInnovatorPath(person)} className="bh-hall-person">
                   <Avatar
                     person={person}
                     className="bh-hall-avatar"

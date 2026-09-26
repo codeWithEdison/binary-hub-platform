@@ -8,6 +8,7 @@ import {
   getInnovatorSkills,
   statusLabel,
 } from "@/lib/innovatorUtils";
+import { getInnovatorPath } from "@/lib/innovatorPath";
 import { cn } from "@/lib/utils";
 
 interface InnovatorDirectoryCardProps {
@@ -32,7 +33,7 @@ export function InnovatorDirectoryCard({
       transition={{ delay: Math.min(index * 0.04, 0.28), duration: 0.45 }}
     >
       <Link
-        to={`/innovators/${innovator.id}`}
+        to={getInnovatorPath(innovator)}
         className={cn("bh-innovator-card", className)}
       >
         <div className="bh-innovator-card-media">
