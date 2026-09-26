@@ -510,7 +510,8 @@
   border-radius: 9999px;
   object-fit: cover;
   background: #cbd5e1;
-  transition: transform 0.2s ease;
+  filter: grayscale(1);
+  transition: transform 0.2s ease, filter 0.2s ease;
 }
 
 .bh-hall-featured h3 {
@@ -586,6 +587,7 @@
   border-radius: 9999px;
   object-fit: cover;
   background: #e2e8f0;
+  filter: grayscale(1);
 }
 
 .bh-hall-avatar-fallback {
