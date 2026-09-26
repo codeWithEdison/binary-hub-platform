@@ -17,28 +17,32 @@ const AboutSection: React.FC<AboutSectionProps> = ({
   const isIndexVariant = variant === "index";
 
   return (
-    <section className={`py-24 px-6 md:px-12 relative ${className}`} id="about">
-      <div className="max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+    <section
+      className={`relative px-5 py-14 sm:px-6 sm:py-20 md:px-12 md:py-24 ${className}`}
+      id="about"
+    >
+      <div className="mx-auto max-w-7xl">
+        <div className="grid grid-cols-1 items-center gap-10 lg:grid-cols-2 lg:gap-16">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            className="order-2 text-center lg:order-1 lg:text-left"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.7 }}
           >
-            <div className="space-y-6">
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white leading-tight">
+            <div className="mx-auto max-w-xl space-y-5 lg:mx-0 lg:space-y-6">
+              <h2 className="font-display text-[1.85rem] font-bold leading-tight tracking-tight text-gray-900 sm:text-4xl md:text-5xl dark:text-white">
                 Building Rwanda&apos;s{" "}
                 <span className="text-[#00628b]">digital future</span>
               </h2>
 
-              <p className="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+              <p className="text-[0.95rem] leading-relaxed text-gray-600 sm:text-lg dark:text-gray-300">
                 UR Binary Hub is the innovation and incubation hub of the University of Rwanda,
                 supporting students, staff, experts, and alumni to develop homegrown digital
                 solutions for national and institutional challenges.
               </p>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-6">
+              <div className="grid grid-cols-1 gap-3 pt-2 text-left sm:grid-cols-2 sm:gap-4 sm:pt-4">
                 {[
                   { icon: Users, text: "Interdisciplinary Collaboration" },
                   { icon: Code, text: "Software Development Focus" },
@@ -47,24 +51,26 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                 ].map((item, index) => (
                   <motion.div
                     key={item.text}
-                    className="flex items-center space-x-3"
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
+                    className="flex items-center gap-3 rounded-[10px] bg-white/70 px-3 py-2.5 ring-1 ring-[#00628b]/8 dark:bg-slate-900/40"
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.4 + index * 0.1, duration: 0.5 }}
+                    transition={{ delay: 0.2 + index * 0.06, duration: 0.4 }}
                   >
-                    <div className="w-8 h-8 bg-[#00628b]/10 rounded-lg flex items-center justify-center">
-                      <item.icon className="w-4 h-4 text-[#00628b]" />
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-[#00628b]/10">
+                      <item.icon className="h-4 w-4 text-[#00628b]" />
                     </div>
-                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{item.text}</span>
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      {item.text}
+                    </span>
                   </motion.div>
                 ))}
               </div>
 
-              <div className="flex flex-wrap items-center gap-x-6 gap-y-3 pt-2">
+              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3 pt-1 lg:justify-start">
                 <Link
                   to="/applications/form?role=Innovator"
-                  className="text-sm font-semibold text-[#00628b] transition-colors hover:text-[#004f70]"
+                  className="inline-flex h-11 items-center rounded-[7px] bg-[#00628b] px-5 text-sm font-semibold text-white transition hover:bg-[#005274]"
                 >
                   Apply to become innovator
                 </Link>
@@ -74,7 +80,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({
                     className="inline-flex items-center gap-1.5 text-sm font-medium text-slate-600 transition-colors hover:text-[#00628b] dark:text-slate-300"
                   >
                     Learn more
-                    <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                    <ArrowRight size={16} />
                   </Link>
                 )}
               </div>
@@ -82,18 +88,18 @@ const AboutSection: React.FC<AboutSectionProps> = ({
           </motion.div>
 
           <motion.div
-            className="relative"
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
+            className="relative order-1 lg:order-2"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.8 }}
+            transition={{ duration: 0.7 }}
           >
-            <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-r from-[#00628b]/20 to-blue-400/20 rounded-3xl blur-3xl"></div>
+            <div className="relative mx-auto max-w-lg lg:max-w-none">
+              <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-[#00628b]/20 to-blue-400/20 blur-2xl sm:rounded-3xl sm:blur-3xl" />
               <img
                 src="/img/presentation-img/team.jpg"
                 alt="UR Binary Hub Team"
-                className="relative z-10 w-full h-auto rounded-3xl shadow-2xl"
+                className="relative z-10 aspect-[16/11] w-full rounded-2xl object-cover shadow-xl sm:aspect-auto sm:h-auto sm:rounded-3xl sm:shadow-2xl"
               />
             </div>
           </motion.div>

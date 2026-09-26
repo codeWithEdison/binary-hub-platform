@@ -135,11 +135,11 @@ const ChatWidget = () => {
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0, opacity: 0 }}
-            className="fixed bottom-6 right-6 z-50"
+            className="fixed bottom-4 right-4 z-50 sm:bottom-6 sm:right-6"
           >
             <Button
               onClick={() => setIsOpen(true)}
-              className="h-14 w-14 rounded-full shadow-lg hover:shadow-xl transition-shadow"
+              className="h-12 w-12 rounded-full shadow-lg transition-shadow hover:shadow-xl sm:h-14 sm:w-14"
               size="icon"
             >
               <MessageCircle className="h-6 w-6" />
@@ -155,7 +155,7 @@ const ChatWidget = () => {
             initial={{ opacity: 0, y: 20, scale: 0.95 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 20, scale: 0.95 }}
-            className="fixed bottom-6 right-6 z-50 w-[380px] h-[600px] glass rounded-2xl shadow-2xl flex flex-col overflow-hidden"
+            className="glass fixed inset-x-3 bottom-3 z-50 flex h-[min(600px,calc(100svh-5.5rem))] w-auto flex-col overflow-hidden rounded-2xl shadow-2xl sm:inset-x-auto sm:bottom-6 sm:right-6 sm:h-[600px] sm:w-[380px]"
           >
             {/* Header */}
             <div className="bg-primary text-primary-foreground p-4 flex items-center justify-between">

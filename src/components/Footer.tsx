@@ -25,9 +25,9 @@ const Footer = () => {
         transition={{ duration: 0.5 }}
       >
         <div className="mx-auto max-w-[1200px]">
-          <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-sm">
-              <div className="mb-3 flex items-center gap-2.5">
+          <div className="flex flex-col gap-8 sm:gap-10 lg:flex-row lg:items-start lg:justify-between">
+            <div className="mx-auto max-w-sm text-center sm:mx-0 sm:text-left">
+              <div className="mb-3 flex items-center justify-center gap-2.5 sm:justify-start">
                 <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[10px] bg-white/95 ring-1 ring-white/30">
                   <img src="/img/logo.png" alt="" className="h-7 w-auto" />
                 </div>
@@ -41,7 +41,7 @@ const Footer = () => {
               <p className="text-sm leading-relaxed text-white/75">
                 Homegrown digital solutions from the University of Rwanda community.
               </p>
-              <div className="mt-5 flex items-center gap-3">
+              <div className="mt-5 flex items-center justify-center gap-3 sm:justify-start">
                 <a
                   href="https://github.com/binaryhubrw"
                   target="_blank"
@@ -74,12 +74,12 @@ const Footer = () => {
               </div>
             </div>
 
-            <div>
+            <div className="text-center sm:text-left">
               <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.14em] text-white/60">
                 Explore
               </p>
               <nav
-                className="grid grid-cols-3 gap-x-5 gap-y-2.5"
+                className="mx-auto grid max-w-xs grid-cols-2 gap-x-6 gap-y-2.5 sm:mx-0 sm:max-w-none sm:grid-cols-3 sm:gap-x-5"
                 aria-label="Footer"
               >
                 {quickLinks.map((link) => (
@@ -94,18 +94,18 @@ const Footer = () => {
               </nav>
             </div>
 
-            <div className="max-w-xs space-y-3">
+            <div className="mx-auto max-w-xs space-y-3 text-center sm:mx-0 sm:text-left">
               <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-white/60">
                 Reach us
               </p>
               <a
                 href="mailto:urbinaryhub@gmail.com"
-                className="flex items-start gap-2 text-sm text-white/80 transition hover:text-white"
+                className="flex items-start justify-center gap-2 text-sm text-white/80 transition hover:text-white sm:justify-start"
               >
                 <Mail size={15} className="mt-0.5 shrink-0" />
                 urbinaryhub@gmail.com
               </a>
-              <p className="flex items-start gap-2 text-sm text-white/80">
+              <p className="flex items-start justify-center gap-2 text-sm text-white/80 sm:justify-start">
                 <MapPin size={15} className="mt-0.5 shrink-0" />
                 <span>Nyarugenge Campus, University of Rwanda</span>
               </p>
