@@ -47,6 +47,69 @@ type HeroCounts = {
   mentors: number;
 };
 
+type HeroStatItem = {
+  id: string;
+  value: string | null;
+  label: string | null;
+  fullLabel: string | null;
+};
+
+/** Stable outside Hero so slide changes do not remount/re-animate stats. */
+const HeroStatsGrid = ({
+  items,
+  compact = false,
+}: {
+  items: HeroStatItem[];
+  compact?: boolean;
+}) => (
+  <div
+    className={
+      compact
+        ? "relative grid grid-cols-3 gap-0 px-2 py-3.5"
+        : "relative grid grid-cols-3 gap-0 px-2 pb-3.5 pt-4 sm:px-6 sm:pb-5 sm:pt-6 md:px-8 md:pb-6 md:pt-8"
+    }
+  >
+    {items.map((stat, index) => {
+      const arcLift = ["md:translate-y-3", "md:-translate-y-3", "md:translate-y-3"][index] ?? "";
+
+      return (
+        <motion.div
+          key={stat.id}
+          initial={{ opacity: 0, y: 12 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.55 + index * 0.08, duration: 0.4 }}
+          className={`relative flex flex-col items-center border-r border-[#00628b]/10 px-1.5 text-center last:border-r-0 sm:px-3 sm:py-2 ${compact ? "py-0.5" : "py-1"} ${arcLift}`}
+        >
+          {stat.value === null ? (
+            <>
+              <div className="h-7 w-10 animate-pulse rounded-md bg-[#00628b]/10 sm:h-9 sm:w-16" />
+              <div className="mt-2 h-2.5 w-14 animate-pulse rounded bg-slate-300/70" />
+            </>
+          ) : (
+            <>
+              <span
+                className={`font-display font-extrabold tracking-tight text-[#00628b] ${
+                  compact ? "text-[1.65rem]" : "text-2xl sm:text-3xl md:text-4xl"
+                }`}
+              >
+                {stat.value}
+              </span>
+              <span
+                className={`mt-1 block font-semibold uppercase leading-tight tracking-[0.12em] text-slate-500 ${
+                  compact ? "text-[9px]" : "text-[8px] sm:mt-1.5 sm:text-[10px] md:text-[11px]"
+                }`}
+              >
+                <span className="md:hidden">{stat.label}</span>
+                <span className="hidden md:inline">{stat.fullLabel}</span>
+              </span>
+            </>
+          )}
+        </motion.div>
+      );
+    })}
+  </div>
+);
+
 const Hero = () => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [statsLoading, setStatsLoading] = useState(true);
@@ -149,55 +212,6 @@ const Hero = () => {
         fullLabel: null as string | null,
       }))
     : displayedStats;
-
-  const StatsGrid = ({ compact = false }: { compact?: boolean }) => (
-    <div
-      className={
-        compact
-          ? "relative grid grid-cols-3 gap-0 px-2 py-3.5"
-          : "relative grid grid-cols-3 gap-0 px-2 pb-3.5 pt-4 sm:px-6 sm:pb-5 sm:pt-6 md:px-8 md:pb-6 md:pt-8"
-      }
-    >
-      {statsItems.map((stat, index) => {
-        const arcLift = ["md:translate-y-3", "md:-translate-y-3", "md:translate-y-3"][index] ?? "";
-
-        return (
-          <motion.div
-            key={stat.id}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.55 + index * 0.08, duration: 0.4 }}
-            className={`relative flex flex-col items-center border-r border-[#00628b]/10 px-1.5 text-center last:border-r-0 sm:px-3 sm:py-2 ${compact ? "py-0.5" : "py-1"} ${arcLift}`}
-          >
-            {stat.value === null ? (
-              <>
-                <div className="h-7 w-10 animate-pulse rounded-md bg-[#00628b]/10 sm:h-9 sm:w-16" />
-                <div className="mt-2 h-2.5 w-14 animate-pulse rounded bg-slate-300/70" />
-              </>
-            ) : (
-              <>
-                <span
-                  className={`font-display font-extrabold tracking-tight text-[#00628b] ${
-                    compact ? "text-[1.65rem]" : "text-2xl sm:text-3xl md:text-4xl"
-                  }`}
-                >
-                  {stat.value}
-                </span>
-                <span
-                  className={`mt-1 block font-semibold uppercase leading-tight tracking-[0.12em] text-slate-500 ${
-                    compact ? "text-[9px]" : "text-[8px] sm:mt-1.5 sm:text-[10px] md:text-[11px]"
-                  }`}
-                >
-                  <span className="md:hidden">{stat.label}</span>
-                  <span className="hidden md:inline">{stat.fullLabel}</span>
-                </span>
-              </>
-            )}
-          </motion.div>
-        );
-      })}
-    </div>
-  );
 
   return (
     <section className="relative flex flex-col overflow-hidden md:h-screen md:min-h-[640px]">
@@ -335,7 +349,7 @@ const Hero = () => {
             transition={{ delay: 0.3, duration: 0.45 }}
             aria-label="Binary Hub impact statistics"
           >
-            <StatsGrid compact />
+            <HeroStatsGrid items={statsItems} compact />
           </motion.div>
         </div>
       </div>
@@ -460,7 +474,7 @@ const Hero = () => {
           >
             <div className="pointer-events-none absolute -left-10 top-0 h-28 w-28 rounded-full bg-[#00628b]/10 blur-2xl" />
             <div className="pointer-events-none absolute -right-10 top-0 h-28 w-28 rounded-full bg-[#00628b]/10 blur-2xl" />
-            <StatsGrid />
+            <HeroStatsGrid items={statsItems} />
           </div>
         </div>
       </motion.div>
