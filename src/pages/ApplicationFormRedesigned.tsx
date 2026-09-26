@@ -44,15 +44,31 @@ const ApplicationFormRedesigned = () => {
   const { user } = useAuth();
   const { toast } = useToast();
   const applicationId = new URLSearchParams(window.location.search).get("id");
-  const [form, setForm] = useState<FormState>(emptyForm);
+  const roleFromQuery = new URLSearchParams(window.location.search).get("role");
+  const [form, setForm] = useState<FormState>({
+    ...emptyForm,
+    role: roleFromQuery || "",
+  });
   const [isLoading, setIsLoading] = useState(true);
   const [isSaving, setIsSaving] = useState(false);
   const [currentStep, setCurrentStep] = useState<1 | 2>(1);
   const imageInputRef = useRef<HTMLInputElement>(null);
   const { options: setupOptions } = useApplicationSetup();
-  const roleOptions = setupOptions.filter((option) => option.category === "role");
+  const setupRoleOptions = setupOptions.filter((option) => option.category === "role");
+  const defaultApplyRoles = ["Innovator", "Mentor"];
+  const roleOptions = [
+    ...defaultApplyRoles
+      .filter((name) => !setupRoleOptions.some((option) => option.name.toLowerCase() === name.toLowerCase()))
+      .map((name) => ({ id: `default-${name}`, name })),
+    ...setupRoleOptions,
+  ];
   const departmentOptions = setupOptions.filter((option) => option.category === "department");
   const skillOptions = setupOptions.filter((option) => option.category === "skill").map((option) => option.name);
+
+  useEffect(() => {
+    if (!roleFromQuery) return;
+    setForm((current) => (current.role ? current : { ...current, role: roleFromQuery }));
+  }, [roleFromQuery]);
 
   useEffect(() => {
     const load = async () => {
@@ -90,19 +106,23 @@ const ApplicationFormRedesigned = () => {
           collaboration: data.collaboration || "",
           highestEducation: data.highest_education || "",
           discoverySource: data.discovery_source || "",
-          role: profile?.role || data.role || "",
-          gender: profile?.gender || data.gender || "",
-          department: profile?.department || data.department || "",
-          bio: profile?.bio || "",
-          image: profile?.image || "",
-          linkedin: profile?.linkedin || "",
-          facebook: profile?.facebook || "",
-          twitter: profile?.twitter || "",
-          github: profile?.github || "",
-          website: profile?.website || "",
+          role: profile?.role || data.role || current.role || "",
+          gender: profile?.gender || data.gender || current.gender || "",
+          department: profile?.department || data.department || current.department || "",
+          bio: profile?.bio || current.bio || "",
+          image: profile?.image || current.image || "",
+          linkedin: profile?.linkedin || current.linkedin || "",
+          facebook: profile?.facebook || current.facebook || "",
+          twitter: profile?.twitter || current.twitter || "",
+          github: profile?.github || current.github || "",
+          website: profile?.website || current.website || "",
         }));
       } else {
-        setForm((current) => ({ ...current, email: current.email || user.email || "" }));
+        setForm((current) => ({
+          ...current,
+          email: current.email || user.email || "",
+          role: current.role || roleFromQuery || "",
+        }));
       }
       setIsLoading(false);
     };

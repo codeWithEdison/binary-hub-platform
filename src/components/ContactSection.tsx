@@ -1,102 +1,133 @@
 import React from "react";
 import { motion } from "framer-motion";
-import { supabase } from "@/integrations/supabase/client";
-import { useToast } from "@/hooks/use-toast";
+import { Mail, MapPin, Phone, Github, Instagram } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface ContactSectionProps {
   className?: string;
 }
 
+const phones = [
+  { label: "Coordinator", number: "+250 788 695 862", href: "tel:+250788695862" },
+  { label: "Assistant Coordinator", number: "+250 786 779 666", href: "tel:+250786779666" },
+  { label: "Assistant Administrator", number: "+250 790 289 399", href: "tel:+250790289399" },
+] as const;
+
+const socials = [
+  {
+    label: "GitHub",
+    href: "https://github.com/binaryhubrw",
+    icon: Github,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/ur_tekinovahub?igsh=bjQ0cWd3YzZ1ODE1",
+    icon: Instagram,
+  },
+  {
+    label: "YouTube",
+    href: "https://youtube.com/@urtekinova_hub?si=PYU7RoxBYqKkQiJF",
+    icon: null,
+  },
+] as const;
+
 const ContactSection: React.FC<ContactSectionProps> = ({ className = "" }) => {
-  const { toast } = useToast();
-  const [submitting, setSubmitting] = React.useState(false);
-
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setSubmitting(true);
-
-    const form = event.currentTarget;
-    const formData = new FormData(form);
-    const { error } = await supabase.from("inquiries").insert({
-      first_name: String(formData.get("firstName") || "").trim(),
-      last_name: String(formData.get("lastName") || "").trim(),
-      email: String(formData.get("email") || "").trim(),
-      inquiry_type: String(formData.get("inquiryType") || "general") as "collaboration" | "partnership" | "innovation" | "general",
-      company: String(formData.get("company") || "").trim() || null,
-      message: String(formData.get("message") || "").trim(),
-    });
-
-    setSubmitting(false);
-    if (error) {
-      toast({ title: "Message not sent", description: error.message || "Please try again or contact us directly.", variant: "destructive" });
-      return;
-    }
-
-    form.reset();
-    toast({ title: "Message sent", description: "Thanks for reaching out. We will be in touch soon." });
-  };
-
   return (
-  <section className={`bg-white px-6 py-14 dark:bg-slate-950 md:px-12 md:py-20 ${className}`}>
-    <div className="mx-auto max-w-7xl">
-      <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:gap-8">
+    <section id="contact" className={cn("bh-connect-section", className)}>
+      <div className="mx-auto w-full max-w-[1100px] px-5 md:px-8 lg:px-12">
         <motion.div
-          initial={{ opacity: 0, x: -24 }}
-          whileInView={{ opacity: 1, x: 0 }}
+          className="bh-connect-heading"
+          initial={{ opacity: 0, y: 18 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.55 }}
         >
-          <p className="text-sm font-semibold uppercase tracking-[0.14em] text-[#00628b]">
-            Do you have questions?
-          </p>
-          <h2 className="mt-4 max-w-xl text-3xl font-bold leading-tight text-slate-950 dark:text-white md:text-4xl">
-            Let&apos;s Connect
+          <h2 className="bh-connect-title">
+            <span className="bh-connect-brand">Let&apos;s </span>
+            <span className="bh-connect-accent">Connect</span>
           </h2>
-          <p className="mt-4 max-w-xl text-base leading-7 text-slate-700 dark:text-slate-300 md:text-lg">
-            Leave us a message and we&apos;ll be happy to connect.
+          <p className="bh-connect-subtitle">
+            Reach the Binary Hub team by phone, email, or social.
           </p>
-          <div className="mt-8 overflow-hidden">
-            <img
-              src="/img/contact/contact%20image.heic"
-              alt="UR Binary Hub team collaborating"
-              className="aspect-[1.55] w-full object-cover"
-            />
-          </div>
         </motion.div>
 
-        <motion.form
-          initial={{ opacity: 0, x: 24 }}
-          whileInView={{ opacity: 1, x: 0 }}
+        <motion.div
+          className="bh-connect-hero-media"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.1 }}
-          onSubmit={handleSubmit}
-          className="grid content-start gap-4 sm:grid-cols-2"
+          transition={{ duration: 0.55 }}
         >
-          <label className="sr-only" htmlFor="contact-first-name">First Name</label>
-          <input id="contact-first-name" name="firstName" placeholder="First Name *" required className="h-14 bg-slate-100 px-5 text-base text-slate-900 outline-none placeholder:text-slate-500 focus:ring-2 focus:ring-[#00628b] dark:bg-slate-800 dark:text-white" />
-          <label className="sr-only" htmlFor="contact-last-name">Last Name</label>
-          <input id="contact-last-name" name="lastName" placeholder="Last Name *" required className="h-14 bg-slate-100 px-5 text-base text-slate-900 outline-none placeholder:text-slate-500 focus:ring-2 focus:ring-[#00628b] dark:bg-slate-800 dark:text-white" />
-          <label className="sr-only" htmlFor="contact-email">Email</label>
-          <input id="contact-email" name="email" type="email" placeholder="Email *" required className="h-14 bg-slate-100 px-5 text-base text-slate-900 outline-none placeholder:text-slate-500 focus:ring-2 focus:ring-[#00628b] dark:bg-slate-800 dark:text-white sm:col-span-2" />
-          <label className="sr-only" htmlFor="contact-inquiry">Inquiry Type</label>
-          <select id="contact-inquiry" name="inquiryType" defaultValue="" required className="h-14 appearance-auto bg-slate-100 px-5 text-base text-slate-500 outline-none focus:ring-2 focus:ring-[#00628b] dark:bg-slate-800 dark:text-slate-300 sm:col-span-2">
-            <option value="" disabled>Inquiry Type *</option>
-            <option value="collaboration">Project collaboration</option>
-            <option value="partnership">Partnership</option>
-            <option value="innovation">Innovation support</option>
-            <option value="general">General question</option>
-          </select>
-          <label className="sr-only" htmlFor="contact-company">Company or Institution</label>
-          <input id="contact-company" name="company" placeholder="Company or Institution" className="h-14 bg-slate-100 px-5 text-base text-slate-900 outline-none placeholder:text-slate-500 focus:ring-2 focus:ring-[#00628b] dark:bg-slate-800 dark:text-white sm:col-span-2" />
-          <label className="sr-only" htmlFor="contact-message">Message</label>
-          <textarea id="contact-message" name="message" placeholder="Message *" required rows={5} className="resize-none bg-slate-100 px-5 py-4 text-base text-slate-900 outline-none placeholder:text-slate-500 focus:ring-2 focus:ring-[#00628b] dark:bg-slate-800 dark:text-white sm:col-span-2" />
-          <button type="submit" disabled={submitting} className="h-12 justify-self-start bg-[#00628b] px-7 text-sm font-semibold text-white transition hover:bg-[#004f70] disabled:cursor-not-allowed disabled:opacity-60 sm:col-span-2">
-            {submitting ? "Sending..." : "Send message"}
-          </button>
-        </motion.form>
+          <img
+            src="/img/presentation-img/team.jpg"
+            alt="UR Binary Hub team collaborating"
+          />
+        </motion.div>
+
+        <motion.div
+          className="bh-connect-board"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55, delay: 0.08 }}
+        >
+          <div className="bh-connect-col">
+            <p className="bh-connect-col-label">Email</p>
+            <a href="mailto:urbinaryhub@gmail.com" className="bh-connect-link">
+              <Mail className="h-4 w-4" />
+              urbinaryhub@gmail.com
+            </a>
+            <p className="bh-connect-col-label bh-connect-col-label-spaced">Visit</p>
+            <p className="bh-connect-plain">
+              <MapPin className="h-4 w-4" />
+              <span>Binary Hub, University of Rwanda — Nyarugenge Campus</span>
+            </p>
+          </div>
+
+          <div className="bh-connect-col">
+            <p className="bh-connect-col-label">Phone</p>
+            <ul className="bh-connect-phone-list">
+              {phones.map((phone) => (
+                <li key={phone.href}>
+                  <a href={phone.href} className="bh-connect-phone">
+                    <Phone className="h-3.5 w-3.5" />
+                    <span>
+                      <em>{phone.label}</em>
+                      {phone.number}
+                    </span>
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="bh-connect-col">
+            <p className="bh-connect-col-label">Social</p>
+            <div className="bh-connect-social-row">
+              {socials.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bh-connect-social-chip"
+                  aria-label={social.label}
+                >
+                  {social.icon ? (
+                    <social.icon className="h-4 w-4" />
+                  ) : (
+                    <svg className="h-4 w-4" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                      <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                    </svg>
+                  )}
+                  {social.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </motion.div>
       </div>
-    </div>
-  </section>
+    </section>
   );
 };
 

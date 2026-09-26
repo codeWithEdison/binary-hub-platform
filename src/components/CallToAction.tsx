@@ -2,6 +2,7 @@ import React from "react";
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 
 interface CallToActionProps {
   title: string;
@@ -20,49 +21,42 @@ const CallToAction: React.FC<CallToActionProps> = ({
   primaryHref,
   secondaryLabel,
   secondaryHref,
-  className = ""
+  className = "",
 }) => (
-  <section className={`relative overflow-hidden bg-slate-600 px-6 py-10 md:px-12 ${className}`} id="cta">
-    <div className="absolute inset-0 bg-[url('/img/presentation-img/team.jpg')] bg-cover bg-center opacity-10" />
-    <div className="relative z-10 mx-auto max-w-4xl text-center">
+  <section className={cn("bh-cta-section", className)} id="cta">
+    <div className="bh-cta-inner">
       <motion.h2
-        initial={{ opacity: 0, y: 30 }}
+        initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ duration: 0.8 }}
-        className="mb-3 text-xl font-bold text-white md:text-2xl"
+        transition={{ duration: 0.55 }}
+        className="bh-cta-title"
       >
         {title}
       </motion.h2>
       <motion.p
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ delay: 0.2, duration: 0.6 }}
-        className="mx-auto mb-5 max-w-xl text-sm leading-relaxed text-white/85"
+        transition={{ delay: 0.1, duration: 0.5 }}
+        className="bh-cta-copy"
       >
         {description}
       </motion.p>
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 14 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        transition={{ delay: 0.4, duration: 0.6 }}
-        className="flex flex-wrap justify-center gap-3"
+        transition={{ delay: 0.18, duration: 0.5 }}
+        className="bh-cta-actions"
       >
-        <Link
-          to={primaryHref}
-          className="group inline-flex items-center rounded-full bg-white px-4 py-2.5 text-sm font-medium text-slate-800 transition-all duration-300 hover:bg-slate-100"
-        >
+        <Link to={primaryHref} className="bh-cta-primary">
           {primaryLabel}
-          <ArrowRight size={15} className="ml-2 transition-transform group-hover:translate-x-1" />
+          <ArrowRight size={15} />
         </Link>
-        <Link
-          to={secondaryHref}
-          className="group inline-flex items-center rounded-full border border-white/70 px-4 py-2.5 text-sm font-medium text-white transition-all duration-300 hover:bg-white/10"
-        >
+        <Link to={secondaryHref} className="bh-cta-secondary">
           {secondaryLabel}
-          <ArrowRight size={15} className="ml-2 transition-transform group-hover:translate-x-1" />
+          <ArrowRight size={15} />
         </Link>
       </motion.div>
     </div>
