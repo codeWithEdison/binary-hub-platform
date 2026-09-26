@@ -28,6 +28,7 @@ const BlogDetail = lazy(() => import("./pages/BlogDetail"));
 const Auth = lazy(() => import("./pages/Auth"));
 const Login = lazy(() => import("./pages/Login"));
 const ApplicationFormRedesigned = lazy(() => import("./pages/ApplicationFormRedesigned"));
+const Applications = lazy(() => import("./pages/Applications"));
 
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const Overview = lazy(() => import("./pages/admin/Overview"));
@@ -100,6 +101,7 @@ const App = () => (
             <Route path="/partners" element={withNavbar(Partners)} />
             <Route path="/contact" element={withNavbar(Contact)} />
 
+            <Route path="/applications" element={withNavbar(Applications)} />
             <Route path="/applications/form" element={withNavbar(ApplicationFormRedesigned)} />
             <Route path="/applications/profile" element={<Navigate to="/applications/form" replace />} />
 

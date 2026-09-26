@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef, ChangeEvent } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useRef, ChangeEvent, FormEvent } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
 import {
   CalendarRange,
   Clock,
@@ -23,14 +23,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
-import { Link } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
 import { AdminPage } from "@/components/admin/AdminPage";
 import { useAdminFormDraft } from "@/hooks/useAdminFormDraft";
+import { useEvents, type EventInput } from "@/hooks/useEvents";
 import { uploadPublicImage } from "@/lib/uploadImage";
 import { InlineLoadingOrb } from "@/components/LoadingOrb";
 
-const categories = ["Hackathon", "Workshop", "Masterclass", "Networking", "Showcase"];
+const categories = ["Hackathon", "Workshop", "Masterclass", "Networking", "Showcase", "Conference", "Seminar"];
+
+const emptyForm = {
+  title: "",
+  description: "",
+  content: "",
+  date: "",
+  time: "",
+  location: "",
+  category: "",
+  capacity: "",
+  image: "",
+  published: true,
+};
 
 const EventForm = () => {
   const { id } = useParams();
@@ -39,17 +52,10 @@ const EventForm = () => {
   const { toast } = useToast();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const { events, loading, createEvent, updateEvent } = useEvents(true);
 
-  const [formData, setFormData] = useState({
-    title: "",
-    description: "",
-    date: "",
-    time: "",
-    location: "",
-    category: "",
-    capacity: "",
-    image: "",
-  });
+  const [formData, setFormData] = useState(emptyForm);
   const draftKey = `event:${id || "new"}`;
   const { ready: draftReady, clearDraft, wasRestored } = useAdminFormDraft(
     draftKey,
@@ -59,40 +65,35 @@ const EventForm = () => {
 
   useEffect(() => {
     if (!draftReady || wasRestored) return;
-    if (isEditMode) {
-      const mockData = {
-        title: "AI in Healthcare Workshop",
-        description:
-          "Learn how artificial intelligence is transforming healthcare delivery in Africa.",
-        date: "2023-11-22",
-        time: "14:00",
-        location: "Virtual Event (Zoom)",
-        category: "Workshop",
-        capacity: "50",
-        image:
-          "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3",
-      };
-      setFormData(mockData);
+    if (isEditMode && id) {
+      const event = events.find((item) => item.id === id);
+      if (!event) return;
+      setFormData({
+        title: event.title || "",
+        description: event.description || "",
+        content: event.content || "",
+        date: event.date ? event.date.slice(0, 10) : "",
+        time: event.time || "",
+        location: event.location || "",
+        category: event.category || "",
+        capacity: event.capacity != null ? String(event.capacity) : "",
+        image: event.image || "",
+        published: Boolean(event.published),
+      });
     }
-  }, [isEditMode, id, draftReady, wasRestored]);
+  }, [isEditMode, id, events, draftReady, wasRestored]);
 
-  const handleChange = (e) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSelectChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (!file) return;
-
     setIsUploading(true);
     const result = await uploadPublicImage(file, "events");
     setIsUploading(false);
-
     if (result.error) {
       toast({ title: "Upload failed", description: result.error, variant: "destructive" });
     } else if (result.url) {
@@ -101,12 +102,7 @@ const EventForm = () => {
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
 
-  const removeImage = () => {
-    setFormData((prev) => ({ ...prev, image: "" }));
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!formData.image) {
       toast({
@@ -117,27 +113,49 @@ const EventForm = () => {
       return;
     }
 
-    toast({
-      title: isEditMode ? "Event Updated" : "Event Created",
-      description: `Successfully ${isEditMode ? "updated" : "created"} ${formData.title}`,
-    });
+    setIsSubmitting(true);
+    const capacity = formData.capacity.trim() ? Number(formData.capacity) : null;
+    const payload: EventInput = {
+      title: formData.title.trim(),
+      description: formData.description.trim(),
+      content: formData.content.trim() || null,
+      date: formData.date,
+      time: formData.time || null,
+      location: formData.location.trim() || null,
+      category: formData.category || null,
+      capacity,
+      max_attendees: capacity,
+      image: formData.image,
+      published: formData.published,
+      registration_deadline: null,
+    };
 
-    clearDraft();
-    navigate("/admin/events");
+    const result =
+      isEditMode && id
+        ? await updateEvent(id, payload)
+        : await createEvent(payload);
+
+    setIsSubmitting(false);
+    if (!result.error) {
+      clearDraft();
+      navigate("/admin/events");
+    }
   };
+
+  if (isEditMode && loading && !formData.title) {
+    return <AdminPage>Loading event...</AdminPage>;
+  }
 
   return (
     <AdminPage>
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center justify-between mb-6">
+      <div className="mx-auto max-w-4xl">
+        <div className="mb-6 flex items-center justify-between gap-4">
           <div>
             <h1 className="bh-admin-page-title">
               {isEditMode ? "Edit Event" : "Create New Event"}
             </h1>
             <p className="text-muted-foreground">
-              {isEditMode
-                ? "Update the details of this event"
-                : "Fill in the details to create a new event"}
+              {isEditMode ? "Update event details" : "Publish a Binary Hub event"}
             </p>
           </div>
           <Button variant="outline" asChild>
@@ -148,47 +166,52 @@ const EventForm = () => {
           </Button>
         </div>
 
-        <form onSubmit={handleSubmit}>
-          <Card className="mb-6">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <Card>
             <CardHeader>
               <CardTitle>Basic Information</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 gap-4">
-                <div className="space-y-2">
-                  <Label htmlFor="title">Event Title</Label>
-                  <Input
-                    id="title"
-                    name="title"
-                    placeholder="Enter event title"
-                    value={formData.title}
-                    onChange={handleChange}
-                    required
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="description">Description</Label>
-                  <Textarea
-                    id="description"
-                    name="description"
-                    placeholder="Provide a detailed description of the event"
-                    value={formData.description}
-                    onChange={handleChange}
-                    required
-                    rows={5}
-                  />
-                </div>
+              <div className="space-y-2">
+                <Label htmlFor="title">Event Title</Label>
+                <Input
+                  id="title"
+                  name="title"
+                  required
+                  value={formData.title}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="description">Short description</Label>
+                <Textarea
+                  id="description"
+                  name="description"
+                  required
+                  rows={4}
+                  value={formData.description}
+                  onChange={handleChange}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="content">Full details <span className="font-normal text-muted-foreground">(optional)</span></Label>
+                <Textarea
+                  id="content"
+                  name="content"
+                  rows={6}
+                  value={formData.content}
+                  onChange={handleChange}
+                />
               </div>
             </CardContent>
           </Card>
 
-          <Card className="mb-6">
+          <Card>
             <CardHeader>
               <CardTitle>Event Details</CardTitle>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid gap-4 md:grid-cols-2">
                 <div className="space-y-2">
                   <Label htmlFor="date" className="flex items-center gap-2">
                     <CalendarRange className="h-4 w-4" />
@@ -198,12 +221,11 @@ const EventForm = () => {
                     id="date"
                     name="date"
                     type="date"
+                    required
                     value={formData.date}
                     onChange={handleChange}
-                    required
                   />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="time" className="flex items-center gap-2">
                     <Clock className="h-4 w-4" />
@@ -215,12 +237,8 @@ const EventForm = () => {
                     type="time"
                     value={formData.time}
                     onChange={handleChange}
-                    required
                   />
                 </div>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="location" className="flex items-center gap-2">
                     <MapPin className="h-4 w-4" />
@@ -229,13 +247,11 @@ const EventForm = () => {
                   <Input
                     id="location"
                     name="location"
-                    placeholder="Physical or virtual location"
+                    required
                     value={formData.location}
                     onChange={handleChange}
-                    required
                   />
                 </div>
-
                 <div className="space-y-2">
                   <Label htmlFor="capacity" className="flex items-center gap-2">
                     <Users className="h-4 w-4" />
@@ -245,19 +261,18 @@ const EventForm = () => {
                     id="capacity"
                     name="capacity"
                     type="number"
-                    placeholder="Maximum number of attendees"
+                    min="0"
                     value={formData.capacity}
                     onChange={handleChange}
-                    required
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="category">Category</Label>
+                <Label>Category</Label>
                 <Select
                   value={formData.category}
-                  onValueChange={(value) => handleSelectChange("category", value)}
+                  onValueChange={(value) => setFormData((prev) => ({ ...prev, category: value }))}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder="Select a category" />
@@ -292,22 +307,19 @@ const EventForm = () => {
                     onClick={() => fileInputRef.current?.click()}
                   >
                     <Upload className="mr-2 h-4 w-4" />
-                    {isUploading
-                      ? "Uploading..."
-                      : formData.image
-                        ? "Replace image"
-                        : "Upload image"}
+                    {isUploading ? "Uploading..." : formData.image ? "Replace image" : "Upload image"}
                   </Button>
                   {formData.image ? (
-                    <Button type="button" variant="ghost" onClick={removeImage}>
+                    <Button
+                      type="button"
+                      variant="ghost"
+                      onClick={() => setFormData((prev) => ({ ...prev, image: "" }))}
+                    >
                       <X className="mr-2 h-4 w-4" />
                       Remove
                     </Button>
                   ) : null}
                 </div>
-                <p className="text-xs text-muted-foreground">
-                  JPG, PNG, or WebP. Maximum 5MB.
-                </p>
                 {formData.image ? (
                   <img
                     src={formData.image}
@@ -321,21 +333,34 @@ const EventForm = () => {
                   </div>
                 )}
               </div>
+
+              <label className="flex cursor-pointer items-start gap-3 rounded-lg border p-4">
+                <input
+                  type="checkbox"
+                  className="mt-1 h-4 w-4"
+                  checked={formData.published}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, published: e.target.checked }))
+                  }
+                />
+                <span>
+                  <span className="font-medium">Publish this event</span>
+                  <span className="block text-sm text-muted-foreground">
+                    Published events appear on the public events page.
+                  </span>
+                </span>
+              </label>
             </CardContent>
           </Card>
 
           <div className="flex justify-end gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => navigate("/admin/events")}
-            >
+            <Button type="button" variant="outline" onClick={() => navigate("/admin/events")}>
               Cancel
             </Button>
-            <Button type="submit" className="flex items-center gap-2" disabled={isUploading}>
+            <Button type="submit" disabled={isSubmitting || isUploading} className="gap-2">
               <Save className="h-4 w-4" />
-              {isUploading ? (
-                <InlineLoadingOrb state="working" label="Uploading" />
+              {isSubmitting ? (
+                <InlineLoadingOrb state="working" label="Saving" />
               ) : isEditMode ? (
                 "Update Event"
               ) : (

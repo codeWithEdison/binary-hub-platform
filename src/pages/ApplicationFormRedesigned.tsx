@@ -301,7 +301,7 @@ const ApplicationFormRedesigned = () => {
     });
 
     setIsSaving(false);
-    navigate("/");
+    navigate("/applications");
   };
 
   const inputClass =
@@ -316,11 +316,11 @@ const ApplicationFormRedesigned = () => {
       <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8">
         <div className="mb-6">
           <Link
-            to="/"
+            to="/applications"
             className="inline-flex items-center gap-1.5 text-sm font-medium text-[#00628b] transition hover:text-[#004f70]"
           >
             <ArrowLeft className="h-4 w-4" />
-            Back to home
+            Back to applications
           </Link>
         </div>
 

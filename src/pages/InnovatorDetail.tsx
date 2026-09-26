@@ -9,7 +9,6 @@ import {
 } from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import Footer from "@/components/Footer";
-import InnovatorDirectoryCard from "@/components/InnovatorDirectoryCard";
 import ProjectCard from "@/components/ProjectCard";
 import { useInnovators } from "@/hooks/useInnovators";
 import { useProjects } from "@/hooks/useProjects";
@@ -33,14 +32,16 @@ const InnovatorDetail = () => {
     project.innovators?.some((item) => item.innovator_id === innovatorId)
   );
 
-  const relatedInnovators = innovators
-    .filter(
+  const relatedInnovators = (() => {
+    const others = innovators.filter((person) => person.id !== innovatorId);
+    const sameCircle = others.filter(
       (person) =>
-        person.id !== innovatorId &&
-        (person.status === innovator?.status ||
-          person.department === innovator?.department)
-    )
-    .slice(0, 3);
+        person.status === innovator?.status ||
+        person.department === innovator?.department
+    );
+    const pool = sameCircle.length >= 2 ? sameCircle : others;
+    return pool.slice(0, 4);
+  })();
 
   if (innovatorsLoading) {
     return (
@@ -298,23 +299,42 @@ const InnovatorDetail = () => {
         {relatedInnovators.length > 0 && (
           <section className="bh-innovator-detail-related">
             <div className="bh-innovator-detail-container">
-              <div className="bh-section-heading">
-                <div>
-                  <h2 className="bh-section-title font-display">
-                    Related <span>people</span>
-                  </h2>
-                  <p className="bh-section-intro">
-                    More members from the Binary Hub community.
-                  </p>
-                </div>
+              <div className="bh-hall-heading">
+                <h2 className="bh-hall-title">
+                  <span className="bh-hall-brand">Related </span>
+                  <span className="bh-hall-fame">people</span>
+                </h2>
+                <p className="bh-hall-subtitle">
+                  More members from the Binary Hub community.
+                </p>
               </div>
-              <div className="bh-innovators-grid">
-                {relatedInnovators.map((person, index) => (
-                  <InnovatorDirectoryCard
+              <div className="bh-hall-grid">
+                {relatedInnovators.map((person) => (
+                  <Link
                     key={person.id}
-                    innovator={person}
-                    index={index}
-                  />
+                    to={`/innovators/${person.id}`}
+                    className="bh-hall-person"
+                  >
+                    {person.image ? (
+                      <img
+                        src={person.image}
+                        alt=""
+                        className="bh-hall-avatar"
+                        loading="lazy"
+                      />
+                    ) : (
+                      <div
+                        className="bh-hall-avatar bh-hall-avatar-fallback"
+                        aria-hidden="true"
+                      >
+                        {getInnovatorInitials(person.name)}
+                      </div>
+                    )}
+                    <div className="bh-hall-copy">
+                      <h3>{person.name}</h3>
+                      <p>{person.role || "Innovator"}</p>
+                    </div>
+                  </Link>
                 ))}
               </div>
             </div>

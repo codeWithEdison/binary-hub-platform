@@ -43,7 +43,7 @@ const AnnouncementManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const { announcements, loading, deleteAnnouncement } = useAnnouncements();
+  const { announcements, loading, deleteAnnouncement } = useAnnouncements(true);
 
   // Filter announcements based on search query and category
   const filteredAnnouncements = announcements.filter(announcement => {

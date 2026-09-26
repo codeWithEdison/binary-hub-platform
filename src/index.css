@@ -2831,6 +2831,14 @@
   background: #f4f7f9;
 }
 
+.bh-innovator-detail-related .bh-hall-heading {
+  margin-bottom: 1.5rem;
+}
+
+.bh-innovator-detail-related .bh-hall-grid {
+  max-width: 100%;
+}
+
 @media (max-width: 960px) {
   .bh-innovator-detail-hero-grid,
   .bh-innovator-detail-layout {

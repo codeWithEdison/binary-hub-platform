@@ -43,7 +43,7 @@ const EventManagement = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(10);
 
-  const { events, loading, deleteEvent } = useEvents();
+  const { events, loading, deleteEvent } = useEvents(true);
 
   // Filter events based on search query and category
   const filteredEvents = events.filter(event => {
@@ -52,9 +52,7 @@ const EventManagement = () => {
       event.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
       (event.location || "").toLowerCase().includes(searchQuery.toLowerCase());
 
-    // For now, we'll use a simple category mapping since events don't have categories yet
-    const eventCategory = "Workshop"; // Default category
-    const matchesCategory = categoryFilter === "All" || eventCategory === categoryFilter;
+    const matchesCategory = categoryFilter === "All" || event.category === categoryFilter;
 
     return matchesSearch && matchesCategory;
   });

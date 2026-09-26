@@ -21,25 +21,28 @@ export interface Event {
   updated_at: string;
 }
 
-export const useEvents = () => {
+export type EventInput = Omit<Event, "id" | "created_at" | "updated_at">;
+
+export const useEvents = (includeUnpublished = false) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [includeUnpublished]);
 
   const fetchEvents = async () => {
     setLoading(true);
     try {
-      const data = await cachedQuery("events:published", async () => {
-        const { data, error } = await (supabase as any)
-          .from("events")
-          .select("*")
-          .eq("published", true)
-          .order("date", { ascending: true });
-
+      const cacheKey = includeUnpublished ? "events:all" : "events:published";
+      const data = await cachedQuery(cacheKey, async () => {
+        let query = (supabase as any).from("events").select("*").order("date", { ascending: true });
+        if (!includeUnpublished) {
+          query = query.eq("published", true);
+        }
+        const { data, error } = await query;
         if (error) throw error;
         return (data as Event[]) || [];
       });
@@ -59,7 +62,7 @@ export const useEvents = () => {
     return fetchEvents();
   };
 
-  const createEvent = async (event: Omit<Event, "id" | "created_at" | "updated_at">) => {
+  const createEvent = async (event: EventInput) => {
     try {
       const { data, error } = await (supabase as any)
         .from("events")
@@ -70,18 +73,14 @@ export const useEvents = () => {
       if (error) {
         toast({
           title: "Error",
-          description: "Failed to create event",
+          description: error.message || "Failed to create event",
           variant: "destructive",
         });
         return { data: null, error };
       }
 
-      toast({
-        title: "Success",
-        description: "Event created successfully",
-      });
+      toast({ title: "Success", description: "Event created successfully" });
       await refreshEvents();
-
       return { data, error: null };
     } catch (error) {
       toast({
@@ -100,18 +99,14 @@ export const useEvents = () => {
       if (error) {
         toast({
           title: "Error",
-          description: "Failed to update event",
+          description: error.message || "Failed to update event",
           variant: "destructive",
         });
         return { error };
       }
 
-      toast({
-        title: "Success",
-        description: "Event updated successfully",
-      });
+      toast({ title: "Success", description: "Event updated successfully" });
       await refreshEvents();
-
       return { error: null };
     } catch (error) {
       toast({
@@ -133,10 +128,7 @@ export const useEvents = () => {
         variant: "destructive",
       });
     } else {
-      toast({
-        title: "Success",
-        description: "Event deleted successfully",
-      });
+      toast({ title: "Success", description: "Event deleted successfully" });
       await refreshEvents();
     }
 
