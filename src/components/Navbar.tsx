@@ -100,6 +100,7 @@ const Navbar = () => {
     "Account";
 
   return (
+    <>
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-[100] transition-all duration-300",
@@ -222,35 +223,39 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile drawer */}
+    </header>
+
+      {/* Outside header: backdrop-filter on header traps fixed children in the 74px bar */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="fixed inset-0 z-[110] lg:hidden"
+            className="fixed inset-0 z-[200] lg:hidden"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
             <button
-              className="absolute inset-0 bg-slate-950/45 backdrop-blur-sm"
+              className="absolute inset-0 bg-slate-950/55 backdrop-blur-[2px]"
               aria-label="Close menu overlay"
               onClick={() => setIsOpen(false)}
             />
             <motion.aside
-              className="absolute right-0 top-0 flex h-full w-[min(100%,22rem)] flex-col border-l border-[#00628b]/10 bg-white shadow-2xl dark:bg-slate-950"
+              className="absolute inset-y-0 right-0 flex h-full w-full max-w-none flex-col bg-white shadow-2xl dark:bg-slate-950 sm:max-w-[22rem] sm:border-l sm:border-[#00628b]/10"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
-              transition={{ type: "spring", damping: 28, stiffness: 280 }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
             >
-              <div className="flex h-[74px] items-center justify-between border-b border-[#00628b]/10 px-5">
+              <div className="flex h-[74px] shrink-0 items-center justify-between border-b border-[#00628b]/10 px-6">
                 <div className="flex items-center gap-2.5">
                   <img src="/img/logo.png" alt="" className="h-8 w-auto" />
-                  <span className="font-display text-base font-bold text-[#00628b]">Menu</span>
+                  <span className="font-display text-base font-bold text-[#00628b]">
+                    UR Binary Hub
+                  </span>
                 </div>
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="inline-flex h-9 w-9 items-center justify-center rounded-[7px] text-slate-600 hover:bg-[#00628b]/8 hover:text-[#00628b]"
+                  className="inline-flex h-10 w-10 items-center justify-center rounded-[7px] text-slate-600 transition hover:bg-[#00628b]/8 hover:text-[#00628b]"
                   aria-label="Close menu"
                 >
                   <X size={20} />
@@ -258,7 +263,7 @@ const Navbar = () => {
               </div>
 
               {user && (
-                <div className="border-b border-[#00628b]/10 px-5 py-4">
+                <div className="shrink-0 border-b border-[#00628b]/10 px-6 py-4">
                   <div className="flex items-center gap-3">
                     <Avatar className="h-11 w-11">
                       <AvatarImage src={user.user_metadata?.avatar_url || profile?.avatar_url || undefined} alt={getUserDisplayName()} />
@@ -276,23 +281,26 @@ const Navbar = () => {
                 </div>
               )}
 
-              <nav className="flex-1 space-y-1 overflow-y-auto px-4 py-5" aria-label="Mobile">
+              <nav
+                className="mx-auto flex w-full max-w-sm flex-1 flex-col justify-center gap-1 overflow-y-auto px-6 py-8"
+                aria-label="Mobile"
+              >
                 {links.map((link, i) => {
                   const active = isActivePath(location.pathname, link.path);
                   return (
                     <motion.div
                       key={link.path}
-                      initial={{ opacity: 0, x: 16 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: 0.04 * i }}
+                      initial={{ opacity: 0, y: 10 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: 0.03 * i }}
                     >
                       <Link
                         to={link.path}
                         onClick={() => setIsOpen(false)}
                         className={cn(
-                          "flex items-center rounded-[10px] px-4 py-3 text-[15px] font-medium transition",
+                          "flex items-center justify-center rounded-[10px] px-4 py-3.5 text-center text-base font-semibold transition",
                           active
-                            ? "text-[#00628b] bg-[#00628b]/8"
+                            ? "bg-[#00628b]/10 text-[#00628b]"
                             : "text-slate-700 hover:bg-[#00628b]/8 hover:text-[#00628b] dark:text-slate-200"
                         )}
                       >
@@ -308,23 +316,10 @@ const Navbar = () => {
                       setIsOpen(false);
                       goToPortal();
                     }}
-                    className="mt-1 flex w-full items-center gap-3 rounded-[10px] px-4 py-3 text-left text-[15px] font-medium text-slate-700 hover:bg-[#00628b]/8 hover:text-[#00628b]"
+                    className="mt-3 flex w-full items-center justify-center gap-2 rounded-[10px] px-4 py-3.5 text-base font-semibold text-slate-700 transition hover:bg-[#00628b]/8 hover:text-[#00628b]"
                   >
                     <LayoutDashboard className="h-5 w-5" />
                     Go to portal
-                  </button>
-                )}
-
-                {!user && (
-                  <button
-                    onClick={() => {
-                      setIsOpen(false);
-                      handleAdminClick();
-                    }}
-                    className="mt-2 flex w-full items-center gap-3 rounded-[10px] px-4 py-3 text-left text-[15px] font-medium text-slate-700 hover:bg-[#00628b]/8 hover:text-[#00628b]"
-                  >
-                    <User className="h-5 w-5" />
-                    Sign in
                   </button>
                 )}
 
@@ -334,28 +329,38 @@ const Navbar = () => {
                       setIsOpen(false);
                       navigate("/admin");
                     }}
-                    className="flex w-full items-center gap-3 rounded-[10px] px-4 py-3 text-left text-[15px] font-medium text-slate-700 hover:bg-[#00628b]/8 hover:text-[#00628b]"
+                    className="flex w-full items-center justify-center gap-2 rounded-[10px] px-4 py-3.5 text-base font-semibold text-slate-700 transition hover:bg-[#00628b]/8 hover:text-[#00628b]"
                   >
                     <Settings className="h-5 w-5" />
                     Admin Dashboard
                   </button>
                 )}
+              </nav>
 
-                {user && (
+              <div className="mx-auto w-full max-w-sm shrink-0 space-y-3 px-6 pb-8 pt-2">
+                {!user ? (
+                  <button
+                    onClick={() => {
+                      setIsOpen(false);
+                      handleAdminClick();
+                    }}
+                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-[7px] bg-[#00628b] text-sm font-semibold text-white transition hover:bg-[#005274]"
+                  >
+                    <User className="h-4 w-4" />
+                    Sign in
+                  </button>
+                ) : (
                   <button
                     onClick={() => {
                       setIsOpen(false);
                       handleLogout();
                     }}
-                    className="flex w-full items-center gap-3 rounded-[10px] px-4 py-3 text-left text-[15px] font-medium text-red-600 hover:bg-red-50"
+                    className="inline-flex h-12 w-full items-center justify-center gap-2 rounded-[7px] border border-red-200 text-sm font-semibold text-red-600 transition hover:bg-red-50"
                   >
-                    <LogOut className="h-5 w-5" />
+                    <LogOut className="h-4 w-4" />
                     Log out
                   </button>
                 )}
-              </nav>
-
-              <div className="border-t border-[#00628b]/10 px-5 py-4">
                 <p className="text-center text-xs text-slate-500">
                   © {new Date().getFullYear()} UR Binary Hub
                 </p>
@@ -364,7 +369,7 @@ const Navbar = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </>
   );
 };
 
