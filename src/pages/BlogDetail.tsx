@@ -60,7 +60,35 @@ const BlogDetail = () => {
         </div>
       </article>
 
-      {relatedPosts.length > 0 && <section className="mx-auto mt-24 max-w-7xl border-t border-[#cbdde4] px-6 pt-10 md:px-12"><p className="text-xs font-bold uppercase tracking-[0.22em] text-[#e65b2e]">Keep reading</p><div className="mt-7 grid gap-5 md:grid-cols-2 lg:grid-cols-4">{relatedPosts.map((related) => <Link key={related.id} to={`/blog/${related.slug}`} className="group block"><article className="grid min-h-[235px] grid-rows-[132px_1fr] overflow-hidden rounded-[3px] bg-[#eef4f7]/90 shadow-sm"><div className="overflow-hidden"><img src={related.images?.[0] || related.image || "/img/placeholder.svg"} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" /></div><div className="flex flex-col justify-between p-4"><div><div className="mb-2 flex items-center justify-between gap-2 text-[9px] font-bold uppercase tracking-[0.12em] text-[#39718b]"><span>{related.category}</span><span className="flex items-center gap-1 font-medium normal-case tracking-normal text-[#6b8794]"><Clock className="h-3 w-3" />{related.read_time_minutes} min read</span></div><h2 className="font-display text-lg leading-tight text-[#183c50]">{related.title}</h2></div><p className="mt-3 line-clamp-2 text-xs leading-relaxed text-[#587181]">{related.excerpt}</p></div></article></Link>)}</div></section>}
+      {relatedPosts.length > 0 && (
+        <section className="mx-auto mt-24 max-w-7xl border-t border-[#cbdde4] px-6 pb-24 pt-10 md:px-12 md:pb-32">
+          <p className="text-xs font-bold uppercase tracking-[0.22em] text-[#e65b2e]">Keep reading</p>
+          <div className="mt-7 grid gap-5 md:grid-cols-2 lg:grid-cols-4">
+            {relatedPosts.map((related) => (
+              <Link key={related.id} to={`/blog/${related.slug}`} className="group block">
+                <article className="grid min-h-[235px] grid-rows-[132px_1fr] overflow-hidden rounded-[3px] bg-[#eef4f7]/90 shadow-sm">
+                  <div className="overflow-hidden">
+                    <img src={related.images?.[0] || related.image || "/img/placeholder.svg"} alt="" className="h-full w-full object-cover transition duration-500 group-hover:scale-105" />
+                  </div>
+                  <div className="flex flex-col justify-between p-4">
+                    <div>
+                      <div className="mb-2 flex items-center justify-between gap-2 text-[9px] font-bold uppercase tracking-[0.12em] text-[#39718b]">
+                        <span>{related.category}</span>
+                        <span className="flex items-center gap-1 font-medium normal-case tracking-normal text-[#6b8794]">
+                          <Clock className="h-3 w-3" />
+                          {related.read_time_minutes} min read
+                        </span>
+                      </div>
+                      <h2 className="font-display text-lg leading-tight text-[#183c50]">{related.title}</h2>
+                    </div>
+                    <p className="mt-3 line-clamp-2 text-xs leading-relaxed text-[#587181]">{related.excerpt}</p>
+                  </div>
+                </article>
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
       <Footer />
     </main>
   );
