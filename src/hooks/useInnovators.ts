@@ -101,12 +101,17 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
     if (error) {
       toast({
         title: "Error",
-        description: "Failed to fetch featured innovators",
+        description: "Failed to fetch management innovators",
         variant: "destructive"
       });
-      setFeaturedInnovators(fallbackInnovators.slice(0, 3));
+      setFeaturedInnovators(
+        fallbackInnovators
+          .filter((person: any) => person.featured)
+          .map((person) => person as any)
+      );
     } else {
-      setFeaturedInnovators((data as any)?.length ? (data as any).slice(0, 3) : fallbackInnovators.slice(0, 3));
+      // All featured rows are management — do not truncate
+      setFeaturedInnovators((data as any)?.length ? (data as any) : []);
     }
   };
 
@@ -181,6 +186,8 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
   return {
     innovators,
     featuredInnovators,
+    /** Alias: featured = management for landing + innovators directory */
+    managementInnovators: featuredInnovators,
     loading,
     createInnovator,
     updateInnovator,

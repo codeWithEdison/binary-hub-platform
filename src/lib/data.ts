@@ -9,6 +9,7 @@ export type Innovator = {
   image: string;
   projects: string[];
   bio: string;
+  featured?: boolean;
 };
 
 export type Project = {
@@ -58,7 +59,8 @@ export const innovators: Innovator[] = [
     skills: ["Strategic Leadership", "Innovation Management", "Project Coordination", "Mentorship"],
     image: "/img/Team/cordinator.jpg",
     projects: ["UMUTUNGO Box", "IMOTRAK", "INUMA App"],
-    bio: "Hub Coordinator overseeing strategic coordination and partnerships at UR Binary Hub."
+    bio: "Hub Coordinator overseeing strategic coordination and partnerships at UR Binary Hub.",
+    featured: true,
   },
   {
     id: "2",
@@ -69,7 +71,8 @@ export const innovators: Innovator[] = [
     skills: ["Project Management", "Team Coordination", "Reporting", "Operations"],
     image: "/img/Team/habibu.jpg",
     projects: ["Hub Operations", "Team Management"],
-    bio: "Assistant Coordinator managing day-to-day operations and team coordination at UR Binary Hub."
+    bio: "Assistant Coordinator managing day-to-day operations and team coordination at UR Binary Hub.",
+    featured: true,
   },
   {
     id: "3",
@@ -80,7 +83,8 @@ export const innovators: Innovator[] = [
     skills: ["Documentation", "Administration", "Event Coordination", "Communication"],
     image: "/img/Team/karlise.jpg",
     projects: ["Documentation Management", "Event Organization"],
-    bio: "Assistant Administrator managing hub documentation, logistics, and internal communication."
+    bio: "Assistant Administrator managing hub documentation, logistics, and internal communication.",
+    featured: true,
   },
   {
     id: "7",
@@ -91,7 +95,8 @@ export const innovators: Innovator[] = [
     skills: ["React", "UI/UX Design", "Team Leadership", "Frontend Architecture"],
     image: "/img/Team/edison.jpg",
     projects: ["Customer Support System", "UR Binary Hub Platform"],
-    bio: "UI/UX & Frontend Team Leader coordinating frontend development and design activities."
+    bio: "UI/UX & Frontend Team Leader coordinating frontend development and design activities.",
+    featured: true,
   },
   {
     id: "4",
@@ -124,7 +129,8 @@ export const innovators: Innovator[] = [
     skills: ["Backend Development", "Team Leadership", "Code Review", "Git"],
     image: "/img/Team/david.jpg",
     projects: ["INUMA App", "Academic Records System"],
-    bio: "Backend Team Leader coordinating backend development activities and mentoring junior developers."
+    bio: "Backend Team Leader coordinating backend development activities and mentoring junior developers.",
+    featured: true,
   },
 
   {
@@ -192,7 +198,8 @@ export const innovators: Innovator[] = [
     skills: ["JavaScript", "React", "Web Development"],
     image: "/img/Team/denis.jpg",
     projects: ["Learning Projects", "Code Reviews"],
-    bio: "Junior Developer learning and contributing to Binary Hub projects."
+    bio: "Junior Developer learning and contributing to Binary Hub projects.",
+    featured: true,
   },
   {
     id: "14",

@@ -42,12 +42,17 @@ import { useProjects } from "@/hooks/useProjects";
 import { useEvents } from "@/hooks/useEvents";
 import { useStakeholders } from "@/hooks/useStakeholders";
 import { useStats } from "@/hooks/useStats";
+import { ensureManagementMembers } from "@/lib/ensureManagementMembers";
 
 const Overview = () => {
   // Use hooks to get dynamic data
   const { innovators, loading: innovatorsLoading } = useInnovators();
   const { projects, loading: projectsLoading } = useProjects();
   const { events, loading: eventsLoading } = useEvents();
+
+  React.useEffect(() => {
+    ensureManagementMembers();
+  }, []);
   const { stakeholders, loading: stakeholdersLoading } = useStakeholders();
   const { stats, loading: statsLoading } = useStats();
 

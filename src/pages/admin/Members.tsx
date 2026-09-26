@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import type { Innovator } from "@/hooks/useInnovators";
+import { ensureManagementMembers } from "@/lib/ensureManagementMembers";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 
@@ -28,6 +29,10 @@ const Members = () => {
   useEffect(() => {
     const loadMembers = async () => {
       setLoading(true);
+
+      // Promote Edison, David, and Denis to management when an admin is signed in
+      await ensureManagementMembers();
+
       const { data, error } = await (supabase as any)
         .from("innovators")
         .select("*, skills:innovator_skills(skill)")
@@ -153,7 +158,14 @@ const Members = () => {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-start justify-between gap-2">
                         <h2 className="truncate text-lg font-semibold leading-6 text-slate-950">{member.name}</h2>
-                        <span title={isActive ? "Active profile" : "Inactive profile"} className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${isActive ? "bg-emerald-500" : "bg-slate-300"}`} />
+                        <div className="flex shrink-0 items-center gap-2">
+                          {member.featured && (
+                            <Badge variant="outline" className="rounded-md border-[#00628b]/30 px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide text-[#00628b]">
+                              Management
+                            </Badge>
+                          )}
+                          <span title={isActive ? "Active profile" : "Inactive profile"} className={`mt-1 h-2.5 w-2.5 shrink-0 rounded-full ${isActive ? "bg-emerald-500" : "bg-slate-300"}`} />
+                        </div>
                       </div>
                       <p className="mt-1 truncate text-sm font-medium text-slate-700">{member.role || "Member"}</p>
                       <p className="truncate text-sm text-slate-500">{member.department || "Department not provided"}</p>

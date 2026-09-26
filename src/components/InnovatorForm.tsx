@@ -98,6 +98,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
         role: "",
         department: "",
         status: "innovator" as "innovator" | "alumni" | "mentor",
+        featured: false,
         email: "",
         phone: "",
         city: "",
@@ -160,15 +161,16 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                     role: innovator.role || "",
                     department: innovator.department || "",
                     status: innovator.status || "innovator",
+                    featured: Boolean(innovator.featured),
                     email: "", // Not in current schema
                     phone: "", // Not in current schema
                     city: "",
                     gender: "",
-                    linkedin: "",
-                    facebook: "",
-                    twitter: "",
-                    github: "",
-                    website: "", // Not in current schema
+                    linkedin: innovator.linkedin || "",
+                    facebook: innovator.facebook || "",
+                    twitter: innovator.twitter || "",
+                    github: innovator.github || "",
+                    website: innovator.website || "",
                     bio: innovator.bio || "",
                     image: innovator.image || "",
                     skills: innovator.skills?.map(s => s.skill).join(", ") || "",
@@ -329,6 +331,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                 github: formData.github,
                 website: formData.website,
                 status: formData.status,
+                featured: formData.featured,
                 ...(userId ? { user_id: userId } : {}),
                 ...(!applicationMode && !isEditMode ? { account_status: "active" } : {}),
                 bio: formData.bio,
@@ -516,6 +519,30 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                     </div>
                                 )}
                             </div>
+
+                            {!applicationMode && !localOnly && (
+                                <div className="space-y-2">
+                                    <Label htmlFor="featured">Is management?</Label>
+                                    <Select
+                                        value={formData.featured ? "yes" : "no"}
+                                        onValueChange={(value) =>
+                                            setFormData((prev) => ({ ...prev, featured: value === "yes" }))
+                                        }
+                                        disabled={isSubmitting}
+                                    >
+                                        <SelectTrigger id="featured">
+                                            <SelectValue placeholder="Select yes or no" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="yes">Yes — show in management</SelectItem>
+                                            <SelectItem value="no">No</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                    <p className="text-xs text-muted-foreground">
+                                        Yes shows this person in Meet the management on the landing page and innovators directory.
+                                    </p>
+                                </div>
+                            )}
 
                             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
                                 <div className="space-y-2">
