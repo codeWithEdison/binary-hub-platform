@@ -33,7 +33,6 @@ import { Link } from "react-router-dom";
 import { useInnovators } from "@/hooks/useInnovators";
 import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useApplicationSetup } from "@/hooks/useApplicationSetup";
 
 const statuses = ["innovator", "alumni", "mentor"] as const;
 
@@ -57,10 +56,6 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
     const isEditMode = Boolean(innovatorId);
     const { toast } = useToast();
     const { createInnovator, updateInnovator, deleteInnovator } = useInnovators({ includeInactive: !localOnly });
-    const { options: applicationSetupOptions } = useApplicationSetup();
-    const roleOptions = applicationSetupOptions.filter((option) => option.category === "role");
-    const departmentOptions = applicationSetupOptions.filter((option) => option.category === "department");
-    const skillOptions = applicationSetupOptions.filter((option) => option.category === "skill").map((option) => option.name);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     const [formData, setFormData] = useState({
@@ -111,26 +106,12 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
         website?: string | null;
     } | null>(null);
 
-    const roleSelectOptions = useMemo(() => {
-        const names = new Set(roleOptions.map((option) => option.name));
-        if (formData.role && !names.has(formData.role)) {
-            return [...roleOptions, { id: `custom-role-${formData.role}`, name: formData.role }];
-        }
-        return roleOptions;
-    }, [roleOptions, formData.role]);
+    const [skillDraft, setSkillDraft] = useState("");
 
-    const departmentSelectOptions = useMemo(() => {
-        const names = new Set(departmentOptions.map((option) => option.name));
-        if (formData.department && !names.has(formData.department)) {
-            return [...departmentOptions, { id: `custom-dept-${formData.department}`, name: formData.department }];
-        }
-        return departmentOptions;
-    }, [departmentOptions, formData.department]);
-
-    const skillSelectOptions = useMemo(() => {
-        const selected = formData.skills.split(",").map((item) => item.trim()).filter(Boolean);
-        return Array.from(new Set([...skillOptions, ...selected]));
-    }, [skillOptions, formData.skills]);
+    const selectedSkills = useMemo(
+        () => formData.skills.split(",").map((item) => item.trim()).filter(Boolean),
+        [formData.skills]
+    );
 
     useEffect(() => {
         if (!localOnly) return;
@@ -278,12 +259,26 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
         setFormData(prev => ({ ...prev, [name]: value }));
     };
 
-    const toggleSkill = (skill: string) => {
+    const addSkill = () => {
+        const skill = skillDraft.trim();
+        if (!skill) return;
         setFormData((current) => {
-            const selectedSkills = current.skills.split(",").map((item) => item.trim()).filter(Boolean);
-            const nextSkills = selectedSkills.includes(skill)
-                ? selectedSkills.filter((item) => item !== skill)
-                : [...selectedSkills, skill];
+            const existing = current.skills.split(",").map((item) => item.trim()).filter(Boolean);
+            if (existing.some((item) => item.toLowerCase() === skill.toLowerCase())) {
+                return current;
+            }
+            return { ...current, skills: [...existing, skill].join(", ") };
+        });
+        setSkillDraft("");
+    };
+
+    const removeSkill = (skill: string) => {
+        setFormData((current) => {
+            const nextSkills = current.skills
+                .split(",")
+                .map((item) => item.trim())
+                .filter(Boolean)
+                .filter((item) => item !== skill);
             return { ...current, skills: nextSkills.join(", ") };
         });
     };
@@ -513,23 +508,15 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                         <Briefcase className="h-4 w-4" />
                                         Role *
                                     </Label>
-                                    <Select value={formData.role || undefined} onValueChange={(value) => handleSelectChange("role", value)} disabled={isSubmitting}>
-                                        <SelectTrigger><SelectValue placeholder="Select your role" /></SelectTrigger>
-                                        <SelectContent>
-                                            {roleSelectOptions
-                                              .filter((option) => option.name.trim().length > 0)
-                                              .map((option) => <SelectItem key={option.id} value={option.name}>{option.name}</SelectItem>)}
-                                        </SelectContent>
-                                    </Select>
-                                    {!applicationMode && !localOnly && (
-                                        <Input
-                                            name="role"
-                                            placeholder="Or type a custom role"
-                                            value={formData.role}
-                                            onChange={handleChange}
-                                            disabled={isSubmitting}
-                                        />
-                                    )}
+                                    <Input
+                                        id="role"
+                                        name="role"
+                                        placeholder="e.g. Software Engineer"
+                                        value={formData.role}
+                                        onChange={handleChange}
+                                        required
+                                        disabled={isSubmitting}
+                                    />
                                 </div>
                             </div>
 
@@ -538,23 +525,14 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                     <Label htmlFor="department" className="flex items-center gap-2">
                                         <Building className="h-4 w-4" /> Department or field
                                     </Label>
-                                    <Select value={formData.department || undefined} onValueChange={(value) => handleSelectChange("department", value)} disabled={isSubmitting}>
-                                        <SelectTrigger><SelectValue placeholder="Select your department or field" /></SelectTrigger>
-                                        <SelectContent>
-                                            {departmentSelectOptions
-                                              .filter((option) => option.name.trim().length > 0)
-                                              .map((option) => <SelectItem key={option.id} value={option.name}>{option.name}</SelectItem>)}
-                                        </SelectContent>
-                                    </Select>
-                                    {!applicationMode && !localOnly && (
-                                        <Input
-                                            name="department"
-                                            placeholder="Or type a custom department"
-                                            value={formData.department}
-                                            onChange={handleChange}
-                                            disabled={isSubmitting}
-                                        />
-                                    )}
+                                    <Input
+                                        id="department"
+                                        name="department"
+                                        placeholder="e.g. Computer Science"
+                                        value={formData.department}
+                                        onChange={handleChange}
+                                        disabled={isSubmitting}
+                                    />
                                 </div>
 
                                 {!applicationMode && (
@@ -607,7 +585,23 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                 </div>
                                 <div className="space-y-2">
                                     <Label htmlFor="gender">Gender</Label>
-                                    <Input id="gender" name="gender" value={formData.gender} onChange={handleChange} disabled={isSubmitting} />
+                                    <Select
+                                        value={
+                                            formData.gender === "Female" || formData.gender === "Male"
+                                                ? formData.gender
+                                                : undefined
+                                        }
+                                        onValueChange={(value) => handleSelectChange("gender", value)}
+                                        disabled={isSubmitting}
+                                    >
+                                        <SelectTrigger id="gender">
+                                            <SelectValue placeholder="Select gender" />
+                                        </SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Female">Female</SelectItem>
+                                            <SelectItem value="Male">Male</SelectItem>
+                                        </SelectContent>
+                                    </Select>
                                 </div>
                             </div>
                         </CardContent>
@@ -690,27 +684,51 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                     <Tag className="h-4 w-4" />
                                     Skills
                                 </Label>
-                                {skillOptions.length > 0 ? (
-                                    <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3">
-                                        {skillSelectOptions.map((skill) => {
-                                            const selected = formData.skills.split(",").map((item) => item.trim()).includes(skill);
-                                            return (
-                                                <label key={skill} className="flex cursor-pointer items-center gap-2 rounded-md border border-border px-3 py-2 text-sm">
-                                                    <input type="checkbox" checked={selected} onChange={() => toggleSkill(skill)} disabled={isSubmitting} className="accent-[#00628b]" />
-                                                    <span>{skill}</span>
-                                                </label>
-                                            );
-                                        })}
-                                    </div>
-                                ) : (
+                                <div className="flex gap-2">
                                     <Input
                                         id="skills"
-                                        name="skills"
-                                        placeholder="e.g., Programming, Design, Research"
-                                        value={formData.skills}
-                                        onChange={handleChange}
+                                        value={skillDraft}
+                                        onChange={(event) => setSkillDraft(event.target.value)}
+                                        onKeyDown={(event) => {
+                                            if (event.key === "Enter") {
+                                                event.preventDefault();
+                                                addSkill();
+                                            }
+                                        }}
+                                        placeholder="Type a skill and press Add"
                                         disabled={isSubmitting}
                                     />
+                                    <Button
+                                        type="button"
+                                        variant="outline"
+                                        onClick={addSkill}
+                                        disabled={isSubmitting || !skillDraft.trim()}
+                                    >
+                                        Add
+                                    </Button>
+                                </div>
+                                {selectedSkills.length > 0 ? (
+                                    <div className="flex flex-wrap gap-2 pt-1">
+                                        {selectedSkills.map((skill) => (
+                                            <span
+                                                key={skill}
+                                                className="inline-flex items-center gap-1 rounded-md border border-slate-200 bg-slate-50 px-2.5 py-1 text-sm text-slate-700"
+                                            >
+                                                {skill}
+                                                <button
+                                                    type="button"
+                                                    onClick={() => removeSkill(skill)}
+                                                    disabled={isSubmitting}
+                                                    className="rounded p-0.5 text-slate-500 hover:bg-slate-200 hover:text-slate-900"
+                                                    aria-label={`Remove ${skill}`}
+                                                >
+                                                    <X className="h-3.5 w-3.5" />
+                                                </button>
+                                            </span>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-xs text-muted-foreground">Add skills one by one.</p>
                                 )}
                             </div>
 
