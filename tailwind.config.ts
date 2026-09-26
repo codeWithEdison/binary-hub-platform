@@ -20,8 +20,9 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				'zurich': ['ZurichBT', 'sans-serif'],
-				'display': ['ZurichBT', 'sans-serif'],
+				sans: ['Inter', 'system-ui', 'sans-serif'],
+				display: ['Plus Jakarta Sans', 'sans-serif'],
+				zurich: ['Inter', 'system-ui', 'sans-serif'],
 			},
 			colors: {
 				border: 'hsl(var(--border))',
