@@ -21,6 +21,7 @@ export interface Innovator {
   image: string | null;
   department: string;
   role: string;
+  gender?: string | null;
   linkedin?: string | null;
   facebook?: string | null;
   twitter?: string | null;
@@ -150,28 +151,40 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
   };
 
   const updateInnovator = async (id: string, updates: Partial<Innovator>) => {
-    const {
-      skills: _skills,
-      projects: _projects,
-      application_answers: _answers,
-      id: _id,
-      created_at: _createdAt,
-      updated_at: _updatedAt,
-      ...row
-    } = updates as Innovator & Record<string, unknown>;
+    const allowed = [
+      "name",
+      "role",
+      "department",
+      "gender",
+      "bio",
+      "image",
+      "status",
+      "featured",
+      "account_status",
+      "linkedin",
+      "facebook",
+      "twitter",
+      "github",
+      "website",
+      "user_id",
+    ] as const;
+
+    const row: Record<string, unknown> = {};
+    for (const key of allowed) {
+      if (key in updates) {
+        row[key] = (updates as Record<string, unknown>)[key];
+      }
+    }
+
     const { error } = await (supabase as any).from("innovators").update(row).eq("id", id);
 
     if (error) {
       toast({
         title: "Error",
-        description: "Failed to update innovator",
+        description: error.message || "Failed to update innovator",
         variant: "destructive",
       });
     } else {
-      toast({
-        title: "Success",
-        description: "Innovator updated successfully",
-      });
       await refreshInnovators();
     }
 

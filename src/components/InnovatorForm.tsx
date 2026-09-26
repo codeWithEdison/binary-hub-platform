@@ -161,7 +161,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                 email: "",
                 phone: "",
                 city: "",
-                gender: "",
+                gender: innovator.gender || "",
                 linkedin: innovator.linkedin || "",
                 facebook: innovator.facebook || "",
                 twitter: innovator.twitter || "",
@@ -203,29 +203,30 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                     }));
                 }
             } else {
-                setApplication(data);
-                setFormData((current) => ({
-                    ...current,
-                    name: data.applicant_name || current.name,
-                    email: data.applicant_email || current.email,
-                    phone: data.phone || current.phone,
-                    city: data.city || current.city,
-                    gender: data.gender || current.gender,
-                    role: data.role || current.role,
-                    department: data.department || current.department,
-                    bio: data.bio || current.bio,
-                    image: data.image || current.image,
-                    linkedin: data.linkedin || current.linkedin,
-                    facebook: data.facebook || current.facebook,
-                    twitter: data.twitter || current.twitter,
-                    github: data.github || current.github,
-                    website: data.website || current.website,
-                    skills: data.skills?.length ? data.skills.join(", ") : current.skills,
-                }));
-                if (data.image) {
-                    setImagePreview(data.image);
-                    setUploadedImageUrl(data.image);
-                }
+                    setApplication(data);
+                    setFormData((current) => ({
+                        ...current,
+                        // Prefer innovator profile fields; fill blanks from linked application
+                        name: current.name || data.applicant_name || "",
+                        email: data.applicant_email || current.email,
+                        phone: data.phone || current.phone,
+                        city: data.city || current.city,
+                        gender: current.gender || data.gender || "",
+                        role: current.role || data.role || "",
+                        department: current.department || data.department || "",
+                        bio: current.bio || data.bio || "",
+                        image: current.image || data.image || "",
+                        linkedin: current.linkedin || data.linkedin || "",
+                        facebook: current.facebook || data.facebook || "",
+                        twitter: current.twitter || data.twitter || "",
+                        github: current.github || data.github || "",
+                        website: current.website || data.website || "",
+                        skills: current.skills || (data.skills?.length ? data.skills.join(", ") : ""),
+                    }));
+                    if (data.image && !imagePreview) {
+                        setImagePreview(data.image);
+                        setUploadedImageUrl(data.image);
+                    }
             }
 
             setRecordLoading(false);
@@ -260,14 +261,25 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
     };
 
     const addSkill = () => {
-        const skill = skillDraft.trim();
-        if (!skill) return;
+        const incoming = skillDraft
+            .split(",")
+            .map((item) => item.trim())
+            .filter(Boolean);
+        if (!incoming.length) return;
+
         setFormData((current) => {
             const existing = current.skills.split(",").map((item) => item.trim()).filter(Boolean);
-            if (existing.some((item) => item.toLowerCase() === skill.toLowerCase())) {
-                return current;
+            const existingLower = new Set(existing.map((item) => item.toLowerCase()));
+            const next = [...existing];
+
+            for (const skill of incoming) {
+                const key = skill.toLowerCase();
+                if (existingLower.has(key)) continue;
+                existingLower.add(key);
+                next.push(skill);
             }
-            return { ...current, skills: [...existing, skill].join(", ") };
+
+            return { ...current, skills: next.join(", ") };
         });
         setSkillDraft("");
     };
@@ -338,81 +350,107 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                 .map(skill => ({ skill }));
 
             const innovatorData = {
-                name: formData.name,
-                role: formData.role,
-                department: formData.department,
-                linkedin: formData.linkedin,
-                facebook: formData.facebook,
-                twitter: formData.twitter,
-                github: formData.github,
-                website: formData.website,
+                name: formData.name.trim(),
+                role: formData.role.trim(),
+                department: formData.department.trim(),
+                gender: formData.gender || null,
+                linkedin: formData.linkedin.trim() || null,
+                facebook: formData.facebook.trim() || null,
+                twitter: formData.twitter.trim() || null,
+                github: formData.github.trim() || null,
+                website: formData.website.trim() || null,
                 status: formData.status,
-                featured: formData.featured,
+                featured: Boolean(formData.featured),
                 ...(userId ? { user_id: userId } : {}),
-                ...(!applicationMode && !isEditMode ? { account_status: "active" } : {}),
-                bio: formData.bio,
-                image: uploadedImageUrl || formData.image, // Use uploaded image if available
+                ...(!applicationMode && !isEditMode ? { account_status: "active" as const } : {}),
+                bio: formData.bio.trim() || null,
+                // Never persist raw base64 data-URLs; keep existing hosted image instead
+                image:
+                    (uploadedImageUrl || formData.image || "").startsWith("data:")
+                        ? formData.image || null
+                        : uploadedImageUrl || formData.image || null,
             };
 
             if (localOnly && !applicationMode) {
                 localStorage.setItem("binaryhub.innovator.profile", JSON.stringify({
                     ...formData,
-                    image: uploadedImageUrl || formData.image,
+                    image: innovatorData.image,
                 }));
             } else if (isEditMode && innovatorId) {
-                const { error } = await updateInnovator(innovatorId, innovatorData);
-                if (error) throw error;
+                const { error } = await updateInnovator(innovatorId, innovatorData as any);
+                if (error) throw new Error(error.message || "Failed to update innovator");
+
                 if (application?.id) {
                     const { error: applicationError } = await (supabase as any)
                         .from("applications")
                         .update({
-                            applicant_name: formData.name,
+                            applicant_name: formData.name.trim(),
                             applicant_email: formData.email || null,
                             phone: formData.phone || null,
                             city: formData.city || null,
                             gender: formData.gender || null,
-                            role: formData.role,
-                            department: formData.department,
-                            bio: formData.bio,
-                            image: uploadedImageUrl || formData.image || null,
-                            linkedin: formData.linkedin || null,
-                            facebook: formData.facebook || null,
-                            twitter: formData.twitter || null,
-                            github: formData.github || null,
-                            website: formData.website || null,
+                            role: formData.role.trim(),
+                            department: formData.department.trim(),
+                            bio: formData.bio.trim() || null,
+                            image: innovatorData.image,
+                            linkedin: innovatorData.linkedin,
+                            facebook: innovatorData.facebook,
+                            twitter: innovatorData.twitter,
+                            github: innovatorData.github,
+                            website: innovatorData.website,
                             skills: skillsArray.map(({ skill }) => skill),
                         })
                         .eq("id", application.id);
-                    if (applicationError) throw applicationError;
+                    if (applicationError) {
+                        console.warn("Application sync failed", applicationError);
+                        toast({
+                            title: "Profile saved",
+                            description: "Innovator updated, but linked application details could not be synced.",
+                        });
+                    }
                 }
+
                 const { error: skillsDeleteError } = await (supabase as any)
                     .from("innovator_skills")
                     .delete()
                     .eq("innovator_id", innovatorId);
-                if (skillsDeleteError) throw skillsDeleteError;
+                if (skillsDeleteError) throw new Error(skillsDeleteError.message || "Failed to clear skills");
+
                 if (skillsArray.length) {
                     const { error: skillsInsertError } = await (supabase as any).from("innovator_skills").insert(
                         skillsArray.map(({ skill }) => ({ innovator_id: innovatorId, skill }))
                     );
-                    if (skillsInsertError) throw skillsInsertError;
+                    if (skillsInsertError) throw new Error(skillsInsertError.message || "Failed to save skills");
                 }
+
+                toast({
+                    title: "Innovator updated",
+                    description: `Successfully updated ${formData.name}`,
+                });
             } else {
-                const { data, error } = await createInnovator(innovatorData);
-                if (error) throw error;
+                const { data, error } = await createInnovator(innovatorData as any);
+                if (error) throw new Error(error.message || "Failed to create innovator");
                 const createdId = (data as { id?: string } | null)?.id;
                 if (createdId && skillsArray.length) {
-                    await (supabase as any).from("innovator_skills").insert(
+                    const { error: skillsInsertError } = await (supabase as any).from("innovator_skills").insert(
                         skillsArray.map(({ skill }) => ({ innovator_id: createdId, skill }))
                     );
+                    if (skillsInsertError) throw new Error(skillsInsertError.message || "Failed to save skills");
                 }
             }
 
             onSuccess?.();
         } catch (error) {
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : typeof error === "object" && error && "message" in error
+                      ? String((error as { message: unknown }).message)
+                      : `Failed to ${isEditMode ? "update" : "create"} innovator`;
             toast({
                 title: "Error",
-                description: error instanceof Error ? error.message : `Failed to ${isEditMode ? "update" : "create"} innovator`,
-                variant: "destructive"
+                description: message,
+                variant: "destructive",
             });
         } finally {
             setIsSubmitting(false);
@@ -695,7 +733,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                                 addSkill();
                                             }
                                         }}
-                                        placeholder="Type a skill and press Add"
+                                        placeholder="e.g. React, TypeScript, Tailwind"
                                         disabled={isSubmitting}
                                     />
                                     <Button
@@ -728,7 +766,9 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                         ))}
                                     </div>
                                 ) : (
-                                    <p className="text-xs text-muted-foreground">Add skills one by one.</p>
+                                    <p className="text-xs text-muted-foreground">
+                                        Type one skill or several separated by commas, then press Add.
+                                    </p>
                                 )}
                             </div>
 
