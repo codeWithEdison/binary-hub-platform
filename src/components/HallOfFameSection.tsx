@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useInnovators, type Innovator } from "@/hooks/useInnovators";
+import { resolveManagement } from "@/lib/resolveManagement";
 import { cn } from "@/lib/utils";
 
 interface HallOfFameSectionProps {
@@ -39,10 +40,10 @@ const HallOfFameSection: React.FC<HallOfFameSectionProps> = ({
 }) => {
   const { innovators, managementInnovators, loading } = useInnovators();
 
-  const management = useMemo(() => {
-    if (managementInnovators.length > 0) return managementInnovators;
-    return innovators.filter((person) => person.featured);
-  }, [managementInnovators, innovators]);
+  const management = useMemo(
+    () => resolveManagement(innovators, managementInnovators),
+    [managementInnovators, innovators]
+  );
 
   const managementIds = useMemo(
     () => new Set(management.map((person) => person.id)),
@@ -133,7 +134,7 @@ const HallOfFameSection: React.FC<HallOfFameSectionProps> = ({
           </div>
         ) : (
           <p className="text-center text-sm text-slate-500">
-            Highlight innovators as management to show them here.
+            Mark innovators as management (Is management = Yes) to pin them here.
           </p>
         )}
 

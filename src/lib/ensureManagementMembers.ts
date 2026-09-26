@@ -1,28 +1,22 @@
 import { supabase } from "@/integrations/supabase/client";
-
-/** Name matchers for people who should appear in Meet the management */
-const MANAGEMENT_NAME_MATCHERS = [/edison/i, /david\s+tuyishime/i, /denis\s+uwihirwe/i];
+import { isManagementCandidate } from "@/lib/resolveManagement";
 
 /**
- * Ensure Edison, David, and Denis are marked as management (featured = true).
+ * Ensure leadership members are marked as management (featured = true).
  * Requires an authenticated admin session (RLS).
  */
 export async function ensureManagementMembers() {
   const { data: rows, error: listError } = await (supabase as any)
     .from("innovators")
-    .select("id, name, featured");
+    .select("id, name, role, featured");
 
   if (listError) {
     return { updated: 0, error: listError };
   }
 
   const toPromote = (
-    (rows as Array<{ id: string; name: string; featured: boolean }>) || []
-  ).filter(
-    (row) =>
-      !row.featured &&
-      MANAGEMENT_NAME_MATCHERS.some((matcher) => matcher.test(row.name))
-  );
+    (rows as Array<{ id: string; name: string; role: string; featured: boolean }>) || []
+  ).filter((row) => !row.featured && isManagementCandidate(row));
 
   if (toPromote.length === 0) {
     return { updated: 0, error: null };
