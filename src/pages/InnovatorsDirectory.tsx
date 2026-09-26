@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { Loader2, Search, UsersRound } from "lucide-react";
+import { ArrowUpRight, Loader2, Search, UsersRound } from "lucide-react";
 import Footer from "@/components/Footer";
-import InnovatorDirectoryCard, {
-  InnovatorDirectoryCardSkeleton,
-} from "@/components/InnovatorDirectoryCard";
-import { useInnovators } from "@/hooks/useInnovators";
+import { useInnovators, type Innovator } from "@/hooks/useInnovators";
+import { resolveManagement } from "@/lib/resolveManagement";
 import { cn } from "@/lib/utils";
 
-const PAGE_SIZE = 9;
+const PAGE_SIZE = 12;
 
 const innovatorTabs = [
   "All",
@@ -25,6 +24,31 @@ const tabStatuses: Record<"Innovators" | "Mentors" | "Alumni", string> = {
   Alumni: "alumni",
 };
 
+const getInitials = (name: string) =>
+  name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase())
+    .join("") || "IN";
+
+const Avatar = ({
+  person,
+  className,
+  fallbackClassName,
+}: {
+  person: Innovator;
+  className: string;
+  fallbackClassName: string;
+}) =>
+  person.image ? (
+    <img src={person.image} alt={person.name} className={className} loading="lazy" />
+  ) : (
+    <div className={cn(className, fallbackClassName)} aria-hidden="true">
+      {getInitials(person.name)}
+    </div>
+  );
+
 const InnovatorsDirectory = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeTab, setActiveTab] = useState<InnovatorTab>("All");
@@ -33,10 +57,10 @@ const InnovatorsDirectory = () => {
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const { innovators, managementInnovators, loading } = useInnovators();
 
-  const management = useMemo(() => {
-    if (managementInnovators.length > 0) return managementInnovators;
-    return innovators.filter((person) => person.featured);
-  }, [managementInnovators, innovators]);
+  const management = useMemo(
+    () => resolveManagement(innovators, managementInnovators),
+    [managementInnovators, innovators]
+  );
 
   const managementIds = useMemo(
     () => new Set(management.map((person) => person.id)),
@@ -51,7 +75,7 @@ const InnovatorsDirectory = () => {
         activeTab === "All"
           ? true
           : activeTab === "Management"
-            ? managementIds.has(innovator.id) || Boolean(innovator.featured)
+            ? managementIds.has(innovator.id)
             : innovator.status === tabStatuses[activeTab];
 
       const searchableText = [
@@ -85,7 +109,6 @@ const InnovatorsDirectory = () => {
     [innovators, management.length]
   );
 
-  // Reset pagination when filters change
   useEffect(() => {
     setVisibleCount(PAGE_SIZE);
     setIsLoadingMore(false);
@@ -94,7 +117,6 @@ const InnovatorsDirectory = () => {
   const loadMore = useCallback(() => {
     if (!hasMore || isLoadingMore) return;
     setIsLoadingMore(true);
-    // Brief delay so the loading state is visible on fast devices
     window.setTimeout(() => {
       setVisibleCount((count) =>
         Math.min(count + PAGE_SIZE, filteredInnovators.length)
@@ -103,7 +125,6 @@ const InnovatorsDirectory = () => {
     }, 220);
   }, [filteredInnovators.length, hasMore, isLoadingMore]);
 
-  // Infinite scroll via sentinel
   useEffect(() => {
     const node = loadMoreRef.current;
     if (!node || !hasMore || loading) return;
@@ -121,64 +142,121 @@ const InnovatorsDirectory = () => {
     return () => observer.disconnect();
   }, [hasMore, loadMore, loading, visibleCount]);
 
+  const showManagementStrip = !loading && management.length > 0 && activeTab === "All" && !searchQuery.trim();
+
   return (
     <div className="bh-innovators-page">
-      <section className="bh-innovators-hero">
-        <div className="bh-innovators-hero-inner">
-          <motion.p
-            className="bh-innovators-brand"
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-          >
-            UR Binary Hub
-          </motion.p>
-          <motion.h1
+      <section className="bh-hall-section bh-innovators-page-section">
+        <div className="mx-auto w-full max-w-[1200px] px-5 md:px-8 lg:px-12">
+          <motion.div
+            className="bh-hall-heading"
             initial={{ opacity: 0, y: 18 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.06, duration: 0.55 }}
+            transition={{ duration: 0.55 }}
           >
-            Innovators
-          </motion.h1>
-          <motion.p
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.12, duration: 0.5 }}
+            <h1 className="bh-hall-title">
+              <span className="bh-hall-brand">UR BINARY HUB</span>
+              <span className="bh-hall-dash" aria-hidden="true">
+                —
+              </span>
+              <span className="bh-hall-fame">Innovators</span>
+            </h1>
+            <p className="bh-hall-subtitle">
+              Students, mentors, and alumni building homegrown digital solutions
+              for Rwanda and beyond.
+            </p>
+          </motion.div>
+
+          {showManagementStrip && (
+            <>
+              <motion.div
+                className="bh-hall-heading"
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5 }}
+              >
+                <h2 className="bh-hall-title">
+                  <span className="bh-hall-brand">Meet the </span>
+                  <span className="bh-hall-fame">management</span>
+                </h2>
+                <p className="bh-hall-subtitle">
+                  Leading UR Binary Hub with vision, mentorship, and hands-on innovation.
+                </p>
+              </motion.div>
+
+              <div className="bh-hall-featured-grid">
+                {management.map((person, index) => (
+                  <motion.div
+                    key={person.id}
+                    initial={{ opacity: 0, y: 14 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: Math.min(index * 0.06, 0.35), duration: 0.45 }}
+                  >
+                    <Link to={`/innovators/${person.id}`} className="bh-hall-featured">
+                      <div className="bh-hall-featured-ring">
+                        <Avatar
+                          person={person}
+                          className="bh-hall-featured-avatar"
+                          fallbackClassName="bh-hall-avatar-fallback"
+                        />
+                      </div>
+                      <h3>{person.name}</h3>
+                      <p>{person.role || "Management"}</p>
+                      {person.linkedin ? (
+                        <span
+                          className="bh-hall-linkedin"
+                          onClick={(event) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                            window.open(person.linkedin!, "_blank", "noopener,noreferrer");
+                          }}
+                          role="link"
+                          tabIndex={0}
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter" || event.key === " ") {
+                              event.preventDefault();
+                              event.stopPropagation();
+                              window.open(person.linkedin!, "_blank", "noopener,noreferrer");
+                            }
+                          }}
+                        >
+                          LinkedIn <ArrowUpRight size={12} aria-hidden="true" />
+                        </span>
+                      ) : (
+                        <span className="bh-hall-linkedin is-muted">View profile</span>
+                      )}
+                    </Link>
+                  </motion.div>
+                ))}
+              </div>
+            </>
+          )}
+
+          <motion.div
+            className={cn(
+              "bh-hall-heading",
+              showManagementStrip && "bh-hall-heading-secondary"
+            )}
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
           >
-            Students, mentors, and alumni building homegrown digital solutions
-            for Rwanda and beyond.
-          </motion.p>
-        </div>
-      </section>
+            <h2 className="bh-hall-title">
+              <span className="bh-hall-brand">Community</span>
+              <span className="bh-hall-dash" aria-hidden="true">
+                —
+              </span>
+              <span className="bh-hall-fame">directory</span>
+            </h2>
+            <p className="bh-hall-subtitle">
+              Browse every innovator, mentor, and alumni in the hub.
+            </p>
+          </motion.div>
 
-      {!loading && management.length > 0 && activeTab !== "Management" && (
-        <section className="bh-innovators-featured">
-          <div className="bh-innovators-container">
-            <div className="bh-innovators-featured-heading">
-              <p className="bh-innovators-eyebrow">Leadership</p>
-              <h2>Meet the management</h2>
-            </div>
-            <div className="bh-innovators-featured-grid">
-              {management.map((person, index) => (
-                <InnovatorDirectoryCard
-                  key={person.id}
-                  innovator={person}
-                  index={index}
-                />
-              ))}
-            </div>
-          </div>
-        </section>
-      )}
-
-      <section className="bh-innovators-directory">
-        <div className="bh-innovators-container">
-          <div className="bh-innovators-toolbar">
-            <div>
-              <p className="bh-innovators-eyebrow">Directory</p>
-              <h2>All community members</h2>
-            </div>
-
+          <div className="bh-innovators-controls">
             <div className="bh-innovators-search">
               <Search className="h-4 w-4" aria-hidden="true" />
               <input
@@ -188,53 +266,75 @@ const InnovatorsDirectory = () => {
                 aria-label="Search innovators"
               />
             </div>
-          </div>
 
-          <div
-            className="bh-innovators-tabs"
-            role="tablist"
-            aria-label="Filter innovators"
-          >
-            {innovatorTabs.map((tab) => (
-              <button
-                key={tab}
-                type="button"
-                role="tab"
-                aria-selected={activeTab === tab}
-                onClick={() => setActiveTab(tab)}
-                className={cn(
-                  "bh-innovators-tab",
-                  activeTab === tab && "is-active"
-                )}
-              >
-                {tab}
-                <span>{tabCounts[tab]}</span>
-              </button>
-            ))}
+            <div
+              className="bh-innovators-tabs"
+              role="tablist"
+              aria-label="Filter innovators"
+            >
+              {innovatorTabs.map((tab) => (
+                <button
+                  key={tab}
+                  type="button"
+                  role="tab"
+                  aria-selected={activeTab === tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={cn(
+                    "bh-innovators-tab",
+                    activeTab === tab && "is-active"
+                  )}
+                >
+                  {tab}
+                  <span>{tabCounts[tab]}</span>
+                </button>
+              ))}
+            </div>
           </div>
 
           {loading ? (
-            <div className="bh-innovators-grid">
-              {Array.from({ length: 6 }).map((_, index) => (
-                <InnovatorDirectoryCardSkeleton key={index} />
+            <div className="bh-hall-grid">
+              {Array.from({ length: 8 }).map((_, index) => (
+                <div key={index} className="bh-hall-person animate-pulse">
+                  <div className="bh-hall-avatar bg-slate-200" />
+                  <div className="min-w-0 flex-1 space-y-2">
+                    <div className="h-3 w-32 rounded bg-slate-200" />
+                    <div className="h-3 w-24 rounded bg-slate-200" />
+                  </div>
+                </div>
               ))}
             </div>
           ) : filteredInnovators.length > 0 ? (
             <>
-              <div className="bh-innovators-grid">
-                {visibleInnovators.map((innovator, index) => (
-                  <InnovatorDirectoryCard
-                    key={innovator.id}
-                    innovator={innovator}
-                    index={index % PAGE_SIZE}
-                  />
+              <div className="bh-hall-grid">
+                {visibleInnovators.map((person, index) => (
+                  <motion.div
+                    key={person.id}
+                    initial={{ opacity: 0, y: 12 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: "-30px" }}
+                    transition={{
+                      delay: Math.min((index % PAGE_SIZE) * 0.03, 0.35),
+                      duration: 0.4,
+                    }}
+                  >
+                    <Link to={`/innovators/${person.id}`} className="bh-hall-person">
+                      <Avatar
+                        person={person}
+                        className="bh-hall-avatar"
+                        fallbackClassName="bh-hall-avatar-fallback"
+                      />
+                      <div className="bh-hall-copy">
+                        <h3>{person.name}</h3>
+                        <p>{person.role || "Innovator"}</p>
+                      </div>
+                    </Link>
+                  </motion.div>
                 ))}
               </div>
 
               <div className="bh-innovators-pagination">
                 <p className="bh-innovators-pagination-meta">
-                  Showing {visibleInnovators.length} of{" "}
-                  {filteredInnovators.length}
+                  Showing {visibleInnovators.length} of {filteredInnovators.length}
                 </p>
 
                 {hasMore ? (

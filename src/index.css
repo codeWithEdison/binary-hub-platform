@@ -2088,107 +2088,28 @@
   }
 }
 
-/* ── Innovators directory ────────────────────────────────── */
+/* ── Innovators directory (landing hall-of-fame style) ── */
 .bh-innovators-page {
   min-height: 100vh;
   background: #fff;
   color: #0f172a;
 }
 
-.bh-innovators-hero {
-  padding: 7rem 1.25rem 2rem;
-  background: linear-gradient(180deg, #e8f3f8 0%, #fff 100%);
+.bh-innovators-page-section {
+  padding-top: 6.5rem;
 }
 
-.bh-innovators-hero-inner,
-.bh-innovators-container {
-  width: 100%;
-  max-width: 1200px;
-  margin-inline: auto;
-  padding-inline: 0.5rem;
-}
-
-.bh-innovators-hero-inner {
-  text-align: center;
-}
-
-.bh-innovators-brand {
-  margin: 0 0 0.65rem;
-  color: #00628b;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: clamp(1.35rem, 2.5vw, 1.75rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-}
-
-.bh-innovators-hero h1 {
-  margin: 0;
-  color: #0f172a;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: clamp(2rem, 4vw, 3.25rem);
-  font-weight: 700;
-  letter-spacing: -0.03em;
-  line-height: 1.1;
-}
-
-.bh-innovators-hero p:last-child {
-  margin: 0.9rem auto 0;
-  max-width: 34rem;
-  color: #64748b;
-  font-size: 1rem;
-  line-height: 1.6;
-}
-
-.bh-innovators-eyebrow {
-  margin: 0 0 0.55rem;
-  color: #00628b;
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.bh-innovators-featured {
-  padding: 1rem 1.25rem 2.5rem;
-}
-
-.bh-innovators-featured-heading,
-.bh-innovators-toolbar > div:first-child {
-  margin-bottom: 1.5rem;
-}
-
-.bh-innovators-featured-heading h2,
-.bh-innovators-toolbar h2 {
-  margin: 0;
-  font-family: "Plus Jakarta Sans", sans-serif;
-  font-size: clamp(1.45rem, 2.5vw, 1.85rem);
-  font-weight: 700;
-  letter-spacing: -0.025em;
-}
-
-.bh-innovators-featured-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
-}
-
-.bh-innovators-directory {
-  padding: 1rem 1.25rem 4.5rem;
-  background: #f4f7f9;
-}
-
-.bh-innovators-toolbar {
+.bh-innovators-controls {
+  margin: 0 0 1.75rem;
   display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  justify-content: space-between;
-  gap: 1.25rem;
-  margin-bottom: 1.25rem;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .bh-innovators-search {
   position: relative;
-  width: min(100%, 20rem);
+  width: min(100%, 22rem);
+  margin-inline: auto;
 }
 
 .bh-innovators-search svg {
@@ -2206,23 +2127,24 @@
   padding: 0 0.9rem 0 2.35rem;
   border: 1px solid rgba(15, 23, 42, 0.1);
   border-radius: 7px;
-  background: #fff;
+  background: #f8fafc;
   color: #0f172a;
   font-size: 0.875rem;
   outline: none;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
 .bh-innovators-search input:focus {
   border-color: rgba(0, 98, 139, 0.45);
+  background: #fff;
   box-shadow: 0 0 0 3px rgba(0, 98, 139, 0.12);
 }
 
 .bh-innovators-tabs {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 0.35rem;
-  margin-bottom: 1.5rem;
   border-bottom: 1px solid rgba(15, 23, 42, 0.08);
 }
 
@@ -2261,10 +2183,71 @@
   color: #00628b;
 }
 
-.bh-innovators-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 1rem;
+.bh-innovators-empty {
+  padding: 4rem 1rem;
+  text-align: center;
+  color: #94a3b8;
+}
+
+.bh-innovators-empty p {
+  margin: 0.75rem 0 0;
+  color: #64748b;
+  font-size: 0.92rem;
+}
+
+.bh-innovators-pagination {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.85rem;
+}
+
+.bh-innovators-pagination-meta {
+  margin: 0;
+  color: #64748b;
+  font-size: 0.82rem;
+  font-weight: 500;
+}
+
+.bh-innovators-pagination-end {
+  margin: 0;
+  color: #94a3b8;
+  font-size: 0.8rem;
+}
+
+.bh-innovators-load-more {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.45rem;
+  min-width: 9.5rem;
+  height: 2.65rem;
+  padding: 0 1.25rem;
+  border: 1px solid rgba(0, 98, 139, 0.22);
+  border-radius: 7px;
+  background: #fff;
+  color: #00628b;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.bh-innovators-load-more:hover:not(:disabled) {
+  background: #e8f3f8;
+  border-color: rgba(0, 98, 139, 0.4);
+}
+
+.bh-innovators-load-more:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.bh-innovators-scroll-sentinel {
+  width: 100%;
+  height: 1px;
+  pointer-events: none;
 }
 
 .bh-innovator-card {
@@ -2405,73 +2388,6 @@
 
 .bh-innovator-card:hover .bh-innovator-card-link {
   color: #00628b;
-}
-
-.bh-innovators-empty {
-  padding: 4rem 1rem;
-  text-align: center;
-  color: #94a3b8;
-}
-
-.bh-innovators-empty p {
-  margin: 0.75rem 0 0;
-  color: #64748b;
-  font-size: 0.92rem;
-}
-
-.bh-innovators-pagination {
-  margin-top: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.85rem;
-}
-
-.bh-innovators-pagination-meta {
-  margin: 0;
-  color: #64748b;
-  font-size: 0.82rem;
-  font-weight: 500;
-}
-
-.bh-innovators-pagination-end {
-  margin: 0;
-  color: #94a3b8;
-  font-size: 0.8rem;
-}
-
-.bh-innovators-load-more {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.45rem;
-  min-width: 9.5rem;
-  height: 2.65rem;
-  padding: 0 1.25rem;
-  border: 1px solid rgba(0, 98, 139, 0.22);
-  border-radius: 7px;
-  background: #fff;
-  color: #00628b;
-  font-size: 0.875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
-}
-
-.bh-innovators-load-more:hover:not(:disabled) {
-  background: #e8f3f8;
-  border-color: rgba(0, 98, 139, 0.4);
-}
-
-.bh-innovators-load-more:disabled {
-  opacity: 0.7;
-  cursor: wait;
-}
-
-.bh-innovators-scroll-sentinel {
-  width: 100%;
-  height: 1px;
-  pointer-events: none;
 }
 
 /* ── Innovator detail ────────────────────────────────────── */
@@ -2762,11 +2678,6 @@
 }
 
 @media (max-width: 960px) {
-  .bh-innovators-featured-grid,
-  .bh-innovators-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
   .bh-innovator-detail-hero-grid,
   .bh-innovator-detail-layout {
     grid-template-columns: 1fr;
@@ -2782,13 +2693,12 @@
 }
 
 @media (max-width: 640px) {
-  .bh-innovators-hero {
-    padding-top: 6rem;
+  .bh-innovators-page-section {
+    padding-top: 5.75rem;
   }
 
-  .bh-innovators-featured-grid,
-  .bh-innovators-grid {
-    grid-template-columns: 1fr;
+  .bh-innovators-search {
+    width: 100%;
   }
 
   .bh-innovator-detail-hero {
