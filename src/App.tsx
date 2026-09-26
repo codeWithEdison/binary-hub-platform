@@ -7,6 +7,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ScrollToTop from "./components/ScrollToTop";
 import PageLoader from "./components/PageLoader";
+import { AdminOverviewSkeleton } from "./components/admin/AdminSkeletons";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
 const Index = lazy(() => import("./pages/Index"));
@@ -127,7 +128,9 @@ const App = () => (
               path="/admin"
               element={
                 <ProtectedRoute requireRole="admin">
-                  <AdminDashboard />
+                  <Suspense fallback={<AdminOverviewSkeleton />}>
+                    <AdminDashboard />
+                  </Suspense>
                 </ProtectedRoute>
               }
             >

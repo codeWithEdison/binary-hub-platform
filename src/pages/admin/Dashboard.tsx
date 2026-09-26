@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState, Suspense } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
   Bell,
@@ -20,6 +20,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { AdminOverviewSkeleton, AdminPageSkeleton } from "@/components/admin/AdminSkeletons";
 
 const navGroups = [
   {
@@ -223,7 +224,17 @@ const AdminDashboard = () => {
           </Button>
         </header>
 
-        <Outlet />
+        <Suspense
+          fallback={
+            location.pathname === "/admin" || location.pathname === "/admin/" ? (
+              <AdminOverviewSkeleton />
+            ) : (
+              <AdminPageSkeleton />
+            )
+          }
+        >
+          <Outlet />
+        </Suspense>
       </div>
     </div>
   );

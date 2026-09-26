@@ -20,8 +20,8 @@ import {
   Newspaper,
   Users,
 } from "lucide-react";
-import { Skeleton } from "@/components/ui/skeleton";
 import { AdminPage, AdminPageHeader } from "@/components/admin/AdminPage";
+import { AdminOverviewSkeleton } from "@/components/admin/AdminSkeletons";
 import { useInnovators } from "@/hooks/useInnovators";
 import { useProjects } from "@/hooks/useProjects";
 import { useEvents } from "@/hooks/useEvents";
@@ -168,24 +168,7 @@ const Overview = () => {
   ];
 
   if (isLoading) {
-    return (
-      <AdminPage>
-        <div className="mb-6 space-y-2">
-          <Skeleton className="h-4 w-16" />
-          <Skeleton className="h-8 w-56" />
-          <Skeleton className="h-4 w-72" />
-        </div>
-        <div className="bh-admin-stat-grid">
-          {Array.from({ length: 4 }).map((_, i) => (
-            <Skeleton key={i} className="h-28 w-full rounded-[0.75rem]" />
-          ))}
-        </div>
-        <div className="bh-admin-chart-grid">
-          <Skeleton className="h-[340px] w-full rounded-[0.75rem]" />
-          <Skeleton className="h-[340px] w-full rounded-[0.75rem]" />
-        </div>
-      </AdminPage>
-    );
+    return <AdminOverviewSkeleton />;
   }
 
   return (
