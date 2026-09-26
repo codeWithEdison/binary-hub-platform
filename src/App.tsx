@@ -1,4 +1,4 @@
-
+import { lazy, Suspense, type ComponentType } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -6,48 +6,70 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ScrollToTop from "./components/ScrollToTop";
-import Index from "./pages/Index";
-import About from "./pages/About";
-import InnovatorsDirectory from "./pages/InnovatorsDirectory";
-import InnovationShowcase from "./pages/InnovationShowcase";
-import Events from "./pages/Events";
-import EventDetail from "./pages/EventDetail";
-import Partners from "./pages/Partners";
-import Contact from "./pages/Contact";
-import NotFound from "./pages/NotFound";
-import ProjectDetail from "./pages/ProjectDetail";
-import InnovatorDetail from "./pages/InnovatorDetail";
-import AnnouncementsPage from "./pages/AnnouncementsPage";
-import AnnouncementDetail from "./pages/AnnouncementDetail";
-import Blog from "./pages/Blog";
-import BlogDetail from "./pages/BlogDetail";
-import Auth from "./pages/Auth";
-import Login from "./pages/Login";
+import PageLoader from "./components/PageLoader";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 
-// Admin Routes
-import AdminDashboard from "./pages/admin/Dashboard";
-import Overview from "./pages/admin/Overview";
-import Members from "./pages/admin/Members";
-import ProjectManagement from "./pages/admin/ProjectManagement";
-import EventManagement from "./pages/admin/EventManagement";
-import AnnouncementManagement from "./pages/admin/AnnouncementManagement";
-import ApplicantManagement from "./pages/admin/ApplicantManagement";
-import ApplicationSetup from "./pages/admin/ApplicationSetup";
-import InnovatorForm from "./pages/admin/InnovatorForm";
-import ProjectForm from "./pages/admin/ProjectForm";
-import EventForm from "./pages/admin/EventForm";
-import AnnouncementForm from "./pages/admin/AnnouncementForm";
-import { StakeholderManagement } from "./pages/admin/StakeholderManagement";
-import ApplicationForm from "./pages/ApplicationForm";
-import ApplicationFormRedesigned from "./pages/ApplicationFormRedesigned";
-import BlogManagement from "./pages/admin/BlogManagement";
-import BlogForm from "./pages/admin/BlogForm";
-import HeroSlidesManagement from "./pages/admin/HeroSlidesManagement";
-import HeroSlideForm from "./pages/admin/HeroSlideForm";
-import Inquiries from "./pages/admin/Inquiries";
+const Index = lazy(() => import("./pages/Index"));
+const About = lazy(() => import("./pages/About"));
+const InnovatorsDirectory = lazy(() => import("./pages/InnovatorsDirectory"));
+const InnovationShowcase = lazy(() => import("./pages/InnovationShowcase"));
+const Events = lazy(() => import("./pages/Events"));
+const EventDetail = lazy(() => import("./pages/EventDetail"));
+const Partners = lazy(() => import("./pages/Partners"));
+const Contact = lazy(() => import("./pages/Contact"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const ProjectDetail = lazy(() => import("./pages/ProjectDetail"));
+const InnovatorDetail = lazy(() => import("./pages/InnovatorDetail"));
+const AnnouncementsPage = lazy(() => import("./pages/AnnouncementsPage"));
+const AnnouncementDetail = lazy(() => import("./pages/AnnouncementDetail"));
+const Blog = lazy(() => import("./pages/Blog"));
+const BlogDetail = lazy(() => import("./pages/BlogDetail"));
+const Auth = lazy(() => import("./pages/Auth"));
+const Login = lazy(() => import("./pages/Login"));
+const ApplicationFormRedesigned = lazy(() => import("./pages/ApplicationFormRedesigned"));
 
-const queryClient = new QueryClient();
+const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
+const Overview = lazy(() => import("./pages/admin/Overview"));
+const Members = lazy(() => import("./pages/admin/Members"));
+const ProjectManagement = lazy(() => import("./pages/admin/ProjectManagement"));
+const EventManagement = lazy(() => import("./pages/admin/EventManagement"));
+const AnnouncementManagement = lazy(() => import("./pages/admin/AnnouncementManagement"));
+const ApplicantManagement = lazy(() => import("./pages/admin/ApplicantManagement"));
+const ApplicationSetup = lazy(() => import("./pages/admin/ApplicationSetup"));
+const InnovatorForm = lazy(() => import("./pages/admin/InnovatorForm"));
+const ProjectForm = lazy(() => import("./pages/admin/ProjectForm"));
+const EventForm = lazy(() => import("./pages/admin/EventForm"));
+const AnnouncementForm = lazy(() => import("./pages/admin/AnnouncementForm"));
+const StakeholderManagement = lazy(() =>
+  import("./pages/admin/StakeholderManagement").then((module) => ({
+    default: module.StakeholderManagement,
+  }))
+);
+const BlogManagement = lazy(() => import("./pages/admin/BlogManagement"));
+const BlogForm = lazy(() => import("./pages/admin/BlogForm"));
+const HeroSlidesManagement = lazy(() => import("./pages/admin/HeroSlidesManagement"));
+const HeroSlideForm = lazy(() => import("./pages/admin/HeroSlideForm"));
+const Inquiries = lazy(() => import("./pages/admin/Inquiries"));
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 60_000,
+      gcTime: 5 * 60_000,
+      refetchOnWindowFocus: false,
+      retry: 1,
+    },
+  },
+});
+
+const withNavbar = (Page: ComponentType) => (
+  <>
+    <Navbar />
+    <Suspense fallback={<PageLoader />}>
+      <Page />
+    </Suspense>
+  </>
+);
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -56,82 +78,90 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
-        <Routes>
-          {/* Auth Routes */}
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/login" element={<Login />} />
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/login" element={<Login />} />
 
-          {/* Public Routes with Navbar */}
-          <Route path="/" element={<><Navbar /><Index /></>} />
-          <Route path="/about" element={<><Navbar /><About /></>} />
-          <Route path="/innovators" element={<><Navbar /><InnovatorsDirectory /></>} />
-          <Route path="/innovators/:innovatorId" element={<><Navbar /><InnovatorDetail /></>} />
-          <Route path="/innovations" element={<><Navbar /><InnovationShowcase /></>} />
-          <Route path="/projects" element={<><Navbar /><InnovationShowcase /></>} />
-          <Route path="/projects/:projectId" element={<><Navbar /><ProjectDetail /></>} />
-          <Route path="/events" element={<><Navbar /><Events /></>} />
-          <Route path="/events/:eventId" element={<><Navbar /><EventDetail /></>} />
-          <Route path="/announcements" element={<><Navbar /><AnnouncementsPage /></>} />
-          <Route path="/announcements/:announcementId" element={<><Navbar /><AnnouncementDetail /></>} />
-          <Route path="/blog" element={<><Navbar /><Blog /></>} />
-          <Route path="/blog/:slug" element={<><Navbar /><BlogDetail /></>} />
-          <Route path="/partners" element={<><Navbar /><Partners /></>} />
-          <Route path="/contact" element={<><Navbar /><Contact /></>} />
+            <Route path="/" element={withNavbar(Index)} />
+            <Route path="/about" element={withNavbar(About)} />
+            <Route path="/innovators" element={withNavbar(InnovatorsDirectory)} />
+            <Route path="/innovators/:innovatorId" element={withNavbar(InnovatorDetail)} />
+            <Route path="/innovations" element={withNavbar(InnovationShowcase)} />
+            <Route path="/projects" element={withNavbar(InnovationShowcase)} />
+            <Route path="/projects/:projectId" element={withNavbar(ProjectDetail)} />
+            <Route path="/events" element={withNavbar(Events)} />
+            <Route path="/events/:eventId" element={withNavbar(EventDetail)} />
+            <Route path="/announcements" element={withNavbar(AnnouncementsPage)} />
+            <Route path="/announcements/:announcementId" element={withNavbar(AnnouncementDetail)} />
+            <Route path="/blog" element={withNavbar(Blog)} />
+            <Route path="/blog/:slug" element={withNavbar(BlogDetail)} />
+            <Route path="/partners" element={withNavbar(Partners)} />
+            <Route path="/contact" element={withNavbar(Contact)} />
 
-          {/* Applications can be started anonymously and saved in this browser. */}
-          <Route path="/applications/form" element={<><Navbar /><ApplicationFormRedesigned /></>} />
-          <Route path="/applications/profile" element={<Navigate to="/applications/form" replace />} />
-          <Route path="/inquiries" element={
-            <ProtectedRoute requireRole="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          }>
-            <Route index element={<Inquiries />} />
-          </Route>
-          <Route path="/members" element={
-            <ProtectedRoute requireRole="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          }>
-            <Route index element={<Members />} />
-          </Route>
+            <Route path="/applications/form" element={withNavbar(ApplicationFormRedesigned)} />
+            <Route path="/applications/profile" element={<Navigate to="/applications/form" replace />} />
 
-          {/* Admin Routes */}
-          <Route path="/admin" element={
-            <ProtectedRoute requireRole="admin">
-              <AdminDashboard />
-            </ProtectedRoute>
-          }>
-            <Route index element={<Overview />} />
-            <Route path="innovators" element={<Navigate to="/admin/members" replace />} />
-            <Route path="members" element={<Members />} />
-            <Route path="innovators/new" element={<Navigate to="/admin/members" replace />} />
-            <Route path="members/new" element={<InnovatorForm />} />
-            <Route path="innovators/edit/:id" element={<InnovatorForm />} />
-            <Route path="projects" element={<ProjectManagement />} />
-            <Route path="projects/new" element={<ProjectForm />} />
-            <Route path="projects/edit/:id" element={<ProjectForm />} />
-            <Route path="events" element={<EventManagement />} />
-            <Route path="events/new" element={<EventForm />} />
-            <Route path="events/edit/:id" element={<EventForm />} />
-            <Route path="announcements" element={<AnnouncementManagement />} />
-            <Route path="announcements/new" element={<AnnouncementForm />} />
-            <Route path="announcements/edit/:id" element={<AnnouncementForm />} />
-            <Route path="blog" element={<BlogManagement />} />
-            <Route path="blog/new" element={<BlogForm />} />
-            <Route path="blog/edit/:id" element={<BlogForm />} />
-            <Route path="hero-slides" element={<HeroSlidesManagement />} />
-            <Route path="hero-slides/new" element={<HeroSlideForm />} />
-            <Route path="hero-slides/edit/:id" element={<HeroSlideForm />} />
-            <Route path="stakeholders" element={<StakeholderManagement />} />
-            <Route path="applicants" element={<ApplicantManagement />} />
-            <Route path="inquiries" element={<Inquiries />} />
-            <Route path="application-setup" element={<ApplicationSetup />} />
-          </Route>
+            <Route
+              path="/inquiries"
+              element={
+                <ProtectedRoute requireRole="admin">
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Inquiries />} />
+            </Route>
+            <Route
+              path="/members"
+              element={
+                <ProtectedRoute requireRole="admin">
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Members />} />
+            </Route>
 
-          {/* Catch-all route for 404 */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+            <Route
+              path="/admin"
+              element={
+                <ProtectedRoute requireRole="admin">
+                  <AdminDashboard />
+                </ProtectedRoute>
+              }
+            >
+              <Route index element={<Overview />} />
+              <Route path="innovators" element={<Navigate to="/admin/members" replace />} />
+              <Route path="members" element={<Members />} />
+              <Route path="innovators/new" element={<Navigate to="/admin/members/new" replace />} />
+              <Route path="members/new" element={<InnovatorForm />} />
+              <Route path="members/edit/:id" element={<InnovatorForm />} />
+              <Route path="innovators/edit/:id" element={<InnovatorForm />} />
+              <Route path="projects" element={<ProjectManagement />} />
+              <Route path="projects/new" element={<ProjectForm />} />
+              <Route path="projects/edit/:id" element={<ProjectForm />} />
+              <Route path="events" element={<EventManagement />} />
+              <Route path="events/new" element={<EventForm />} />
+              <Route path="events/edit/:id" element={<EventForm />} />
+              <Route path="announcements" element={<AnnouncementManagement />} />
+              <Route path="announcements/new" element={<AnnouncementForm />} />
+              <Route path="announcements/edit/:id" element={<AnnouncementForm />} />
+              <Route path="blog" element={<BlogManagement />} />
+              <Route path="blog/new" element={<BlogForm />} />
+              <Route path="blog/edit/:id" element={<BlogForm />} />
+              <Route path="hero-slides" element={<HeroSlidesManagement />} />
+              <Route path="hero-slides/new" element={<HeroSlideForm />} />
+              <Route path="hero-slides/edit/:id" element={<HeroSlideForm />} />
+              <Route path="stakeholders" element={<StakeholderManagement />} />
+              <Route path="applicants" element={<ApplicantManagement />} />
+              <Route path="inquiries" element={<Inquiries />} />
+              <Route path="application-setup" element={<ApplicationSetup />} />
+            </Route>
+
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

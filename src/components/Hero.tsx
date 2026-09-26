@@ -2,8 +2,8 @@ import React, { useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { useHeroSlides } from "@/hooks/useHeroSlides";
-import { useProjects } from "@/hooks/useProjects";
-import { useInnovators } from "@/hooks/useInnovators";
+import { supabase } from "@/integrations/supabase/client";
+import { cachedQuery } from "@/lib/queryCache";
 
 const benefits = ["Student-led", "Mentor supported", "Impact focused"] as const;
 
@@ -41,12 +41,56 @@ const fallbackSlides = [
   },
 ];
 
+type HeroCounts = {
+  solutions: number;
+  innovators: number;
+  mentors: number;
+};
+
 const Hero = () => {
   const [activeSlide, setActiveSlide] = useState(0);
+  const [statsLoading, setStatsLoading] = useState(true);
+  const [counts, setCounts] = useState<HeroCounts>({
+    solutions: 0,
+    innovators: 0,
+    mentors: 0,
+  });
   const { slides } = useHeroSlides();
-  const { projects, loading: projectsLoading } = useProjects();
-  const { innovators, loading: innovatorsLoading } = useInnovators();
-  const statsLoading = projectsLoading || innovatorsLoading;
+
+  useEffect(() => {
+    let cancelled = false;
+    setStatsLoading(true);
+    cachedQuery("hero:counts", async () => {
+      const [projectsRes, innovatorsRes, mentorsRes] = await Promise.all([
+        supabase.from("projects").select("id", { count: "exact", head: true }),
+        supabase
+          .from("innovators")
+          .select("id", { count: "exact", head: true })
+          .eq("account_status", "active"),
+        supabase
+          .from("innovators")
+          .select("id", { count: "exact", head: true })
+          .eq("account_status", "active")
+          .eq("status", "mentor"),
+      ]);
+
+      return {
+        solutions: projectsRes.count ?? 0,
+        innovators: innovatorsRes.count ?? 0,
+        mentors: mentorsRes.count ?? 0,
+      } satisfies HeroCounts;
+    })
+      .then((data) => {
+        if (!cancelled) setCounts(data);
+      })
+      .finally(() => {
+        if (!cancelled) setStatsLoading(false);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const displayedSlides =
     slides.length > 0
@@ -57,33 +101,29 @@ const Hero = () => {
         }))
       : fallbackSlides;
 
-  const displayedStats = useMemo(() => {
-    const totalMembers = innovators.length;
-    const mentorCount = innovators.filter((person) => person.status === "mentor").length;
-    const solutionsCount = projects.length;
-
-    return [
+  const displayedStats = useMemo(
+    () => [
       {
         id: "developed-solutions",
-        value: String(solutionsCount > 0 ? solutionsCount : HERO_STAT_FALLBACKS.solutions),
+        value: String(counts.solutions > 0 ? counts.solutions : HERO_STAT_FALLBACKS.solutions),
         label: "Solutions",
         fullLabel: "Developed Solutions",
       },
       {
         id: "total-innovators",
-        value: String(totalMembers > 0 ? totalMembers : HERO_STAT_FALLBACKS.innovators),
+        value: String(counts.innovators > 0 ? counts.innovators : HERO_STAT_FALLBACKS.innovators),
         label: "Innovators",
         fullLabel: "Total Innovators",
       },
       {
         id: "mentors",
-        value: String(mentorCount > 0 ? mentorCount : HERO_STAT_FALLBACKS.mentors),
+        value: String(counts.mentors > 0 ? counts.mentors : HERO_STAT_FALLBACKS.mentors),
         label: "Mentors",
         fullLabel: "Mentors",
       },
-    ];
-  }, [projects.length, innovators]);
-
+    ],
+    [counts]
+  );
   useEffect(() => {
     if (displayedSlides.length === 0) return;
     const interval = window.setInterval(() => {

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { cachedQuery, invalidateCache } from "@/lib/queryCache";
 
 export interface BlogPost {
   id: string;
@@ -27,30 +28,32 @@ export const useBlogPosts = (admin = false, silent = false) => {
   const [posts, setPosts] = useState<BlogPost[]>([]);
   const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const cacheKey = admin ? "blog:admin" : "blog:published";
 
   const fetchPosts = async () => {
     setLoading(true);
-    const query = (supabase as any)
-      .from("blog_posts")
-      .select("*")
-      .order("is_main", { ascending: false })
-      .order("publish_date", { ascending: false, nullsFirst: false });
+    try {
+      const data = await cachedQuery(cacheKey, async () => {
+        const query = (supabase as any)
+          .from("blog_posts")
+          .select("*")
+          .order("is_main", { ascending: false })
+          .order("publish_date", { ascending: false, nullsFirst: false });
 
-    const { data, error } = admin ? await query : await query.eq("published", true);
-
-    if (error) {
-      if (silent) {
-        setPosts([]);
-        setLoading(false);
-        return;
-      }
-      toast({
-        title: "Error",
-        description: "Failed to fetch blog posts",
-        variant: "destructive",
+        const { data, error } = admin ? await query : await query.eq("published", true);
+        if (error) throw error;
+        return (data as BlogPost[]) || [];
       });
-    } else {
-      setPosts((data as BlogPost[]) || []);
+      setPosts(data);
+    } catch {
+      if (!silent) {
+        toast({
+          title: "Error",
+          description: "Failed to fetch blog posts",
+          variant: "destructive",
+        });
+      }
+      setPosts([]);
     }
     setLoading(false);
   };
@@ -59,6 +62,10 @@ export const useBlogPosts = (admin = false, silent = false) => {
     fetchPosts();
   }, [admin]);
 
+  const refreshPosts = async () => {
+    invalidateCache("blog");
+    await fetchPosts();
+  };
   const clearCurrentMainPost = async (exceptId?: string) => {
     let query = (supabase as any).from("blog_posts").update({ is_main: false }).eq("is_main", true);
     if (exceptId) query = query.neq("id", exceptId);
@@ -85,7 +92,7 @@ export const useBlogPosts = (admin = false, silent = false) => {
     }
 
     toast({ title: "Success", description: "Blog post created successfully" });
-    await fetchPosts();
+    await refreshPosts();
     return { data: data as BlogPost, error: null };
   };
 
@@ -110,7 +117,7 @@ export const useBlogPosts = (admin = false, silent = false) => {
     }
 
     toast({ title: "Success", description: "Blog post updated successfully" });
-    await fetchPosts();
+    await refreshPosts();
     return { data: data as BlogPost, error: null };
   };
 
@@ -120,10 +127,10 @@ export const useBlogPosts = (admin = false, silent = false) => {
       toast({ title: "Error", description: error.message || "Failed to delete blog post", variant: "destructive" });
     } else {
       toast({ title: "Success", description: "Blog post deleted successfully" });
-      await fetchPosts();
+      await refreshPosts();
     }
     return { error };
   };
 
-  return { posts, loading, createPost, updatePost, deletePost, refetch: fetchPosts };
+  return { posts, loading, createPost, updatePost, deletePost, refetch: refreshPosts };
 };

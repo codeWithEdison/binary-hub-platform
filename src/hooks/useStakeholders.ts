@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { cachedQuery, invalidateCache } from "@/lib/queryCache";
 
 export interface Stakeholder {
   id: string;
@@ -26,21 +27,30 @@ export const useStakeholders = () => {
 
   const fetchStakeholders = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("stakeholders")
-      .select("*")
-      .order("created_at", { ascending: false });
+    try {
+      const data = await cachedQuery("stakeholders:all", async () => {
+        const { data, error } = await supabase
+          .from("stakeholders")
+          .select("*")
+          .order("created_at", { ascending: false });
 
-    if (error) {
+        if (error) throw error;
+        return data || [];
+      });
+      setStakeholders(data);
+    } catch {
       toast({
         title: "Error",
         description: "Failed to fetch stakeholders",
-        variant: "destructive"
+        variant: "destructive",
       });
-    } else {
-      setStakeholders(data || []);
     }
     setLoading(false);
+  };
+
+  const refreshStakeholders = () => {
+    invalidateCache("stakeholders");
+    return fetchStakeholders();
   };
 
   const createStakeholder = async (stakeholder: Omit<Stakeholder, "id" | "created_at" | "updated_at">) => {
@@ -54,60 +64,54 @@ export const useStakeholders = () => {
       toast({
         title: "Error",
         description: "Failed to create stakeholder",
-        variant: "destructive"
+        variant: "destructive",
       });
     } else {
       toast({
         title: "Success",
-        description: "Stakeholder created successfully"
+        description: "Stakeholder created successfully",
       });
-      fetchStakeholders();
+      await refreshStakeholders();
     }
 
     return { data, error };
   };
 
   const updateStakeholder = async (id: string, updates: Partial<Stakeholder>) => {
-    const { error } = await supabase
-      .from("stakeholders")
-      .update(updates)
-      .eq("id", id);
+    const { error } = await supabase.from("stakeholders").update(updates).eq("id", id);
 
     if (error) {
       toast({
         title: "Error",
         description: "Failed to update stakeholder",
-        variant: "destructive"
+        variant: "destructive",
       });
     } else {
       toast({
         title: "Success",
-        description: "Stakeholder updated successfully"
+        description: "Stakeholder updated successfully",
       });
-      fetchStakeholders();
+      await refreshStakeholders();
     }
 
     return { error };
   };
 
   const deleteStakeholder = async (id: string) => {
-    const { error } = await supabase
-      .from("stakeholders")
-      .delete()
-      .eq("id", id);
+    const { error } = await supabase.from("stakeholders").delete().eq("id", id);
 
     if (error) {
       toast({
         title: "Error",
         description: "Failed to delete stakeholder",
-        variant: "destructive"
+        variant: "destructive",
       });
     } else {
       toast({
         title: "Success",
-        description: "Stakeholder deleted successfully"
+        description: "Stakeholder deleted successfully",
       });
-      fetchStakeholders();
+      await refreshStakeholders();
     }
 
     return { error };
@@ -119,6 +123,6 @@ export const useStakeholders = () => {
     createStakeholder,
     updateStakeholder,
     deleteStakeholder,
-    refetch: fetchStakeholders
+    refetch: refreshStakeholders,
   };
 };

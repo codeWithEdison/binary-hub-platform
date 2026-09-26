@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { cachedQuery, invalidateCache } from "@/lib/queryCache";
 
 export interface Project {
   id: string;
@@ -43,6 +44,16 @@ export interface Project {
   }>;
 }
 
+const PROJECT_SELECT = `
+  *,
+  categories:project_categories(category),
+  team:project_team(name, role, image),
+  technologies:project_technologies(technology),
+  links:project_links(url, link_type),
+  gallery:project_gallery(image_url),
+  innovators:project_innovators(innovator_id)
+`;
+
 export const useProjects = () => {
   const [projects, setProjects] = useState<Project[]>([]);
   const [featuredProjects, setFeaturedProjects] = useState<Project[]>([]);
@@ -56,55 +67,52 @@ export const useProjects = () => {
 
   const fetchProjects = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("projects")
-      .select(`
-        *,
-        categories:project_categories(category),
-        team:project_team(name, role, image),
-        technologies:project_technologies(technology),
-        links:project_links(url, link_type),
-        gallery:project_gallery(image_url),
-        innovators:project_innovators(innovator_id)
-      `)
-      .order("created_at", { ascending: false });
+    try {
+      const data = await cachedQuery("projects:all", async () => {
+        const { data, error } = await supabase
+          .from("projects")
+          .select(PROJECT_SELECT)
+          .order("created_at", { ascending: false });
 
-    if (error) {
+        if (error) throw error;
+        return (data as any) || [];
+      });
+      setProjects(data);
+    } catch {
       toast({
         title: "Error",
         description: "Failed to fetch projects",
-        variant: "destructive"
+        variant: "destructive",
       });
-    } else {
-      setProjects((data as any) || []);
     }
     setLoading(false);
   };
 
   const fetchFeaturedProjects = async () => {
-    const { data, error } = await (supabase as any)
-      .from("projects")
-      .select(`
-        *,
-        categories:project_categories(category),
-        team:project_team(name, role, image),
-        technologies:project_technologies(technology),
-        links:project_links(url, link_type),
-        gallery:project_gallery(image_url),
-        innovators:project_innovators(innovator_id)
-      `)
-      .eq("featured", true)
-      .order("created_at", { ascending: false });
+    try {
+      const data = await cachedQuery("projects:featured", async () => {
+        const { data, error } = await (supabase as any)
+          .from("projects")
+          .select(PROJECT_SELECT)
+          .eq("featured", true)
+          .order("created_at", { ascending: false });
 
-    if (error) {
+        if (error) throw error;
+        return (data as any) || [];
+      });
+      setFeaturedProjects(data);
+    } catch {
       toast({
         title: "Error",
         description: "Failed to fetch featured projects",
-        variant: "destructive"
+        variant: "destructive",
       });
-    } else {
-      setFeaturedProjects((data as any) || []);
     }
+  };
+
+  const refreshProjects = () => {
+    invalidateCache("projects");
+    return Promise.all([fetchProjects(), fetchFeaturedProjects()]);
   };
 
   const createProject = async (project: Omit<Project, "id" | "created_at" | "updated_at">) => {
@@ -186,8 +194,7 @@ export const useProjects = () => {
         title: "Success",
         description: "Project created successfully"
       });
-      fetchProjects();
-      fetchFeaturedProjects();
+      await refreshProjects();
 
       return { data: projectResult, error: null };
     } catch (error) {
@@ -300,8 +307,7 @@ export const useProjects = () => {
         title: "Success",
         description: "Project updated successfully"
       });
-      fetchProjects();
-      fetchFeaturedProjects();
+      await refreshProjects();
 
       return { error: null };
     } catch (error) {
@@ -331,8 +337,7 @@ export const useProjects = () => {
         title: "Success",
         description: "Project deleted successfully"
       });
-      fetchProjects();
-      fetchFeaturedProjects();
+      await refreshProjects();
     }
 
     return { error };

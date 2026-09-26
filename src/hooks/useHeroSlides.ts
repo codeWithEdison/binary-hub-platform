@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { HERO_SLIDE_LIMITS, HeroSlide, HeroSlideInput } from "@/lib/heroSlides";
+import { cachedQuery, invalidateCache } from "@/lib/queryCache";
 
 const validateSlide = (slide: HeroSlideInput) => {
   if (slide.title.length > HERO_SLIDE_LIMITS.title) return `Title must be ${HERO_SLIDE_LIMITS.title} characters or fewer.`;
@@ -19,16 +20,29 @@ export const useHeroSlides = (admin = false) => {
 
   const fetchSlides = async () => {
     setLoading(true);
-    let query = (supabase as any).from("hero_slides").select("*").order("sort_order", { ascending: true }).order("created_at", { ascending: true });
-    if (!admin) query = query.eq("published", true);
-    const { data, error } = await query;
-
-    if (error) {
+    try {
+      const cacheKey = admin ? "hero_slides:admin" : "hero_slides:published";
+      const data = await cachedQuery(cacheKey, async () => {
+        let query = (supabase as any)
+          .from("hero_slides")
+          .select("*")
+          .order("sort_order", { ascending: true })
+          .order("created_at", { ascending: true });
+        if (!admin) query = query.eq("published", true);
+        const { data, error } = await query;
+        if (error) throw error;
+        return (data as HeroSlide[]) || [];
+      });
+      setSlides(data);
+    } catch {
       toast({ title: "Error", description: "Failed to fetch hero slides", variant: "destructive" });
-    } else {
-      setSlides((data as HeroSlide[]) || []);
     }
     setLoading(false);
+  };
+
+  const refreshSlides = () => {
+    invalidateCache("hero_slides");
+    return fetchSlides();
   };
 
   useEffect(() => {
@@ -42,7 +56,7 @@ export const useHeroSlides = (admin = false) => {
     if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Success", description: "Hero slide created successfully" });
-      await fetchSlides();
+      await refreshSlides();
     }
     return { data: data as HeroSlide | null, error };
   };
@@ -63,7 +77,7 @@ export const useHeroSlides = (admin = false) => {
     if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Success", description: "Hero slide updated successfully" });
-      await fetchSlides();
+      await refreshSlides();
     }
     return { data: data as HeroSlide | null, error };
   };
@@ -73,10 +87,10 @@ export const useHeroSlides = (admin = false) => {
     if (error) toast({ title: "Error", description: error.message, variant: "destructive" });
     else {
       toast({ title: "Success", description: "Hero slide deleted successfully" });
-      await fetchSlides();
+      await refreshSlides();
     }
     return { error };
   };
 
-  return { slides, loading, createSlide, updateSlide, deleteSlide, refetch: fetchSlides };
+  return { slides, loading, createSlide, updateSlide, deleteSlide, refetch: refreshSlides };
 };

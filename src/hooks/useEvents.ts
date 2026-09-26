@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { cachedQuery, invalidateCache } from "@/lib/queryCache";
 
 export interface Event {
   id: string;
@@ -31,22 +32,31 @@ export const useEvents = () => {
 
   const fetchEvents = async () => {
     setLoading(true);
-    const { data, error } = await (supabase as any)
-      .from("events")
-      .select("*")
-      .eq("published", true)
-      .order("date", { ascending: true });
+    try {
+      const data = await cachedQuery("events:published", async () => {
+        const { data, error } = await (supabase as any)
+          .from("events")
+          .select("*")
+          .eq("published", true)
+          .order("date", { ascending: true });
 
-    if (error) {
+        if (error) throw error;
+        return (data as Event[]) || [];
+      });
+      setEvents(data);
+    } catch {
       toast({
         title: "Error",
         description: "Failed to fetch events",
-        variant: "destructive"
+        variant: "destructive",
       });
-    } else {
-      setEvents((data as any) || []);
     }
     setLoading(false);
+  };
+
+  const refreshEvents = () => {
+    invalidateCache("events");
+    return fetchEvents();
   };
 
   const createEvent = async (event: Omit<Event, "id" | "created_at" | "updated_at">) => {
@@ -61,23 +71,23 @@ export const useEvents = () => {
         toast({
           title: "Error",
           description: "Failed to create event",
-          variant: "destructive"
+          variant: "destructive",
         });
         return { data: null, error };
       }
 
       toast({
         title: "Success",
-        description: "Event created successfully"
+        description: "Event created successfully",
       });
-      fetchEvents();
+      await refreshEvents();
 
       return { data, error: null };
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to create event",
-        variant: "destructive"
+        variant: "destructive",
       });
       return { data: null, error };
     }
@@ -85,55 +95,49 @@ export const useEvents = () => {
 
   const updateEvent = async (id: string, updates: Partial<Event>) => {
     try {
-      const { error } = await (supabase as any)
-        .from("events")
-        .update(updates)
-        .eq("id", id);
+      const { error } = await (supabase as any).from("events").update(updates).eq("id", id);
 
       if (error) {
         toast({
           title: "Error",
           description: "Failed to update event",
-          variant: "destructive"
+          variant: "destructive",
         });
         return { error };
       }
 
       toast({
         title: "Success",
-        description: "Event updated successfully"
+        description: "Event updated successfully",
       });
-      fetchEvents();
+      await refreshEvents();
 
       return { error: null };
     } catch (error) {
       toast({
         title: "Error",
         description: "Failed to update event",
-        variant: "destructive"
+        variant: "destructive",
       });
       return { error };
     }
   };
 
   const deleteEvent = async (id: string) => {
-    const { error } = await (supabase as any)
-      .from("events")
-      .delete()
-      .eq("id", id);
+    const { error } = await (supabase as any).from("events").delete().eq("id", id);
 
     if (error) {
       toast({
         title: "Error",
         description: "Failed to delete event",
-        variant: "destructive"
+        variant: "destructive",
       });
     } else {
       toast({
         title: "Success",
-        description: "Event deleted successfully"
+        description: "Event deleted successfully",
       });
-      fetchEvents();
+      await refreshEvents();
     }
 
     return { error };
@@ -145,6 +149,6 @@ export const useEvents = () => {
     createEvent,
     updateEvent,
     deleteEvent,
-    refetch: fetchEvents
+    refetch: refreshEvents,
   };
 };
