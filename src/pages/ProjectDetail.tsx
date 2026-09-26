@@ -1,9 +1,26 @@
-import { ArrowLeft, Award, Building2, Calendar, Code2, ExternalLink, Github, Globe, Image as ImageIcon, Link as LinkIcon, TrendingUp, Users } from "lucide-react";
+import React from "react";
+import { motion } from "framer-motion";
+import {
+  ArrowLeft,
+  ArrowUpRight,
+  Calendar,
+  ExternalLink,
+  Github,
+  Globe,
+  Link as LinkIcon,
+  Users,
+} from "lucide-react";
 import { Link, useParams } from "react-router-dom";
 import Footer from "@/components/Footer";
-import { Badge } from "@/components/ui/badge";
-import { Skeleton } from "@/components/ui/skeleton";
+import ProjectCard from "@/components/ProjectCard";
+import ProjectThumb from "@/components/ProjectThumb";
 import { useProjects } from "@/hooks/useProjects";
+import {
+  formatProjectDate,
+  getLiveUrl,
+  getProjectYear,
+  linkLabel,
+} from "@/lib/projectMedia";
 
 const ProjectDetail = () => {
   const { projectId } = useParams();
@@ -11,49 +28,312 @@ const ProjectDetail = () => {
   const project = projects.find((item) => item.id === projectId);
 
   if (loading) {
-    return <div className="min-h-screen bg-[#fafafa] px-4 pb-12 pt-28 md:px-8 md:pt-32"><div className="mx-auto grid max-w-7xl gap-5 lg:grid-cols-[320px_1fr]"><Skeleton className="h-[560px] rounded-md bg-white" /><Skeleton className="h-[680px] rounded-md bg-white" /></div></div>;
+    return (
+      <div className="bh-project-detail-page">
+        <div className="bh-project-detail-loading">
+          <div className="bh-project-detail-hero-skeleton animate-pulse" />
+          <div className="bh-project-detail-container space-y-4 py-10">
+            <div className="h-8 w-2/3 animate-pulse rounded bg-slate-200" />
+            <div className="h-4 w-full animate-pulse rounded bg-slate-200" />
+            <div className="h-4 w-5/6 animate-pulse rounded bg-slate-200" />
+          </div>
+        </div>
+        <Footer />
+      </div>
+    );
   }
 
   if (!project) {
-    return <div className="flex min-h-screen flex-col bg-[#fafafa]"><main className="flex flex-1 items-center justify-center px-6 pt-24"><div className="text-center"><Globe className="mx-auto h-10 w-10 text-slate-300" /><h1 className="mt-4 text-xl font-semibold text-slate-900">Project not found</h1><p className="mt-2 text-sm text-slate-500">This project may have been removed.</p><Link to="/innovations" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-[#00628b]"><ArrowLeft className="h-4 w-4" /> Back to projects</Link></div></main><Footer /></div>;
+    return (
+      <div className="bh-project-detail-page">
+        <main className="flex flex-1 items-center justify-center px-6 pt-28 pb-20">
+          <div className="text-center">
+            <Globe className="mx-auto h-10 w-10 text-slate-300" />
+            <h1 className="mt-4 font-display text-xl font-bold text-slate-900">
+              Project not found
+            </h1>
+            <p className="mt-2 text-sm text-slate-500">
+              This project may have been removed or is unavailable.
+            </p>
+            <Link to="/innovations" className="bh-project-detail-back mt-6">
+              <ArrowLeft className="h-4 w-4" />
+              Back to projects
+            </Link>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
   }
 
+  const liveUrl = getLiveUrl(project);
   const projectLinks = project.links || [];
-  const relatedProjects = projects.filter((item) => item.id !== projectId && item.category === project.category).slice(0, 3);
+  const projectDate = formatProjectDate(project.date || project.created_at);
+  const relatedProjects = projects
+    .filter((item) => item.id !== projectId)
+    .filter(
+      (item) =>
+        item.category === project.category ||
+        item.stage === project.stage
+    )
+    .slice(0, 3);
+
+  const fallbackRelated =
+    relatedProjects.length > 0
+      ? relatedProjects
+      : projects.filter((item) => item.id !== projectId).slice(0, 3);
+
+  const linkIcon = (type: string) => {
+    const t = type.toLowerCase();
+    if (t === "github") return <Github className="h-4 w-4" />;
+    if (t === "demo" || t === "live") return <ExternalLink className="h-4 w-4" />;
+    return <LinkIcon className="h-4 w-4" />;
+  };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#fafafa] font-zurich text-slate-900">
-      <main className="flex-1 px-4 pb-12 pt-28 md:px-8 md:pt-32">
-        <div className="mx-auto max-w-7xl">
-          <Link to="/innovations" className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-[#00628b] transition hover:text-[#004f70]"><ArrowLeft className="h-4 w-4" /> Back to projects</Link>
-          <div className="grid items-start gap-5 lg:grid-cols-[320px_minmax(0,1fr)]">
-            <aside className="self-start rounded-md border border-slate-200 bg-white p-5">
-              <div className="relative mt-4 aspect-[4/3] w-full overflow-hidden rounded-md bg-slate-100">{project.image ? <img src={project.image} alt={project.title} className="block h-full w-full object-cover" /> : <div className="flex h-full items-center justify-center text-slate-400"><Building2 className="h-12 w-12" /></div>}</div>
-              <div className="mt-5 border-t border-slate-100 pt-5"><h1 className="text-lg font-semibold text-slate-950">{project.title}</h1><p className="mt-1 text-sm font-medium text-slate-700">{project.category}</p><p className="mt-1 text-sm capitalize text-slate-500">{project.stage}</p></div>
-              <div className="mt-5 space-y-3 text-sm text-slate-600"><div className="flex items-center gap-2"><Building2 className="h-4 w-4 text-slate-400" /> {project.status || "In progress"}</div><div className="flex items-center gap-2"><Users className="h-4 w-4 text-slate-400" /> {project.team?.length || 0} team members</div>{project.date && <div className="flex items-center gap-2"><Calendar className="h-4 w-4 text-slate-400" /> {new Date(project.date).toLocaleDateString("en-US", { year: "numeric", month: "long" })}</div>}</div>
-            </aside>
+    <div className="bh-project-detail-page">
+      <main>
+        <section className="bh-project-detail-hero">
+          <div className="bh-project-detail-container">
+            <Link to="/innovations" className="bh-project-detail-back">
+              <ArrowLeft className="h-4 w-4" />
+              Back to projects
+            </Link>
 
-            <section className="rounded-md border border-slate-200 bg-white p-6 md:p-8">
-              <p className="text-xs font-semibold text-slate-500">Project overview</p>
-              <h2 className="mt-2 text-2xl font-semibold text-slate-950 md:text-3xl">{project.title}</h2>
-              <p className="mt-4 text-sm leading-7 text-slate-600">{project.full_description || project.description}</p>
+            <div className="bh-project-detail-hero-grid">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.55 }}
+              >
+                <p className="bh-project-detail-eyebrow">
+                  {getProjectYear(project)}
+                  <span aria-hidden="true"> · </span>
+                  {project.category || project.stage}
+                </p>
+                <h1>{project.title}</h1>
+                <p className="bh-project-detail-lead">
+                  {project.description}
+                </p>
 
-              {projectLinks.length > 0 && <div className="mt-8 border-t border-slate-100 pt-6"><p className="text-xs font-semibold text-slate-700">Project links</p><div className="mt-4 flex flex-wrap gap-x-8 gap-y-4 text-sm text-slate-600">{projectLinks.map((link) => <a key={`${link.link_type}-${link.url}`} href={link.url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 hover:text-[#00628b]">{link.link_type === "github" ? <Github className="h-4 w-4" /> : link.link_type === "demo" ? <ExternalLink className="h-4 w-4" /> : <LinkIcon className="h-4 w-4" />} {link.link_type === "demo" ? "Live demo" : link.link_type === "github" ? "Source code" : "Website"}</a>)}</div></div>}
+                <div className="bh-project-detail-meta">
+                  {project.status && (
+                    <span>{project.status}</span>
+                  )}
+                  <span className="capitalize">{project.stage}</span>
+                  {projectDate && (
+                    <span className="inline-flex items-center gap-1.5">
+                      <Calendar className="h-3.5 w-3.5" />
+                      {projectDate}
+                    </span>
+                  )}
+                  <span className="inline-flex items-center gap-1.5">
+                    <Users className="h-3.5 w-3.5" />
+                    {project.team?.length || 0} team
+                  </span>
+                </div>
 
-              <div className="mt-8 border-t border-slate-100 pt-6"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><Award className="h-4 w-4 text-[#00628b]" /> Problem and solution</div><div className="mt-4 grid gap-6 md:grid-cols-2"><div><p className="text-xs font-semibold text-slate-500">Problem statement</p><p className="mt-2 text-sm leading-6 text-slate-600">{project.problem_statement || "No problem statement provided."}</p></div><div><p className="text-xs font-semibold text-slate-500">Solution approach</p><p className="mt-2 text-sm leading-6 text-slate-600">{project.solution || "No solution details provided."}</p></div></div></div>
+                <div className="bh-project-detail-actions">
+                  {liveUrl && (
+                    <a
+                      href={liveUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="bh-project-detail-btn-primary"
+                    >
+                      View live site
+                      <ArrowUpRight size={15} />
+                    </a>
+                  )}
+                  {projectLinks
+                    .filter((link) => link.url !== liveUrl)
+                    .slice(0, 2)
+                    .map((link) => (
+                      <a
+                        key={`${link.link_type}-${link.url}`}
+                        href={link.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="bh-project-detail-btn-secondary"
+                      >
+                        {linkIcon(link.link_type)}
+                        {linkLabel(link.link_type)}
+                      </a>
+                    ))}
+                </div>
+              </motion.div>
 
-              <div className="mt-8 border-t border-slate-100 pt-6"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><Code2 className="h-4 w-4 text-[#00628b]" /> Technologies used</div><div className="mt-3 flex min-h-10 flex-wrap gap-2">{project.technologies?.length ? project.technologies.map((technology, index) => <Badge key={`${technology.technology}-${index}`} variant="outline" className="rounded-full border-slate-300 px-3 py-1 text-xs font-medium text-slate-600">{technology.technology}</Badge>) : <span className="text-sm text-slate-500">No technologies listed</span>}</div></div>
-
-              <div className="mt-8 border-t border-slate-100 pt-6"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><TrendingUp className="h-4 w-4 text-[#00628b]" /> Impact and outcomes</div><div className="mt-4 grid gap-6 md:grid-cols-3"><div><p className="text-xs font-semibold text-slate-500">Results</p><p className="mt-2 text-sm leading-6 text-slate-600">{project.results || "No results provided."}</p></div><div><p className="text-xs font-semibold text-slate-500">Impact</p><p className="mt-2 text-sm leading-6 text-slate-600">{project.impact || "No impact details provided."}</p></div><div><p className="text-xs font-semibold text-slate-500">Future plans</p><p className="mt-2 text-sm leading-6 text-slate-600">{project.future_plans || "No future plans provided."}</p></div></div></div>
-
-              <div className="mt-8 border-t border-slate-100 pt-6"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><Users className="h-4 w-4 text-[#00628b]" /> Project team</div><div className="mt-3 grid gap-3 sm:grid-cols-2">{project.team?.length ? project.team.map((member, index) => <div key={`${member.name}-${index}`} className="flex items-center gap-3 rounded-md border border-slate-200 px-3 py-3"><div className="h-10 w-10 overflow-hidden rounded-full bg-slate-100">{member.image && <img src={member.image} alt="" className="h-full w-full object-cover" />}</div><div><p className="text-sm font-semibold text-slate-800">{member.name}</p><p className="text-xs text-slate-500">{member.role}</p></div></div>) : <span className="text-sm text-slate-500">No team members listed</span>}</div></div>
-
-              {project.gallery?.length ? <div className="mt-8 border-t border-slate-100 pt-6"><div className="flex items-center gap-2 text-sm font-semibold text-slate-900"><ImageIcon className="h-4 w-4 text-[#00628b]" /> Gallery</div><div className="mt-3 grid gap-3 sm:grid-cols-2">{project.gallery.map((image, index) => <img key={`${image.image_url}-${index}`} src={image.image_url} alt={`${project.title} gallery ${index + 1}`} className="aspect-video w-full rounded-md object-cover" />)}</div></div> : null}
-            </section>
+              <motion.div
+                className="bh-project-detail-preview"
+                initial={{ opacity: 0, y: 24 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.1, duration: 0.6 }}
+              >
+                <ProjectThumb project={project} className="bh-project-detail-thumb" />
+              </motion.div>
+            </div>
           </div>
+        </section>
 
-          {relatedProjects.length > 0 && <section className="mt-8"><h2 className="mb-4 text-xl font-semibold text-slate-950">Related projects</h2><div className="grid gap-4 md:grid-cols-3">{relatedProjects.map((relatedProject) => <Link key={relatedProject.id} to={`/projects/${relatedProject.id}`} className="rounded-md border border-slate-200 bg-white p-4 transition hover:border-[#00628b]/40"><p className="text-sm font-semibold text-slate-800">{relatedProject.title}</p><p className="mt-2 line-clamp-2 text-xs leading-5 text-slate-500">{relatedProject.description}</p></Link>)}</div></section>}
-        </div>
+        <section className="bh-project-detail-body">
+          <div className="bh-project-detail-container bh-project-detail-layout">
+            <div className="bh-project-detail-main">
+              <motion.article
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45 }}
+              >
+                <p className="bh-project-detail-label">Overview</p>
+                <p className="bh-project-detail-prose">
+                  {project.full_description || project.description}
+                </p>
+              </motion.article>
+
+              <div className="bh-project-detail-split">
+                <motion.article
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45 }}
+                >
+                  <p className="bh-project-detail-label">Problem</p>
+                  <p className="bh-project-detail-prose">
+                    {project.problem_statement || "No problem statement provided."}
+                  </p>
+                </motion.article>
+                <motion.article
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.45, delay: 0.05 }}
+                >
+                  <p className="bh-project-detail-label">Solution</p>
+                  <p className="bh-project-detail-prose">
+                    {project.solution || "No solution details provided."}
+                  </p>
+                </motion.article>
+              </div>
+
+              <div className="bh-project-detail-impact">
+                {[
+                  { label: "Results", value: project.results },
+                  { label: "Impact", value: project.impact },
+                  { label: "Future plans", value: project.future_plans },
+                ].map((item) => (
+                  <article key={item.label}>
+                    <p className="bh-project-detail-label">{item.label}</p>
+                    <p className="bh-project-detail-prose">
+                      {item.value || "—"}
+                    </p>
+                  </article>
+                ))}
+              </div>
+
+              {project.gallery && project.gallery.length > 0 && (
+                <div>
+                  <p className="bh-project-detail-label">Gallery</p>
+                  <div className="bh-project-detail-gallery">
+                    {project.gallery.map((image, index) => (
+                      <img
+                        key={`${image.image_url}-${index}`}
+                        src={image.image_url}
+                        alt={`${project.title} gallery ${index + 1}`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <aside className="bh-project-detail-aside">
+              <div className="bh-project-detail-aside-block">
+                <p className="bh-project-detail-label">Technologies</p>
+                <div className="bh-project-detail-tech">
+                  {project.technologies?.length ? (
+                    project.technologies.map((technology, index) => (
+                      <span key={`${technology.technology}-${index}`}>
+                        {technology.technology}
+                      </span>
+                    ))
+                  ) : (
+                    <p className="bh-project-detail-muted">No technologies listed</p>
+                  )}
+                </div>
+              </div>
+
+              <div className="bh-project-detail-aside-block">
+                <p className="bh-project-detail-label">Team</p>
+                <ul className="bh-project-detail-team">
+                  {project.team?.length ? (
+                    project.team.map((member, index) => (
+                      <li key={`${member.name}-${index}`}>
+                        <div className="bh-project-detail-avatar">
+                          {member.image ? (
+                            <img src={member.image} alt="" />
+                          ) : (
+                            <span>{member.name.slice(0, 1)}</span>
+                          )}
+                        </div>
+                        <div>
+                          <strong>{member.name}</strong>
+                          <em>{member.role}</em>
+                        </div>
+                      </li>
+                    ))
+                  ) : (
+                    <li className="bh-project-detail-muted">No team members listed</li>
+                  )}
+                </ul>
+              </div>
+
+              {projectLinks.length > 0 && (
+                <div className="bh-project-detail-aside-block">
+                  <p className="bh-project-detail-label">Links</p>
+                  <ul className="bh-project-detail-links">
+                    {projectLinks.map((link) => (
+                      <li key={`${link.link_type}-${link.url}`}>
+                        <a href={link.url} target="_blank" rel="noreferrer">
+                          {linkIcon(link.link_type)}
+                          {linkLabel(link.link_type)}
+                          <ArrowUpRight size={13} />
+                        </a>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </aside>
+          </div>
+        </section>
+
+        {fallbackRelated.length > 0 && (
+          <section className="bh-project-detail-related">
+            <div className="bh-project-detail-container">
+              <div className="bh-section-heading">
+                <div>
+                  <h2 className="bh-section-title font-display">
+                    Related <span>solutions</span>
+                  </h2>
+                  <p className="bh-section-intro">
+                    More work from UR Binary Hub innovators.
+                  </p>
+                </div>
+              </div>
+              <div className="bh-projects-board">
+                <div className="bh-projects-grid">
+                  {fallbackRelated.map((related, index) => (
+                    <ProjectCard
+                      key={related.id}
+                      project={related}
+                      index={index}
+                    />
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+        )}
       </main>
       <Footer />
     </div>
