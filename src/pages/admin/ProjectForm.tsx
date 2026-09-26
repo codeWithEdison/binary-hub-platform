@@ -100,7 +100,8 @@ const ProjectForm = () => {
     status: "",
     date: "",
     image: "",
-    featured: false
+    featured: false,
+    sortOrder: "0",
   });
 
   const [categories, setCategories] = useState<string[]>([""]);
@@ -162,7 +163,8 @@ const ProjectForm = () => {
           status: project.status || "",
           date: project.date || "",
           image: project.image || "",
-          featured: project.featured || false
+          featured: project.featured || false,
+          sortOrder: String((project as { sort_order?: number }).sort_order ?? 0),
         });
 
         // Set main image preview
@@ -361,10 +363,12 @@ const ProjectForm = () => {
 
     try {
       // Prepare project data with related data
+      const { sortOrder, ...formFields } = formData;
       const projectData = {
-        ...formData,
+        ...formFields,
         date: formData.date || null,
         image: uploadedImageUrl || formData.image || null,
+        sort_order: Math.max(0, parseInt(sortOrder, 10) || 0),
         // Include related data that our hook will handle
         categories: categories.filter(cat => cat.trim()).map(cat => ({ category: cat.trim() })),
         technologies: technologies.filter(tech => tech.trim()).map(tech => ({ technology: tech.trim() })),
@@ -636,6 +640,23 @@ const ProjectForm = () => {
                     />
                     <span className="text-sm text-gray-600">Mark as featured project</span>
                   </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label htmlFor="sortOrder">List order</Label>
+                  <Input
+                    id="sortOrder"
+                    name="sortOrder"
+                    type="number"
+                    min={0}
+                    step={1}
+                    value={formData.sortOrder}
+                    onChange={(e) => setFormData((prev) => ({ ...prev, sortOrder: e.target.value }))}
+                    disabled={isSubmitting}
+                  />
+                  <p className="text-xs text-muted-foreground">
+                    Lower numbers appear first on the projects list (1, then 2, then 3…).
+                  </p>
                 </div>
               </div>
             </CardContent>

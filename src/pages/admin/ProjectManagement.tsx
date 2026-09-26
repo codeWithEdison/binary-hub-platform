@@ -140,6 +140,9 @@ const ProjectManagement = () => {
                   <TableCell>
                     <div>
                       <div className="font-medium">{project.title}</div>
+                      <div className="text-xs text-muted-foreground">
+                        Order #{project.sort_order ?? 0}
+                      </div>
                       <div className="text-sm text-muted-foreground line-clamp-1">
                         {project.description}
                       </div>

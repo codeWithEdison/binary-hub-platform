@@ -67,6 +67,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
         status: "innovator" as "innovator" | "alumni" | "mentor",
         featured: false,
         binaryHubCode: "",
+        sortOrder: "0",
         email: "",
         phone: "",
         city: "",
@@ -191,6 +192,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                 status: innovator.status || "innovator",
                 featured: Boolean(innovator.featured),
                 binaryHubCode: innovator.binary_hub_code || "",
+                sortOrder: String(innovator.sort_order ?? 0),
                 email: "",
                 phone: "",
                 city: "",
@@ -377,6 +379,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                 department: formData.department.trim(),
                 gender: formData.gender || null,
                 binary_hub_code: formData.binaryHubCode.trim() || null,
+                sort_order: Math.max(0, parseInt(formData.sortOrder, 10) || 0),
                 linkedin: formData.linkedin.trim() || null,
                 facebook: formData.facebook.trim() || null,
                 twitter: formData.twitter.trim() || null,
@@ -650,6 +653,30 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                           /innovators/{formData.binaryHubCode.trim() || "…"}
                                         </span>
                                         . Letters, numbers, hyphen, or underscore.
+                                    </p>
+                                </div>
+                            )}
+
+                            {!applicationMode && (
+                                <div className="space-y-2">
+                                    <Label htmlFor="sortOrder">List order</Label>
+                                    <Input
+                                        id="sortOrder"
+                                        name="sortOrder"
+                                        type="number"
+                                        min={0}
+                                        step={1}
+                                        value={formData.sortOrder}
+                                        onChange={(event) => {
+                                            setFormData((prev) => ({
+                                                ...prev,
+                                                sortOrder: event.target.value,
+                                            }));
+                                        }}
+                                        disabled={isSubmitting}
+                                    />
+                                    <p className="text-xs text-muted-foreground">
+                                        Lower numbers appear first on the innovators list and hall of fame (1, then 2, then 3…).
                                     </p>
                                 </div>
                             )}

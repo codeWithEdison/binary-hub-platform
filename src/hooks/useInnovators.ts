@@ -31,6 +31,7 @@ export interface Innovator {
   status: "innovator" | "alumni" | "mentor";
   account_status?: "active" | "inactive";
   featured?: boolean;
+  sort_order?: number;
   created_at: string;
   updated_at: string;
   skills?: Array<{
@@ -74,7 +75,9 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
           innovatorsQuery = innovatorsQuery.eq("account_status", "active");
         }
 
-        const { data, error } = await innovatorsQuery.order("created_at", { ascending: false });
+        const { data, error } = await innovatorsQuery
+          .order("sort_order", { ascending: true })
+          .order("created_at", { ascending: false });
         if (error) throw error;
         return (data as any)?.length ? (data as any) : fallbackInnovators;
       });
@@ -102,7 +105,9 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
           featuredQuery = featuredQuery.eq("account_status", "active");
         }
 
-        const { data, error } = await featuredQuery.order("created_at", { ascending: false });
+        const { data, error } = await featuredQuery
+          .order("sort_order", { ascending: true })
+          .order("created_at", { ascending: false });
         if (error) throw error;
         return (data as any)?.length ? (data as any) : [];
       });
@@ -162,6 +167,7 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
       "image",
       "status",
       "featured",
+      "sort_order",
       "account_status",
       "linkedin",
       "facebook",

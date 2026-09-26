@@ -19,6 +19,7 @@ export interface Project {
   status: string | null;
   date: string | null;
   featured?: boolean;
+  sort_order?: number;
   created_at: string;
   updated_at: string;
   categories?: Array<{
@@ -72,6 +73,7 @@ export const useProjects = () => {
         const { data, error } = await supabase
           .from("projects")
           .select(PROJECT_SELECT)
+          .order("sort_order", { ascending: true })
           .order("created_at", { ascending: false });
 
         if (error) throw error;
@@ -95,6 +97,7 @@ export const useProjects = () => {
           .from("projects")
           .select(PROJECT_SELECT)
           .eq("featured", true)
+          .order("sort_order", { ascending: true })
           .order("created_at", { ascending: false });
 
         if (error) throw error;

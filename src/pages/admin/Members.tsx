@@ -175,6 +175,9 @@ const Members = () => {
                           BH-{member.binary_hub_code}
                         </p>
                       ) : null}
+                      <p className="truncate text-xs text-slate-400">
+                        Order #{member.sort_order ?? 0}
+                      </p>
                       <p className="truncate text-sm text-slate-500">{member.department || "Department not provided"}</p>
                     </div>
                   </div>

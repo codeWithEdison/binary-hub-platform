@@ -215,6 +215,7 @@ export type Database = {
           image: string | null
           name: string
           role: string
+          sort_order: number
           status: Database["public"]["Enums"]["innovator_status"]
           updated_at: string | null
           user_id: string | null
@@ -229,6 +230,7 @@ export type Database = {
           image?: string | null
           name: string
           role: string
+          sort_order?: number
           status: Database["public"]["Enums"]["innovator_status"]
           updated_at?: string | null
           user_id?: string | null
@@ -243,6 +245,7 @@ export type Database = {
           image?: string | null
           name?: string
           role?: string
+          sort_order?: number
           status?: Database["public"]["Enums"]["innovator_status"]
           updated_at?: string | null
           user_id?: string | null
@@ -489,6 +492,7 @@ export type Database = {
           problem_statement: string | null
           results: string | null
           solution: string | null
+          sort_order: number
           stage: Database["public"]["Enums"]["project_stage"]
           status: string | null
           title: string
@@ -509,6 +513,7 @@ export type Database = {
           problem_statement?: string | null
           results?: string | null
           solution?: string | null
+          sort_order?: number
           stage: Database["public"]["Enums"]["project_stage"]
           status?: string | null
           title: string
@@ -529,6 +534,7 @@ export type Database = {
           problem_statement?: string | null
           results?: string | null
           solution?: string | null
+          sort_order?: number
           stage?: Database["public"]["Enums"]["project_stage"]
           status?: string | null
           title?: string
