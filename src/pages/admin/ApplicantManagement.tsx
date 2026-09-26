@@ -1,10 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
+  Camera,
   CheckCircle2,
   ClipboardList,
   Eye,
   EyeOff,
   Search,
+  Upload,
+  X,
   XCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -40,6 +43,8 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { AdminPage } from "@/components/admin/AdminPage";
 import { useApplicationSetup } from "@/hooks/useApplicationSetup";
+import { uploadPublicImage } from "@/lib/uploadImage";
+import type { ChangeEvent } from "react";
 
 type Application = {
   id: string;
@@ -159,6 +164,8 @@ const ApplicantManagement = () => {
   const [selectedApplication, setSelectedApplication] = useState<Application | null>(null);
   const [reviewForm, setReviewForm] = useState<ReviewForm>(emptyReviewForm());
   const [isSaving, setIsSaving] = useState(false);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const imageInputRef = useRef<HTMLInputElement>(null);
   const [profileStatuses, setProfileStatuses] = useState<
     Record<string, "active" | "inactive" | "missing">
   >({});
@@ -272,6 +279,28 @@ const ApplicantManagement = () => {
 
   const updateField = <K extends keyof ReviewForm>(key: K, value: ReviewForm[K]) => {
     setReviewForm((current) => ({ ...current, [key]: value }));
+  };
+
+  const handleImageUpload = async (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    event.target.value = "";
+    if (!file) return;
+
+    setIsUploadingImage(true);
+    const result = await uploadPublicImage(file, "applications");
+    setIsUploadingImage(false);
+
+    if (result.error) {
+      toast({
+        title: "Upload failed",
+        description: result.error,
+        variant: "destructive",
+      });
+      return;
+    }
+
+    updateField("image", result.url);
+    toast({ title: "Image uploaded", description: "Profile photo updated." });
   };
 
   const buildPayloadFromForm = () => {
@@ -744,28 +773,61 @@ const ApplicantManagement = () => {
 
           {selectedApplication && (
             <div className="flex-1 space-y-5 overflow-y-auto px-6 py-5">
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
                 {reviewForm.image ? (
-                  <img
-                    src={reviewForm.image}
-                    alt=""
-                    className="h-16 w-16 rounded-full object-cover ring-2 ring-[#00628b]/20"
-                  />
+                  <div className="relative shrink-0">
+                    <img
+                      src={reviewForm.image}
+                      alt=""
+                      className="h-20 w-20 rounded-full object-cover ring-2 ring-[#00628b]/20"
+                    />
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="icon"
+                      className="absolute -right-1 -top-1 h-7 w-7 rounded-full bg-white"
+                      onClick={() => updateField("image", "")}
+                      disabled={isSaving || isUploadingImage}
+                      aria-label="Remove profile image"
+                    >
+                      <X className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
                 ) : (
-                  <div className="grid h-16 w-16 place-items-center rounded-full bg-[#e8f3f8] text-sm font-bold text-[#00628b]">
-                    {(reviewForm.applicant_name || "?").slice(0, 2).toUpperCase()}
+                  <div className="grid h-20 w-20 shrink-0 place-items-center rounded-full border-2 border-dashed border-[#00628b]/25 bg-[#e8f3f8] text-[#00628b]">
+                    <Camera className="h-7 w-7" />
                   </div>
                 )}
-                <div className="min-w-0 flex-1 space-y-1">
-                  <Label htmlFor="review-image">Profile image URL</Label>
-                  <Input
-                    id="review-image"
-                    className={fieldClass}
-                    value={reviewForm.image}
-                    onChange={(e) => updateField("image", e.target.value)}
-                    placeholder="https://..."
-                    disabled={isSaving}
+                <div className="min-w-0 flex-1 space-y-2">
+                  <Label className="flex items-center gap-2">
+                    <Upload className="h-4 w-4" />
+                    Profile image
+                  </Label>
+                  <p className="text-xs text-muted-foreground">
+                    Upload a photo (JPG, PNG, GIF, or WebP — max 5MB).
+                  </p>
+                  <input
+                    ref={imageInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleImageUpload}
+                    disabled={isSaving || isUploadingImage}
                   />
+                  <Button
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    onClick={() => imageInputRef.current?.click()}
+                    disabled={isSaving || isUploadingImage}
+                  >
+                    <Upload className="mr-2 h-4 w-4" />
+                    {isUploadingImage
+                      ? "Uploading…"
+                      : reviewForm.image
+                        ? "Replace photo"
+                        : "Upload photo"}
+                  </Button>
                 </div>
               </div>
 
@@ -1039,14 +1101,14 @@ const ApplicantManagement = () => {
               )}
             </div>
             <div className="flex flex-wrap justify-end gap-2">
-              <Button variant="outline" onClick={closeReview} disabled={isSaving}>
+              <Button variant="outline" onClick={closeReview} disabled={isSaving || isUploadingImage}>
                 Cancel
               </Button>
               {canDecide && (
                 <Button
                   variant="destructive"
                   onClick={rejectApplication}
-                  disabled={isSaving}
+                  disabled={isSaving || isUploadingImage}
                 >
                   <XCircle className="mr-2 h-4 w-4" />
                   {isSaving ? "Saving…" : "Reject"}
@@ -1056,7 +1118,7 @@ const ApplicantManagement = () => {
                 <Button
                   className="bg-[#00628b] text-white hover:bg-[#004f70]"
                   onClick={approveApplication}
-                  disabled={isSaving}
+                  disabled={isSaving || isUploadingImage}
                 >
                   <CheckCircle2 className="mr-2 h-4 w-4" />
                   {isSaving
