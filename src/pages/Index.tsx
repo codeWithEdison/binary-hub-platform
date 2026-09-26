@@ -10,7 +10,6 @@ import { useStakeholders } from "@/hooks/useStakeholders";
 const ProjectsSection = lazy(() => import("@/components/ProjectsSection"));
 const HallOfFameSection = lazy(() => import("@/components/HallOfFameSection"));
 const BlogSection = lazy(() => import("@/components/BlogSection"));
-const ChatWidget = lazy(() => import("@/components/ChatWidget"));
 
 const SectionFallback = () => (
   <div className="flex items-center justify-center py-16">
@@ -109,9 +108,6 @@ const Index = () => {
       />
 
       <Footer />
-      <Suspense fallback={null}>
-        <ChatWidget />
-      </Suspense>
     </div>
   );
 };
