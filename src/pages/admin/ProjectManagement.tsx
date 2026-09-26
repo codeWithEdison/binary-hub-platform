@@ -24,6 +24,7 @@ import {
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { useProjects } from "@/hooks/useProjects";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
 const ProjectManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -54,11 +55,10 @@ const ProjectManagement = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="max-w-7xl mx-auto">
+    <AdminPage>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-semibold mb-1">Project Management</h1>
+            <h1 className="bh-admin-page-title">Projects</h1>
             <p className="text-muted-foreground">
               Manage innovation projects and their details
             </p>
@@ -112,7 +112,7 @@ const ProjectManagement = () => {
         </div>
         
         {/* Projects Table */}
-        <div className="border rounded-lg overflow-hidden">
+        <div className="bh-admin-panel">
           <Table>
             <TableHeader>
               <TableRow>
@@ -259,8 +259,7 @@ const ProjectManagement = () => {
             </TableBody>
           </Table>
         </div>
-      </div>
-    </div>
+    </AdminPage>
   );
 };
 

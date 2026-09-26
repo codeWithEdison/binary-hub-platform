@@ -6,6 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useHeroSlides } from "@/hooks/useHeroSlides";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
 const HeroSlidesManagement = () => {
   const { slides, loading, deleteSlide } = useHeroSlides(true);
@@ -15,17 +16,18 @@ const HeroSlidesManagement = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
-          <div>
-            <h1 className="mb-1 text-2xl font-semibold">Hero Slides</h1>
-            <p className="text-muted-foreground">Manage the images and text shown in the homepage hero slider.</p>
-          </div>
-          <Button asChild><Link to="/admin/hero-slides/new" className="flex items-center gap-2"><Plus className="h-4 w-4" /> New Hero Slide</Link></Button>
-        </div>
+    <AdminPage>
+      <AdminPageHeader
+        title="Hero slides"
+        description="Manage the images and text shown in the homepage hero slider."
+        actions={
+          <Button asChild className="h-10 rounded-[7px]">
+            <Link to="/admin/hero-slides/new" className="flex items-center gap-2"><Plus className="h-4 w-4" /> New Hero Slide</Link>
+          </Button>
+        }
+      />
 
-        <div className="overflow-hidden rounded-lg border">
+      <AdminPanel>
           <Table>
             <TableHeader><TableRow><TableHead>Preview</TableHead><TableHead>Title</TableHead><TableHead>Order</TableHead><TableHead>Status</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
             <TableBody>
@@ -41,9 +43,8 @@ const HeroSlidesManagement = () => {
               {!loading && slides.length === 0 && <TableRow><TableCell colSpan={5} className="py-12 text-center text-muted-foreground"><ImageIcon className="mx-auto mb-3 h-8 w-8" />No hero slides yet.</TableCell></TableRow>}
             </TableBody>
           </Table>
-        </div>
-      </div>
-    </div>
+      </AdminPanel>
+    </AdminPage>
   );
 };
 

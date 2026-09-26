@@ -25,6 +25,7 @@ import {
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
 import { Link } from "react-router-dom";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
 // Sample event categories for selection
 const categories = ["Hackathon", "Workshop", "Masterclass", "Networking", "Showcase"];
@@ -88,11 +89,11 @@ const EventForm = () => {
   };
 
   return (
-    <div className="p-6">
+    <AdminPage>
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-semibold mb-1">
+            <h1 className="bh-admin-page-title">
               {isEditMode ? "Edit Event" : "Create New Event"}
             </h1>
             <p className="text-muted-foreground">
@@ -267,7 +268,7 @@ const EventForm = () => {
           </div>
         </form>
       </div>
-    </div>
+    </AdminPage>
   );
 };
 

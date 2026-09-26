@@ -1,13 +1,102 @@
-
-import React, { useState, useEffect } from "react";
-import { useNavigate, Outlet, useLocation } from "react-router-dom";
+import React, { useEffect, useMemo, useState } from "react";
+import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
-  ChevronLeft, ChevronRight, LayoutDashboard, Users, Calendar, FileText,
-  Settings, LogOut, Menu, X, Bell, ClipboardList, Newspaper, Images, SlidersHorizontal, MessageSquare
+  Bell,
+  Calendar,
+  ChevronLeft,
+  ChevronRight,
+  ClipboardList,
+  FileText,
+  Images,
+  LayoutDashboard,
+  LogOut,
+  Menu,
+  MessageSquare,
+  Newspaper,
+  Settings,
+  SlidersHorizontal,
+  Users,
+  X,
 } from "lucide-react";
-import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+
+const navGroups = [
+  {
+    label: "Overview",
+    items: [{ name: "Dashboard", path: "/admin", icon: LayoutDashboard, end: true }],
+  },
+  {
+    label: "Content",
+    items: [
+      { name: "Members", path: "/admin/members", icon: Users },
+      { name: "Projects", path: "/admin/projects", icon: FileText },
+      { name: "Events", path: "/admin/events", icon: Calendar },
+      { name: "Announcements", path: "/admin/announcements", icon: Bell },
+      { name: "Blog", path: "/admin/blog", icon: Newspaper },
+      { name: "Hero Slides", path: "/admin/hero-slides", icon: Images },
+      { name: "Stakeholders", path: "/admin/stakeholders", icon: Users },
+    ],
+  },
+  {
+    label: "Applications",
+    items: [
+      { name: "Applicants", path: "/admin/applicants", icon: ClipboardList },
+      { name: "Inquiries", path: "/admin/inquiries", icon: MessageSquare },
+      { name: "Application setup", path: "/admin/application-setup", icon: SlidersHorizontal },
+    ],
+  },
+  {
+    label: "System",
+    items: [{ name: "Settings", path: "/admin/settings", icon: Settings }],
+  },
+] as const;
+
+const isActivePath = (pathname: string, path: string, end?: boolean) => {
+  if (end || path === "/admin") return pathname === "/admin" || pathname === "/admin/";
+  return pathname === path || pathname.startsWith(`${path}/`);
+};
+
+const pageTitleFromPath = (pathname: string) => {
+  if (pathname === "/admin" || pathname === "/admin/") return "Dashboard";
+  const match = navGroups
+    .flatMap((group) => group.items)
+    .find((item) => isActivePath(pathname, item.path, "end" in item ? item.end : false));
+  return match?.name || "Admin";
+};
+
+const NavLinks = ({
+  pathname,
+  collapsed = false,
+  onNavigate,
+}: {
+  pathname: string;
+  collapsed?: boolean;
+  onNavigate?: () => void;
+}) => (
+  <nav className="bh-admin-nav" aria-label="Admin">
+    {navGroups.map((group) => (
+      <div key={group.label}>
+        <p className="bh-admin-nav-label">{group.label}</p>
+        {group.items.map((item) => {
+          const active = isActivePath(pathname, item.path, "end" in item ? item.end : false);
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              onClick={onNavigate}
+              className={cn("bh-admin-nav-link", active && "is-active")}
+              title={collapsed ? item.name : undefined}
+            >
+              <item.icon />
+              <span>{item.name}</span>
+            </Link>
+          );
+        })}
+      </div>
+    ))}
+  </nav>
+);
 
 const AdminDashboard = () => {
   const [sidebarOpen, setSidebarOpen] = useState(true);
@@ -15,247 +104,127 @@ const AdminDashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Navigation links
-  const navItems = [
-    {
-      name: "Dashboard",
-      path: "/admin",
-      icon: LayoutDashboard
-    },
-    {
-      name: "Members",
-      path: "/admin/members",
-      icon: Users
-    },
-    {
-      name: "Projects",
-      path: "/admin/projects",
-      icon: FileText
-    },
-    {
-      name: "Events",
-      path: "/admin/events",
-      icon: Calendar
-    },
-    {
-      name: "Announcements",
-      path: "/admin/announcements",
-      icon: Bell
-    },
-    {
-      name: "Blog",
-      path: "/admin/blog",
-      icon: Newspaper
-    },
-    {
-      name: "Hero Slides",
-      path: "/admin/hero-slides",
-      icon: Images
-    },
-    {
-      name: "Applicants",
-      path: "/admin/applicants",
-      icon: ClipboardList
-    },
-    {
-      name: "Inquiries",
-      path: "/inquiries",
-      icon: MessageSquare
-    },
-    {
-      name: "Application setup",
-      path: "/admin/application-setup",
-      icon: SlidersHorizontal
-    },
-    {
-      name: "Stakeholders",
-      path: "/admin/stakeholders",
-      icon: Users
-    },
-    {
-      name: "Settings",
-      path: "/admin/settings",
-      icon: Settings
-    }
-  ];
-
-  // Prevent body scroll when mobile menu is open
   useEffect(() => {
-    if (mobileMenuOpen) {
-      document.body.style.overflow = 'hidden';
-    } else {
-      document.body.style.overflow = 'unset';
-    }
-
+    document.body.style.overflow = mobileMenuOpen ? "hidden" : "unset";
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = "unset";
     };
   }, [mobileMenuOpen]);
 
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
+
+  const pageTitle = useMemo(() => pageTitleFromPath(location.pathname), [location.pathname]);
+
   return (
-    <div className="min-h-screen bg-background">
-      {/* Mobile menu button */}
-      <div className="lg:hidden fixed top-4 left-4 z-[60]">
-        <Button
-          variant="outline"
-          size="icon"
-          onClick={() => setMobileMenuOpen(true)}
-          className="bg-white/90 backdrop-blur-sm shadow-lg border-gray-200 hover:bg-white"
-        >
-          <Menu size={20} />
-        </Button>
-      </div>
+    <div className="bh-admin-shell">
+      <aside className={cn("bh-admin-sidebar", !sidebarOpen && "is-collapsed")}>
+        <div className="bh-admin-sidebar-brand">
+          <img src="/img/logo.png" alt="" />
+          <div className="bh-admin-sidebar-brand-copy">
+            <strong>UR Binary Hub</strong>
+            <span>Admin</span>
+          </div>
+          <button
+            type="button"
+            className="bh-admin-sidebar-toggle"
+            onClick={() => setSidebarOpen((open) => !open)}
+            aria-label={sidebarOpen ? "Collapse sidebar" : "Expand sidebar"}
+          >
+            {sidebarOpen ? <ChevronLeft size={16} /> : <ChevronRight size={16} />}
+          </button>
+        </div>
 
-      {/* Mobile sidebar */}
-      {mobileMenuOpen && (
-        <div className="lg:hidden fixed inset-0 z-[65] bg-black/50 backdrop-blur-sm">
-          <div className="fixed inset-y-0 left-0 w-full max-w-xs bg-white dark:bg-slate-900 shadow-2xl">
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center space-x-3">
-                <div className="w-8 h-8 bg-[#00628b] rounded-lg flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">BH</span>
-                </div>
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Admin Panel</h2>
+        <NavLinks pathname={location.pathname} collapsed={!sidebarOpen} />
+
+        <div className="bh-admin-sidebar-foot">
+          <Button
+            variant="outline"
+            className={cn(
+              "h-10 w-full rounded-[7px] border-white/25 bg-transparent text-white hover:bg-white/10 hover:text-white",
+              sidebarOpen ? "justify-start gap-2" : "justify-center px-0"
+            )}
+            onClick={() => navigate("/")}
+          >
+            <LogOut size={16} />
+            {sidebarOpen ? "Return to site" : null}
+          </Button>
+        </div>
+      </aside>
+
+      {mobileMenuOpen ? (
+        <div className="bh-admin-mobile-drawer lg:hidden">
+          <button
+            type="button"
+            className="absolute inset-0 cursor-default"
+            aria-label="Close menu overlay"
+            onClick={() => setMobileMenuOpen(false)}
+          />
+          <div className="bh-admin-mobile-panel relative z-10">
+            <div className="bh-admin-sidebar-brand">
+              <img src="/img/logo.png" alt="" />
+              <div className="bh-admin-sidebar-brand-copy">
+                <strong>UR Binary Hub</strong>
+                <span>Admin</span>
               </div>
-              <Button
-                variant="ghost"
-                size="icon"
+              <button
+                type="button"
+                className="ml-auto grid h-9 w-9 place-items-center rounded-[7px] text-white hover:bg-white/10"
                 onClick={() => setMobileMenuOpen(false)}
-                className="hover:bg-gray-100 dark:hover:bg-gray-800"
+                aria-label="Close menu"
               >
-                <X size={20} />
-              </Button>
+                <X size={18} />
+              </button>
             </div>
-
-            {/* Navigation */}
-            <nav className="flex-1 px-4 py-6 overflow-y-auto">
-              <div className="space-y-2">
-                {navItems.map((item, index) => (
-                  <Link
-                    key={item.name}
-                    to={item.path}
-                    onClick={() => setMobileMenuOpen(false)}
-                    className={cn(
-                      "flex items-center gap-3 px-4 py-4 text-sm font-medium rounded-xl transition-all duration-200",
-                      {
-                        "bg-[#00628b]/10 text-[#00628b] border-l-4 border-[#00628b]": location.pathname === item.path,
-                        "text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-[#00628b]": location.pathname !== item.path
-                      }
-                    )}
-                  >
-                    <item.icon size={18} />
-                    {item.name}
-                  </Link>
-                ))}
-              </div>
-            </nav>
-
-            {/* Footer */}
-            <div className="p-4 border-t border-gray-200 dark:border-gray-700">
+            <NavLinks pathname={location.pathname} onNavigate={() => setMobileMenuOpen(false)} />
+            <div className="bh-admin-sidebar-foot">
               <Button
                 variant="outline"
-                className="w-full justify-start gap-3 text-gray-700 dark:text-gray-300 hover:text-[#00628b] hover:border-[#00628b]"
+                className="h-10 w-full justify-start gap-2 rounded-[7px] border-white/25 bg-transparent text-white hover:bg-white/10 hover:text-white"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   navigate("/");
                 }}
               >
-                <LogOut size={18} />
-                Return to Site
+                <LogOut size={16} />
+                Return to site
               </Button>
             </div>
           </div>
         </div>
-      )}
+      ) : null}
 
-      {/* Desktop sidebar */}
-      <aside
-        className={cn(
-          "fixed top-0 left-0 h-full bg-background border-r border-border transition-all duration-300 z-30 hidden lg:block",
-          {
-            "w-64": sidebarOpen,
-            "w-20": !sidebarOpen
-          }
-        )}
-      >
-        <div className="flex flex-col h-full">
-          {/* Sidebar header */}
-          <div className={cn(
-            "flex items-center justify-between h-16 px-4",
-            {
-              "justify-center": !sidebarOpen
-            }
-          )}>
-            {sidebarOpen ? (
-              <h2 className="text-xl font-semibold">Binary Hub Admin</h2>
-            ) : (
-              <span className="text-xl font-semibold">BH</span>
-            )}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setSidebarOpen(!sidebarOpen)}
-              className="hidden lg:flex"
-            >
-              {sidebarOpen ? <ChevronLeft size={18} /> : <ChevronRight size={18} />}
-            </Button>
-          </div>
-
-          {/* Sidebar navigation */}
-          <nav className="flex-1 py-6 px-2">
-            <ul className="space-y-1">
-              {navItems.map((item) => (
-                <li key={item.name}>
-                  <Link
-                    to={item.path}
-                    className={cn(
-                      "flex items-center gap-3 px-4 py-3 text-sm font-medium rounded-lg",
-                      {
-                        "bg-primary/10 text-primary": location.pathname === item.path,
-                        "text-muted-foreground hover:text-foreground hover:bg-accent/50":
-                          location.pathname !== item.path,
-                        "justify-center": !sidebarOpen
-                      }
-                    )}
-                  >
-                    <item.icon size={18} />
-                    {sidebarOpen && <span>{item.name}</span>}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </nav>
-
-          {/* Sidebar footer */}
-          <div className="p-4 border-t border-border">
+      <div className={cn("bh-admin-main", !sidebarOpen && "is-collapsed")}>
+        <header className="bh-admin-topbar">
+          <div className="flex min-w-0 items-center gap-3">
             <Button
               variant="outline"
-              className={cn("w-full", {
-                "justify-center": !sidebarOpen,
-                "justify-start gap-3": sidebarOpen
-              })}
-              onClick={() => navigate("/")}
+              size="icon"
+              className="h-10 w-10 rounded-[7px] border-[#00628b]/15 lg:hidden"
+              onClick={() => setMobileMenuOpen(true)}
+              aria-label="Open menu"
             >
-              <LogOut size={18} />
-              {sidebarOpen && <span>Return to Site</span>}
+              <Menu size={18} />
             </Button>
+            <div className="min-w-0">
+              <h1 className="bh-admin-topbar-title truncate">{pageTitle}</h1>
+              <p className="bh-admin-topbar-meta hidden sm:block">
+                Manage Binary Hub content and applications
+              </p>
+            </div>
           </div>
-        </div>
-      </aside>
+          <Button
+            asChild
+            variant="outline"
+            className="hidden h-10 rounded-[7px] border-[#00628b]/15 text-[#00628b] hover:bg-[#00628b]/5 sm:inline-flex"
+          >
+            <Link to="/">View site</Link>
+          </Button>
+        </header>
 
-      {/* Main content */}
-      <main
-        className={cn(
-          "transition-all duration-300 pt-16 lg:pt-0",
-          {
-            "lg:ml-64": sidebarOpen,
-            "lg:ml-20": !sidebarOpen
-          }
-        )}
-      >
         <Outlet />
-      </main>
+      </div>
     </div>
   );
 };

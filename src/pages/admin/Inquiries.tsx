@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
  type Inquiry = Tables<"inquiries">;
  type InquiryStatus = Inquiry["status"];
@@ -74,33 +75,30 @@ const Inquiries = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex flex-col gap-2 md:flex-row md:items-end md:justify-between">
-          <div>
-            <h1 className="text-2xl font-semibold">Inquiries</h1>
-            <p className="text-muted-foreground">Review messages submitted through the contact form.</p>
-          </div>
-          <Badge variant="outline">{inquiries.filter((inquiry) => inquiry.status === "new").length} new</Badge>
-        </div>
+    <AdminPage>
+      <AdminPageHeader
+        title="Inquiries"
+        description="Review messages submitted through the contact form."
+        actions={<Badge variant="outline" className="rounded-[7px]">{inquiries.filter((inquiry) => inquiry.status === "new").length} new</Badge>}
+      />
 
-        <div className="mb-6 flex flex-col gap-4 md:flex-row">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-            <Input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search inquiries..." className="pl-9" />
-          </div>
-          <Select value={statusFilter} onValueChange={setStatusFilter}>
-            <SelectTrigger className="w-full md:w-44"><SelectValue placeholder="Filter status" /></SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All statuses</SelectItem>
-              <SelectItem value="new">New</SelectItem>
-              <SelectItem value="read">Read</SelectItem>
-              <SelectItem value="archived">Archived</SelectItem>
-            </SelectContent>
-          </Select>
+      <AdminToolbar>
+        <div className="relative w-full flex-1">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+          <Input value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} placeholder="Search inquiries..." className="h-10 rounded-[7px] pl-9" />
         </div>
+        <Select value={statusFilter} onValueChange={setStatusFilter}>
+          <SelectTrigger className="h-10 w-full rounded-[7px] md:w-44"><SelectValue placeholder="Filter status" /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All statuses</SelectItem>
+            <SelectItem value="new">New</SelectItem>
+            <SelectItem value="read">Read</SelectItem>
+            <SelectItem value="archived">Archived</SelectItem>
+          </SelectContent>
+        </Select>
+      </AdminToolbar>
 
-        <div className="rounded-lg border bg-card">
+      <AdminPanel>
           <Table>
             <TableHeader>
               <TableRow>
@@ -137,9 +135,8 @@ const Inquiries = () => {
               ))}
             </TableBody>
           </Table>
-        </div>
-      </div>
-    </div>
+      </AdminPanel>
+    </AdminPage>
   );
 };
 

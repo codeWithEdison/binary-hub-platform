@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Search, ShieldCheck, UserPlus, UserRound, UsersRound } from "lucide-react";
+import { Search, ShieldCheck, UserPlus, UserRound, UsersRound, Pencil } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -7,6 +7,7 @@ import type { Innovator } from "@/hooks/useInnovators";
 import { ensureManagementMembers } from "@/lib/ensureManagementMembers";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
 const memberTabs = ["All members", "Active", "Inactive"] as const;
 type MemberTab = (typeof memberTabs)[number];
@@ -84,34 +85,35 @@ const Members = () => {
   }, [activeTab, innovators, searchQuery]);
 
   return (
-    <main className="min-h-screen bg-[#eef2ff] px-4 py-8 font-zurich text-slate-900 md:px-8 md:py-10">
-      <section className="mx-auto max-w-7xl rounded-[10px] bg-white px-6 py-8 shadow-[0_18px_55px_rgba(73,91,170,0.14)] md:px-10 md:py-10">
-        <div className="flex flex-col gap-7 lg:flex-row lg:items-end lg:justify-between">
-          <div>
-            <div className="mb-3 flex items-center gap-2 text-sm font-medium text-[#00628b]">
-              <UsersRound className="h-4 w-4" /> Community directory
-            </div>
-          </div>
-
+    <AdminPage>
+      <AdminPageHeader
+        title="Members"
+        description="Manage innovators, mentors, and community profiles."
+        actions={
           <Link
             to="/admin/members/new"
-            className="inline-flex h-11 items-center justify-center gap-2 rounded-md bg-[#00628b] px-4 text-sm font-semibold text-white transition hover:bg-[#004f70] focus:outline-none focus:ring-2 focus:ring-[#00628b]/30 focus:ring-offset-2"
+            className="inline-flex h-10 items-center justify-center gap-2 rounded-[7px] bg-[#00628b] px-4 text-sm font-semibold text-white transition hover:bg-[#004f70]"
           >
             <UserPlus className="h-4 w-4" />
             Add Member
           </Link>
+        }
+      />
 
-          <div className="relative w-full max-w-sm">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
-            <Input
-              value={searchQuery}
-              onChange={(event) => setSearchQuery(event.target.value)}
-              placeholder="Search members"
-              className="h-11 border-slate-200 pl-9 text-sm shadow-none focus-visible:ring-[#00628b]/20"
-              aria-label="Search members"
-            />
-          </div>
+      <AdminToolbar>
+        <div className="relative w-full max-w-sm">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
+          <Input
+            value={searchQuery}
+            onChange={(event) => setSearchQuery(event.target.value)}
+            placeholder="Search members"
+            className="h-10 rounded-[7px] border-slate-200 pl-9 text-sm shadow-none focus-visible:ring-[#00628b]/20"
+            aria-label="Search members"
+          />
         </div>
+      </AdminToolbar>
+
+      <AdminPanel className="p-5 md:p-6">
 
         <div className="mt-8 flex flex-wrap items-center gap-2 border-b border-slate-100 pb-4">
           {memberTabs.map((tab) => (
@@ -145,13 +147,13 @@ const Members = () => {
               return (
                 <article
                   key={member.id}
-                  className="group flex min-h-[286px] flex-col rounded-lg border border-slate-200 bg-white p-6 transition hover:-translate-y-0.5 hover:border-[#7898f4]/50 hover:shadow-[0_12px_28px_rgba(73,91,170,0.12)]"
+                    className="group flex min-h-[286px] flex-col rounded-[0.75rem] border border-[#00628b]/10 bg-white p-6 transition hover:-translate-y-0.5 hover:border-[#00628b]/30 hover:shadow-[0_12px_28px_rgba(0,98,139,0.12)]"
                 >
                   <div className="flex items-start gap-4">
                     {member.image ? (
                       <img src={member.image} alt={member.name} className="h-14 w-14 shrink-0 rounded-full object-cover ring-2 ring-white" />
                     ) : (
-                      <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#dbe5ff] text-sm font-bold text-[#3e5ea9]">
+                      <div className="grid h-14 w-14 shrink-0 place-items-center rounded-full bg-[#e8f3f8] text-sm font-bold text-[#00628b]">
                         {getInitials(member.name) || <UserRound className="h-6 w-6" />}
                       </div>
                     )}
@@ -188,10 +190,11 @@ const Members = () => {
                     </p>
                   </div>
                   <Link
-                    to={`/admin/innovators/edit/${member.id}`}
-                    className="mt-4 inline-flex h-10 w-full items-center justify-center rounded-md bg-[#00628b] px-4 text-sm font-semibold text-white transition hover:bg-[#004f70] focus:outline-none focus:ring-2 focus:ring-[#00628b]/30 focus:ring-offset-2"
+                    to={`/admin/members/edit/${member.id}`}
+                    className="mt-4 inline-flex h-10 w-full items-center justify-center gap-2 rounded-md bg-[#00628b] px-4 text-sm font-semibold text-white transition hover:bg-[#004f70] focus:outline-none focus:ring-2 focus:ring-[#00628b]/30 focus:ring-offset-2"
                   >
-                    View profile
+                    <Pencil className="h-4 w-4" />
+                    Edit member
                   </Link>
                 </article>
               );
@@ -203,8 +206,8 @@ const Members = () => {
             <p className="mt-3 text-sm text-slate-500">No generated members match your search.</p>
           </div>
         )}
-      </section>
-    </main>
+      </AdminPanel>
+    </AdminPage>
   );
 };
 

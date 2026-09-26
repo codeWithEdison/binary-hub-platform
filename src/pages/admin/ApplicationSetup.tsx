@@ -3,6 +3,7 @@ import { Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useApplicationSetup, SetupCategory } from "@/hooks/useApplicationSetup";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
 const groups: Array<{ category: SetupCategory; title: string; description: string }> = [
   { category: "role", title: "Roles", description: "Roles applicants can select." },
@@ -22,13 +23,12 @@ const ApplicationSetup = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="mx-auto max-w-5xl">
-        <header className="mb-8">
-          <h1 className="text-2xl font-semibold">Application setup</h1>
-          <p className="mt-1 text-muted-foreground">Manage the options applicants select while completing their application.</p>
-        </header>
-        <div className="grid gap-6 md:grid-cols-3">
+    <AdminPage narrow>
+      <AdminPageHeader
+        title="Application setup"
+        description="Manage the options applicants select while completing their application."
+      />
+      <div className="grid gap-4 md:grid-cols-3">
           {groups.map((group) => (
             <section key={group.category} className="rounded-lg border bg-card p-5">
               <h2 className="text-lg font-semibold">{group.title}</h2>
@@ -47,9 +47,8 @@ const ApplicationSetup = () => {
               </div>
             </section>
           ))}
-        </div>
       </div>
-    </div>
+    </AdminPage>
   );
 };
 

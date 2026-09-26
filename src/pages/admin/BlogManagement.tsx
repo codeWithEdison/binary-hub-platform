@@ -8,6 +8,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { Skeleton } from "@/components/ui/skeleton";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { useBlogPosts } from "@/hooks/useBlogPosts";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
 const BlogManagement = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -21,24 +22,25 @@ const BlogManagement = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="mx-auto max-w-7xl">
-        <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
-          <div>
-            <h1 className="mb-1 text-2xl font-semibold">Blog Management</h1>
-            <p className="text-muted-foreground">Create, publish, and choose the main public blog story.</p>
-          </div>
-          <Button asChild>
+    <AdminPage>
+      <AdminPageHeader
+        title="Blog management"
+        description="Create, publish, and choose the main public blog story."
+        actions={
+          <Button asChild className="h-10 rounded-[7px]">
             <Link to="/admin/blog/new" className="flex items-center gap-2"><Plus className="h-4 w-4" /> New Blog Post</Link>
           </Button>
-        </div>
+        }
+      />
 
-        <div className="relative mb-6 max-w-lg">
+      <AdminToolbar>
+        <div className="relative w-full max-w-lg">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-          <Input placeholder="Search blog posts..." className="pl-9" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} />
+          <Input placeholder="Search blog posts..." className="h-10 rounded-[7px] pl-9" value={searchQuery} onChange={(event) => setSearchQuery(event.target.value)} />
         </div>
+      </AdminToolbar>
 
-        <div className="overflow-hidden rounded-lg border">
+      <AdminPanel>
           <Table>
             <TableHeader><TableRow><TableHead>Title</TableHead><TableHead>Category</TableHead><TableHead>Status</TableHead><TableHead>Main</TableHead><TableHead className="text-right">Actions</TableHead></TableRow></TableHeader>
             <TableBody>
@@ -54,9 +56,8 @@ const BlogManagement = () => {
               {!loading && filteredPosts.length === 0 && <TableRow><TableCell colSpan={5} className="py-12 text-center text-muted-foreground">No blog posts found.</TableCell></TableRow>}
             </TableBody>
           </Table>
-        </div>
-      </div>
-    </div>
+      </AdminPanel>
+    </AdminPage>
   );
 };
 

@@ -18,6 +18,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { StakeholderForm } from "./StakeholderForm";
+import { AdminPage, AdminPageHeader, AdminPanel } from "@/components/admin/AdminPage";
+import { CenteredLoadingOrb } from "@/components/LoadingOrb";
 
 export const StakeholderManagement = () => {
   const { stakeholders, loading, deleteStakeholder } = useStakeholders();
@@ -42,39 +44,45 @@ export const StakeholderManagement = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
-      </div>
+      <AdminPage>
+        <CenteredLoadingOrb state="searching" label="Loading stakeholders" minHeightClassName="min-h-[40vh]" />
+      </AdminPage>
     );
   }
 
   return (
-    <div className="container mx-auto py-10">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Stakeholder Management</h1>
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-          <DialogTrigger asChild>
-            <Button onClick={() => setSelectedStakeholder(null)}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Stakeholder
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl">
-            <DialogHeader>
-              <DialogTitle>
-                {selectedStakeholder ? "Edit Stakeholder" : "Add New Stakeholder"}
-              </DialogTitle>
-            </DialogHeader>
-            <StakeholderForm
-              stakeholderId={selectedStakeholder}
-              onSuccess={handleDialogClose}
-              onCancel={handleDialogClose}
-            />
-          </DialogContent>
-        </Dialog>
-      </div>
+    <AdminPage>
+      <AdminPageHeader
+        title="Stakeholder management"
+        description="Manage partners and stakeholder logos shown on the site."
+        actions={
+          <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogTrigger asChild>
+              <Button
+                className="h-10 rounded-[7px]"
+                onClick={() => setSelectedStakeholder(null)}
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add Stakeholder
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-2xl">
+              <DialogHeader>
+                <DialogTitle>
+                  {selectedStakeholder ? "Edit Stakeholder" : "Add New Stakeholder"}
+                </DialogTitle>
+              </DialogHeader>
+              <StakeholderForm
+                stakeholderId={selectedStakeholder}
+                onSuccess={handleDialogClose}
+                onCancel={handleDialogClose}
+              />
+            </DialogContent>
+          </Dialog>
+        }
+      />
 
-      <div className="rounded-md border">
+      <AdminPanel>
         <Table>
           <TableHeader>
             <TableRow>
@@ -90,36 +98,35 @@ export const StakeholderManagement = () => {
             {stakeholders.map((stakeholder) => (
               <TableRow key={stakeholder.id}>
                 <TableCell>
-                  {stakeholder.logo && (
+                  {stakeholder.logo ? (
                     <img
                       src={stakeholder.logo}
                       alt={stakeholder.name}
                       className="h-10 w-10 object-contain"
                     />
-                  )}
+                  ) : null}
                 </TableCell>
                 <TableCell className="font-medium">{stakeholder.name}</TableCell>
                 <TableCell>{stakeholder.category}</TableCell>
-                <TableCell className="max-w-xs truncate">
-                  {stakeholder.contribution}
-                </TableCell>
+                <TableCell className="max-w-xs truncate">{stakeholder.contribution}</TableCell>
                 <TableCell>
-                  {stakeholder.website && (
+                  {stakeholder.website ? (
                     <a
                       href={stakeholder.website}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-primary hover:underline"
+                      className="text-[#00628b] hover:underline"
                     >
                       Visit
                     </a>
-                  )}
+                  ) : null}
                 </TableCell>
                 <TableCell className="text-right">
                   <div className="flex justify-end gap-2">
                     <Button
                       variant="outline"
                       size="sm"
+                      className="h-9 rounded-[7px]"
                       onClick={() => handleEdit(stakeholder.id)}
                     >
                       <Edit className="h-4 w-4" />
@@ -127,6 +134,7 @@ export const StakeholderManagement = () => {
                     <Button
                       variant="outline"
                       size="sm"
+                      className="h-9 rounded-[7px]"
                       onClick={() => handleDelete(stakeholder.id)}
                     >
                       <Trash2 className="h-4 w-4" />
@@ -137,7 +145,7 @@ export const StakeholderManagement = () => {
             ))}
           </TableBody>
         </Table>
-      </div>
-    </div>
+      </AdminPanel>
+    </AdminPage>
   );
 };

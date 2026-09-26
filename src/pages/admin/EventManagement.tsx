@@ -32,6 +32,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { useEvents } from "@/hooks/useEvents";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
 // Event categories for filtering
 const categories = ["All", "Hackathon", "Workshop", "Masterclass", "Networking", "Showcase", "Conference", "Seminar"];
@@ -122,11 +123,10 @@ const EventManagement = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="max-w-7xl mx-auto">
+    <AdminPage>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-semibold mb-1">Event Management</h1>
+            <h1 className="bh-admin-page-title">Events</h1>
             <p className="text-muted-foreground">
               Manage upcoming and past events
             </p>
@@ -197,7 +197,7 @@ const EventManagement = () => {
         </div>
 
         {/* Events Table */}
-        <div className="border rounded-lg overflow-hidden">
+        <div className="bh-admin-panel">
           <Table>
             <TableHeader>
               <TableRow>
@@ -418,8 +418,7 @@ const EventManagement = () => {
             </div>
           </div>
         )}
-      </div>
-    </div>
+    </AdminPage>
   );
 };
 

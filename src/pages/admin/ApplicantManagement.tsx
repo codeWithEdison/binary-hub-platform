@@ -29,6 +29,7 @@ import {
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
 type Application = {
   id: string;
@@ -214,11 +215,10 @@ const ApplicantManagement = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="mx-auto max-w-7xl">
+    <AdminPage>
         <div className="mb-8 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
           <div>
-            <h1 className="mb-1 text-2xl font-semibold">Applicants</h1>
+            <h1 className="bh-admin-page-title">Applicants</h1>
             <p className="text-muted-foreground">Monitor applications and review applicant responses.</p>
           </div>
           <div className="flex gap-3 text-sm">
@@ -334,71 +334,7 @@ const ApplicantManagement = () => {
           </Table>
         </div>
         <p className="mt-3 text-xs text-muted-foreground">Showing {filteredApplications.length} of {applications.length} applications.</p>
-      </div>
-
-      <Dialog open={Boolean(selectedApplication)} onOpenChange={(open) => !open && setSelectedApplication(null)}>
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
-          <DialogHeader>
-            <DialogTitle>Review application</DialogTitle>
-            <DialogDescription>
-              {selectedApplication?.applicant_name || "Applicant"} · {selectedApplication?.applicant_email || "Email not saved"}
-            </DialogDescription>
-          </DialogHeader>
-
-          {selectedApplication && (
-            <div className="grid gap-4 border-y py-4 text-sm md:grid-cols-2">
-              {selectedApplication.image && (
-                <div className="md:col-span-2">
-                  <img src={selectedApplication.image} alt={`${selectedApplication.applicant_name || "Applicant"} profile`} className="h-24 w-24 rounded-full object-cover ring-1 ring-border" />
-                </div>
-              )}
-              {!selectedApplication.image && (
-                <div className="md:col-span-2 rounded-md border border-dashed p-4 text-muted-foreground">
-                  No profile picture was submitted.
-                </div>
-              )}
-              <div><span className="font-medium">Phone:</span> {selectedApplication.phone || "Not provided"}</div>
-              <div><span className="font-medium">City:</span> {selectedApplication.city || "Not provided"}</div>
-              <div><span className="font-medium">Gender:</span> {selectedApplication.gender || "Not provided"}</div>
-              <div><span className="font-medium">Role:</span> {selectedApplication.role || "Not provided"}</div>
-              <div><span className="font-medium">Department:</span> {selectedApplication.department || "Not provided"}</div>
-              <div><span className="font-medium">Education:</span> {selectedApplication.highest_education || "Not provided"}</div>
-              <div className="md:col-span-2"><span className="font-medium">Skills:</span> {selectedApplication.skills?.join(", ") || "Not provided"}</div>
-              <div><span className="font-medium">LinkedIn:</span> {selectedApplication.linkedin || "Not provided"}</div>
-              <div><span className="font-medium">Facebook:</span> {selectedApplication.facebook || "Not provided"}</div>
-              <div><span className="font-medium">X:</span> {selectedApplication.twitter || "Not provided"}</div>
-              <div><span className="font-medium">GitHub:</span> {selectedApplication.github || "Not provided"}</div>
-              <div><span className="font-medium">Website:</span> {selectedApplication.website || "Not provided"}</div>
-              <div><span className="font-medium">How they found us:</span> {selectedApplication.discovery_source || "Not provided"}</div>
-              <div className="md:col-span-2"><span className="font-medium">Bio:</span><p className="mt-1 whitespace-pre-wrap text-muted-foreground">{selectedApplication.bio || "Not provided"}</p></div>
-              <div className="md:col-span-2"><span className="font-medium">Motivation:</span><p className="mt-1 whitespace-pre-wrap text-muted-foreground">{selectedApplication.motivation || "Not provided"}</p></div>
-              <div className="md:col-span-2"><span className="font-medium">Project interests:</span><p className="mt-1 whitespace-pre-wrap text-muted-foreground">{selectedApplication.interests || "Not provided"}</p></div>
-              <div className="md:col-span-2"><span className="font-medium">Collaboration:</span><p className="mt-1 whitespace-pre-wrap text-muted-foreground">{selectedApplication.collaboration || "Not provided"}</p></div>
-            </div>
-          )}
-
-          <DialogFooter>
-            <Button variant="outline" onClick={() => setSelectedApplication(null)} disabled={isSaving}>Cancel</Button>
-            {selectedApplication && profileStatuses[selectedApplication.id] === "missing" && (
-              <Button variant="outline" onClick={() => acceptAndGenerateProfile(selectedApplication)} disabled={isSaving}>
-                <UserPlus className="mr-2 h-4 w-4" />
-                {selectedApplication.status === "submitted" ? "Accept & generate profile" : "Generate profile"}
-              </Button>
-            )}
-            {selectedApplication && profileStatuses[selectedApplication.id] === "active" && (
-              <Button variant="outline" onClick={() => setProfileVisibility(selectedApplication, "inactive")} disabled={isSaving}>
-                <EyeOff className="mr-2 h-4 w-4" /> Close profile
-              </Button>
-            )}
-            {selectedApplication && profileStatuses[selectedApplication.id] === "inactive" && (
-              <Button className="bg-[#00628b] text-white hover:bg-[#004f70]" onClick={() => setProfileVisibility(selectedApplication, "active")} disabled={isSaving}>
-                <CheckCircle2 className="mr-2 h-4 w-4" /> Activate profile
-              </Button>
-            )}
-          </DialogFooter>
-        </DialogContent>
-      </Dialog>
-    </div>
+    </AdminPage>
   );
 };
 

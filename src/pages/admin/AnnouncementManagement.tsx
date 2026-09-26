@@ -32,6 +32,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/badge";
 import { useAnnouncements } from "@/hooks/useAnnouncements";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
 // Categories for filtering
 const categories = ["All", "Membership", "Partnership", "Donation", "Operations", "Event", "Resources", "General"];
@@ -121,11 +122,10 @@ const AnnouncementManagement = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="max-w-7xl mx-auto">
+    <AdminPage>
         <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
           <div>
-            <h1 className="text-2xl font-semibold mb-1">Announcement Management</h1>
+            <h1 className="bh-admin-page-title">Announcements</h1>
             <p className="text-muted-foreground">
               Manage public announcements and notices
             </p>
@@ -196,7 +196,7 @@ const AnnouncementManagement = () => {
         </div>
 
         {/* Announcements Table */}
-        <div className="border rounded-lg overflow-hidden">
+        <div className="bh-admin-panel">
           <Table>
             <TableHeader>
               <TableRow>
@@ -392,8 +392,7 @@ const AnnouncementManagement = () => {
             </div>
           </div>
         )}
-      </div>
-    </div>
+    </AdminPage>
   );
 };
 

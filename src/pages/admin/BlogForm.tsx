@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { ArrowLeft, Image as ImageIcon, Loader2, Save, Star, Upload } from "lucide-react";
+import { ArrowLeft, Image as ImageIcon, Save, Star, Upload } from "lucide-react";
+import { InlineLoadingOrb } from "@/components/LoadingOrb";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useBlogPosts, BlogPostInput } from "@/hooks/useBlogPosts";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
 const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
@@ -108,11 +110,11 @@ const BlogForm = () => {
     if (!result.error) navigate("/admin/blog");
   };
 
-  if (isEditMode && loading) return <div className="p-6">Loading blog post...</div>;
+  if (isEditMode && loading) return <AdminPage>Loading blog post...</AdminPage>;
 
   return (
-    <div className="p-6"><div className="mx-auto max-w-4xl">
-      <div className="mb-6 flex items-center justify-between gap-4"><div><h1 className="mb-1 text-2xl font-semibold">{isEditMode ? "Edit Blog Post" : "New Blog Post"}</h1><p className="text-muted-foreground">Manage the public journal story and its main-blog placement.</p></div><Button variant="outline" asChild><Link to="/admin/blog" className="flex items-center gap-2"><ArrowLeft className="h-4 w-4" /> Back to Blog</Link></Button></div>
+    <AdminPage narrow><div className="mx-auto w-full">
+      <div className="mb-6 flex items-center justify-between gap-4"><div><h1 className="bh-admin-page-title">{isEditMode ? "Edit Blog Post" : "New Blog Post"}</h1><p className="text-muted-foreground">Manage the public journal story and its main-blog placement.</p></div><Button variant="outline" asChild><Link to="/admin/blog" className="flex items-center gap-2"><ArrowLeft className="h-4 w-4" /> Back to Blog</Link></Button></div>
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card><CardHeader><CardTitle>Story Details</CardTitle></CardHeader><CardContent className="space-y-5">
           <div className="space-y-2"><Label htmlFor="title">Title</Label><Input id="title" required value={formData.title} onChange={(event) => { updateField("title", event.target.value); if (!isEditMode) updateField("slug", slugify(event.target.value)); }} /></div>
@@ -124,9 +126,10 @@ const BlogForm = () => {
         </CardContent></Card>
         <Card><CardHeader><CardTitle>Story Images</CardTitle></CardHeader><CardContent className="space-y-4"><input ref={fileInputRef} type="file" accept="image/*" multiple onChange={handleImageUpload} className="hidden" /><Button type="button" variant="outline" disabled={isUploading} onClick={() => fileInputRef.current?.click()}><Upload className="mr-2 h-4 w-4" />{isUploading ? "Uploading..." : "Upload images"}</Button><p className="text-xs text-muted-foreground">Select multiple images for the main story slider. The first image is used as the cover.</p>{formData.images?.length ? <div className="grid gap-4 sm:grid-cols-2">{formData.images.map((image, index) => <div key={image} className="space-y-2"><img src={image} alt={`Blog story image ${index + 1}`} className="aspect-video w-full object-cover" /><Button type="button" variant="outline" size="sm" onClick={() => removeImage(image)}>Remove image</Button></div>)}</div> : <div className="flex h-40 items-center justify-center border border-dashed text-muted-foreground"><ImageIcon className="mr-2 h-5 w-5" />No story images selected</div>}</CardContent></Card>
         <Card><CardHeader><CardTitle>Publishing</CardTitle></CardHeader><CardContent className="space-y-4"><label className="flex cursor-pointer items-start gap-3 rounded-lg border p-4"><input type="checkbox" className="mt-1 h-4 w-4" checked={formData.published} onChange={(event) => updateField("published", event.target.checked)} /><span><span className="font-medium">Publish this post</span><span className="block text-sm text-muted-foreground">Published posts appear on the public blog.</span></span></label><label className="flex cursor-pointer items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-4"><input type="checkbox" className="mt-1 h-4 w-4" checked={formData.is_main} onChange={(event) => updateField("is_main", event.target.checked)} /><span><span className="flex items-center gap-2 font-medium"><Star className="h-4 w-4 text-amber-500" /> Main blog post</span><span className="block text-sm text-muted-foreground">This is the primary story highlighted on the public blog. Saving it replaces the current main post.</span></span></label></CardContent></Card>
-        <div className="flex justify-end gap-3"><Button type="button" variant="outline" onClick={() => navigate("/admin/blog")}>Cancel</Button><Button type="submit" disabled={isSubmitting || isUploading}><Save className="mr-2 h-4 w-4" />{isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : isEditMode ? "Update post" : "Create post"}</Button></div>
+        <div className="flex justify-end gap-3"><Button type="button" variant="outline" onClick={() => navigate("/admin/blog")}>Cancel</Button><Button type="submit" disabled={isSubmitting || isUploading}><Save className="mr-2 h-4 w-4" />{isSubmitting ? <InlineLoadingOrb state="working" label="Saving" /> : isEditMode ? "Update post" : "Create post"}</Button></div>
       </form>
-    </div></div>
+    </div>
+    </AdminPage>
   );
 };
 

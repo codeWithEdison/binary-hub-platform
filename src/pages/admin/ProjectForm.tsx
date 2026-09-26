@@ -15,10 +15,10 @@ import {
   Plus,
   Trash2,
   X,
-  Loader2,
   Upload,
   Camera
 } from "lucide-react";
+import { InlineLoadingOrb } from "@/components/LoadingOrb";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -37,6 +37,7 @@ import { Badge } from "@/components/ui/badge";
 import { useProjects } from "@/hooks/useProjects";
 import { useInnovators } from "@/hooks/useInnovators";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
 // Sample categories for selection
 const categories = [
@@ -426,45 +427,43 @@ const ProjectForm = () => {
 
   if (loading && isEditMode) {
     return (
-      <div className="p-6">
-        <div className="max-w-4xl mx-auto">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <Skeleton className="h-8 w-48 mb-2" />
-              <Skeleton className="h-4 w-64" />
-            </div>
-            <Skeleton className="h-10 w-32" />
+      <AdminPage narrow>
+        <div className="flex items-center justify-between mb-6">
+          <div>
+            <Skeleton className="h-8 w-48 mb-2" />
+            <Skeleton className="h-4 w-64" />
           </div>
-          <div className="space-y-6">
-            {Array.from({ length: 3 }).map((_, i) => (
-              <Card key={i}>
-                <CardHeader>
-                  <Skeleton className="h-6 w-32" />
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {Array.from({ length: 4 }).map((_, j) => (
-                      <div key={j} className="space-y-2">
-                        <Skeleton className="h-4 w-24" />
-                        <Skeleton className="h-10 w-full" />
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+          <Skeleton className="h-10 w-32" />
         </div>
-      </div>
+        <div className="space-y-6">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <Card key={i}>
+              <CardHeader>
+                <Skeleton className="h-6 w-32" />
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {Array.from({ length: 4 }).map((_, j) => (
+                    <div key={j} className="space-y-2">
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-10 w-full" />
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </AdminPage>
     );
   }
 
   return (
-    <div className="p-6">
+    <AdminPage narrow>
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h1 className="text-2xl font-semibold mb-1">
+            <h1 className="bh-admin-page-title">
               {isEditMode ? "Edit Project" : "Create New Project"}
             </h1>
             <p className="text-muted-foreground">
@@ -1036,7 +1035,7 @@ const ProjectForm = () => {
             </Button>
             <Button type="submit" disabled={isSubmitting} className="flex items-center gap-2">
               {isSubmitting ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
+                <InlineLoadingOrb state="working" label="Saving" />
               ) : (
                 <Save className="h-4 w-4" />
               )}
@@ -1048,7 +1047,7 @@ const ProjectForm = () => {
           </div>
         </form>
       </div>
-    </div>
+    </AdminPage>
   );
 };
 

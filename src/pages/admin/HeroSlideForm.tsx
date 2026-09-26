@@ -1,5 +1,6 @@
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
-import { ArrowLeft, Image as ImageIcon, Loader2, Save, Upload } from "lucide-react";
+import { ArrowLeft, Image as ImageIcon, Save, Upload } from "lucide-react";
+import { InlineLoadingOrb } from "@/components/LoadingOrb";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -11,6 +12,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useHeroSlides } from "@/hooks/useHeroSlides";
 import { HERO_SLIDE_LIMITS, HeroSlideInput } from "@/lib/heroSlides";
 import { supabase } from "@/integrations/supabase/client";
+import { AdminPage, AdminPageHeader, AdminPanel, AdminToolbar } from "@/components/admin/AdminPage";
 
 const emptyForm: HeroSlideInput = {
   title: "",
@@ -87,11 +89,11 @@ const HeroSlideForm = () => {
     else toast({ title: "Could not save slide", description: result.error.message, variant: "destructive" });
   };
 
-  if (isEditMode && loading) return <div className="p-6">Loading hero slide...</div>;
+  if (isEditMode && loading) return <AdminPage>Loading hero slide...</AdminPage>;
 
   return (
-    <div className="p-6"><div className="mx-auto max-w-4xl">
-      <div className="mb-6 flex items-center justify-between gap-4"><div><h1 className="mb-1 text-2xl font-semibold">{isEditMode ? "Edit Hero Slide" : "New Hero Slide"}</h1><p className="text-muted-foreground">Upload a homepage image and keep its text concise.</p></div><Button variant="outline" asChild><Link to="/admin/hero-slides" className="flex items-center gap-2"><ArrowLeft className="h-4 w-4" /> Back to Hero Slides</Link></Button></div>
+    <AdminPage narrow><div className="mx-auto w-full">
+      <div className="mb-6 flex items-center justify-between gap-4"><div><h1 className="bh-admin-page-title">{isEditMode ? "Edit Hero Slide" : "New Hero Slide"}</h1><p className="text-muted-foreground">Upload a homepage image and keep its text concise.</p></div><Button variant="outline" asChild><Link to="/admin/hero-slides" className="flex items-center gap-2"><ArrowLeft className="h-4 w-4" /> Back to Hero Slides</Link></Button></div>
       <form onSubmit={handleSubmit} className="space-y-6">
         <Card><CardHeader><CardTitle>Slide Content</CardTitle></CardHeader><CardContent className="space-y-5">
           <div className="space-y-2"><Label htmlFor="title">Title</Label><Input id="title" required maxLength={HERO_SLIDE_LIMITS.title} value={formData.title} onChange={(event) => updateField("title", event.target.value)} /><p className="text-xs text-muted-foreground">{formData.title.length}/{HERO_SLIDE_LIMITS.title} characters</p></div>
@@ -100,9 +102,10 @@ const HeroSlideForm = () => {
         </CardContent></Card>
         <Card><CardHeader><CardTitle>Slide Image</CardTitle></CardHeader><CardContent className="space-y-4"><input ref={fileInputRef} type="file" accept="image/*" onChange={handleImageUpload} className="hidden" /><Button type="button" variant="outline" disabled={isUploading} onClick={() => fileInputRef.current?.click()}><Upload className="mr-2 h-4 w-4" />{isUploading ? "Uploading..." : "Upload slide image"}</Button><p className="text-xs text-muted-foreground">JPG, PNG, or WebP. Maximum 5MB. Stored in the hero-slides folder.</p>{formData.image_url ? <img src={formData.image_url} alt="Hero slide preview" className="max-h-80 w-full rounded-md object-cover" /> : <div className="flex h-48 items-center justify-center border border-dashed text-muted-foreground"><ImageIcon className="mr-2 h-5 w-5" />No image selected</div>}</CardContent></Card>
         <Card><CardHeader><CardTitle>Publishing</CardTitle></CardHeader><CardContent><label className="flex cursor-pointer items-start gap-3 rounded-lg border p-4"><input type="checkbox" className="mt-1 h-4 w-4" checked={formData.published} onChange={(event) => updateField("published", event.target.checked)} /><span><span className="font-medium">Publish this slide</span><span className="block text-sm text-muted-foreground">Published slides appear in the homepage carousel.</span></span></label></CardContent></Card>
-        <div className="flex justify-end gap-3"><Button type="button" variant="outline" onClick={() => navigate("/admin/hero-slides")}>Cancel</Button><Button type="submit" disabled={isSubmitting || isUploading}><Save className="mr-2 h-4 w-4" />{isSubmitting ? <Loader2 className="h-4 w-4 animate-spin" /> : isEditMode ? "Update slide" : "Create slide"}</Button></div>
+        <div className="flex justify-end gap-3"><Button type="button" variant="outline" onClick={() => navigate("/admin/hero-slides")}>Cancel</Button><Button type="submit" disabled={isSubmitting || isUploading}><Save className="mr-2 h-4 w-4" />{isSubmitting ? <InlineLoadingOrb state="working" label="Saving" /> : isEditMode ? "Update slide" : "Create slide"}</Button></div>
       </form>
-    </div></div>
+    </div>
+    </AdminPage>
   );
 };
 
