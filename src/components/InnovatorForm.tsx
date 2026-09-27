@@ -676,7 +676,7 @@ const InnovatorForm: React.FC<InnovatorFormProps> = ({
                                         disabled={isSubmitting}
                                     />
                                     <p className="text-xs text-muted-foreground">
-                                        Lower numbers appear first on the innovators list and hall of fame (1, then 2, then 3…).
+                                        Lower numbers appear first. Management uses 1–6; other members follow by created date unless you override.
                                     </p>
                                 </div>
                             )}
