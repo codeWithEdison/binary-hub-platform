@@ -1,4 +1,5 @@
 import type { Innovator } from "@/hooks/useInnovators";
+import { sortBySortOrder } from "@/lib/innovatorOrder";
 
 const MANAGEMENT_NAME_MATCHERS = [
   /edison/i,
@@ -26,15 +27,16 @@ export const isManagementCandidate = (person: Pick<Innovator, "name" | "role" | 
 /**
  * Prefer explicit featured flags; if none are set in DB yet,
  * fall back to known leadership roles/names so Meet the management is not empty.
+ * Always returns list sorted by sort_order.
  */
 export const resolveManagement = (
   innovators: Innovator[],
   featuredInnovators: Innovator[] = []
 ) => {
-  if (featuredInnovators.length > 0) return featuredInnovators;
+  if (featuredInnovators.length > 0) return sortBySortOrder(featuredInnovators);
 
   const flagged = innovators.filter((person) => person.featured);
-  if (flagged.length > 0) return flagged;
+  if (flagged.length > 0) return sortBySortOrder(flagged);
 
-  return innovators.filter((person) => isManagementCandidate(person));
+  return sortBySortOrder(innovators.filter((person) => isManagementCandidate(person)));
 };

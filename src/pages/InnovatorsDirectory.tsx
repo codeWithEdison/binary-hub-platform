@@ -6,6 +6,7 @@ import { InlineLoadingOrb } from "@/components/LoadingOrb";
 import Footer from "@/components/Footer";
 import { useInnovators, type Innovator } from "@/hooks/useInnovators";
 import { resolveManagement } from "@/lib/resolveManagement";
+import { sortBySortOrder } from "@/lib/innovatorOrder";
 import { getInnovatorPath } from "@/lib/innovatorPath";
 import { cn } from "@/lib/utils";
 
@@ -72,25 +73,27 @@ const InnovatorsDirectory = () => {
   const filteredInnovators = useMemo(() => {
     const query = searchQuery.trim().toLowerCase();
 
-    return innovators.filter((innovator) => {
-      const matchesTab =
-        activeTab === "All"
-          ? true
-          : activeTab === "Management"
-            ? managementIds.has(innovator.id)
-            : innovator.status === tabStatuses[activeTab];
+    return sortBySortOrder(
+      innovators.filter((innovator) => {
+        const matchesTab =
+          activeTab === "All"
+            ? true
+            : activeTab === "Management"
+              ? managementIds.has(innovator.id)
+              : innovator.status === tabStatuses[activeTab];
 
-      const searchableText = [
-        innovator.name,
-        innovator.role,
-        innovator.department,
-        ...(innovator.skills || []).map(({ skill }) => skill),
-      ]
-        .join(" ")
-        .toLowerCase();
+        const searchableText = [
+          innovator.name,
+          innovator.role,
+          innovator.department,
+          ...(innovator.skills || []).map(({ skill }) => skill),
+        ]
+          .join(" ")
+          .toLowerCase();
 
-      return matchesTab && (!query || searchableText.includes(query));
-    });
+        return matchesTab && (!query || searchableText.includes(query));
+      }),
+    );
   }, [activeTab, innovators, managementIds, searchQuery]);
 
   const visibleInnovators = useMemo(

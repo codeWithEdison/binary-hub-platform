@@ -5,6 +5,7 @@ import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { useInnovators, type Innovator } from "@/hooks/useInnovators";
 import { resolveManagement } from "@/lib/resolveManagement";
 import { getInnovatorPath } from "@/lib/innovatorPath";
+import { sortBySortOrder } from "@/lib/innovatorOrder";
 import { cn } from "@/lib/utils";
 
 interface HallOfFameSectionProps {
@@ -52,7 +53,10 @@ const HallOfFameSection: React.FC<HallOfFameSectionProps> = ({
   );
 
   const hallMembers = useMemo(
-    () => innovators.filter((person) => !managementIds.has(person.id)),
+    () =>
+      sortBySortOrder(
+        innovators.filter((person) => !managementIds.has(person.id)),
+      ),
     [innovators, managementIds]
   );
 

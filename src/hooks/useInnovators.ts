@@ -3,6 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { innovators as fallbackInnovators } from "@/lib/data";
 import { cachedQuery, invalidateCache } from "@/lib/queryCache";
+import { sortBySortOrder } from "@/lib/innovatorOrder";
 
 export interface Innovator {
   id: string;
@@ -77,9 +78,10 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
 
         const { data, error } = await innovatorsQuery
           .order("sort_order", { ascending: true })
-          .order("created_at", { ascending: false });
+          .order("created_at", { ascending: true });
         if (error) throw error;
-        return (data as any)?.length ? (data as any) : fallbackInnovators;
+        const rows = (data as any)?.length ? (data as any) : fallbackInnovators;
+        return sortBySortOrder(rows);
       });
       setInnovators(data);
     } catch {
@@ -107,9 +109,9 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
 
         const { data, error } = await featuredQuery
           .order("sort_order", { ascending: true })
-          .order("created_at", { ascending: false });
+          .order("created_at", { ascending: true });
         if (error) throw error;
-        return (data as any)?.length ? (data as any) : [];
+        return sortBySortOrder((data as any)?.length ? (data as any) : []);
       });
       setFeaturedInnovators(data);
     } catch {
