@@ -34,8 +34,6 @@ const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
 const Overview = lazy(() => import("./pages/admin/Overview"));
 const Members = lazy(() => import("./pages/admin/Members"));
 const ProjectManagement = lazy(() => import("./pages/admin/ProjectManagement"));
-const EventManagement = lazy(() => import("./pages/admin/EventManagement"));
-const AnnouncementManagement = lazy(() => import("./pages/admin/AnnouncementManagement"));
 const ApplicantManagement = lazy(() => import("./pages/admin/ApplicantManagement"));
 const ApplicationSetup = lazy(() => import("./pages/admin/ApplicationSetup"));
 const InnovatorForm = lazy(() => import("./pages/admin/InnovatorForm"));
@@ -146,10 +144,10 @@ const App = () => (
               <Route path="projects" element={<ProjectManagement />} />
               <Route path="projects/new" element={<ProjectForm />} />
               <Route path="projects/edit/:id" element={<ProjectForm />} />
-              <Route path="events" element={<EventManagement />} />
+              <Route path="events" element={<Navigate to="/admin" replace />} />
               <Route path="events/new" element={<EventForm />} />
               <Route path="events/edit/:id" element={<EventForm />} />
-              <Route path="announcements" element={<AnnouncementManagement />} />
+              <Route path="announcements" element={<Navigate to="/admin/blog" replace />} />
               <Route path="announcements/new" element={<AnnouncementForm />} />
               <Route path="announcements/edit/:id" element={<AnnouncementForm />} />
               <Route path="blog" element={<BlogManagement />} />

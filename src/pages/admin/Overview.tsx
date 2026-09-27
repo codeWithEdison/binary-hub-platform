@@ -239,7 +239,7 @@ const Overview = () => {
       value: dashboardStats.upcomingEvents,
       growth: dashboardStats.eventsGrowth,
       icon: Calendar,
-      to: "/admin/events",
+      to: "/events",
     },
     {
       label: "Total Partners",

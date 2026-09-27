@@ -127,7 +127,7 @@ const AnnouncementForm = () => {
     setIsSubmitting(false);
     if (!result.error) {
       clearDraft();
-      navigate("/admin/announcements");
+      navigate("/admin/blog");
     }
   };
 
@@ -148,9 +148,9 @@ const AnnouncementForm = () => {
             </p>
           </div>
           <Button variant="outline" asChild>
-            <Link to="/admin/announcements" className="flex items-center gap-2">
+            <Link to="/admin/blog" className="flex items-center gap-2">
               <ArrowLeft className="h-4 w-4" />
-              Back
+              Back to Blog
             </Link>
           </Button>
         </div>
@@ -313,7 +313,7 @@ const AnnouncementForm = () => {
           </Card>
 
           <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={() => navigate("/admin/announcements")}>
+            <Button type="button" variant="outline" onClick={() => navigate("/admin/blog")}>
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting || isUploading} className="gap-2">

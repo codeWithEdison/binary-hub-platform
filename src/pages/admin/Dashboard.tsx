@@ -1,8 +1,6 @@
 import React, { useEffect, useMemo, useState, Suspense } from "react";
 import { Link, Outlet, useLocation, useNavigate } from "react-router-dom";
 import {
-  Bell,
-  Calendar,
   ChevronLeft,
   ChevronRight,
   ClipboardList,
@@ -32,8 +30,6 @@ const navGroups = [
     items: [
       { name: "Members", path: "/admin/members", icon: Users },
       { name: "Projects", path: "/admin/projects", icon: FileText },
-      { name: "Events", path: "/admin/events", icon: Calendar },
-      { name: "Announcements", path: "/admin/announcements", icon: Bell },
       { name: "Blog", path: "/admin/blog", icon: Newspaper },
       { name: "Hero Slides", path: "/admin/hero-slides", icon: Images },
       { name: "Stakeholders", path: "/admin/stakeholders", icon: Users },

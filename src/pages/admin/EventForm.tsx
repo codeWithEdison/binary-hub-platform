@@ -138,7 +138,7 @@ const EventForm = () => {
     setIsSubmitting(false);
     if (!result.error) {
       clearDraft();
-      navigate("/admin/events");
+      navigate("/admin");
     }
   };
 
@@ -159,9 +159,9 @@ const EventForm = () => {
             </p>
           </div>
           <Button variant="outline" asChild>
-            <Link to="/admin/events" className="flex items-center gap-2">
+            <Link to="/admin" className="flex items-center gap-2">
               <ArrowLeft className="h-4 w-4" />
-              Back to Events
+              Back to Dashboard
             </Link>
           </Button>
         </div>
@@ -354,7 +354,7 @@ const EventForm = () => {
           </Card>
 
           <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={() => navigate("/admin/events")}>
+            <Button type="button" variant="outline" onClick={() => navigate("/admin")}>
               Cancel
             </Button>
             <Button type="submit" disabled={isSubmitting || isUploading} className="gap-2">
