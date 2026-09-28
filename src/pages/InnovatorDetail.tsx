@@ -213,14 +213,6 @@ const InnovatorDetail = () => {
           <div className="bh-innovator-detail-container bh-innovator-detail-layout">
             <div className="bh-innovator-detail-main">
               <article>
-                <p className="bh-innovator-detail-label">About</p>
-                <p className="bh-innovator-detail-prose">
-                  {innovator.bio ||
-                    "This member has not added a public biography yet."}
-                </p>
-              </article>
-
-              <article>
                 <p className="bh-innovator-detail-label">Skills & expertise</p>
                 <div className="bh-innovator-detail-skills">
                   {skills.length > 0 ? (
