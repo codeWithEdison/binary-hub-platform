@@ -655,7 +655,7 @@ const ProjectForm = () => {
                     disabled={isSubmitting}
                   />
                   <p className="text-xs text-muted-foreground">
-                    Lower numbers appear first. Defaults follow created date unless you override.
+                    Lower numbers appear first (1, then 2…). Use 0 to keep a project at the end of the list.
                   </p>
                 </div>
               </div>

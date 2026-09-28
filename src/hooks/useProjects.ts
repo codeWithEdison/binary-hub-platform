@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { cachedQuery, invalidateCache } from "@/lib/queryCache";
+import { sortBySortOrder } from "@/lib/innovatorOrder";
 
 export interface Project {
   id: string;
@@ -77,7 +78,7 @@ export const useProjects = () => {
           .order("created_at", { ascending: false });
 
         if (error) throw error;
-        return (data as any) || [];
+        return sortBySortOrder((data as any) || []);
       });
       setProjects(data);
     } catch {
@@ -98,10 +99,10 @@ export const useProjects = () => {
           .select(PROJECT_SELECT)
           .eq("featured", true)
           .order("sort_order", { ascending: true })
-          .order("created_at", { ascending: false });
+          .order("created_at", { ascending: true });
 
         if (error) throw error;
-        return (data as any) || [];
+        return sortBySortOrder((data as any) || []);
       });
       setFeaturedProjects(data);
     } catch {

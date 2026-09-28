@@ -1,12 +1,21 @@
 import type { Innovator } from "@/hooks/useInnovators";
 
-/** Lower sort_order first; missing values last; then older created_at first. */
+/**
+ * Effective list rank: positive orders (1, 2, 3…) come first.
+ * 0 / missing / negative are treated as "unsorted" and go last.
+ */
+export function effectiveSortOrder(value?: number | null): number {
+  if (value == null || value <= 0) return Number.MAX_SAFE_INTEGER;
+  return value;
+}
+
+/** Lower positive sort_order first; 0/missing last; then older created_at first. */
 export function compareBySortOrder(
   a: Pick<Innovator, "sort_order" | "created_at">,
   b: Pick<Innovator, "sort_order" | "created_at">
 ): number {
-  const orderA = a.sort_order ?? Number.MAX_SAFE_INTEGER;
-  const orderB = b.sort_order ?? Number.MAX_SAFE_INTEGER;
+  const orderA = effectiveSortOrder(a.sort_order);
+  const orderB = effectiveSortOrder(b.sort_order);
   if (orderA !== orderB) return orderA - orderB;
 
   const timeA = a.created_at ? new Date(a.created_at).getTime() : 0;
