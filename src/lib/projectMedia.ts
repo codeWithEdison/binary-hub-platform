@@ -1,4 +1,5 @@
 import type { Project } from "@/hooks/useProjects";
+import { isSupabaseStorageUrl } from "@/lib/media";
 
 /** Live product URLs used for screenshot previews */
 export const PROJECT_LIVE_URLS: Array<{ match: RegExp; url: string }> = [
@@ -11,8 +12,8 @@ export const PROJECT_LIVE_URLS: Array<{ match: RegExp; url: string }> = [
 ];
 
 const LOCAL_PROJECT_IMAGES: Array<{ match: RegExp; src: string }> = [
-  { match: /inuma/i, src: "/img/Project/inuma.jpg" },
-  { match: /imotrak|imotrack/i, src: "/img/Project/imotrak.png" },
+  { match: /inuma/i, src: "/img/Project/inuma.png" },
+  { match: /imotrak|imotrack/i, src: "/img/Project/imotrack.png" },
   { match: /umutungo/i, src: "/img/Project/umutungo.png" },
 ];
 
@@ -78,16 +79,21 @@ export const resolveProjectImageCandidates = (project: Project): string[] => {
   }
 
   for (const entry of LOCAL_PROJECT_IMAGES) {
-    if (entry.match.test(project.title)) candidates.push(entry.src);
+    if (entry.match.test(project.title)) {
+      candidates.push(entry.src);
+      candidates.push(...withAlternateExtensions(entry.src));
+    }
   }
 
-  if (isUsableImageSrc(project.image)) {
+  if (isUsableImageSrc(project.image) && !isSupabaseStorageUrl(project.image)) {
     candidates.push(project.image!.trim());
     candidates.push(...withAlternateExtensions(project.image!.trim()));
   }
 
   for (const item of project.gallery || []) {
-    if (isUsableImageSrc(item.image_url)) candidates.push(item.image_url);
+    if (isUsableImageSrc(item.image_url) && !isSupabaseStorageUrl(item.image_url)) {
+      candidates.push(item.image_url);
+    }
   }
 
   return [...new Set(candidates)];

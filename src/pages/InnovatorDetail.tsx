@@ -20,6 +20,8 @@ import {
   statusLabel,
 } from "@/lib/innovatorUtils";
 import { getInnovatorPath, matchesInnovatorParam } from "@/lib/innovatorPath";
+import { resolvePersonImage } from "@/lib/media";
+import { SafeImage } from "@/components/SafeImage";
 
 const InnovatorDetail = () => {
   const { innovatorId } = useParams<{ innovatorId: string }>();
@@ -145,13 +147,15 @@ const InnovatorDetail = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.55 }}
               >
-                {innovator.image ? (
-                  <img src={innovator.image} alt={innovator.name} />
-                ) : (
-                  <div className="bh-innovator-detail-photo-fallback">
-                    {getInnovatorInitials(innovator.name)}
-                  </div>
-                )}
+                <SafeImage
+                  src={resolvePersonImage(innovator)}
+                  alt={innovator.name}
+                  fallback={
+                    <div className="bh-innovator-detail-photo-fallback">
+                      {getInnovatorInitials(innovator.name)}
+                    </div>
+                  }
+                />
               </motion.div>
 
               <motion.div
@@ -326,21 +330,20 @@ const InnovatorDetail = () => {
                     to={getInnovatorPath(person)}
                     className="bh-hall-person"
                   >
-                    {person.image ? (
-                      <img
-                        src={person.image}
-                        alt=""
-                        className="bh-hall-avatar"
-                        loading="lazy"
-                      />
-                    ) : (
-                      <div
-                        className="bh-hall-avatar bh-hall-avatar-fallback"
-                        aria-hidden="true"
-                      >
-                        {getInnovatorInitials(person.name)}
-                      </div>
-                    )}
+                    <SafeImage
+                      src={resolvePersonImage(person)}
+                      alt=""
+                      className="bh-hall-avatar"
+                      loading="lazy"
+                      fallback={
+                        <div
+                          className="bh-hall-avatar bh-hall-avatar-fallback"
+                          aria-hidden="true"
+                        >
+                          {getInnovatorInitials(person.name)}
+                        </div>
+                      }
+                    />
                     <div className="bh-hall-copy">
                       <h3>{person.name}</h3>
                       <p>{person.role || "Innovator"}</p>

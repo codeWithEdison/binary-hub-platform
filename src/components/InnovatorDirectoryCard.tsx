@@ -10,6 +10,8 @@ import {
 } from "@/lib/innovatorUtils";
 import { getInnovatorPath } from "@/lib/innovatorPath";
 import { cn } from "@/lib/utils";
+import { resolvePersonImage } from "@/lib/media";
+import { SafeImage } from "@/components/SafeImage";
 
 interface InnovatorDirectoryCardProps {
   innovator: Innovator;
@@ -37,17 +39,16 @@ export function InnovatorDirectoryCard({
         className={cn("bh-innovator-card", className)}
       >
         <div className="bh-innovator-card-media">
-          {innovator.image ? (
-            <img
-              src={innovator.image}
-              alt={innovator.name}
-              loading="lazy"
-            />
-          ) : (
-            <div className="bh-innovator-card-fallback" aria-hidden="true">
-              {getInnovatorInitials(innovator.name)}
-            </div>
-          )}
+          <SafeImage
+            src={resolvePersonImage(innovator)}
+            alt={innovator.name}
+            loading="lazy"
+            fallback={
+              <div className="bh-innovator-card-fallback" aria-hidden="true">
+                {getInnovatorInitials(innovator.name)}
+              </div>
+            }
+          />
         </div>
 
         <div className="bh-innovator-card-body">

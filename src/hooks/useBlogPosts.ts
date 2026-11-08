@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { cachedQuery, invalidateCache } from "@/lib/queryCache";
+import { liveOrOffline } from "@/lib/liveOrOffline";
+import { offlineBlogPosts } from "@/lib/offlineData";
 
 export interface BlogPost {
   id: string;
@@ -33,26 +35,21 @@ export const useBlogPosts = (admin = false, silent = false) => {
   const fetchPosts = async () => {
     setLoading(true);
     try {
-      const data = await cachedQuery(cacheKey, async () => {
-        const query = (supabase as any)
-          .from("blog_posts")
-          .select("*")
-          .order("is_main", { ascending: false })
-          .order("publish_date", { ascending: false, nullsFirst: false });
+      const data = await cachedQuery(cacheKey, () =>
+        liveOrOffline(async () => {
+          const query = (supabase as any)
+            .from("blog_posts")
+            .select("*")
+            .order("is_main", { ascending: false })
+            .order("publish_date", { ascending: false, nullsFirst: false });
 
-        const { data, error } = admin ? await query : await query.eq("published", true);
-        if (error) throw error;
-        return (data as BlogPost[]) || [];
-      });
+          const { data, error } = admin ? await query : await query.eq("published", true);
+          if (error) throw error;
+          return (data as BlogPost[]) || [];
+        }, () => offlineBlogPosts(admin), [])
+      );
       setPosts(data);
     } catch {
-      if (!silent) {
-        toast({
-          title: "Error",
-          description: "Failed to fetch blog posts",
-          variant: "destructive",
-        });
-      }
       setPosts([]);
     }
     setLoading(false);

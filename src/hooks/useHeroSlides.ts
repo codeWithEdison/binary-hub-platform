@@ -3,6 +3,8 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { HERO_SLIDE_LIMITS, HeroSlide, HeroSlideInput } from "@/lib/heroSlides";
 import { cachedQuery, invalidateCache } from "@/lib/queryCache";
+import { liveOrOffline } from "@/lib/liveOrOffline";
+import { offlineHeroSlides } from "@/lib/offlineData";
 
 const validateSlide = (slide: HeroSlideInput) => {
   if (slide.title.length > HERO_SLIDE_LIMITS.title) return `Title must be ${HERO_SLIDE_LIMITS.title} characters or fewer.`;
@@ -22,20 +24,22 @@ export const useHeroSlides = (admin = false) => {
     setLoading(true);
     try {
       const cacheKey = admin ? "hero_slides:admin" : "hero_slides:published";
-      const data = await cachedQuery(cacheKey, async () => {
-        let query = (supabase as any)
-          .from("hero_slides")
-          .select("*")
-          .order("sort_order", { ascending: true })
-          .order("created_at", { ascending: true });
-        if (!admin) query = query.eq("published", true);
-        const { data, error } = await query;
-        if (error) throw error;
-        return (data as HeroSlide[]) || [];
-      });
+      const data = await cachedQuery(cacheKey, () =>
+        liveOrOffline(async () => {
+          let query = (supabase as any)
+            .from("hero_slides")
+            .select("*")
+            .order("sort_order", { ascending: true })
+            .order("created_at", { ascending: true });
+          if (!admin) query = query.eq("published", true);
+          const { data, error } = await query;
+          if (error) throw error;
+          return (data as HeroSlide[]) || [];
+        }, () => offlineHeroSlides(!admin), [])
+      );
       setSlides(data);
     } catch {
-      toast({ title: "Error", description: "Failed to fetch hero slides", variant: "destructive" });
+      setSlides([]);
     }
     setLoading(false);
   };

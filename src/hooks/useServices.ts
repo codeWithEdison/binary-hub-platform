@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { liveOrOffline } from "@/lib/liveOrOffline";
+import { offlineServices } from "@/lib/offlineData";
 
 export interface Service {
   id: string;
@@ -22,19 +24,18 @@ export const useServices = () => {
 
   const fetchServices = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("services")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch services",
-        variant: "destructive"
-      });
-    } else {
-      setServices(data || []);
+    try {
+      const data = await liveOrOffline(async () => {
+        const { data, error } = await supabase
+          .from("services")
+          .select("*")
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        return data || [];
+      }, () => offlineServices(), []);
+      setServices(data as Service[]);
+    } catch {
+      setServices([]);
     }
     setLoading(false);
   };

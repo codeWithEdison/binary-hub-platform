@@ -4,6 +4,8 @@ import { useToast } from "@/hooks/use-toast";
 import { innovators as fallbackInnovators } from "@/lib/data";
 import { cachedQuery, invalidateCache } from "@/lib/queryCache";
 import { sortBySortOrder } from "@/lib/innovatorOrder";
+import { liveOrOffline } from "@/lib/liveOrOffline";
+import { offlineInnovators } from "@/lib/offlineData";
 
 export interface Innovator {
   id: string;
@@ -69,27 +71,27 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
   const fetchInnovators = async () => {
     setLoading(true);
     try {
-      const data = await cachedQuery(listKey, async () => {
-        let innovatorsQuery = supabase.from("innovators").select(INNOVATOR_SELECT);
+      const data = await cachedQuery(listKey, () =>
+        liveOrOffline(async () => {
+          let innovatorsQuery = supabase.from("innovators").select(INNOVATOR_SELECT);
 
-        if (!includeInactive) {
-          innovatorsQuery = innovatorsQuery.eq("account_status", "active");
-        }
+          if (!includeInactive) {
+            innovatorsQuery = innovatorsQuery.eq("account_status", "active");
+          }
 
-        const { data, error } = await innovatorsQuery
-          .order("sort_order", { ascending: true })
-          .order("created_at", { ascending: true });
-        if (error) throw error;
-        const rows = (data as any)?.length ? (data as any) : fallbackInnovators;
-        return sortBySortOrder(rows);
-      });
-      setInnovators(data);
+          const { data, error } = await innovatorsQuery
+            .order("sort_order", { ascending: true })
+            .order("created_at", { ascending: true });
+          if (error) throw error;
+          const rows = (data as any)?.length ? (data as any) : fallbackInnovators;
+          return sortBySortOrder(rows);
+        }, async () => {
+          const rows = await offlineInnovators({ includeInactive });
+          return rows.length ? rows : fallbackInnovators;
+        }, fallbackInnovators)
+      );
+      setInnovators(data as Innovator[]);
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to fetch innovators",
-        variant: "destructive",
-      });
       setInnovators(fallbackInnovators);
     }
     setLoading(false);
@@ -97,29 +99,26 @@ export const useInnovators = ({ includeInactive = false }: { includeInactive?: b
 
   const fetchFeaturedInnovators = async () => {
     try {
-      const data = await cachedQuery(featuredKey, async () => {
-        let featuredQuery = (supabase as any)
-          .from("innovators")
-          .select(INNOVATOR_SELECT)
-          .eq("featured", true);
+      const data = await cachedQuery(featuredKey, () =>
+        liveOrOffline(async () => {
+          let featuredQuery = (supabase as any)
+            .from("innovators")
+            .select(INNOVATOR_SELECT)
+            .eq("featured", true);
 
-        if (!includeInactive) {
-          featuredQuery = featuredQuery.eq("account_status", "active");
-        }
+          if (!includeInactive) {
+            featuredQuery = featuredQuery.eq("account_status", "active");
+          }
 
-        const { data, error } = await featuredQuery
-          .order("sort_order", { ascending: true })
-          .order("created_at", { ascending: true });
-        if (error) throw error;
-        return sortBySortOrder((data as any)?.length ? (data as any) : []);
-      });
-      setFeaturedInnovators(data);
+          const { data, error } = await featuredQuery
+            .order("sort_order", { ascending: true })
+            .order("created_at", { ascending: true });
+          if (error) throw error;
+          return sortBySortOrder((data as any)?.length ? (data as any) : []);
+        }, () => offlineInnovators({ includeInactive, featuredOnly: true }), [])
+      );
+      setFeaturedInnovators(data as Innovator[]);
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to fetch management innovators",
-        variant: "destructive",
-      });
       setFeaturedInnovators(
         fallbackInnovators
           .filter((person: any) => person.featured)

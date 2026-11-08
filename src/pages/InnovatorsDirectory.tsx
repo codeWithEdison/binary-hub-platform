@@ -9,6 +9,8 @@ import { resolveManagement } from "@/lib/resolveManagement";
 import { sortBySortOrder } from "@/lib/innovatorOrder";
 import { getInnovatorPath } from "@/lib/innovatorPath";
 import { cn } from "@/lib/utils";
+import { resolvePersonImage } from "@/lib/media";
+import { SafeImage } from "@/components/SafeImage";
 
 const PAGE_SIZE = 12;
 
@@ -44,13 +46,17 @@ const Avatar = ({
   className: string;
   fallbackClassName: string;
 }) =>
-  person.image ? (
-    <img src={person.image} alt={person.name} className={className} loading="lazy" />
-  ) : (
-    <div className={cn(className, fallbackClassName)} aria-hidden="true">
-      {getInitials(person.name)}
-    </div>
-  );
+  <SafeImage
+    src={resolvePersonImage(person)}
+    alt={person.name}
+    className={className}
+    loading="lazy"
+    fallback={
+      <div className={cn(className, fallbackClassName)} aria-hidden="true">
+        {getInitials(person.name)}
+      </div>
+    }
+  />;
 
 const InnovatorsDirectory = () => {
   const [searchQuery, setSearchQuery] = useState("");

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { liveOrOffline } from "@/lib/liveOrOffline";
+import { offlineStats } from "@/lib/offlineData";
 
 export interface Stat {
   id: string;
@@ -21,19 +23,18 @@ export const useStats = () => {
 
   const fetchStats = async () => {
     setLoading(true);
-    const { data, error } = await supabase
-      .from("stats")
-      .select("*")
-      .order("created_at", { ascending: false });
-
-    if (error) {
-      toast({
-        title: "Error",
-        description: "Failed to fetch stats",
-        variant: "destructive"
-      });
-    } else {
-      setStats(data || []);
+    try {
+      const data = await liveOrOffline(async () => {
+        const { data, error } = await supabase
+          .from("stats")
+          .select("*")
+          .order("created_at", { ascending: false });
+        if (error) throw error;
+        return data || [];
+      }, () => offlineStats(), []);
+      setStats(data as Stat[]);
+    } catch {
+      setStats([]);
     }
     setLoading(false);
   };

@@ -7,6 +7,8 @@ import { resolveManagement } from "@/lib/resolveManagement";
 import { getInnovatorPath } from "@/lib/innovatorPath";
 import { sortBySortOrder } from "@/lib/innovatorOrder";
 import { cn } from "@/lib/utils";
+import { resolvePersonImage } from "@/lib/media";
+import { SafeImage } from "@/components/SafeImage";
 
 interface HallOfFameSectionProps {
   className?: string;
@@ -29,13 +31,17 @@ const Avatar = ({
   className: string;
   fallbackClassName: string;
 }) =>
-  person.image ? (
-    <img src={person.image} alt={person.name} className={className} loading="lazy" />
-  ) : (
-    <div className={cn(className, fallbackClassName)} aria-hidden="true">
-      {getInitials(person.name)}
-    </div>
-  );
+  <SafeImage
+    src={resolvePersonImage(person)}
+    alt={person.name}
+    className={className}
+    loading="lazy"
+    fallback={
+      <div className={cn(className, fallbackClassName)} aria-hidden="true">
+        {getInitials(person.name)}
+      </div>
+    }
+  />;
 
 const HallOfFameSection: React.FC<HallOfFameSectionProps> = ({
   className = "",

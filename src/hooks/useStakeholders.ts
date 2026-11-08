@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { cachedQuery, invalidateCache } from "@/lib/queryCache";
+import { liveOrOffline } from "@/lib/liveOrOffline";
+import { offlineStakeholders } from "@/lib/offlineData";
 
 export interface Stakeholder {
   id: string;
@@ -28,22 +30,20 @@ export const useStakeholders = () => {
   const fetchStakeholders = async () => {
     setLoading(true);
     try {
-      const data = await cachedQuery("stakeholders:all", async () => {
-        const { data, error } = await supabase
-          .from("stakeholders")
-          .select("*")
-          .order("created_at", { ascending: false });
+      const data = await cachedQuery("stakeholders:all", () =>
+        liveOrOffline(async () => {
+          const { data, error } = await supabase
+            .from("stakeholders")
+            .select("*")
+            .order("created_at", { ascending: false });
 
-        if (error) throw error;
-        return data || [];
-      });
+          if (error) throw error;
+          return data || [];
+        }, () => offlineStakeholders(), [])
+      );
       setStakeholders(data);
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to fetch stakeholders",
-        variant: "destructive",
-      });
+      setStakeholders([]);
     }
     setLoading(false);
   };

@@ -3,6 +3,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { cachedQuery, invalidateCache } from "@/lib/queryCache";
 import { sortBySortOrder } from "@/lib/innovatorOrder";
+import { liveOrOffline } from "@/lib/liveOrOffline";
+import { offlineProjects } from "@/lib/offlineData";
 
 export interface Project {
   id: string;
@@ -70,47 +72,43 @@ export const useProjects = () => {
   const fetchProjects = async () => {
     setLoading(true);
     try {
-      const data = await cachedQuery("projects:all", async () => {
-        const { data, error } = await supabase
-          .from("projects")
-          .select(PROJECT_SELECT)
-          .order("sort_order", { ascending: true })
-          .order("created_at", { ascending: false });
+      const data = await cachedQuery("projects:all", () =>
+        liveOrOffline(async () => {
+          const { data, error } = await supabase
+            .from("projects")
+            .select(PROJECT_SELECT)
+            .order("sort_order", { ascending: true })
+            .order("created_at", { ascending: false });
 
-        if (error) throw error;
-        return sortBySortOrder((data as any) || []);
-      });
-      setProjects(data);
+          if (error) throw error;
+          return sortBySortOrder((data as any) || []);
+        }, () => offlineProjects(), [])
+      );
+      setProjects(data as Project[]);
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to fetch projects",
-        variant: "destructive",
-      });
+      setProjects([]);
     }
     setLoading(false);
   };
 
   const fetchFeaturedProjects = async () => {
     try {
-      const data = await cachedQuery("projects:featured", async () => {
-        const { data, error } = await (supabase as any)
-          .from("projects")
-          .select(PROJECT_SELECT)
-          .eq("featured", true)
-          .order("sort_order", { ascending: true })
-          .order("created_at", { ascending: true });
+      const data = await cachedQuery("projects:featured", () =>
+        liveOrOffline(async () => {
+          const { data, error } = await (supabase as any)
+            .from("projects")
+            .select(PROJECT_SELECT)
+            .eq("featured", true)
+            .order("sort_order", { ascending: true })
+            .order("created_at", { ascending: true });
 
-        if (error) throw error;
-        return sortBySortOrder((data as any) || []);
-      });
-      setFeaturedProjects(data);
+          if (error) throw error;
+          return sortBySortOrder((data as any) || []);
+        }, () => offlineProjects(true), [])
+      );
+      setFeaturedProjects(data as Project[]);
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to fetch featured projects",
-        variant: "destructive",
-      });
+      setFeaturedProjects([]);
     }
   };
 

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { cachedQuery, invalidateCache } from "@/lib/queryCache";
+import { liveOrOffline } from "@/lib/liveOrOffline";
+import { offlineEvents } from "@/lib/offlineData";
 
 export interface Event {
   id: string;
@@ -37,22 +39,20 @@ export const useEvents = (includeUnpublished = false) => {
     setLoading(true);
     try {
       const cacheKey = includeUnpublished ? "events:all" : "events:published";
-      const data = await cachedQuery(cacheKey, async () => {
-        let query = (supabase as any).from("events").select("*").order("date", { ascending: true });
-        if (!includeUnpublished) {
-          query = query.eq("published", true);
-        }
-        const { data, error } = await query;
-        if (error) throw error;
-        return (data as Event[]) || [];
-      });
+      const data = await cachedQuery(cacheKey, () =>
+        liveOrOffline(async () => {
+          let query = (supabase as any).from("events").select("*").order("date", { ascending: true });
+          if (!includeUnpublished) {
+            query = query.eq("published", true);
+          }
+          const { data, error } = await query;
+          if (error) throw error;
+          return (data as Event[]) || [];
+        }, () => offlineEvents(includeUnpublished), [])
+      );
       setEvents(data);
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to fetch events",
-        variant: "destructive",
-      });
+      setEvents([]);
     }
     setLoading(false);
   };

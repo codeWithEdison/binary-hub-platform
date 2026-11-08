@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { cachedQuery, invalidateCache } from "@/lib/queryCache";
+import { liveOrOffline } from "@/lib/liveOrOffline";
+import { offlineAnnouncements } from "@/lib/offlineData";
 
 export interface Announcement {
   id: string;
@@ -34,25 +36,23 @@ export const useAnnouncements = (includeUnpublished = false) => {
     setLoading(true);
     try {
       const cacheKey = includeUnpublished ? "announcements:all" : "announcements:published";
-      const data = await cachedQuery(cacheKey, async () => {
-        let query = (supabase as any)
-          .from("announcements")
-          .select("*")
-          .order("publish_date", { ascending: false });
-        if (!includeUnpublished) {
-          query = query.eq("published", true);
-        }
-        const { data, error } = await query;
-        if (error) throw error;
-        return (data as Announcement[]) || [];
-      });
+      const data = await cachedQuery(cacheKey, () =>
+        liveOrOffline(async () => {
+          let query = (supabase as any)
+            .from("announcements")
+            .select("*")
+            .order("publish_date", { ascending: false });
+          if (!includeUnpublished) {
+            query = query.eq("published", true);
+          }
+          const { data, error } = await query;
+          if (error) throw error;
+          return (data as Announcement[]) || [];
+        }, () => offlineAnnouncements(includeUnpublished), [])
+      );
       setAnnouncements(data);
     } catch {
-      toast({
-        title: "Error",
-        description: "Failed to fetch announcements",
-        variant: "destructive",
-      });
+      setAnnouncements([]);
     }
     setLoading(false);
   };

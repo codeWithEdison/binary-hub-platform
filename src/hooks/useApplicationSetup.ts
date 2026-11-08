@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { liveOrOffline } from "@/lib/liveOrOffline";
+import { offlineSetupOptions } from "@/lib/offlineData";
 
 export type SetupCategory = "role" | "department" | "skill";
 export interface SetupOption { id: string; category: SetupCategory; name: string; active: boolean; created_at: string; }
@@ -12,11 +14,18 @@ export const useApplicationSetup = (includeInactive = false) => {
 
   const refetch = useCallback(async () => {
     setLoading(true);
-    let query = (supabase as any).from("application_setup_options").select("*").order("category").order("name");
-    if (!includeInactive) query = query.eq("active", true);
-    const { data, error } = await query;
-    if (error) toast({ title: "Unable to load application setup", description: error.message, variant: "destructive" });
-    else setOptions(data || []);
+    try {
+      const data = await liveOrOffline(async () => {
+        let query = (supabase as any).from("application_setup_options").select("*").order("category").order("name");
+        if (!includeInactive) query = query.eq("active", true);
+        const { data, error } = await query;
+        if (error) throw error;
+        return data || [];
+      }, () => offlineSetupOptions(includeInactive), []);
+      setOptions(data as SetupOption[]);
+    } catch {
+      setOptions([]);
+    }
     setLoading(false);
   }, [includeInactive, toast]);
 

@@ -4,6 +4,10 @@ import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { useHeroSlides } from "@/hooks/useHeroSlides";
 import { supabase } from "@/integrations/supabase/client";
 import { cachedQuery } from "@/lib/queryCache";
+import { liveOrOffline } from "@/lib/liveOrOffline";
+import { offlineHeroCounts } from "@/lib/offlineData";
+import { HERO_IMAGE_FALLBACK, resolveHeroImage } from "@/lib/media";
+import { SafeImage } from "@/components/SafeImage";
 
 const benefits = ["Student-led", "Mentor supported", "Impact focused"] as const;
 
@@ -123,26 +127,39 @@ const Hero = () => {
   useEffect(() => {
     let cancelled = false;
     setStatsLoading(true);
-    cachedQuery("hero:counts", async () => {
-      const [projectsRes, innovatorsRes, mentorsRes] = await Promise.all([
-        supabase.from("projects").select("id", { count: "exact", head: true }),
-        supabase
-          .from("innovators")
-          .select("id", { count: "exact", head: true })
-          .eq("account_status", "active"),
-        supabase
-          .from("innovators")
-          .select("id", { count: "exact", head: true })
-          .eq("account_status", "active")
-          .eq("status", "mentor"),
-      ]);
+    cachedQuery("hero:counts", () =>
+      liveOrOffline(async () => {
+        const [projectsRes, innovatorsRes, mentorsRes] = await Promise.all([
+          supabase.from("projects").select("id", { count: "exact", head: true }),
+          supabase
+            .from("innovators")
+            .select("id", { count: "exact", head: true })
+            .eq("account_status", "active"),
+          supabase
+            .from("innovators")
+            .select("id", { count: "exact", head: true })
+            .eq("account_status", "active")
+            .eq("status", "mentor"),
+        ]);
 
-      return {
-        solutions: projectsRes.count ?? 0,
-        innovators: innovatorsRes.count ?? 0,
-        mentors: mentorsRes.count ?? 0,
-      } satisfies HeroCounts;
-    })
+        if (
+          projectsRes.error ||
+          innovatorsRes.error ||
+          mentorsRes.error ||
+          projectsRes.count == null ||
+          innovatorsRes.count == null ||
+          mentorsRes.count == null
+        ) {
+          throw projectsRes.error || innovatorsRes.error || mentorsRes.error || new Error("Live counts unavailable");
+        }
+
+        return {
+          solutions: projectsRes.count,
+          innovators: innovatorsRes.count,
+          mentors: mentorsRes.count,
+        } satisfies HeroCounts;
+      }, () => offlineHeroCounts(), { solutions: 0, innovators: 0, mentors: 0 })
+    )
       .then((data) => {
         if (!cancelled) setCounts(data);
       })
@@ -158,7 +175,7 @@ const Hero = () => {
   const displayedSlides =
     slides.length > 0
       ? slides.map((slide) => ({
-          image: slide.image_url,
+          image: resolveHeroImage(slide.image_url),
           title: slide.title,
           alt: slide.title,
         }))
@@ -285,9 +302,10 @@ const Hero = () => {
                   transition={{ duration: 0.45 }}
                   className="absolute inset-0"
                 >
-                  <img
+                  <SafeImage
                     src={displayedSlides[activeSlide]?.image}
-                    alt={displayedSlides[activeSlide]?.alt}
+                    fallbackSrc={HERO_IMAGE_FALLBACK}
+                    alt={displayedSlides[activeSlide]?.alt || ""}
                     className="h-full w-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/15 to-transparent" />
@@ -400,9 +418,10 @@ const Hero = () => {
                   transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
                   className="absolute inset-0"
                 >
-                  <img
+                  <SafeImage
                     src={displayedSlides[activeSlide]?.image}
-                    alt={displayedSlides[activeSlide]?.alt}
+                    fallbackSrc={HERO_IMAGE_FALLBACK}
+                    alt={displayedSlides[activeSlide]?.alt || ""}
                     className="h-full w-full object-cover"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-transparent" />

@@ -3,6 +3,8 @@ import React from "react";
 import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { Innovator } from "@/lib/data";
+import { resolvePersonImage } from "@/lib/media";
+import { SafeImage } from "@/components/SafeImage";
 
 type InnovatorCardProps = {
   innovator: Innovator;
@@ -33,10 +35,20 @@ const InnovatorCard = ({ innovator, index }: InnovatorCardProps) => {
       }}
     >
       <div className="relative overflow-hidden aspect-[5/6]">
-        <img 
-          src={innovator.image} 
-          alt={innovator.name} 
+        <SafeImage
+          src={resolvePersonImage(innovator)}
+          alt={innovator.name}
           className="w-full h-full object-cover transition-transform duration-700 hover:scale-105"
+          fallback={
+            <div className="flex h-full w-full items-center justify-center bg-[#00628b] text-2xl font-bold text-white">
+              {innovator.name
+                .split(/\s+/)
+                .filter(Boolean)
+                .slice(0, 2)
+                .map((part) => part[0]?.toUpperCase())
+                .join("")}
+            </div>
+          }
         />
         
         <div className="absolute inset-0 bg-gradient-to-t from-background/90 via-background/20 to-transparent"></div>
