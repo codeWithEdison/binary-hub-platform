@@ -1,10 +1,12 @@
-version: '3.8'
+# Server stack: pull the image published by CI (no build on the server).
+#
+#   mkdir -p ~/binary-hub-platform && cd ~/binary-hub-platform
+#   # paste this file as docker-compose.yml
+#   docker login ghcr.io -u <github-user>
+#   docker compose pull && docker compose up -d
 services:
-  binaryhubweb:
-    # build: .
-    image: ghcr.io/programmerdatch/binaryhubweb:latest
+  web:
+    image: ghcr.io/codewithedison/binary-hub-platform:${IMAGE_TAG:-production}
+    restart: unless-stopped
     ports:
-      - "7015:80"
-    environment:
-      - NODE_ENV=production
-    restart: unless-stopped 
+      - "127.0.0.1:${FRONTEND_PORT:-7015}:80"
